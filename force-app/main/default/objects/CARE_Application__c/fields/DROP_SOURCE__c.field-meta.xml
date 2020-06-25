@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DROP_SOURCE__c</fullName>
+    <externalId>false</externalId>
+    <label>DROP SOURCE</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Called - In</fullName>
+                <default>false</default>
+                <label>Called - In</label>
+            </value>
+            <value>
+                <fullName>CC&amp;B Case</fullName>
+                <default>false</default>
+                <label>CC&amp;B Case</label>
+            </value>
+            <value>
+                <fullName>Emailed</fullName>
+                <default>false</default>
+                <label>Emailed</label>
+            </value>
+            <value>
+                <fullName>Faxed/Letter Mailed - In</fullName>
+                <default>false</default>
+                <label>Faxed/Letter Mailed - In</label>
+            </value>
+            <value>
+                <fullName>Space Occupied</fullName>
+                <default>false</default>
+                <label>Space Occupied</label>
+            </value>
+            <value>
+                <fullName>SF Case</fullName>
+                <default>false</default>
+                <label>SF Case</label>
+            </value>
+            <value>
+                <fullName>CSR</fullName>
+                <default>false</default>
+                <label>CSR</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

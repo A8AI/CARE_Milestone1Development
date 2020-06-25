@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BATCH_TYPE_NO__c</fullName>
+    <externalId>false</externalId>
+    <label>BATCH TYPE NO</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CASE Adjustments-CR</fullName>
+                <default>false</default>
+                <label>CASE Adjustments-CR</label>
+            </value>
+            <value>
+                <fullName>CASE Adjustments-FR</fullName>
+                <default>false</default>
+                <label>CASE Adjustments-FR</label>
+            </value>
+            <value>
+                <fullName>TRANSFERS CMD-CR</fullName>
+                <default>false</default>
+                <label>TRANSFERS CMD-CR</label>
+            </value>
+            <value>
+                <fullName>TRANSFERS CMD-FR</fullName>
+                <default>false</default>
+                <label>TRANSFERS CMD-FR</label>
+            </value>
+            <value>
+                <fullName>C AE CARE upload</fullName>
+                <default>false</default>
+                <label>C AE CARE upload</label>
+            </value>
+            <value>
+                <fullName>V Related CC</fullName>
+                <default>false</default>
+                <label>V Related CC</label>
+            </value>
+            <value>
+                <fullName>V Result ReEnro - CR</fullName>
+                <default>false</default>
+                <label>V Result ReEnro - CR</label>
+            </value>
+            <value>
+                <fullName>V Result ESA H R C</fullName>
+                <default>false</default>
+                <label>V Result ESA H R C</label>
+            </value>
+            <value>
+                <fullName>V Result ESA NOAGGR</fullName>
+                <default>false</default>
+                <label>V Result ESA NOAGGR</label>
+            </value>
+            <value>
+                <fullName>V Result ESA Result</fullName>
+                <default>false</default>
+                <label>V Result ESA Result</label>
+            </value>
+            <value>
+                <fullName>V Result ReEnro - FR</fullName>
+                <default>false</default>
+                <label>V Result ReEnro - FR</label>
+            </value>
+            <value>
+                <fullName>V Result Incomplete</fullName>
+                <default>false</default>
+                <label>V Result Incomplete</label>
+            </value>
+            <value>
+                <fullName>V Result Nothing Att</fullName>
+                <default>false</default>
+                <label>V Result Nothing Att</label>
+            </value>
+            <value>
+                <fullName>V Result Denial</fullName>
+                <default>false</default>
+                <label>V Result Denial</label>
+            </value>
+            <value>
+                <fullName>V Result Req Drop</fullName>
+                <default>false</default>
+                <label>V Result Req Drop</label>
+            </value>
+            <value>
+                <fullName>V Related Drop</fullName>
+                <default>false</default>
+                <label>V Related Drop</label>
+            </value>
+            <value>
+                <fullName>V Reminder CC</fullName>
+                <default>false</default>
+                <label>V Reminder CC</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

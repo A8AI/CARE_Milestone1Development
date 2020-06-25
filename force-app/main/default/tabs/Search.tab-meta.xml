@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <flexiPage>CARE_APP_Tab</flexiPage>
+    <icon>0153K0000009IJQ</icon>
+    <label>Search</label>
+    <motif>Custom103: TV Widescreen</motif>
+</CustomTab>

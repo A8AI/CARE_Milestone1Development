@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NAME_Member_Income_Seq__c</fullName>
+    <displayFormat>CTMI{0000000000}</displayFormat>
+    <externalId>false</externalId>
+    <label>NAME  (Member Income Seq)</label>
+    <trackTrending>false</trackTrending>
+    <type>AutoNumber</type>
+</CustomField>

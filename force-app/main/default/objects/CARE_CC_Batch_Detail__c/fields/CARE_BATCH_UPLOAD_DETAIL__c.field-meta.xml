@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_BATCH_UPLOAD_DETAIL__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <label>CARE BATCH UPLOAD DETAIL</label>
+    <referenceTo>CARE_Batch_Upload_Detail__c</referenceTo>
+    <relationshipLabel>CARE CC Batch Detail</relationshipLabel>
+    <relationshipName>CARE_CC_Batch_Detail</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

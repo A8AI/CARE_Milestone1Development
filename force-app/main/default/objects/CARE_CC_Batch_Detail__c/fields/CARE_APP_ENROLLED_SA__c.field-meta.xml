@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_APP_ENROLLED_SA__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <label>CARE APP ENROLLED SA</label>
+    <referenceTo>CARE_App_Enrolled_SA__c</referenceTo>
+    <relationshipLabel>CARE CC Batch Detail</relationshipLabel>
+    <relationshipName>CARE_CC_Batch_Detail</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

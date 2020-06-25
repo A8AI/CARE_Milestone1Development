@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Maintain_Name_Uniqueness</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(Name = VLOOKUP($ObjectType.CARE_Income_Entry_Form__c.Fields.Name , $ObjectType.CARE_Income_Entry_Form__c.Fields.Name, Name),
+NOT(Id=VLOOKUP($ObjectType.CARE_Income_Entry_Form__c.Fields.Id, $ObjectType.CARE_Income_Entry_Form__c.Fields.Name, Name)))</errorConditionFormula>
+    <errorDisplayField>Name</errorDisplayField>
+    <errorMessage>Already a record exists with the same name.</errorMessage>
+</ValidationRule>

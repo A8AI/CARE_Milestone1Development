@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_Facility_Name__c</fullName>
+    <externalId>false</externalId>
+    <label>FACILITY</label>
+    <referenceTo>CARE_Facility__c</referenceTo>
+    <relationshipLabel>CARE Facility Enrolled SA</relationshipLabel>
+    <relationshipName>CARE_Facility_Enrolled_SA</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

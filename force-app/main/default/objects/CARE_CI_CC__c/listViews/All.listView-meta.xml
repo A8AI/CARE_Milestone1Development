@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>CC_ID__c</columns>
+    <columns>PER_ID__c</columns>
+    <columns>CC_DTTM__c</columns>
+    <columns>CC_CL_CD__c</columns>
+    <columns>CC_TYPE_CD__c</columns>
+    <columns>DESCR254__c</columns>
+    <columns>USER_ID__c</columns>
+    <columns>CC_STATUS_FLG__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_Household_Member__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <label>Household Member</label>
+    <referenceTo>CARE_Household_Member__c</referenceTo>
+    <relationshipLabel>CARE Household Member Income</relationshipLabel>
+    <relationshipName>CARE_Household_Member_Income</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

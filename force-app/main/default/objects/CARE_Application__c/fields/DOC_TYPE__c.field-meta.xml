@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DOC_TYPE__c</fullName>
+    <externalId>false</externalId>
+    <label>DOC TYPE</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Contract with Office of Migrant Services</fullName>
+                <default>false</default>
+                <label>Contract with Office of Migrant Services</label>
+            </value>
+            <value>
+                <fullName>Federal 501(c)3</fullName>
+                <default>false</default>
+                <label>Federal 501(c)3</label>
+            </value>
+            <value>
+                <fullName>Invalid Document</fullName>
+                <default>false</default>
+                <label>Invalid Document</label>
+            </value>
+            <value>
+                <fullName>Not Provided</fullName>
+                <default>false</default>
+                <label>Not Provided</label>
+            </value>
+            <value>
+                <fullName>Permit by DHCD</fullName>
+                <default>false</default>
+                <label>Permit by DHCD</label>
+            </value>
+            <value>
+                <fullName>State Tax Exemption</fullName>
+                <default>false</default>
+                <label>State Tax Exemption</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

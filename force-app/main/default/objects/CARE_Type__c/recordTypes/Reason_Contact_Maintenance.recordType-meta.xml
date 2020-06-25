@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reason_Contact_Maintenance</fullName>
+    <active>false</active>
+    <label>Reason/Contact Maintenance</label>
+    <picklistValues>
+        <picklist>CATEGORY__c</picklist>
+        <values>
+            <fullName>Adjustment Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reinstatement Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Reason</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

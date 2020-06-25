@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Low_Income_Type__c</fullName>
+    <externalId>false</externalId>
+    <label>Low Income Type</label>
+    <required>true</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CARE</fullName>
+                <default>false</default>
+                <label>CARE</label>
+            </value>
+            <value>
+                <fullName>FERA</fullName>
+                <default>false</default>
+                <label>FERA</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

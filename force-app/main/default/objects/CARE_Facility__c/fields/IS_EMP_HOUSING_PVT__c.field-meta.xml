@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IS_EMP_HOUSING_PVT__c</fullName>
+    <defaultValue>false</defaultValue>
+    <externalId>false</externalId>
+    <label>IS EMP HOUSING PVT</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

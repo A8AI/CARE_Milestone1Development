@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>BATCHUPLOAD__c</fullName>
+    <externalId>false</externalId>
+    <label>BATCHUPLOAD</label>
+    <referenceTo>CARE_BATCH_UPLOAD__c</referenceTo>
+    <relationshipLabel>CARE Batch Upload Detail</relationshipLabel>
+    <relationshipName>CARE_Batch_Upload_Detail</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

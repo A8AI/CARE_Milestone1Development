@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SOURCE_CHANNEL_TYPE__c</fullName>
+    <externalId>false</externalId>
+    <label>SOURCE CHANNEL TYPE</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>On Demand Status</fullName>
+                <default>false</default>
+                <label>On Demand Status</label>
+            </value>
+            <value>
+                <fullName>CARE Force.com</fullName>
+                <default>false</default>
+                <label>CARE Force.com</label>
+            </value>
+            <value>
+                <fullName>CARE SMS</fullName>
+                <default>false</default>
+                <label>CARE SMS</label>
+            </value>
+            <value>
+                <fullName>CARE Flatsite</fullName>
+                <default>false</default>
+                <label>CARE Flatsite</label>
+            </value>
+            <value>
+                <fullName>CARE MyEnergy</fullName>
+                <default>false</default>
+                <label>CARE MyEnergy</label>
+            </value>
+            <value>
+                <fullName>DataXport Enrollment</fullName>
+                <default>false</default>
+                <label>DataXport Enrollment</label>
+            </value>
+            <value>
+                <fullName>DataXport PEV Notice</fullName>
+                <default>false</default>
+                <label>DataXport PEV Notice</label>
+            </value>
+            <value>
+                <fullName>Regular App</fullName>
+                <default>false</default>
+                <label>Regular App</label>
+            </value>
+            <value>
+                <fullName>SoundBite</fullName>
+                <default>false</default>
+                <label>SoundBite</label>
+            </value>
+            <value>
+                <fullName>Phone Enrollment</fullName>
+                <default>false</default>
+                <label>Phone Enrollment</label>
+            </value>
+            <value>
+                <fullName>Web Download</fullName>
+                <default>false</default>
+                <label>Web Download</label>
+            </value>
+            <value>
+                <fullName>Kiosk</fullName>
+                <default>false</default>
+                <label>Kiosk</label>
+            </value>
+            <value>
+                <fullName>CASE/Adjustment</fullName>
+                <default>false</default>
+                <label>CASE/Adjustment</label>
+            </value>
+            <value>
+                <fullName>CASE/Reinstatement</fullName>
+                <default>false</default>
+                <label>CASE/Reinstatement</label>
+            </value>
+            <value>
+                <fullName>CASE/Transfer</fullName>
+                <default>false</default>
+                <label>CASE/Transfer</label>
+            </value>
+            <value>
+                <fullName>CASE/Commodity</fullName>
+                <default>false</default>
+                <label>CASE/Commodity</label>
+            </value>
+            <value>
+                <fullName>PEV/Adjustment</fullName>
+                <default>false</default>
+                <label>PEV/Adjustment</label>
+            </value>
+            <value>
+                <fullName>Enroll/Adjustment</fullName>
+                <default>false</default>
+                <label>Enroll/Adjustment</label>
+            </value>
+            <value>
+                <fullName>Bill Insert</fullName>
+                <default>false</default>
+                <label>Bill Insert</label>
+            </value>
+            <value>
+                <fullName>Direct Mail</fullName>
+                <default>false</default>
+                <label>Direct Mail</label>
+            </value>
+            <value>
+                <fullName>Other</fullName>
+                <default>false</default>
+                <label>Other</label>
+            </value>
+            <value>
+                <fullName>Allconnect</fullName>
+                <default>false</default>
+                <label>Allconnect</label>
+            </value>
+            <value>
+                <fullName>ESA Enrollment</fullName>
+                <default>false</default>
+                <label>ESA Enrollment</label>
+            </value>
+            <value>
+                <fullName>DAC GT Enrollment</fullName>
+                <default>false</default>
+                <label>DAC GT Enrollment</label>
+            </value>
+            <value>
+                <fullName>Water Agency/IOU</fullName>
+                <default>false</default>
+                <label>Water Agency/IOU</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

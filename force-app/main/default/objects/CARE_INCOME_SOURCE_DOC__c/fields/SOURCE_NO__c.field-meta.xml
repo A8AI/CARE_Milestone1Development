@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SOURCE_NO__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <externalId>false</externalId>
+    <label>SOURCE NO</label>
+    <referenceTo>CARE_Income_Sources__c</referenceTo>
+    <relationshipLabel>CARE INCOME SOURCE DOC</relationshipLabel>
+    <relationshipName>CARE_INCOME_SOURCE_DOC</relationshipName>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

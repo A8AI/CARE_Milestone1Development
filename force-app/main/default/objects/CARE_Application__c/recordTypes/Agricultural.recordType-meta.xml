@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Agricultural</fullName>
+    <active>true</active>
+    <label>Agricultural</label>
+    <picklistValues>
+        <picklist>APPLICATION_STATUS__c</picklist>
+        <values>
+            <fullName>Cancelled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Decision Made</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>In-Progress</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>New</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Pending</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reconciled</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent to CC%26B</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Staged for CC%26B</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>APPLICATION_TYPE__c</picklist>
+        <values>
+            <fullName>Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Notice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CARE_Phone_Type__c</picklist>
+        <values>
+            <fullName>Home</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Work</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CARE_Preferred_Method_of_Communication__c</picklist>
+        <values>
+            <fullName>Email%28By entering your email address%2C you are authorizing PG%26E to send you information from time to time regarding your PG%26E utility service and PG%26E programs and services that may be available to you%2E%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mail %28billing address%29%2C</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Text%28Note%3A Message and data rates may apply%2E%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>CARE_Public_Assistance_Programs__c</picklist>
+        <values>
+            <fullName>Bureau of Indian Affairs General Assistance</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CalFresh%2FSNAP%28Food Stamps%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CalWorks%28TANF%29 or Tribal TANF</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Head Start Income Eligible %28Tribal Only%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Low Income Home Energy Assistance Program %28LIHEAP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medi-Cal for Families%28Healthy Families A%26B%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medicaid%2FMedi-Cal %28age 65 and over%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Medicaid%2FMedi-Cal %28under age 65%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>National School Lunch Program%28NSLP%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Supplemental Security Income%28SSI%29</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Women Infants and Children %28WIC%29</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>DOC_TYPE__c</picklist>
+        <values>
+            <fullName>Contract with Office of Migrant Services</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Federal 501%28c%293</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Invalid Document</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Provided</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Permit by DHCD</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>State Tax Exemption</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>DROP_SOURCE__c</picklist>
+        <values>
+            <fullName>CC%26B Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CSR</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Called - In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Emailed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Faxed%2FLetter Mailed - In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SF Case</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Space Occupied</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ENROLLMENT_TYPE__c</picklist>
+        <values>
+            <fullName>ENROLLMENT</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>OTHER</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV Receipt</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>ESA_STATUS_CODE__c</picklist>
+        <values>
+            <fullName>Completed</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Dropped</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Sent</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>Language_Preference__c</picklist>
+        <values>
+            <fullName>Cantonese</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>English</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hmong</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Korean</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mandarin</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Russian</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Spanish</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tagalog</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Vietnamese</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>QUALIFIED_BY__c</picklist>
+        <values>
+            <fullName>Catagorical</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Income</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Not Qualified</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>SOURCE_CHANNEL_TYPE__c</picklist>
+        <values>
+            <fullName>Allconnect</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Batch</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Bill Insert</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE Flatsite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE Force%2Ecom</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE MyEnergy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE SMS</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CASE%2FAdjustment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CASE%2FCommodity</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CASE%2FReinstatement</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CASE%2FTransfer</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DAC GT Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DataXport Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DataXport PEV Notice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Direct Mail</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>ESA Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Enroll%2FAdjustment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Kiosk</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Demand Status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV%2FAdjustment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Phone Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Regular App</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SoundBite</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Water Agency%2FIOU</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Web Download</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>TRANS_TYPE__c</picklist>
+        <values>
+            <fullName>NE</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RC</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>RQ</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

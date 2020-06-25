@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_IN_PEV__c</fullName>
+    <externalId>false</externalId>
+    <label>CARE IN PEV</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Regular PEV</fullName>
+                <default>false</default>
+                <label>Regular PEV</label>
+            </value>
+            <value>
+                <fullName>HU PEV</fullName>
+                <default>false</default>
+                <label>HU PEV</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

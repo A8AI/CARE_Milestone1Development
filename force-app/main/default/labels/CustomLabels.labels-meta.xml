@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>CARE_AccountPersonIdValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Send App screen is not having Account Id/P</shortDescription>
+        <value>Account Id/Person Id entered is either blank or null!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_AddElecGasHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_AddElecGasHeader</shortDescription>
+        <value>Add Elec / Gas ( Contact Code: {0} )</value>
+    </labels>
+    <labels>
+        <fullName>CARE_AdjustmentHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_AdjustmentHeader</shortDescription>
+        <value>Adjustment ( Contact Code: {0} )</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ApplicantNameMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to enter Applicant Name</shortDescription>
+        <value>Please enter applicant Name!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_BothRetroDateValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for both retro dates validation</shortDescription>
+        <value>If entered, both Retro start and End date must have a value!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_CancelHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_CancelHeader</shortDescription>
+        <value>Cancel the Transaction?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_CommentFieldValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to remove comma from comment box</shortDescription>
+        <value>Please remove comma(,) from comment field in order to proceed!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ConfirmationDeleteMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ConfirmationDeleteMsg</shortDescription>
+        <value>Are you sure you want to delete the record?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ConfirmationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Modal Popup Message to show in CARE App for confirmation</shortDescription>
+        <value>Are you sure you want to cancel the transaction?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DeleteMsgHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Message Header for the Delete Confirmation Modal</shortDescription>
+        <value>Delete the Transaction?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DeleteSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for deletion Transaction</shortDescription>
+        <value>Enrollment Record is Deleted!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DropCaseourceValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Drop Source is selected as SF Case or CC&amp;B</shortDescription>
+        <value>Case ID is Required when Drop Source is SF Case or CC&amp;B Case!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DropEmailSourceValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Drop Source is selected as Email.</shortDescription>
+        <value>Please upload at least one document or Image ID when Drop Source is Emailed!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DropInvalidCaseIDMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if entered CaseID is invalid</shortDescription>
+        <value>Case ID provided is incorrect, Case ID must be 15 or 18 character Salesforce ID !!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DropValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Drop Source is not selected.</shortDescription>
+        <value>Drop Source is required in order to drop a customer!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EmailIdValidation</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to enter valid Email Id</shortDescription>
+        <value>Please enter valid Email Id!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollAcceptMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for enrollment accept.</shortDescription>
+        <value>Enrollment is accepted successfully!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollmentCreateErrorMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to say that there was error while creating Enrollment Record.</shortDescription>
+        <value>Error while creating Enrollment record!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollmentDocumentValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to ask to upload one document or image ID</shortDescription>
+        <value>Please upload atleast one document or Image ID!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollmentEditErrorMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to show that editing of retro dates was not successful</shortDescription>
+        <value>Error editing record!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollmentProcessingMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for enrollment processing.</shortDescription>
+        <value>Enrollment processing complete!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_EnrollmentSaveMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show enrollment saved successfully.</shortDescription>
+        <value>Enrollment record saved!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ErrorHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ErrorHeader</shortDescription>
+        <value>Application Error</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ImageDeleteMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Files/Image is deleted</shortDescription>
+        <value>Record / File deleted successfully !!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ImageIdLengthMismatchMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ImageIdLengthMismatchMsg</shortDescription>
+        <value>Please enter 8 or 10 numeric characters</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ImageIdPatternMismatchMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ImageIdPatternMismatchMsg</shortDescription>
+        <value>Please enter numeric characters only.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ImageIdSaveSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ImageIdSaveSuccessMsg</shortDescription>
+        <value>Image IDs are saved successfully !!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_InvalidPersonIdMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to show 2 person Id is selected</shortDescription>
+        <value>You can&apos;t select this SAID as it belongs to different Person ID. Please do reselection of all records of same person!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NotEligibleMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Customer is not having a Current discount</shortDescription>
+        <value>Selected Customer is Not enrolled in CARE/FERA!!.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NotEligiblePersonMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show Selected person is not applicable for the transaction.</shortDescription>
+        <value>Selected Person is not eligible for the transaction!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NotModifiedMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_NotModifiedMsg</shortDescription>
+        <value>Please modify atleast one record.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NotModifiedRstREndMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_NotModifiedRstREndMsg</shortDescription>
+        <value>Please modify atleast one record with Retro Start Date and Retro End Date.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NotSelectedMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Customer is not Selected any record for Tra</shortDescription>
+        <value>Please select atleast one record!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_RecordsCustNotFound</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_RecordsCustNotFound</shortDescription>
+        <value>No customer records found !</value>
+    </labels>
+    <labels>
+        <fullName>CARE_RecordsWithNoDiscNotFound</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_RecordsWithNoDiscNotFound</shortDescription>
+        <value>There are no active SA for applying discounts in commodity addition.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_RetroDateValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for Retro Date Validation.</shortDescription>
+        <value>Retro end date should be greater than Retro start date and not greater than Todays date!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_RetroStartDateValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_RetroStartDateValidationMsg</shortDescription>
+        <value>Retro start date should be less than Todays date.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SaveSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Save is Successful</shortDescription>
+        <value>Successfully Saved details!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SearchFieldMissingMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if search criteria is not mentioned</shortDescription>
+        <value>Please enter atleast one field!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SelectCommentMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for selecting Comment</shortDescription>
+        <value>Please enter Comment!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SelectReasonMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for selecting Reason</shortDescription>
+        <value>Please select Reason!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SendAppConfirmationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_SendAppConfirmationMsg</shortDescription>
+        <value>Are you sure you want to send a Single Family Enrollment Application form to this customer?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SendAppHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_SendAppHeader</shortDescription>
+        <value>Send Application ( Contact Code: {0} )</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SendAppSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Send App is success</shortDescription>
+        <value>Contact has been created to send an Enrollment Application!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SuccessHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_SuccessHeader</shortDescription>
+        <value>Transaction Success</value>
+    </labels>
+    <labels>
+        <fullName>CARE_TransactionErrorMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for any transaction exception.</shortDescription>
+        <value>There is some technical error !! Please try again later.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_TransactionSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for Success transaction</shortDescription>
+        <value>Transaction successful. Click on History tab to view transaction details!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_TransferHeader</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Modal Pop Up Header for Transfer</shortDescription>
+        <value>Transfer ( Contact Code: {0} )</value>
+    </labels>
+    <labels>
+        <fullName>CARE_TransferOverrideValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if Override is not selected for different Prem</shortDescription>
+        <value>Please select SA from same Premise or select override !!</value>
+    </labels>
+</CustomLabels>

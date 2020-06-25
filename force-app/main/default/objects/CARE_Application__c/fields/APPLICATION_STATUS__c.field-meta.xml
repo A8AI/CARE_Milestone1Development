@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>APPLICATION_STATUS__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Status of Enrollment</inlineHelpText>
+    <label>APPLICATION STATUS</label>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>New</fullName>
+                <default>false</default>
+                <label>New</label>
+            </value>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+            <value>
+                <fullName>In-Progress</fullName>
+                <default>false</default>
+                <label>In-Progress</label>
+            </value>
+            <value>
+                <fullName>Decision Made</fullName>
+                <default>false</default>
+                <label>Decision Made</label>
+            </value>
+            <value>
+                <fullName>Staged for CC&amp;B</fullName>
+                <default>false</default>
+                <label>Staged for CC&amp;B</label>
+            </value>
+            <value>
+                <fullName>Sent to CC&amp;B</fullName>
+                <default>false</default>
+                <label>Sent to CC&amp;B</label>
+            </value>
+            <value>
+                <fullName>Reconciled</fullName>
+                <default>false</default>
+                <label>Reconciled</label>
+            </value>
+            <value>
+                <fullName>Completed</fullName>
+                <default>false</default>
+                <label>Completed</label>
+            </value>
+            <value>
+                <fullName>Cancelled</fullName>
+                <default>false</default>
+                <label>Cancelled</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

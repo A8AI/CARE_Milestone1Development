@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SYSTEM_VALUE_TYPE__c</fullName>
+    <externalId>false</externalId>
+    <label>SYSTEM_VALUE TYPE</label>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>BATCH JOB</fullName>
+                <default>false</default>
+                <label>BATCH JOB</label>
+            </value>
+            <value>
+                <fullName>CAREOPS</fullName>
+                <default>false</default>
+                <label>CAREOPS</label>
+            </value>
+            <value>
+                <fullName>CONTROL</fullName>
+                <default>false</default>
+                <label>CONTROL</label>
+            </value>
+            <value>
+                <fullName>EMAIL</fullName>
+                <default>false</default>
+                <label>EMAIL</label>
+            </value>
+            <value>
+                <fullName>RENEWAL MONTH</fullName>
+                <default>false</default>
+                <label>RENEWAL MONTH</label>
+            </value>
+            <value>
+                <fullName>SYSTEM</fullName>
+                <default>false</default>
+                <label>SYSTEM</label>
+            </value>
+            <value>
+                <fullName>URL</fullName>
+                <default>false</default>
+                <label>URL</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

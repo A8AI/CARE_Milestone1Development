@@ -81,7 +81,7 @@ export default class lwcCmpName extends LightningElement {
     @track enrollReturn;
     @track sCareAppStatus = '';
     @api sLiveAppCall;
-    
+    //@track careResultList = 
     @track values;
     //@track careSAData;
     @track careSAData = [];
@@ -607,9 +607,11 @@ handleSave(event){
     if(formValidFlag){
         if(this.EnrollObjFields.adultValue == '' || this.EnrollObjFields.adultValue == undefined){
             this.EnrollObjFields.adultValue = 0;
-        }else if(this.EnrollObjFields.childrenValue == '' || this.EnrollObjFields.childrenValue == undefined){
+        }
+        if(this.EnrollObjFields.childrenValue == '' || this.EnrollObjFields.childrenValue == undefined){
             this.EnrollObjFields.childrenValue = 0;
-        }else if(this.EnrollObjFields.annualIncValue == '' || this.EnrollObjFields.annualIncValue == undefined){
+        }
+        if(this.EnrollObjFields.annualIncValue == '' || this.EnrollObjFields.annualIncValue == undefined){
             this.EnrollObjFields.annualIncValue = 0;
         }
 

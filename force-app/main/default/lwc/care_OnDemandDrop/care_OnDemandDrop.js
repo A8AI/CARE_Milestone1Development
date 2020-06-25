@@ -6,7 +6,7 @@ import deleteCareAppRecord from '@salesforce/apex/CARE_OnDemandDropController.d
 import getOnDemandDropInfoList from '@salesforce/apex/CARE_OnDemandDropController.getOnDemandDropInfoList';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import DROP_SOURCE_TYPE from '@salesforce/schema/CARE_Application__c.DROP_SOURCE__c';
-//import custom labelss
+//import custom labels
 import DropCaseourceValidationMsg from '@salesforce/label/c.CARE_DropCaseourceValidationMsg';
 import TransactionSuccessMsg from '@salesforce/label/c.CARE_TransactionSuccessMsg';
 import NotEligibleMsg from '@salesforce/label/c.CARE_NotEligibleMsg';
@@ -159,12 +159,13 @@ export default class ModalPopupLWC extends LightningElement {
 
         if(this.OnDemandDropObj.dropSourceValue === 'Emailed' ) {
             this.disableImageButton = this.OnDemandDropObj.dropSourceValue;
-            this.emailDropValue = this.OnDemandDropObj.dropSourceValue;
-        }else if(this.caseIDLength === 15 || this.caseIDLength === 18){
+        }else{
+            this.disableImageButton = '';
+        }
+        if(this.caseIDLength === 15 || this.caseIDLength === 18){
             this.bCaseIdIncorrect = true;
         }else{
-            this.bCaseIdIncorrect = false;
-            this.disableImageButton = '';
+            this.bCaseIdIncorrect = false;            
         }
         
         this.bFormEdited = true;

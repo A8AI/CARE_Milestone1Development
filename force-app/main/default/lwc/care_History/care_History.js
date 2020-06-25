@@ -65,6 +65,11 @@ export default class Care_History extends LightningElement {
     @track selectedRecord;
     @track bShowReadonly = true;                
     @track sApplicationNo;
+    @track loadMoreStatus;
+    @track totalCount = 0;
+    tableElement;
+    @track bIsLoaded = true;
+    @track idRecLast;
     @track typeNumber;
     label = {
         DeleteSuccessMsg,
@@ -78,7 +83,9 @@ export default class Care_History extends LightningElement {
 
     @wire(getEnrollHistoryData, {
         sPerID: '$sSelectedHistoryPerId',
-        sMakeLiveCall: '$sLiveCall'
+        sMakeLiveCall: '$sLiveCall',
+        recordId: ''
+
     })
     wiredHistoryResp(resp) {
         this._wiredHistoryResult = resp;
@@ -89,7 +96,11 @@ export default class Care_History extends LightningElement {
 
         console.log(this.sSelectedHistoryPerId + '  HistoryFlag  ');
         if (data) {
-            this.data = data;
+            this.data = data.listHistoryWrapper;
+            this.totalCount = data.iTotalRecCount;
+            this.idRecLast = data.idLastRec;
+            console.log('total listHistoryWrapper data length ------->' , this.data.length);
+            console.log('total count of select clause ------->' , this.totalCount);
             this.error = undefined;
             if (this.data) {
                 this.showLoadingSpinner = false;
@@ -101,6 +112,57 @@ export default class Care_History extends LightningElement {
         }
     }
 
+    loadMoreData(event) {
+        
+        //Display a spinner to signal that data is being loaded
+        //Display "Loading" when more data is being loaded
+        //event.target.isLoading = true;
+        if(event.target){
+            event.target.isLoading = true;
+        }
+        this.tableElement = event.target;
+        this.loadMoreStatus = 'Loading';
+        const currentRecord = this.data;
+        //const lastRecId = currentRecord[currentRecord.length - 1].sId;
+        const lastRecId = this.idRecLast;
+        console.log('lastRecId ------->' + lastRecId);
+        if (this.data.length < this.totalCount) {
+            getEnrollHistoryData({ sPerID: this.sSelectedHistoryPerId, sMakeLiveCall: this.sLiveCall, recordId: lastRecId})
+            .then(result => {
+                console.log('result length before concat ------->' + result.listHistoryWrapper.length);
+                //console.log('result with recordID ------->' + JSON.stringify(result));
+                const currentData = result.listHistoryWrapper;
+                //Appends new data to the end of the table
+                const newData = currentRecord.concat(currentData);
+                this.data = newData;
+                this.idRecLast = result.idLastRec;
+                console.log('data length after concat ------->' + this.data.length); 
+                if (this.data.length >= this.totalCount) {
+                console.log('Inside If block of LoadMoreData'); 
+                    this.bIsLoaded = false;
+                    //event.target.enableInfiniteLoading = false;
+                    this.loadMoreStatus = 'No more data to load';
+                } else {
+                    console.log('Inside else block of LoadMoreData'); 
+                    this.loadMoreStatus = '';
+                }
+                if(this.tableElement){
+                    this.tableElement.isLoading = false;
+                } 
+            })
+            .catch(error => {
+                console.log('-------error-------------'+error);
+                console.log(error);
+            });
+        }else{
+            this.loadMoreStatus = 'No more data to load';
+            this.bIsLoaded = false;
+            this.tableElement.isLoading = false;  
+        }
+        
+    }
+    
+    
     //call refresh data after Delete click to update the wired hisotry cache
     @api refreshData() {
         return refreshApex(this._wiredHistoryResult);

@@ -2,10 +2,12 @@
     <template if:true={checkHistoryData}>
         <div style="height: 300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
             <lightning-datatable data={data} columns={columns} key-field="sId" hide-checkbox-column="true"
-                
-                onrowaction={handleRowAction}>
+            enable-infinite-loading={bIsLoaded}
+            onloadmore={loadMoreData}            
+            onrowaction={handleRowAction}>
                 <!--</lightning-datatable>onsuccess={refreshData}-->
             </lightning-datatable>
+            {loadMoreStatus}
         </div>
         
         <div class="slds-float_right slds-p-top_x-small">

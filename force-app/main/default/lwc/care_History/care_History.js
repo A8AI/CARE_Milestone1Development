@@ -11,7 +11,7 @@ import ConfirmationDeleteMsg from '@salesforce/label/c.CARE_ConfirmationDeleteMs
 import DeleteMsgHeader from '@salesforce/label/c.CARE_DeleteMsgHeader';
 
 
-// datatable columns with rows actions
+// datatable columns with row actions
 const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date',
                         typeAttributes: {day: "numeric", month: "numeric",year: "numeric"},
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},

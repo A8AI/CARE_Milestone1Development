@@ -1,0 +1,30 @@
+<!--LWC Component Name      :  care_EnrollResult
+    Version                 :  1.0                                                                          
+    Function                :  This Component displays result of customer enrollment on Enrollment Tab 
+    Work Task               :                                                                            
+    Modification Log        :                                                                            
+*   When                       Who                   Description
+****************************************************************************************                                     
+*  05/04/2020                  A8AI                First Iteration  : 
+****************************************************************************************-->
+
+<template>
+    <!--Result-->
+    <td style="padding-right: 20px;">
+    <table style="width: 365px; border: 1px solid black;">
+        <tr> <td class="header">3. Result</td><td></td></tr>
+        <tr> <td ><textarea  rows="2" cols="25">Whateve Contact Code ypu have. Can be 2 lines !</textarea></td><td>Is Adjustment?&emsp;<input type="checkbox" checked></input></td></tr>
+        <tr> <td>Elec Yes Date:&emsp;<input type="date" style="width: 130px"></input></td><td>Elec Retro Start Date:&emsp;<input type="date" style="width: 130px"></input></td></tr>
+        <tr> <td>Gas Yes Date:&emsp;<input type="date" style="width: 130px"></input></td><td>Gas Retro Start Date:&emsp;<input type="date" style="width: 130px"></input></td></tr>
+        <tr> <td>No Date:&emsp;&emsp;<input type="date" style="width: 130px"></input></td><td>Retro End Date:&emsp;<input type="date" style="width: 130px"></input></td></tr>
+        <tr> <td>Is Duplicate?&emsp;<input type="checkbox" checked></input></td><td>Adjustment Reason:&nbsp;<select style="width: 130px"><option value="Regular App">Regular App</option><option value="Bill Insert">Bill Insert</option></select></td></tr>
+        <!--<tr> <td>Is Duplicate?&emsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+        <!--<tr> <td>Is Duplicate?&emsp;&nbsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+        <tr> <td>Process Notes:<textarea  rows="2" cols="25"></textarea></td><td>Is New Enrollment?&nbsp;<input type="checkbox" checked></input></td></tr>     
+        <!--<tr> <td>Data Entry Complete?&nbsp;<input type="checkbox" checked></input></td><td>Is New Enrollment?&nbsp;<input type="checkbox" checked></input></td></tr>-->
+        <!--<tr> <td>Is New Enrollment?&nbsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+        
+
+    </table>
+</td>
+</template>

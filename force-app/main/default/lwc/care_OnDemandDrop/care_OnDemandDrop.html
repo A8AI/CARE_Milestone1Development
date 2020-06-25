@@ -1,0 +1,100 @@
+<template>
+    <!-- lightning button for open modal window -->
+    <lightning-button
+       label="On Demand Drop"
+       title="On Demand Drop"
+       onclick={openOnDemandModal}
+       class="slds-m-left_x-small">
+    </lightning-button>
+    <!--Use template if:true to display/hide popup based on isModalOpen value--> 
+    <template if:true={isModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!--<div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                 </div>-->
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <!--<h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">On Demand Drop</h2>-->
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">OnDemandDrop ( Contact Code: {OnDemandDropObj.sContactCCCode} )</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_x-small" id="modal-content-id-1">
+                    <div class="slds-p-left_small slds-size_2-of-3 slds-p-top_x-small">
+                        <lightning-textarea label="Drop Reason:" data-id="dropReasonField" value={OnDemandDropObj.dropReasonValue} onfocusout={handleChange}></lightning-textarea>
+                    </div>
+                    <div class="slds-grid slds-wrap">   
+                        <div class="slds-p-left_small slds-size_1-of-4 slds-p-top_medium">
+                            <lightning-combobox label="Drop Source"  data-id="dropSourceField" value={value} placeholder="Select an option" options={sourceOptions} onfocusout={handleChange} ></lightning-combobox>
+                        </div>
+                        <div class="slds-p-left_xx-large slds-size_1-of-4 slds-p-top_medium">
+                            <lightning-input type="text" label="Case ID" required={bCaseField} data-id="caseIDField" onfocusout={handleChange}></lightning-input>
+                        </div>
+                     </div>
+                     <div class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-size_1-of-4 slds-p-top_medium">
+                            <lightning-input type="date" label="Drop Date" date-style="short" data-id="dropDateField" value={OnDemandDropObj.dropDateValue} onfocusout={handleChange}></lightning-input>
+                        </div>
+            
+                        <div class="slds-p-left_xx-large slds-size_1-of-4 slds-p-top_medium">
+                            <lightning-input type="date" label="Received Date" date-style="short" data-id="receivedDateField" value={OnDemandDropObj.receiveDateValue} onfocusout={handleChange}></lightning-input>
+                        </div>
+                    </div>
+
+                    <!--<div if:false={checkAppId} >
+                        <div class="slds-p-left_small slds-p-top_medium">
+                        <lightning-button label="Image ID" title="Image ID" disabled  class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                    </div>-->
+
+                   <div class="slds-p-left_small slds-p-top_medium"> 
+                       <c-care_-image-upload record-id={newCareApplicationId} view-only="false"></c-care_-image-upload></div>
+                
+                    <!--<div if:true={checkAppId} class="slds-p-left_small slds-p-top_medium">
+                        <div if:false={bModalFlag}><c-care_-image-upload record-id={newCareApplicationId} view-only="false"></c-care_-image-upload></div>
+                        <div if:true={bModalFlag}><c-care_-image-upload record-id={newCareApplicationId} view-only="true"></c-care_-image-upload></div>
+                    
+                    </div>-->
+
+                    <!--<div class="slds-p-left_small slds-p-top_medium">
+                    Image ID:<lightning-button label="Image" title="Image" disabled={disableImageButton} onclick={handleClick} class="slds-m-left_x-small"></lightning-button>
+                    </div>-->
+                <!--<table>
+                <tr>
+                    <td if:false={checkAppId}> <lightning-button label="Image ID" title="Image ID" disabled  class="slds-m-left_x-small"></lightning-button>
+                    </td>
+                    <td if:true={checkAppId}><c-care_-image-upload record-id={newCareApplicationId} view-only={bModalFlag}></c-care_-image-upload></td>
+                </tr>
+                </table>-->
+                    <div if:true={showLoadingSpinner}>
+                        <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                     </div>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                <div class="slds-float_right">
+                    <lightning-button class="slds-p-left_small" label="Close" title="Close" name="close" onclick={closeModal}></lightning-button>
+                    <lightning-button class="slds-p-left_x-small" label="Confirm" title="Confirm" name="confirm" onclick={submitDetails} ></lightning-button>
+                    
+                </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!--Confirmation modal start-->
+  <template if:true={bShowConfirmationModal}>
+    <c-care_-confirm-modal header-text="Cancel the Transaction?" body-text="Are you sure you want to cancel the transaction?" footer-yes-text="Yes" footer-no-text="No"
+       onnobuttonevent={closeConfirmationModal} onyesbuttonevent={cancelTransaction}></c-care_-confirm-modal>
+ </template>
+ <!--Confirmation modal end-->
+    
+ </template>

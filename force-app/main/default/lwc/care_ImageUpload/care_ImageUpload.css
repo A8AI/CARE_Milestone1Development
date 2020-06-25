@@ -1,0 +1,45 @@
+.slds-modal__container {
+   max-width: 50rem !important;
+  width: 50% !important; 
+  /*height: 100% !important;*/
+  max-height: 100rem !important;
+  height: 100% !important; 
+}
+.scroll {
+  overflow: scroll;
+} 
+.cellAlignment{
+    text-align: center;
+  }
+.add__value {
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    transition: border 0.3s;
+}
+.outer-div {
+  position: relative;
+}
+.spinner {
+  position: absolute;
+}
+
+.modal__containerresize{
+  max-width: 30rem !important;
+  width: 30% !important;
+}
+.confirmHeader{
+  border-top: 0.25rem solid rgb(156, 150, 150);
+  border-left: 0.25rem solid rgb(156, 150, 150);
+  border-right: 0.25rem solid rgb(156, 150, 150);
+  color:rgb(194, 57, 52);
+}
+.confirmBody{
+  text-align:center;
+  border-left: 0.25rem solid rgb(156, 150, 150);
+  border-right: 0.25rem solid rgb(156, 150, 150);
+}
+.confirmFooter{
+  border-bottom: 0.25rem solid rgb(156, 150, 150);
+  border-left: 0.25rem solid rgb(156, 150, 150);
+  border-right: 0.25rem solid rgb(156, 150, 150);
+}

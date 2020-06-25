@@ -1,0 +1,14 @@
+.slds-modal__container {
+    max-width: 80rem !important;
+    width: 80% !important;
+}
+.modal__containerresize{
+    max-width: 50rem !important;
+    width: 50% !important;   
+}
+.scroll {
+    overflow: scroll;
+}
+.slds-input{
+   padding: 0px 0px 0px 0px !important;
+}

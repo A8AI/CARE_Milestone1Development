@@ -1,0 +1,44 @@
+<!--
+  @File Name          : care_SearchAutoComplete.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 5/19/2020, 1:52:46 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <lightning-input placeholder="Type here...."  label={inputLabel} onchange={handleKeyChange} onfocus={handleKeyChange} onkeypress={lastSpace} onfocusout={handleOnBlur}
+        class="slds-m-bottom_xx-small" value={searchKey} min-length="10" max-length="10" autocomplete="off"
+        message-when-too-short="Please enter 10 characters numbers only including leading zeroes" message-when-too-long="Please enter 10 characters numbers only including leading zeroes" pattern="[0-9]{10}"
+        message-when-pattern-mismatch="Please enter 10 characters numbers only including leading zeroes"></lightning-input>
+        
+                <template if:true={showListBox}>
+                    <div class="slds-form-element__control">
+                        <div class="slds-combobox_container">
+                            <template if:true={showListBox}>
+                                <div id="listbox-id-11" class="slds-dropdown slds-dropdown_length-10 slds-dropdown_fluid" role="listbox">
+                                    <ul class="slds-listbox slds-listbox_vertical">
+                                        <template for:each={listOfRec} for:item="rec">
+                                            <li class="listItem" key={rec} onmousedown={handleOnClick} data-item={rec}>
+                                                <div class="slds-media slds-listbox__option slds-listbox__option_plain slds-media_xx-small"
+                                                    role="option">
+                                                    <span class="slds-media__body">
+                                                        <span class="slds-truncate">
+                                                            <span> {rec}</span>
+                                                        </span>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+       
+    </template>
+</template>

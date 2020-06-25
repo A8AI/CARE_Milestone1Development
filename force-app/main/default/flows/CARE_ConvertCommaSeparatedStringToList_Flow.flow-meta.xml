@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Add Left String To Collection</description>
+        <name>Add_Left_String_To_Collection</name>
+        <label>Add Left String To Collection</label>
+        <locationX>794</locationX>
+        <locationY>762</locationY>
+        <assignmentItems>
+            <assignToReference>colString_Output</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>fxLEFTInputString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Set_Remaining_String</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Add final String To Collection</description>
+        <name>Add_Left_String_To_Collection_Final</name>
+        <label>Add Left String To Collection</label>
+        <locationX>1288</locationX>
+        <locationY>876</locationY>
+        <assignmentItems>
+            <assignToReference>colString_Output</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varInputString_Input</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Assign Temp To Input String</description>
+        <name>Assign_Temp_To_Input_String</name>
+        <label>Assign Temp To Input String</label>
+        <locationX>580</locationX>
+        <locationY>444</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString_Input</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varTempString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Input_String_Lenght_GreaterThan_Zero</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Remove Separator From End</description>
+        <name>Remove_Separator_From_End</name>
+        <label>Remove Separator From End</label>
+        <locationX>1305</locationX>
+        <locationY>484</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString_Input</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxRemoveFromEnd</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Next_Separator_Available</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Remove Separator From Start</description>
+        <name>Remove_Separator_From_Start</name>
+        <label>Remove Separator From Start</label>
+        <locationX>1102</locationX>
+        <locationY>280</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString_Input</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxRIGHTInputString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Separator_At_End</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Exit</description>
+        <name>Set_Output_and_Exist</name>
+        <label>Set Output and Exist</label>
+        <locationX>713</locationX>
+        <locationY>50</locationY>
+        <assignmentItems>
+            <assignToReference>varTempString</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Done</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Temp Assignment</description>
+        <name>Set_Remaining_String</name>
+        <label>Set Remaining String in Temp</label>
+        <locationX>664</locationX>
+        <locationY>586</locationY>
+        <assignmentItems>
+            <assignToReference>varTempString</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxRIGHTInputString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Temp_To_Input_String</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Trim Input String</description>
+        <name>Trim_Input_String</name>
+        <label>Trim Input String</label>
+        <locationX>494</locationX>
+        <locationY>252</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString_Input</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxTrimmedInputString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Input_String_Lenght_GreaterThan_Zero</targetReference>
+        </connector>
+    </assignments>
+    <constants>
+        <description>Separator String</description>
+        <name>conSepartator</name>
+        <dataType>String</dataType>
+        <value>
+            <stringValue>,</stringValue>
+        </value>
+    </constants>
+    <decisions>
+        <description>Check length greater than zero</description>
+        <name>Is_Input_String_Lenght_GreaterThan_Zero</name>
+        <label>Is Input String &gt;0</label>
+        <locationX>700</locationX>
+        <locationY>270</locationY>
+        <defaultConnector>
+            <targetReference>Set_Output_and_Exist</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Greater</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fxLengthOfInputString</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Separator_At_Start</targetReference>
+            </connector>
+            <label>Yes Greater</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check Next Separator Location</description>
+        <name>Is_Next_Separator_Available</name>
+        <label>Check Next Separator Location Greater Than Zero</label>
+        <locationX>1026</locationX>
+        <locationY>758</locationY>
+        <defaultConnector>
+            <targetReference>Add_Left_String_To_Collection_Final</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fxNextSeparatorLocation</leftValueReference>
+                <operator>GreaterThan</operator>
+                <rightValue>
+                    <numberValue>0.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_Left_String_To_Collection</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Separator at end</description>
+        <name>Is_Separator_At_End</name>
+        <label>Is Separator At End?</label>
+        <locationX>1022</locationX>
+        <locationY>514</locationY>
+        <defaultConnector>
+            <targetReference>Is_Next_Separator_Available</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Separator_End</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fxIsSeparatorAtEnd</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Remove_Separator_From_End</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is separator at begining?</description>
+        <name>Is_Separator_At_Start</name>
+        <label>Is Separator At Start?</label>
+        <locationX>905</locationX>
+        <locationY>280</locationY>
+        <defaultConnector>
+            <targetReference>Is_Separator_At_End</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_at_Beginning</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>fxIsSeparatorAtStart</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Remove_Separator_From_Start</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>CARE Convert Comma Separated String To List</description>
+    <formulas>
+        <description>Check separator at the end of string</description>
+        <name>fxIsSeparatorAtEnd</name>
+        <dataType>Boolean</dataType>
+        <expression>IF(RIGHT({!varInputString_Input}, {!fxLengthOfSeparatorString}) ={!varSeparator}, True, False)</expression>
+    </formulas>
+    <formulas>
+        <description>Check Comma is there at beginning of input String</description>
+        <name>fxIsSeparatorAtStart</name>
+        <dataType>Boolean</dataType>
+        <expression> IF(LEFT({!varInputString_Input}, {!fxLengthOfSeparatorString}) = {!varSeparator}, True, False)</expression>
+    </formulas>
+    <formulas>
+        <description>Left Input String</description>
+        <name>fxLEFTInputString</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!varInputString_Input}, FIND({!varSeparator}, {!varInputString_Input}) -1)</expression>
+    </formulas>
+    <formulas>
+        <description>Length of input string after trimming</description>
+        <name>fxLengthOfInputString</name>
+        <dataType>Number</dataType>
+        <expression>LEN({!varInputString_Input})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <description>Length of Separator String (in this scenario =1)</description>
+        <name>fxLengthOfSeparatorString</name>
+        <dataType>Number</dataType>
+        <expression>LEN({!varSeparator})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <description>Next Separator Location</description>
+        <name>fxNextSeparatorLocation</name>
+        <dataType>Number</dataType>
+        <expression>FIND({!varSeparator}, {!varInputString_Input})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <description>Remove separator from end</description>
+        <name>fxRemoveFromEnd</name>
+        <dataType>String</dataType>
+        <expression>LEFT({!varInputString_Input}, LEN({!varInputString_Input})-{!fxLengthOfSeparatorString})</expression>
+    </formulas>
+    <formulas>
+        <description>Right Input String</description>
+        <name>fxRIGHTInputString</name>
+        <dataType>String</dataType>
+        <expression>RIGHT({!varInputString_Input}, LEN({!varInputString_Input}) -{!fxNextSeparatorLocation}-{!fxLengthOfSeparatorString}+1)</expression>
+    </formulas>
+    <formulas>
+        <description>Trim input string</description>
+        <name>fxTrimmedInputString</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!varInputString_Input})</expression>
+    </formulas>
+    <interviewLabel>CARE {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CARE Convert Comma Separated String To List Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>261</locationY>
+        <connector>
+            <targetReference>Trim_Input_String</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Final List of Strings</description>
+        <name>colString_Output</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>Comma Separated Input String</description>
+        <name>varInputString_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Separator</description>
+        <name>varSeparator</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <elementReference>conSepartator</elementReference>
+        </value>
+    </variables>
+    <variables>
+        <description>Temp String To hold intermediate results</description>
+        <name>varTempString</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

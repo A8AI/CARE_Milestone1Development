@@ -1,0 +1,195 @@
+<!--
+  @File Name          : care_App.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 6/22/2020, 9:24:34 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <lightning-accordion class="setAccordionIdentifier" allow-multiple-sections-open active-section-name={listActiveSections} onsectiontoggle={handleSectionToggle}>
+
+        <lightning-accordion-section name="SearchForm"  label="Search">
+
+            <lightning-card>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <c-care_-search-auto-complete name="accountField" input-label="Account #"
+                            object-api-name="EI_Site__c" field-api-name="Billing_Account_ID_EI__c"
+                            onrecordselect={handleRecordSelection} onhandletyping={handletyping}
+                            class="slds-m-bottom_small c-layout__half-width"></c-care_-search-auto-complete>
+                    </div>
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Customer Name" type="text" data-id="custNameField" autocomplete="off"
+                            onfocusout={handleChange}></lightning-input>
+                    </div>
+
+                    <!-- <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Phone" type="text" data-id="phoneField" autocomplete="off"
+                            onchange={handleChange}></lightning-input>
+                    </div> -->
+
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Phone" type="text" data-id="phoneField" autocomplete="off"
+                        placeholder="(###) ###-####" pattern="^\(\d{3}\)\s\d{3}-\d{4}$" message-when-pattern-mismatch="Not a valid phone number" 
+                        value={maskedPhone} onchange={handleChange}></lightning-input>
+                    </div>
+
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Street" type="text" data-id="streetField" autocomplete="off"
+                            onchange={handleChange}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Space" type="text" data-id="spaceField" autocomplete="off"
+                            onfocusout={handleChange}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="City" type="text" data-id="cityField" autocomplete="off"
+                            onchange={handleChange}></lightning-input>
+                    </div>
+
+                    <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
+                        <lightning-input label="Zip" type="text" data-id="zipField" autocomplete="off"
+                            onchange={handleChange}></lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-p-left_small slds-p-top_small slds-size_1-of-8">
+                        <c-care_-search-auto-complete name="SAIDField" input-label="SAID" object-api-name="EI_Site__c"
+                            field-api-name="SAID_EI__c" onrecordselect={handleRecordSelection}
+                            onhandletyping={handletyping} class="slds-m-bottom_small c-layout__half-width">
+                        </c-care_-search-auto-complete>
+                    </div>
+                    <div class="slds-p-left_small slds-p-top_small slds-size_1-of-8">
+                        <c-care_-search-auto-complete name="personField" input-label="Person ID"
+                            object-api-name="EI_Site__c" field-api-name="Person_ID_EI__c"
+                            onrecordselect={handleRecordSelection} onhandletyping={handletyping}
+                            class="slds-m-bottom_small c-layout__half-width"></c-care_-search-auto-complete>
+                    </div>
+                    <!-- <div class="slds-p-left_small slds-p-top_small slds-size_1-of-8">
+                        <lightning-input label="Premise ID" type="text" placeholder="Type here...."
+                            onchange={handleAccountName} value={strSearchAccName}></lightning-input>
+                    </div> -->
+                    <div class="slds-p-left_small slds-p-top_small slds-size_1-of-8">
+                        <c-care_-search-auto-complete name="premiseField" input-label="Premise ID"
+                            object-api-name="EI_Site__c" field-api-name="Site_Premise_ID_EI__c"
+                            onrecordselect={handleRecordSelection} onhandletyping={handletyping}
+                            class="slds-m-bottom_small c-layout__half-width"></c-care_-search-auto-complete>
+                    </div>
+                    <div class="slds-p-left_small slds-size_1-of-8 slds-p-top_small">
+                        <lightning-combobox label="Facility/Housing Org" value={value} placeholder="Select an option"
+                            options={roleOptions} data-id="facilityField" onchange={handleChange}></lightning-combobox>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap">
+
+                    <div class="slds-p-left_small slds-p-top_medium">
+                        <lightning-input label="Include Inactive Customer" type="checkbox" data-id="inactiveCustField"
+                            onchange={handleChange}></lightning-input>
+                    </div>
+                    <!--div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input label="Probation" type="checkbox" data-id="probationField"
+                            onchange={handleChange}></lightning-input>
+                    </div-->
+                    <div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input label="Enrolled Tentant Only" type="checkbox" data-id="enrolledTenField"
+                            onchange={handleChange}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input label="MFHC" type="checkbox" data-id="mfhcField" onchange={handleChange}>
+                        </lightning-input>
+                    </div>
+                </div>
+
+                <div class="slds-grid slds-wrap slds-p-top_small slds-float_right">
+                    <div class="slds-p-right_small">
+                        <lightning-button label="Clear" variant="" onclick={handleClear}></lightning-button>
+                    </div>
+
+                    <div class="slds-p-right_medium">
+                        <lightning-button label="Search" variant="" onclick={handleSearch}></lightning-button>
+                    </div>
+                </div>
+                <br>
+                <br>
+            </lightning-card>
+        </lightning-accordion-section>
+
+        <lightning-accordion-section class="setCustomerListIdClass" name="CustomerList" label="Customer List" style="visibility: hidden;" >
+            <div class="outer-div" if:true={searchData}>
+                <div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                </div>                
+                <div if:true={showCustomerList} style="max-height:300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
+                    <lightning-datatable  onsort={updateColumnSorting} sorted-by={sortedBy}  sorted-direction={sortedDirection}  data={searchData} columns={columns} key-field="idcustId"
+                        selected-rows={selectedRows1} onrowselection={handleRowSelection}></lightning-datatable>
+               </div>
+                <br />
+                <div if:false={showCustomerList}>
+                    <p>{label.CARE_RecordsCustNotFound}</p>
+                </div>
+                <br />
+                <!--div if:true={showCustomerList} class="slds-m-around_medium">
+                    <p class="slds-m-vertical_medium content">
+                        Displaying {startingRecord} to {endingRecord} of {totalRecountCount} records.
+                        Page {page} of {totalPage}. </p>
+                    <c-paginator onprevious={previousHandler} onnext={nextHandler}></c-paginator>
+                </div-->
+
+
+               
+            </div>
+
+
+        </lightning-accordion-section>
+
+        <lightning-accordion-section class="setCustomerDetailIdClass" name="CustomerDetails" label="Customer Details" style="visibility: hidden;">
+           <div if:true={bCustomerDetailFlag}>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_3-of-3">
+                    <div if:true={bCustomerDetailFlag} class="slds-float_right">
+                        <table>
+                            <tr>
+                            <td><c-care_-send-app s-applicant-name={sSelectedCustName} s-billing-account-id={sSelectedBillingAccId}  s-account-id={sSelectedEIAccountId} s-person-id={sSelectedPersonId}></c-care_-send-app></td>
+                            <td> <c-care_-on-demand-drop s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag=false></c-care_-on-demand-drop></td>
+                            <td> <c-care_-transfer s-selected-per-id={sSelectedPersonId}></c-care_-transfer></td>
+                            <td><c-care_-adjustment s-selected-per-id={sSelectedPersonId}></c-care_-adjustment></td>
+                            <td><c-care_-add-elec-gas s-selected-per-id={sSelectedPersonId}></c-care_-add-elec-gas></td>
+                            <td><c-care_-reinstate s-selected-per-id={sSelectedPersonId}></c-care_-reinstate></td>
+                           
+                            </tr>
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_3-of-3">                
+                    <lightning-tabset>
+                        <lightning-tab label="History" onactive={refreshTabData}>
+                            <c-care_-history s-live-call={sHistoryRefresh} s-selected-history-per-id={sSelectedPersonId} list-selected-history-prem-ids={listSelectedPremId} ></c-care_-history>
+                            
+                        </lightning-tab>
+
+                        <lightning-tab label="PEV" onactive={refreshTabData}>
+                            PEV !
+                        </lightning-tab>
+
+
+                        <lightning-tab label="Enroll" onactive={refreshTabData} >
+
+                            <c-care_-enrollment s-selected-name={sSelectedCustName} s-selected-billing-acct-id={sSelectedBillingAccId} s-live-app-call={sHistoryRefresh} s-selected-app-id="tab" s-selected-acct-id={sSelectedEIAccountId} s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag={bCallFromModal} ></c-care_-enrollment>
+
+                        </lightning-tab>
+                    </lightning-tabset>
+                </div>
+            </div>
+        </div>
+        </lightning-accordion-section>
+    </lightning-accordion>
+</template>

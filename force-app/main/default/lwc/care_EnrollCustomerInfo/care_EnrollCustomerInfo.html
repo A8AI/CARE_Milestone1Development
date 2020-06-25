@@ -1,0 +1,40 @@
+<!--LWC Component Name      :  CARE_EnrollCustomerOnfo
+    Version                 :  1.0                                                                          
+    Function                :  This Component displays Customer Info on Enrollment Tab 
+    Work Task               :                                                                            
+    Modification Log        :                                                                            
+*   When                       Who                            Description
+****************************************************************************************                                     
+*  05/04/2020      Cognizant Technology Solutions             First Iteration  : 
+****************************************************************************************-->
+
+<template>
+    <!--Customer Information-->
+    <table style="width: 260px; border: 1px solid black;">
+        <tr> <td class="header">1. Customer Information</td></tr>
+        <tr> <td class="tdr">Is Cert? &nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp; <input type="checkbox" class="tdl" ></input></td></tr>
+        <tr> <td>Adult &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; <input type="text" value="2" class="threeDigit" onchange={handleAdultChange}></input></td></tr>
+        <tr> <td>Children (under 18) &nbsp;&nbsp;<input type="text" value="1" class="threeDigit"></input></td></tr>
+        <tr> <td>Is Signed?&emsp;&emsp;&emsp;&emsp;&emsp; <input type="checkbox" ></input></td></tr>
+        <tr> <td>Request Drop? &nbsp;&nbsp;&nbsp;&emsp;&emsp; <input type="checkbox" ></input></td></tr>
+        <!--<tr> <td>Guardian/Power Of Attorney? &nbsp;<input type="checkbox" ></input></td></tr>-->
+        <tr> <td>Need Name Change?&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;<input type="checkbox" ></input></td></tr>
+        <tr> <td>Applicant Name:&nbsp;<input type="text" style="width: 138px"></input></td></tr>
+        <!--<tr> <td>Provided Incompleted Income Proof?&nbsp;<input type="checkbox" ></input></td></tr>-->
+        <tr> <td>Received Date?&emsp;<input type="date" style="width: 138px"></input></td></tr>
+        <tr> <td>Processed Date?&nbsp;&nbsp;<input type="date" style="width: 138px"></input></td></tr>
+        <!--<template for:each={data} for:item="channelOptions">
+        <tr key={w_record.unique_name}> <td>Channel/Form Type:&nbsp;<select style="width: 116px"><option value={channelOptions} ></option></select></td></tr>
+        </template>-->
+        <tr><td>Channel/Form Type:&nbsp;<Select style="width: 116px" onchange={onValueSelection}>
+            <option value="">---None---</option>
+            <template for:each={stageNameValues.data} for:item="picklistItem">
+                <option key={picklistItem.svalue} value={picklistItem.svalue}>{picklistItem.slabel}</option>
+            </template>
+         </Select></td></tr>
+        <!--<tr> <td>Channel/Form Type:&nbsp;<select style="width: 116px"><lightning-combobox value={value} placeholder="Select an option" options={channelOptions}></lightning-combobox></select></td></tr>-->
+        <!--<tr> <td>Channel/Form Type:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" value={value} placeholder="Select an option" options={channelOptions} style="width: 116px" onchange={handleChange} ></lightning-combobox></td></tr>-->
+        <tr> <td>Form Code:&nbsp;&nbsp;&nbsp;&emsp;&emsp;<input type="text" style="width: 138px"></input></td></tr>
+        <tr> <td>COC Code:&emsp;&emsp;&emsp;<input type="text" style="width: 138px"></input></td></tr>
+    </table>
+</template>

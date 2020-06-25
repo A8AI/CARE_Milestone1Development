@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Set Out Put Variable =M</description>
+        <name>Set_Out_Put_Variable_M</name>
+        <label>Set Out Put Variable =M</label>
+        <locationX>937</locationX>
+        <locationY>249</locationY>
+        <assignmentItems>
+            <assignToReference>varCustomerHas_M_InLast2Years_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Customer_CC_code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set default value as false</description>
+        <name>Set_Output_Variable_False</name>
+        <label>Set Output Variables=False</label>
+        <locationX>1815</locationX>
+        <locationY>313</locationY>
+        <assignmentItems>
+            <assignToReference>varCustomerHas_M_InLast2Years_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varCustomerHas_VH_InLast2Years_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Customer_CC_code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Output variable =VH</description>
+        <name>Set_Output_variable_VH</name>
+        <label>Set Output variable =VH</label>
+        <locationX>1708</locationX>
+        <locationY>141</locationY>
+        <assignmentItems>
+            <assignToReference>varCustomerHas_VH_InLast2Years_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Customer_CC_code</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Check Customer  CC code</description>
+        <name>Check_Customer_CC_code</name>
+        <label>Check Customer  CC code</label>
+        <locationX>681</locationX>
+        <locationY>542</locationY>
+        <defaultConnector>
+            <targetReference>Set_Output_Variable_False</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>VH</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Customer_CC_code.CARE_CI_CC__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>VH</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Output_variable_VH</targetReference>
+            </connector>
+            <label>VH</label>
+        </rules>
+        <rules>
+            <name>DH</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Customer_CC_code.CARE_CI_CC__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DH</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_Customer_CC_code.CARE_CI_CC__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>DE</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Out_Put_Variable_M</targetReference>
+            </connector>
+            <label>DH/DE</label>
+        </rules>
+    </decisions>
+    <description>Check Customer 2 Year CC Code and return CC code if customer has DH/DE/VH.</description>
+    <formulas>
+        <description>Date = today - 2 years</description>
+        <name>fxTwoYearsBeforeDate</name>
+        <dataType>Date</dataType>
+        <expression>Today()-730</expression>
+    </formulas>
+    <interviewLabel>CARE Check Customer 2 Year CC Code Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CARE Check Customer 2 Year CC Code Flow</label>
+    <loops>
+        <description>Loop through customer CC code</description>
+        <name>Loop_Customer_CC_code</name>
+        <label>Loop Customer CC code</label>
+        <locationX>709</locationX>
+        <locationY>125</locationY>
+        <collectionReference>Get_Customer_CC_Code_For_Last_2_Years</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Customer_CC_code</targetReference>
+        </nextValueConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get Customer CC Code For last 2 years</description>
+        <name>Get_Customer_CC_Code_For_Last_2_Years</name>
+        <label>Get Customer CC Code For Last 2 Years</label>
+        <locationX>523</locationX>
+        <locationY>151</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Customer_CC_code</targetReference>
+        </connector>
+        <filters>
+            <field>LastModifiedDate</field>
+            <operator>GreaterThanOrEqualTo</operator>
+            <value>
+                <elementReference>fxTwoYearsBeforeDate</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>PER_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varPersonId_Input</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>CARE_CC_Batch_Detail__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>CARE_CI_CC__c</queriedFields>
+        <queriedFields>CreatedDate</queriedFields>
+        <queriedFields>LastModifiedDate</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>50</locationX>
+        <locationY>50</locationY>
+        <connector>
+            <targetReference>Get_Customer_CC_Code_For_Last_2_Years</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>set true if customer has DH /DE in last 2 years</description>
+        <name>varCustomerHas_M_InLast2Years_Output</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Set to true if customer has VH in last 2 years</description>
+        <name>varCustomerHas_VH_InLast2Years_Output</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Person id</description>
+        <name>varPersonId_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

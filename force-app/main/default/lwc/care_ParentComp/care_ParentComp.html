@@ -1,0 +1,97 @@
+<template>
+    <p>{activeSectionsMessage}</p>
+
+    <c-care-search-component></c-care-search-component>
+    
+    <lightning-accordion allow-multiple-sections-open
+                             onsectiontoggle={handleSectionToggle}
+                             active-section-name={activeSections}>
+                             
+            <!--<lightning-accordion-section name="A" label="Search Tab">
+                
+            </lightning-accordion-section>-->
+
+    
+            <lightning-accordion-section name="C" label="Customer Details">
+        
+                <lightning-tabset>
+                    <lightning-tab label="History">
+                        <c-care-history-comp></c-care-history-comp>
+                    </lightning-tab>
+    
+                    <lightning-tab label="PEV">
+                        PEV !
+                    </lightning-tab>
+                    
+    
+                    <lightning-tab label="Enroll" title="3nd tab extended title">
+                        
+                    <div class="slds-grid slds-wrap">
+                        <div>
+                            <c-care_-enroll-customer-info></c-care_-enroll-customer-info>
+                        </div>
+                        <div class="slds-p-left_xxx-small">
+                            <c-care_-enroll-public-assist></c-care_-enroll-public-assist>
+                        </div>
+                        <div class="slds-p-left_xxx-small">
+                            <c-care_-enroll-house-income></c-care_-enroll-house-income>
+                        </div>
+                        <div class="slds-p-left_xxx-small">
+                            <c-care_-enroll-c-c-b-info></c-care_-enroll-c-c-b-info>
+                        </div>
+                        <div class="slds-p-left_xxx-small">
+                            <c-care_-enroll-result></c-care_-enroll-result>
+                        </div>
+                    </div>
+                        <div>
+                        <c-care_-enroll-related-s-a></c-care_-enroll-related-s-a>
+                        </div>
+                        <div>
+                        <c-care-buttons-h-z></c-care-buttons-h-z>
+                        </div>
+    
+                    
+    
+                        <!--<div class="slds-box">
+                                <p> 1. Customer Information </p>
+                        <div class="slds-grid">
+                            <div class="slds-col slds-size_1-of-4">
+                                <div class="slds-grid slds-grid_vertical">
+                                    <div class="slds-col">
+                                        <lightning-input label="Is Recert?" type="checkbox" onchange={handleChange}></lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-12">
+                                        <lightning-input type="number" onchange={handleNumberChange} label="Adult:" value={value}></lightning-input>
+                                    </div>
+                                    <div class="slds-col slds-size_1-of-12">
+                                        <lightning-input type="number" onchange={handleNumberChange} label="Children" value={value}></lightning-input>
+                                    </div>
+                                    <div class="slds-col">
+                                        <lightning-input label="Is Signed?" type="checkbox" onchange={handleChange} ></lightning-input>
+                                    </div>
+                                </div>    
+                            </div>
+                            
+                            
+                            <div class="slds-col slds-size_1-of-4">
+                                <span>2A. Public Assistance</span>
+                                <div class="slds-grid slds-grid_vertical">
+                                    <div class="slds-col slds-size_1-of-2">
+                                        <lightning-input type="text" label="Applicant Name"></lightning-input>
+                                    </div>
+                                    
+                                    <div class="slds-col slds-size_1-of-12">
+                                        <lightning-input type="number" onchange={handleNumberChange} label="Adult:"></lightning-input>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>-->
+                    </lightning-tab>
+                </lightning-tabset>                
+                
+                </lightning-accordion-section>
+    
+    </lightning-accordion>
+</template>

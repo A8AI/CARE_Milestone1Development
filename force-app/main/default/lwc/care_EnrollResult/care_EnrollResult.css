@@ -1,0 +1,41 @@
+h1 {
+    color: rgb(0, 112, 210);
+}
+p {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: rgb(62, 62, 60);
+}
+.app {
+    background-color: #fafaf9;
+    height: 100vh;
+    overflow: scroll;
+}
+.tdr {
+    text-align: left;
+}
+
+.tdl {
+    text-align: left;
+}
+
+td {
+    padding: 3px;
+    height: 15px;
+}
+
+.tbb {
+    border: 1px solid black;
+    width: 250px;
+}
+
+input.threeDigit {
+    width: 30px;
+
+}
+
+
+
+td.header {
+    color: rgb(95, 12, 12);
+    font-weight: bold;
+}

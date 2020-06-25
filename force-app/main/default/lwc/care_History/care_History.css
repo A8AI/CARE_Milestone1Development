@@ -1,0 +1,7 @@
+.slds-modal__container {
+    max-width: 90rem !important;
+    width: 90% !important;
+}
+.scroll {
+    overflow: scroll;
+}

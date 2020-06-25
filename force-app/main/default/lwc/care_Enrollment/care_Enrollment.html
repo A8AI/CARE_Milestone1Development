@@ -1,0 +1,186 @@
+<!--LWC Component Name      :  CARE_EnrollCustomerOnfo
+    Version                 :  1.0                                                                          
+    Function                :  This Component displays Customer Info on Enrollment Tab 
+    Work Task               :                                                                            
+    Modification Log        :                                                                            
+*   When                       Who                            Description
+****************************************************************************************                                     
+*  05/04/2020      Cognizant Technology Solutions             First Iteration  : 
+****************************************************************************************-->
+
+<template>
+    
+    <!-- Spinner -->
+    <div if:true={showLoadingSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div>
+    <div class="slds-grid slds-wrap" style="width:1250px">
+        <div>
+                <!--Customer Information-->
+        <table style="width: 280px; border: 1px solid black;">
+            <tr> <td class="header" colspan="2">1. Customer Information</td></tr>
+            <tr> <td>Applicant Name:&nbsp;</td><td><lightning-input type="text" disabled={enableAppName}  data-id="textAppNameField" name="applicantName" style="width: 138px" value={EnrollObjFields.applicantNameValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Need Name Change?&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</td><td><lightning-input disabled={bModalFlag} type="checkbox" data-id="checkboxnncValField" onclick={handleApplicantNameSet} name="nnc" checked={EnrollObjFields.nncValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+     
+            <!--<lightning-input type="checkbox" label="Is Cert" name="isCert" class="tdl" onblur={handleBlurChange}></lightning-input>-->
+            <tr> <td class="tdr">Is Cert?&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</td><td > <lightning-input disabled={bModalFlag} type="checkbox" data-id="checkboxisCertField" name="isCert" class="tdl" checked={EnrollObjFields.isCertValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Adult &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; </td><td><lightning-input type="number" disabled={bModalFlag} data-id="textadultField" style="width: 50px" name="adult" class="threeDigit" value={EnrollObjFields.adultValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Children (under 18) &nbsp;&nbsp;</td><td><lightning-input type="number" disabled={bModalFlag} data-id="textChildField" name="children" style="width: 50px" class="threeDigit" value={EnrollObjFields.childrenValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Is Signed?&emsp;&emsp;&emsp;&emsp;&emsp;</td><td> <lightning-input type="checkbox" disabled={bModalFlag} data-id="checkboxisSignField" name="isSigned" checked={EnrollObjFields.isSignedValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Request Drop? &nbsp;&nbsp;&nbsp;&emsp;&emsp;</td><td> <lightning-input type="checkbox" disabled={bModalFlag} data-id="checkboxreqDropField" name="reqDrop" checked={EnrollObjFields.requestDropValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+            <!--<tr> <td>Guardian/Power Of Attorney? &nbsp;<input type="checkbox" ></input></td></tr>-->
+        <!--<template if:true={EnrollObjFields.nncValueCB}>-->
+        <!--</template>--> 
+            <!--<tr> <td>Provided Incompleted Income Proof?&nbsp;<input type="checkbox" ></input></td></tr>-->
+            <tr> <td>Received Date?&emsp;</td><td><lightning-input disabled={bModalFlag} type="date" date-style="short" data-id="dateReceiveField" name="receiveDate" value={EnrollObjFields.receiveDateValue} style="width: 138px" onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Processed Date?&nbsp;&nbsp;</td><td><lightning-input disabled={bModalFlag} readonly type="date" date-style="short" data-id="dateProcessField" name="processDate" value={EnrollObjFields.processDateValue} style="width: 138px" onfocusout={handleChange}></lightning-input></td></tr>
+            <!--<template for:each={data} for:item="channelOptions">
+            <tr key={w_record.unique_name}> <td>Channel/Form Type:&nbsp;<select style="width: 116px"><option value={channelOptions} ></option></select></td></tr>
+            </template>-->
+            <!--<tr><td>Channel/Form Type:&nbsp;<Select data-id="textChannelField" name="channelType" style="width: 116px" onchange={handleChange}>
+                <option value="">---None---</option>
+                <template for:each={stageNameValues.data} for:item="picklistItem">
+                    <option key={picklistItem.svalue} value={picklistItem.svalue}>{picklistItem.slabel}</option>
+                </template>
+             </Select></td></tr>-->
+            <!--<tr> <td>Channel/Form Type:&nbsp;<select style="width: 116px"><lightning-combobox value={value} placeholder="Select an option" options={channelOptions}></lightning-combobox></select></td></tr>-->
+            <tr> <td>Channel/Form Type:&nbsp;</td><td><lightning-combobox disabled={bModalFlag} label="Channel/Form Type" variant="label-hidden" data-id="textChannelField" value={EnrollObjFields.channelTypeValue} placeholder="Select an option" options={channelOptions} style="width: 116px" onfocusout={handleChange} ></lightning-combobox></td></tr>
+            <tr> <td>Form Code:&nbsp;&nbsp;&nbsp;&emsp;&emsp;</td><td><lightning-input disabled={bModalFlag} type="text" data-id="textFormField" name="formCode" style="width: 138px" value={EnrollObjFields.formCodeValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>COC Code:&emsp;&emsp;&emsp;</td><td><lightning-input type="text" disabled={bModalFlag} data-id="textcocField" name="cocCode" style="width: 138px" value={EnrollObjFields.cocCodeValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td></td><td>&nbsp;</td></tr>
+        </table>
+        </div>
+
+        
+        <div class="slds-p-left_xxx-small">
+                <!--Public Assistance-->
+        <table style="width: 280px; border: 1px solid black;">      
+            <tr> <td class="header">2A. Public Assitance</td><td></td></tr>
+            <tr> <td class="tdr">LIHEAP:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="UheapField" checked={EnrollObjFields.uHeapValue} onfocusout={handleChange}></lightning-input></td> </tr>
+            <tr> <td>WIC</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="wicField" checked={EnrollObjFields.wicValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Calfresh/SNAP:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="calFreshField" checked={EnrollObjFields.calFreshValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>CalWorks/Tribal TANF:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="calWorkField" checked={EnrollObjFields.calWorkValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Head Start Income Eligible (Tribal Only):</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="hsieField" checked={EnrollObjFields.hsieValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>SSI:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="ssiField" checked={EnrollObjFields.ssiValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Medi-Cal for Families (Healthy Families A&B):</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="mediFamilyField" checked={EnrollObjFields.mediFamilyValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>NSLP:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="nslpField" checked={EnrollObjFields.nslpValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Bureau of Indian Affairs:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="boiaField" checked={EnrollObjFields.boiaValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Medi(Caid/Cal) Under 65:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="mediUnderField" checked={EnrollObjFields.mediUnderValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Medi(Caid/Cal) 65 & Over:</td>  <td><lightning-input type="checkbox" disabled={houseHoldSection} data-id="mediOverField" checked={EnrollObjFields.mediOverValue} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr style="height: 63px" > <td>E-Mail:&nbsp;&nbsp;&nbsp;&emsp;&emsp;<lightning-input type="email" style="width: 190px" disabled={houseHoldSection} data-id="emailField" checked={EnrollObjFields.emailValue} onfocusout={handleChange}></lightning-input></td><td></td></tr>
+
+        </table>
+        </div>
+    
+            <div class="slds-p-left_xxx-small">
+                <!--HouseHold Income-->
+        <table style="width: 280px; border: 1px solid black;">
+            <tr> <td class="header">2B. Household Income</td><td></td></tr>
+            <tr> <td >Annual Income:&nbsp;<lightning-input type="number" name="annualIncome" step="0.01" style="width: 120px" disabled={publicAssistanceSection} data-id="AnnualIncField" value={EnrollObjFields.annualIncValue} onfocusout={handleChange}></lightning-input></td><td></td></tr>
+            <tr> <td>Fixed Income:&emsp;&nbsp;<lightning-input type="checkbox" disabled={publicAssistanceSection} data-id="fixedIncField" checked={EnrollObjFields.fixedIncValue} onfocusout={handleChange}></lightning-input></td><td></td></tr>
+            <tr style="height: 33px"> <td></td><td></td></tr>
+        </table> <br/>
+    
+    
+    
+            <!--CC&B Information-->
+        <!--table style="width: 280px; border: 1px solid black;">
+            <tr> <td class="header">CC&B Information</td></tr>
+            <tr> <td>Name(s) on Acct:&emsp;<lightning-input readonly type="text" style="width: 138px"></lightning-input></td></tr>
+            <tr> <td>Elec Start Date&emsp;&emsp;<lightning-input readonly type="date" date-style="short" style="width: 138px"></lightning-input></td></tr>
+            <tr> <td>Gas Start Date&emsp;&emsp;<lightning-input readonly type="date" date-style="short" style="width: 138px"></lightning-input></td></tr>
+            <tr> <td>Elec Last Bill Date&nbsp;&nbsp;<lightning-input readonly type="date" date-style="short" style="width: 138px"></lightning-input></td></tr>
+            <tr> <td>Gas Last Bill Date&nbsp;&nbsp;<lightning-input readonly type="date" date-style="short" style="width: 138px"></lightning-input></td></tr> 
+            <tr> <td>&nbsp;</td></tr>
+        </table-->
+        </div>
+    
+        <!--Result-->
+        <div class="slds-p-left_xxx-small">
+            <!--<td style="padding-right: 20px;">-->
+        <table style="width: 365px; border: 1px solid black;">
+            <tr> <td class="header">3. Result</td><td></td></tr>
+            <tr style="height: 30px"> <td colspan="2" style="padding:5px;"><lightning-textarea disabled={bModalFlag} readonly value={careResccDesc}></lightning-textarea></td></tr>
+            <tr> <td>Is Adjustment?&emsp;<lightning-input type="checkbox" data-id="isAdjustField" value={EnrollObjFields.isAdjustValue} disabled={bModalFlag} onfocusout={handleChange}></lightning-input></td><td>Adjustment Reason:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" disabled={isAdjustmentReasonCheck} data-id="textAdjustField" value={value} placeholder="Select an option" options={adjustReasonList} style="width: 116px" onfocusout={handleChange} ></lightning-combobox></td></tr>
+            <!--<tr> <td>No Date:&emsp;&emsp;<lightning-input type="date" date-style="short" style="width: 130px"></lightning-input></td><td>Retro No Date:&emsp;&emsp;&emsp;<lightning-input type="date" date-style="short" disabled={isAdjustmentCheck} data-id="retroNField" style="width: 130px" onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>CC&B SA Start Date:&emsp;&emsp;<lightning-input type="date" date-style="short" variant="label-hidden" style="width: 130px"></lightning-input></td><td>Adjustment Reason:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" disabled={isAdjustmentCheck} data-id="textAdjustField" value={value} placeholder="Select an option" options={adjustOptions} style="width: 116px" onfocusout={handleChange} ></lightning-combobox></td></tr>
+            <tr> <td>Last Bill Date:&emsp;<lightning-input type="date" date-style="short" style="width: 130px"></lightning-input></td><td>SA ID:&nbsp;<lightning-input type="text" style="width: 130px"></lightning-input></td></td></tr>-->
+            <tr> <td>Is Duplicate?&emsp;<lightning-input disabled={bModalFlag} readonly type="checkbox" data-id="isDuplicateField" onfocusout={handleChange}></lightning-input></td><td>Is New Enrollment?&nbsp;<lightning-input disabled={bModalFlag} readonly type="checkbox" checked={isNewEnrollment}></lightning-input></td></tr>
+            <!--<tr> <td>Is Duplicate?&emsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+            <!--<tr> <td>Is Duplicate?&emsp;&nbsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+            <tr style="height: 60px;"> <td colspan="2" style="padding:5px;">Comments:<lightning-textarea disabled={bModalFlag} data-id="ccbCommentField" value={EnrollObjFields.ccbCommentValue} onfocusout={handleChange}></lightning-textarea></td></tr>
+            <tr style="height: 60px"> <td colspan="2" style="padding:5px;">Process Notes:<lightning-textarea disabled={bModalFlag} data-id="processNoteField" value={EnrollObjFields.processNoteValue} onfocusout={handleChange}></lightning-textarea></td></tr>     
+            <!--<tr> <td>Data Entry Complete?&nbsp;<input type="checkbox" checked></input></td><td>Is New Enrollment?&nbsp;<input type="checkbox" checked></input></td></tr>-->
+            <!--<tr> <td>Is New Enrollment?&nbsp;<input type="checkbox" checked></input></td><td></td></tr>-->
+        </table>
+            <!--</td>-->
+        </div>
+    </div>
+    <!--<div class="slds-grid slds-wrap" if:true={careSAData}>-->
+    
+        <!--SA Related DataTable-->
+        <div if:false={isDataTableEditable}>
+            <template if:true={careResccDesc}>
+                <div class="slds-table slds-table_bordered slds-table_resizable-cols slds-p-top_medium" style="height: 12rem;">
+                    <lightning-datatable data={careSAData} columns={columns} key-field="Id"
+                    hide-checkbox-column = true>
+                     <!--</lightning-datatable>onsuccess={refreshData}-->
+                    </lightning-datatable>
+                </div>
+            </template>
+        </div>
+
+        <div if:true={isDataTableEditable}>
+            <template if:true={careResccDesc}>
+                <div class="slds-table slds-table_bordered slds-table_resizable-cols slds-p-top_medium" style="height: 12rem;">
+                    <lightning-datatable data={careSAData} columns={columnsWithEdit} key-field="Id"
+                    hide-checkbox-column = true
+                    onsave={handleDataTableSave}
+                    draft-values={draftValues} >
+                     <!--</lightning-datatable>onsuccess={refreshData}-->
+                    </lightning-datatable>
+                </div>
+            </template>
+        </div>
+
+    <!--</div>-->
+    
+            <!--Buttons-->
+            <div class="slds-p-right_x-small slds-grid slds-gutters slds-p-top_medium slds-float_right">
+                <table>
+                    <tr>
+                    <td if:false={bModalFlag}>     <lightning-button disabled={checkAcceptedApplication} label="Save" title="Save" name="save" icon-name="utility:save" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                    </td>
+                    <!--<td>     <lightning-button label="Save" title="Save" name="save" icon-name="utility:save" disabled={bModalFlag} onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                    </td>-->
+                    <td if:false={checkApplicationId}> <lightning-button label="Image ID" title="Image ID" disabled  class="slds-m-left_x-small"></lightning-button>
+                    </td>
+                    <td if:true={checkApplicationId}>
+                        <div if:false={bModalFlag}>
+                          <div if:false={checkAcceptedApplication}><c-care_-image-upload record-id={careResAppId} view-only="false"></c-care_-image-upload></div>
+                          <div if:true={checkAcceptedApplication}><c-care_-image-upload record-id={careResAppId} view-only="true"></c-care_-image-upload></div>
+                        </div>
+                        <div if:true={bModalFlag}><c-care_-image-upload record-id={careResAppId} view-only="true"></c-care_-image-upload></div>
+       
+                    </td>
+                    <td if:false={bModalFlag}>
+        
+                            <c-care_-communication s-selected-per-id={sSelectedPerId} > </c-care_-communication>    
+                     </td>
+                    <td if:false={bModalFlag}><lightning-button disabled={checkAcceptedApplication} label="Verify" title="Verify" name="verify" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                    </td>
+                    <td if:false={bModalFlag}><lightning-button disabled={checkResultDesc} label="Accept" title="Accept" name="accept" onclick={handleSave} class="slds-m-left_x-small"></lightning-button>
+                    </td>
+                    <td if:false={bModalFlag}> <lightning-button label="Cancel" disabled={checkAcceptedApplication} title="Cancel" onclick={handleCancel} class="slds-m-left_x-small"></lightning-button>
+                    </td>
+
+                    </tr>
+                </table>
+
+           </div>
+           <!-- <div>
+                <c-care_-communication-modal s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag=false></c-care_-communication-modal>
+            </div>-->
+        
+       
+    </template>

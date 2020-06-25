@@ -1,0 +1,155 @@
+<!--
+  @File Name          : care_Adjustment.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 6/22/2020, 9:54:51 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    6/12/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <!-- lightning button for open modal window -->
+    <lightning-button label="Adjustment" title="Adjustment" onclick={openModal} class="slds-m-left_x-small">
+    </lightning-button>
+
+    <!--Use template if:true to display/hide popup based on isModalOpen value-->
+    <template if:true={bShowModal}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                </div>
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{label.CARE_AdjustmentHeader}</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_x-small" id="modal-content-id-1">
+
+                    <div class="slds-p-left_small">
+                        <lightning-input label="Yes Date Adjustment Only?" type="checkbox" data-id="yesDateAdjustField"
+                            onchange={handleAdjustmentChecked}></lightning-input>
+                    </div>
+
+                    <!--SA Related DataTable-->
+                    <div class="slds-modal__content slds-p-around_medium slds-truncate" id="modal-content-id-2">
+
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Billing Account">Billing Account</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="SAID">SA ID</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Yes Date">Yes Date</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="No Date">No Date</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Retro Start Date">Retro Start Date</div>
+                                    </th>
+                                    <th class="" scope="col">
+                                        <div class="slds-truncate" title="Retro End Date">Retro End Date</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={dataAdjustment} for:item="adjust" for:index="index">
+                                    <tr key={adjust.idSARecID}>
+                                        <th scope="col">
+                                            <div class="slds-p-top_medium">{adjust.sBillingAccountId}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-p-top_medium">{adjust.sSAId}</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div>
+                                                <lightning-input readonly type="date" value={adjust.dStartDate}
+                                                    date-style="short">
+                                                </lightning-input>
+
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div>
+                                                <lightning-input readonly type="date" value={adjust.dEndDate}
+                                                    date-style="short">
+                                                </lightning-input>
+
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div>
+                                                <lightning-input type="date" name="retroStartDate"
+                                                    value={adjust.dRetroStartDate} onchange={handleDateChange}
+                                                    data-index={index} date-style="short">
+                                                </lightning-input>
+                                            </div>
+                                        </th>
+                                        <th scope="col">
+                                            <div>
+                                                <lightning-input type="date" name="retroEndDate"
+                                                    value={adjust.dRetroEndDate} disabled={bEditDisabled}
+                                                    onchange={handleDateChange} data-index={index} date-style="short">
+                                                </lightning-input>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Reason Section start-->
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-size_5-of-12 slds-p-top_medium">
+                            <div style="height:10rem">
+                                <lightning-combobox name="reasonField" label="Reason" onchange={handleChange}
+                                    placeholder="Select Reason" options={dataReasonOptions} required>
+                                </lightning-combobox>
+                            </div>
+                        </div>
+                        <div class="slds-p-left_small slds-size_7-of-12 slds-p-top_medium">
+                            <lightning-textarea name="commentField" value={objInputFields.sComment} label="Comment"
+                                max-length="2000" onchange={handleChange} required>
+                            </lightning-textarea>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <!-- <div class="slds-float_right"> -->
+                    <lightning-button class="slds-m-right_x-small" variant="brand-outline" label="Close" title="Close"
+                        onclick={closeModal}>
+                    </lightning-button>
+                    <lightning-button class="slds-m-right_x-small" variant="brand-outline" label="Adjust" title="Adjust"
+                        name="adjust" onclick={handleAdjust}></lightning-button>
+                    <!-- </div> -->
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!--Confirmation modal start-->
+    <template if:true={bShowConfirmationModal}>
+        <c-care_-confirm-modal header-text={label.CARE_CancelHeader}
+            body-text={label.CARE_ConfirmationMsg} footer-yes-text="Yes" footer-no-text="No"
+            onnobuttonevent={closeConfirmationModal} onyesbuttonevent={cancelTransaction}></c-care_-confirm-modal>
+    </template>
+    <!--Confirmation modal end-->
+</template>

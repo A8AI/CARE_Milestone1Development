@@ -1,0 +1,22 @@
+<!--LWC Component Name      :  care_EnrollRelatedSA
+    Version                 :  1.0                                                                          
+    Function                :  This Component displays Related SA's on Enrollment Tab as Datatable. 
+    Work Task               :                                                                            
+    Modification Log        :                                                                            
+*   When                       Who                   Description
+****************************************************************************************                                     
+*  05/04/2020                  A8AI                First Iteration  : 
+****************************************************************************************-->
+
+<template>
+    <!--<div class="slds-box slds-m-left_medium slds-m-right_medium slds-theme_default">-->
+    <template if:true={data}>
+        <div class="slds-table slds-table_bordered slds-table_resizable-cols">
+            <lightning-datatable data={data} columns={columns} key-field="id"
+            hide-checkbox-column = true
+             onrowaction={handleRowAction} ><!--</lightning-datatable>onsuccess={refreshData}-->
+            </lightning-datatable>
+        </div>
+    </template>
+    <!--</div>-->
+</template>

@@ -1,0 +1,20 @@
+.modal__containerresize{
+    max-width: 30rem !important;
+    width: 30% !important;
+}
+.confirmHeader{
+    border-top: 0.25rem solid rgb(156, 150, 150);
+    border-left: 0.25rem solid rgb(156, 150, 150);
+    border-right: 0.25rem solid rgb(156, 150, 150);
+    color:rgb(194, 57, 52);
+}
+.confirmBody{
+    text-align:center;
+    border-left: 0.25rem solid rgb(156, 150, 150);
+    border-right: 0.25rem solid rgb(156, 150, 150);
+}
+.confirmFooter{
+    border-bottom: 0.25rem solid rgb(156, 150, 150);
+    border-left: 0.25rem solid rgb(156, 150, 150);
+    border-right: 0.25rem solid rgb(156, 150, 150);
+}

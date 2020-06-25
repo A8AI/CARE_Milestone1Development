@@ -1,0 +1,184 @@
+<!--
+  @File Name          : care_ImageUpload.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 6/21/2020, 12:57:44 AM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    5/29/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <!-- lightning button for open modal window -->
+    <lightning-button label="Image ID" title="Image ID" onclick={openModal} class="slds-m-left_x-small">
+    </lightning-button>
+
+    <!-- modal start -->
+    <template if:true={bShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <!-- <lightning-icon icon-name="custom:custom38" title="custom11"></lightning-icon> -->
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Image Details</h2>
+                </header>
+                <!-- modal body start -->
+                <div if:true={bShowImageSection} class="slds-modal__content slds-p-around_medium">
+                    <div class="slds-modal__content slds-p-around_medium outer-div" id="modal-content-id-1">
+                        <div if:true={bShowLoadingSpinner}>
+                            <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                        </div>
+                        <table
+                            class="slds-table slds-table_bordered slds-border_right slds-border_left slds-table_fixed-layout"
+                            role="grid">
+                            <thead>
+                                <tr>
+                                    <th class="slds-text-title_caps cellAlignment" style="width:25%;">
+                                        <span title="ID" class="slds-truncate">ID</span>
+                                    </th>
+                                    <th class="slds-text-title_caps" style="width:50%;">
+                                        <span title="Image ID" class="slds-truncate">Image ID</span>
+                                    </th>
+                                    <th class="slds-text-title_caps cellAlignment" style="width:25%;">
+                                    </th>
+                                    <th if:false={showViewOnly} class="slds-text-title_caps cellAlignment"
+                                        style="width:25%;">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={imageList} for:item="image" for:index="index">
+                                    <tr key={image.iImageIndex}>
+                                        <td title="" class="slds-truncate" style="text-align: center;">
+                                            {image.iNumber}</td>
+                                        <td title="" class="slds-truncate">
+                                            <div if:true={showViewOnly}>
+                                                <lightning-input name='imageIdName' type='text' max-length='10'
+                                                    variant="label-hidden" label="no label" placeholder="Enter Image ID"
+                                                    value={image.sImageId} key={image.iImageIndex}
+                                                    data-id={image.iImageIndex} data-api="imageId" read-only>
+                                                </lightning-input>
+                                            </div>
+                                            <div if:false={showViewOnly}>
+                                                <lightning-input name='imageIdName' type='text' max-length='10'
+                                                    variant="label-hidden" label="no label" placeholder="Enter Image ID"
+                                                    value={image.sImageId}  
+                                                    key={image.iImageIndex} data-id={image.iImageIndex} data-api="imageId" autocomplete="off"
+                                                    onblur={handleUpdateImageIDRows}>
+                                                </lightning-input>
+                                            </div>
+                                        </td>
+                                        <td title="" class="slds-truncate" style="text-align: center;">
+                                            <button if:true={image.sId} name="preview" class="slds-button"
+                                                title="Preview">
+                                                <span onclick={handlePreview}>
+                                                    <lightning-icon icon-name="action:preview" size="x-small"
+                                                        data-id={image.iImageIndex} data-api={image.sId}>
+                                                    </lightning-icon>
+                                                </span>
+                                            </button>
+                                        </td>
+                                        <td if:false={showViewOnly} title="" class="slds-truncate"
+                                            style="text-align: center;">
+                                            <button name="delete" class="slds-button" title="Delete">
+                                                <span onclick={handleDelete}>
+                                                    <lightning-icon icon-name="action:delete" size="x-small"
+                                                        data-id={image.iImageIndex} data-api={image.sId}>
+                                                    </lightning-icon>
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div if:false={showViewOnly} class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-size_2-of-12 slds-p-top_medium">
+                            <lightning-button variant="brand-outline" label="Add" onclick={handleAdd}
+                                class="slds-m-left_x-small"></lightning-button>
+                        </div>
+                        <div class="slds-p-middle_small slds-size_2-of-12 slds-p-top_medium">
+                            <lightning-button variant="brand-outline" label="Save" onclick={handleSave}
+                                class="slds-m-middle_x-small "></lightning-button>
+                        </div>
+                        <div class="slds-p-right_small slds-size_8-of-12 slds-p-top_medium">
+                            <lightning-button variant="brand-outline" label={sLabelUpload} onclick={handleUpload}
+                                class="slds-m-right_x-small" icon-name={uIconName}></lightning-button>
+                        </div>
+                    </div>
+                </footer>
+
+                <!--Start: Image upload-->
+                <div if:true={bShowUploadSection} class="slds-modal__content slds-p-around_medium">
+                    <lightning-card title="Custom File Uploader">
+                        <div if:false={showViewOnly} style="padding-left: 25%;">
+                            <lightning-file-upload label="Attach files" name="fileUploader" accept={acceptedFormats}
+                                record-id={recordId} onuploadfinished={handleUploadFinished} multiple>
+                            </lightning-file-upload>
+                            <br />
+                        </div>
+                        <!-- Datatable to show the related files of the record -->
+                        <lightning-card title="Uploaded Files of the record" icon-name="standard:file"
+                            class="slds-card_boundary slds-p-around_medium slds-card__body--inner"
+                            style="display: block;;">
+                            <div style="overflow-x: auto; width: auto;">
+                                <template if:true={fileData}>
+                                    <lightning-datatable data={fileData} columns={columns} key-field="sId"
+                                        hide-checkbox-column style="height: 30% !important;display: block;"
+                                        onrowaction={handleRowAction}>
+                                    </lightning-datatable>
+                                </template>
+                            </div>
+                        </lightning-card>
+
+                    </lightning-card>
+                </div>
+
+                <!--End: Image upload-->
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+    <!-- modal end -->
+
+    <!--Delete Record Modal-->
+    <!-- modal start -->
+    <template if:true={bShowDeleteModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container modal__containerresize">
+                <!-- modal header start -->
+                <header class="slds-modal__header confirmHeader">
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Delete the Record</h2>
+                </header>
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium confirmBody" style="text-align:center"
+                    id="modal-content-id-2">
+                    <p>{label.CARE_ConfirmationDeleteMsg}</p>
+                </div>
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer confirmFooter">
+                    <button class="slds-button slds-button_destructive slds-float_left" onclick={delRec}>Yes</button>
+                    <button class="slds-button slds-button_text-destructive" onclick={closeDeleteModal}>No</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+
+</template>

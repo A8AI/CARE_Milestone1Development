@@ -1,0 +1,74 @@
+<template>
+    <template if:true={checkHistoryData}>
+        <div style="height: 300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
+            <lightning-datatable data={data} columns={columns} key-field="sId" hide-checkbox-column="true"
+                
+                onrowaction={handleRowAction}>
+                <!--</lightning-datatable>onsuccess={refreshData}-->
+            </lightning-datatable>
+        </div>
+        
+        <div class="slds-float_right slds-p-top_x-small">
+            <c-care_-c-c-b-history s-selected-c-c-b-per-id={sSelectedHistoryPerId}></c-care_-c-c-b-history>
+        </div>
+
+    </template>
+    <template if:false={checkHistoryData}>
+        <div>No Records Found</div>
+    </template>
+
+
+    <!-- Spinner -->
+    <div if:true={showLoadingSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div>
+    <!-- Detail view modal -->
+    <template if:true={bShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- modal header -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small"></lightning-icon>
+                    </button>
+
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate" if:false={isEditForm}>
+                        Enrollment Information</h2>
+                </header>
+                <!-- modal body -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" if:false={isEditForm}>
+
+                    <c-care_-enrollment s-live-app-call={sLiveCall} s-selected-app-id={selectedRecord}
+                        s-selected-per-id={sSelectedHistoryPerId} list-selected-prem-ids={listSelectedHistoryPremIds}
+                        b-modal-flag={bShowReadonly}></c-care_-enrollment>
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer" if:false={isEditForm}>
+                    <lightning-button variant="brand" label="Close" title="Close" onclick={closeModal}>
+                    </lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </template>
+
+    <!--Confirmation modal start-->
+    <template if:true={bShowDeleteModal}>
+        <c-care_-confirm-modal header-text={label.DeleteMsgHeader}
+            body-text={label.ConfirmationDeleteMsg} footer-yes-text="Yes" footer-no-text="No"
+            onnobuttonevent={closeModal} onyesbuttonevent={delRec}></c-care_-confirm-modal>
+    </template>
+    <!--View Message Modal-->
+<template if:true={bShowMessageModal}> 
+    <c-care_-special-message-modal type-number={typeNumber} s-application-no={sApplicationNo} 
+    oncloseevent= {closeMessageModal}>
+    </c-care_-special-message-modal>
+</template>
+
+
+</template>

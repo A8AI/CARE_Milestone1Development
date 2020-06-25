@@ -1,0 +1,269 @@
+<template>
+    <!-- lightning button for open modal window -->
+    <lightning-button variant="" label="Phone" title="Phone" onclick={openModal} class="slds-m-left_x-small">
+    </lightning-button>
+
+    <lightning-button variant="" label="Communication" title="Communication" onclick={openCommunicationModal}
+        class="slds-m-left_x-small">
+    </lightning-button>
+
+    <lightning-button variant="" label="Language" title="Language" onclick={openLanguageModal}
+        class="slds-m-left_x-small">
+    </lightning-button>
+
+    <!-- Phone modal start -->
+    <template if:true={bShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 20%;">
+                <div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                 </div>
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <lightning-icon icon-name="action:log_a_call" title="log_a_call"></lightning-icon>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Phone Details</h2>
+                </header>
+
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-p-top_xx-small">
+                            <lightning-input label="Home Phone" type="text" value={phoneDetails.home}
+                                onfocusout={handleChangeHome}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-p-top_xx-small">
+                            <lightning-input label="Work Phone" type="text" value={phoneDetails.work}
+                                onfocusout={handleChangeWork}>
+                            </lightning-input>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-p-left_small slds-p-top_xx-small">
+                            <lightning-input label="Mobile Phone" type="text" value={phoneDetails.mobile}
+                                onfocusout={handleChangeMobile}>
+                            </lightning-input>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div class="slds-float_right">
+
+                        <lightning-button  label="Close" onclick={closeModal}
+                            class="slds-p-left_small"></lightning-button>
+                            
+                        <lightning-button  label="Save" onclick={saveAndClose}
+                        class="slds-p-left_x-small" ></lightning-button>
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Communication modal start -->
+    <template if:true={cShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 20%;">
+                <div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                 </div>
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeCommunicationModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <lightning-icon icon-name="standard:channel_program_members" alternative-text="Communication"
+                        title="Communication"></lightning-icon>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Communication Preference
+                    </h2>
+                </header>
+
+                <!-- modal body start -->
+
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <table
+                            class="slds-table slds-table_bordered slds-no-row-hover slds-border_right slds-border_left  slds-table_fixed-layout"
+                            role="grid">
+                            <thead>
+                                <tr>
+                                    <!-- <th class="slds-text-title_caps cellAlignment">
+                         <span title="ID" class="slds-truncate">ID</span>
+                      </th>-->
+                                    <th class="slds-text-title_caps cellAlignment">
+                                        <span title="Communication" class="slds-truncate">Communication</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <template for:each={selectedVal} for:item="con">
+                                    <tr key={con.Id}>
+                                        <!-- <td title="" class="slds-truncate" scope="row" style="text-align: center;">
+                         {con.Billing_Person_ID_EI__c}
+                      </td> -->
+                                        <td title="" class="slds-truncate" scope="row" style="text-align: center;">
+                                            <!-- Custom Lightning Input Select Field-->
+                                            <div class="slds-form-element__control">
+                                                <div class="slds-select_container">
+                                                    <select class="slds-select" onchange={onValueSelection}>
+                                                        <option value={con.Id}>{con.PREFERRED_CONTACT_METHOD__c}
+                                                        </option>
+                                                        <!--iterate all picklist values from wrapper list using for:each loop-->
+                                                        <template for:each={commPicklistValues.data}
+                                                            for:item="picklistItem">
+                                                            <option key={picklistItem.sValue}
+                                                                value={picklistItem.sValue}>
+                                                                {picklistItem.sLabel}
+                                                            </option>
+                                                        </template>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div class="slds-float_right">
+
+
+                        <lightning-button  label="Close" onclick={closeCommunicationModal}
+                            class="slds-p-left_small"></lightning-button>
+                            <lightning-button label="Save" onclick={saveCommunicationModal}
+                            class="slds-p-left_x-small" ></lightning-button> 
+                    </div>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+    <!-- Language modal start -->
+    <template if:true={dShowModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" style="width: 20%;">
+                <div if:true={showLoadingSpinner}>
+                    <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                 </div>
+                <!-- modal header start -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                        title="Close" onclick={closeLanguageModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                            size="small">
+                        </lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <lightning-icon icon-name="standard:channel_program_members" alternative-text="Language"
+                        title="Languagge"></lightning-icon>
+                    <h2 id="modal-heading-03" class="slds-text-heading_medium slds-hyphenate">Language Preference</h2>
+                </header>
+
+                <!-- modal body start -->
+
+                <!-- <div class="slds-grid slds-wrap"> -->
+                <div class="slds-modal__content slds-p-around_medium slds-truncate" id="modal-content-id-3">
+                    <table  style="width:90%;"  >
+                        <tr>
+                            <td>
+                                <lightning-combobox name="Language" style="z-index: 10000;" label="Language"
+                                    value={value} placeholder={fetchLanguage.selectedLang} options={pickListValues}
+                                    onfocusout={handleChangeLanguage}>
+                                </lightning-combobox>
+                            </td>
+                        </tr>
+                    </table>
+                    <br /><br /><br /><br />
+
+
+                    <!-- <table class="slds-table slds-table_bordered slds-no-row-hover slds-border_right slds-border_left  slds-table_fixed-layout" role="grid">
+                <thead>
+                   <tr>                                
+                      <th class="slds-text-title_caps cellAlignment">
+                         <span title="ID" class="slds-truncate">ID</span>
+                      </th>-->
+                    <!-- <th class="slds-text-title_caps cellAlignment">
+                         <span title="Language" class="slds-truncate">Language</span>
+                      </th>
+                   </tr> 
+                   </thead> 
+                   <tbody>
+                   
+                   <template for:each={selectVal1.data} for:item="con1">
+                      <tr key = {con1.Id}>
+                      <td title="" class="slds-truncate" scope="row" style="text-align: center;">
+                         {con.Billing_Person_ID_EI__c}
+                      </td> -->
+                    <!-- <td title="" class="slds-truncate" scope="row" style="text-align: center;">
+                          Custom Lightning Input Select Field-->
+                    <!--  <div class="slds-form-element__control">
+                            <div class="slds-select_container">
+                               <select class="slds-select"  onchange={onValueSelection}>
+                                  <option value={con1.Id}>{con1.Languages_Other_Than_English_EI__c}
+                                  </option>
+                                  iterate all picklist values from wrapper list using for:each loop-->
+                    <!--  <template for:each={stageNameValues1.data} for:item="picklistItem">
+                                        <option key={picklistItem.sValue1} value={picklistItem.sValue1}>
+                                           {picklistItem.sLabel1}
+                                        </option>
+                                     </template>
+                               </select>
+                             </div>
+                            </div>                
+                      </td> 
+                      </tr>
+                   </template>                               
+                   
+                   </tbody>
+                </table> -->
+                </div>
+                <!--  </div> -->
+
+
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer">
+                    <div class="slds-float_right">
+                        <lightning-button  label="Close" onclick={closeLanguageModal}
+                        class="slds-p-left_small"></lightning-button>
+                        <lightning-button variant="brand-outline" label="Save" onclick={saveLanguageModal}
+                        class="slds-p-left_x-small"></lightning-button>    
+                        </div>
+
+            
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+</template>

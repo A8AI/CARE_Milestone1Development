@@ -2,7 +2,7 @@ import { LightningElement, track, api } from 'lwc';
 import getListOfStrings from '@salesforce/apex/CARE_SearchController.getListOfStrings';
 
 export default class Care_SearchAutoComplete extends LightningElement {
-    @api idOfRec; //id of record
+    @api idOfRec; //ids of record
     @track searchKey = '';
     @track listOfRec = [];
     @api error;

@@ -104,7 +104,7 @@ export default class Care_Adjustment extends LightningElement {
         this.showDataSA();
     }
 
-    //logic for Adjustment box selected 
+    //logicc for Adjustment box selected 
     handleAdjustmentChecked(event) {
         this.bFormEdited = true;
         this.bAdjustment = event.target.checked;

@@ -18,7 +18,7 @@ import CARE_ImageDeleteMsg from '@salesforce/label/c.CARE_ImageDeleteMsg';
 import CARE_TransactionErrorMsg from '@salesforce/label/c.CARE_TransactionErrorMsg';
 import CARE_ConfirmationDeleteMsg from '@salesforce/label/c.CARE_ConfirmationDeleteMsg';
 
-//#region  Constants
+//#region  Constant
 const DELAY = 350;
 const columns = [
     { label: 'Title', fieldName: 'sTitle', type: 'text', initialWidth: 240 },

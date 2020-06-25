@@ -81,7 +81,7 @@ export default class lwcCmpName extends LightningElement {
     @track enrollReturn;
     @track sCareAppStatus = '';
     @api sLiveAppCall;
-    //@track careResultList = 
+    
     @track values;
     //@track careSAData;
     @track careSAData = [];

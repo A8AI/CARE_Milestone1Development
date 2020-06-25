@@ -6,7 +6,7 @@ import deleteCareAppRecord from '@salesforce/apex/CARE_OnDemandDropController.d
 import getOnDemandDropInfoList from '@salesforce/apex/CARE_OnDemandDropController.getOnDemandDropInfoList';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import DROP_SOURCE_TYPE from '@salesforce/schema/CARE_Application__c.DROP_SOURCE__c';
-//import custom labels
+//import custom labelss
 import DropCaseourceValidationMsg from '@salesforce/label/c.CARE_DropCaseourceValidationMsg';
 import TransactionSuccessMsg from '@salesforce/label/c.CARE_TransactionSuccessMsg';
 import NotEligibleMsg from '@salesforce/label/c.CARE_NotEligibleMsg';

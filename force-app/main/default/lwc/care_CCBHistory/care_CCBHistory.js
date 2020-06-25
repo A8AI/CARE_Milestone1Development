@@ -85,7 +85,7 @@ wiredAccounts({
     }
 } 
  
-    /* javaScipt functions start */ 
+    /* javaScipts functions start */ 
     openModal() {    
         // to open modal window set 'bShowModal' tarck value as true
         this.bShowModal = true;

@@ -52,7 +52,7 @@ export default class Care_Reinstate extends LightningElement {
     CARE_RetroStartDateValidationMsg,
     CARE_RetroDateValidationMsg      
  }
-    //open Reinstate modalPop-up based on the valid customer result
+    //open Reinstate modalPopup based on the valid customer result
     openReinstateModal() {
 
         this.showLoadingSpinner = true;

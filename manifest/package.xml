@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
+        <members>CARE_HistoryTabController</members>
+        <members>CARE_TransferController</members>
+        <members>CARE_ReinstateController</members>
+        <members>CARE_UtilityController</members>
+        <members>CARE_OnDemandDropController</members>
+        <members>CARE_EnrollTabController</members>
+        <members>CARE_AdjustmentController</members>
+        <members>CARE_SearchController</members>
+        <members>CARE_ImageUploadController</members>
+        <members>CARE_SendAppController</members>
+        <members>CARE_AddElecGasController</members>
+        <members>CARE_CommunicationController</members>
+		<members>CARE_CCBHistoryController</members>
+		<members>CARE_IncomeQualificationController</members>
+        <members>CARE_EmployeeDiscountController</members>
+		<members>CARE_DiscountDateController</members>
+		<members>CARE_Constants</members>
+		<!--<members>CARE_SpecialMessageController</members>-->
+		<members>CARE_TestDataFactory</members>
+		
+		<members>CARE_EmployeeDiscountControllerTest</members>
+		<members>CARE_CommunicationControllerTest</members>
+		<members>CARE_CCBHistoryControllerTest</members>
+		<members>CARE_AddElecGasControllerTest</members>
+		<members>CARE_AdjustmentControllerTest</members>
+		<members>CARE_DiscountDateControllerTest</members>
+		<members>CARE_EnrollTabControllerTest</members>
+		<members>CARE_HistoryTabControllerTest</members>
+		<members>CARE_ImageUploadControllerTest</members>
+		<members>CARE_IncomeQualificationControllerTest</members>
+		<members>CARE_OnDemandDropControllerTest</members>
+		<members>CARE_ReinstateControllerTest</members>
+		<members>CARE_SearchControllerTest</members>
+		<members>CARE_SendAppControllerTest</members>
+		<members>CARE_TransferControllerTest</members>
+		<members>CARE_UtilityControllerTest</members>
+        <name>ApexClass</name>
+    </types>
+	
+	 <types>
         <members>Account.CARE_ENROLLED__c</members>
 		<members>Account.Premise_ID__c</members>
 		<members>Account.IN_PEV__c</members>
@@ -139,6 +179,9 @@
 		<members>CARE_Application__c.WAGES_PROFITS__c</members>
         <members>CARE_Application__c.WIC__c</members>
         <members>CARE_Application__c.WORKERS_COMP__c</members>
+		<members>CARE_Application__c.Total_Persons_in_Household__c</members>
+		<members>CARE_Application__c.On_Probation__c</members>
+		<members>CARE_Application__c.NO_ATTACHMENTS_RECEIVED__c</members>
         <members>EI_Site__c.CARE_DISCOUNT_TYPE__c</members>
         <members>CARE_App_Enrolled_SA__c.ACCT_ID__c</members>
         <members>CARE_App_Enrolled_SA__c.ACCT_ID_NEW__c</members>
@@ -341,6 +384,7 @@
 		<members>CARE_Facility__c.NAME_Facility_No__c</members>
 		<members>CARE_Facility__c.NO_OF_RESIDENTS__c</members>
 		<members>CARE_Facility__c.OTHER_DESC__c</members>
+		<members>CARE_Facility__c.OWNER__c</members>
 		<!--<members>CARE_Facility__c.OwnerId</members>-->
         <members>CARE_Facility__c.PHONE_EXT1__c</members>
         <members>CARE_Facility__c.PHONE_EXT2__c</members>
@@ -616,6 +660,30 @@
 		<members>CARE_Household_Member_Income__c.SCHEDULE_1_VALID__c</members>
 		<members>CARE_Household_Member_Income__c.UPDATE_DATE_CARE1__c</members>
 		<members>CARE_Household_Member_Income__c.USER_NAME_CARE1__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_3__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_4__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_5__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_6__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_7__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_8__c</members>
+		<members>CARE_Household_Member_Income__c.Amount_9__c</members>
+		<members>CARE_Household_Member_Income__c.Document_Complete__c</members>
+		<members>CARE_Household_Member_Income__c.INCOME_FORM_TYPE__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_2__c</members>
+		<members>CARE_Household_Member_Income__c.Line_2A__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_2A__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_3__c</members>
+		<members>CARE_Household_Member_Income__c.Line_3A__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_3A__c</members>
+		<members>CARE_Household_Member_Income__c.Line_4C__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_4C__c</members>
+		<members>CARE_Household_Member_Income__c.LINE_5__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_5__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_4__c</members>
+		<members>CARE_Household_Member_Income__c.Line_8__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_8__c</members>
+		<members>CARE_Household_Member_Income__c.Line_9__c</members>
+		<members>CARE_Household_Member_Income__c.Adj_9__c</members>
         <members>CARE_Facility_Enrolled_SA__c.ACCT_ID__c</members>
         <members>CARE_Facility_Enrolled_SA__c.CCB_APP_STATUS__c</members>
         <members>CARE_Facility_Enrolled_SA__c.CURR_CARE__c</members>
@@ -1076,6 +1144,97 @@
 		<members>WAC_RPT_Zip__c-WAC RPT Zip Layout</members>
         <name>Layout</name>
     </types>
+	
+	<types>
+        <members>care_App</members>
+        <members>care_History</members>
+        <members>care_Transfer</members>
+        <members>care_Reinstate</members>
+        <members>care_Enrollment</members>
+        <members>care_OnDemandDrop</members>
+        <members>care_Adjustment</members>
+        <members>care_ConfirmModal</members>
+        <members>care_SearchAutoComplete</members>
+        <members>care_ImageUpload</members>
+        <members>care_SendApp</members>
+        <members>care_AddElecGas</members>
+        <members>care_CCBHistory</members>
+        <members>care_Communication</members>
+		<members>care_SpecialMessageModal</members>
+		<members>care_Utilities</members>
+		<name>LightningComponentBundle</name>
+    </types>
+	
+	 <types>
+		<members>CARE_Type__c.Adjustment</members>
+		<members>CARE_Type__c.Reinstatement</members>
+		<members>CARE_Type__c.Transfer</members>
+		<members>CARE_Type__c.Add_Electric_Gas</members>
+		<name>ListView</name>
+	</types>
+	
+	 <types>
+		<members>CARE_Processor_PS</members>
+		<members>CARE_Admin_PS</members>
+		<members>CARE_Informatica_PS</members>
+		<name>PermissionSet</name>
+	</types>
+	
+	<types>
+		<members>CARE Base Profile</members>
+		<members>CARE Partner SM</members>
+		<members>CARE Partner Non-Profit</members>
+		<members>Admin</members>
+		<!--<members>EI Read Only</members>-->
+		<members>Integration User</members>
+		<!--<members>ReadOnly</members>
+		<members>Technology Enablement</members>-->
+		<name>Profile</name>
+	</types>
+	
+	 <types>
+		<members>CARE_Application__c.Residential_Customer</members>
+		<members>CARE_Application__c.Agricultural</members>
+		<members>CARE_Application__c.Migrant</members>
+		<members>CARE_Application__c.Non_Profile</members>
+		<members>CARE_Application__c.Sub_Metered</members>
+		<members>CARE_Facility__c.SM</members>
+		<members>CARE_Facility__c.NP</members>
+		<members>CARE_Facility__c.MF</members>
+		<members>CARE_Facility__c.AG</members>
+		<members>Account.CARE_Agricultural</members>
+		<members>Account.CARE_Migrant</members>
+		<members>Account.CARE_Non_Profit</members>
+		<members>Account.CARE_Sub_Metered</members>
+		<name>RecordType</name>
+	</types>
+	
+	<types>
+        <members>CARE_FullQualificationProcess_Flow</members>
+		<members>CARE_FreshEnrollmentProcess_Flow</members>
+        <members>CARE_RecertificationProcess_Flow</members>
+        <members>CARE_UpdateCCCode_Flow</members>
+        <!--<members>CARE_CheckCustomerDiscountType_Flow</members>-->
+		<members>CARE_CheckCustomer2YearCCCode_Flow</members>
+		<members>CARE_ConvertCommaSeparatedStringToList_Flow</members>
+        <name>Flow</name>
+    </types>
+	
+	
+	<types>
+		<members>CARE_APP_Tab</members>
+		<members>CARE_Application_Record_Page</members>
+		<members>Facility_Record_Page</members>
+		<members>CARE_Application_UtilityBar</members>
+		<members>CARE_APP_UtilityBar</members>
+		<name>FlexiPage</name>
+	</types>
+	
+	<types>
+		<members>Energy_Insight_Logo_EI/EnergyInsightCAREAPPLogo.jpg</members>
+		<name>Document</name>
+	</types>
+	
 	
 
     <version>49.0</version>

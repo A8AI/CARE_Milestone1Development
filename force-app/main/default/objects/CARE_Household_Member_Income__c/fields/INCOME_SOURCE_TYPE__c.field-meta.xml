@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>INCOME_SOURCE_TYPE__c</fullName>
+    <externalId>false</externalId>
+    <label>INCOME_SOURCE_TYPE</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Pension/Annuities</fullName>
+                <default>false</default>
+                <label>Pension/Annuities</label>
+            </value>
+            <value>
+                <fullName>Retirement</fullName>
+                <default>false</default>
+                <label>Retirement</label>
+            </value>
+            <value>
+                <fullName>Categorical</fullName>
+                <default>false</default>
+                <label>Categorical</label>
+            </value>
+            <value>
+                <fullName>Categorical Fixed</fullName>
+                <default>false</default>
+                <label>Categorical Fixed</label>
+            </value>
+            <value>
+                <fullName>Foster Care Payments</fullName>
+                <default>false</default>
+                <label>Foster Care Payments</label>
+            </value>
+            <value>
+                <fullName>High Usage</fullName>
+                <default>false</default>
+                <label>High Usage</label>
+            </value>
+            <value>
+                <fullName>Loan</fullName>
+                <default>false</default>
+                <label>Loan</label>
+            </value>
+            <value>
+                <fullName>Online Submission</fullName>
+                <default>false</default>
+                <label>Online Submission</label>
+            </value>
+            <value>
+                <fullName>School Grants</fullName>
+                <default>false</default>
+                <label>School Grants</label>
+            </value>
+            <value>
+                <fullName>Social Security - SSA</fullName>
+                <default>false</default>
+                <label>Social Security - SSA</label>
+            </value>
+            <value>
+                <fullName>Social Security - SSDI</fullName>
+                <default>false</default>
+                <label>Social Security - SSDI</label>
+            </value>
+            <value>
+                <fullName>Social Security - SSI</fullName>
+                <default>false</default>
+                <label>Social Security - SSI</label>
+            </value>
+            <value>
+                <fullName>Unemployment Benefits</fullName>
+                <default>false</default>
+                <label>Unemployment Benefits</label>
+            </value>
+            <value>
+                <fullName>Union Strike Fund Benefits</fullName>
+                <default>false</default>
+                <label>Union Strike Fund Benefits</label>
+            </value>
+            <value>
+                <fullName>VA Benefits</fullName>
+                <default>false</default>
+                <label>VA Benefits</label>
+            </value>
+            <value>
+                <fullName>Worker&apos;s Compensation</fullName>
+                <default>false</default>
+                <label>Worker&apos;s Compensation</label>
+            </value>
+            <value>
+                <fullName>Insurance/Legal Settlements</fullName>
+                <default>false</default>
+                <label>Insurance/Legal Settlements</label>
+            </value>
+            <value>
+                <fullName>Child Support</fullName>
+                <default>false</default>
+                <label>Child Support</label>
+            </value>
+            <value>
+                <fullName>Contract Work</fullName>
+                <default>false</default>
+                <label>Contract Work</label>
+            </value>
+            <value>
+                <fullName>Spousal Support</fullName>
+                <default>false</default>
+                <label>Spousal Support</label>
+            </value>
+            <value>
+                <fullName>Wages and Salaries</fullName>
+                <default>false</default>
+                <label>Wages and Salaries</label>
+            </value>
+            <value>
+                <fullName>Dividends/Capital Gains</fullName>
+                <default>false</default>
+                <label>Dividends/Capital Gains</label>
+            </value>
+            <value>
+                <fullName>IRA/401K</fullName>
+                <default>false</default>
+                <label>IRA/401K</label>
+            </value>
+            <value>
+                <fullName>Farm Income</fullName>
+                <default>false</default>
+                <label>Farm Income</label>
+            </value>
+            <value>
+                <fullName>Gambling/Lottery Winnings</fullName>
+                <default>false</default>
+                <label>Gambling/Lottery Winnings</label>
+            </value>
+            <value>
+                <fullName>Rental Income</fullName>
+                <default>false</default>
+                <label>Rental Income</label>
+            </value>
+            <value>
+                <fullName>Self-Employment</fullName>
+                <default>false</default>
+                <label>Self-Employment</label>
+            </value>
+            <value>
+                <fullName>Cash/Gifts</fullName>
+                <default>false</default>
+                <label>Cash/Gifts</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Savings</fullName>
+                <default>false</default>
+                <label>Savings</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

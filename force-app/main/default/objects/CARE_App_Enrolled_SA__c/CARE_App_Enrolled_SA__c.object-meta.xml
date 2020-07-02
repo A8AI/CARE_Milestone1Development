@@ -157,7 +157,7 @@
     <label>CARE App Enrolled SA</label>
     <nameField>
         <displayFormat>CTSA{000000000}</displayFormat>
-        <label>NAME  (APP SA Seq)</label>
+        <label>APP SA Seq</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE App Enrolled SA</pluralLabel>

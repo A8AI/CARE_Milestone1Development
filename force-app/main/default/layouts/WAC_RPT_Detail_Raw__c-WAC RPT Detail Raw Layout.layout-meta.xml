@@ -27,7 +27,7 @@
                 <field>CUST_NAME__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Edit</behavior>
                 <field>DETAIL_NO__c</field>
             </layoutItems>
             <layoutItems>
@@ -94,13 +94,16 @@
                 <behavior>Edit</behavior>
                 <field>SP_ID__c</field>
             </layoutItems>
-        </layoutColumns>
-        <layoutColumns>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>WAC_RPT__c</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>OwnerId</field>
+                <field>ENROLLTYPE__c</field>
             </layoutItems>
         </layoutColumns>
+        <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>

@@ -73,11 +73,11 @@
     </layoutSections>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>CARE_Household_Member_Income__c.HOUSEHOLD_DETAIL__c</relatedList>
+        <relatedList>CARE_Household_Member_IncomeC__c.HOUSEHOLD_DETAIL__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <relatedList>CARE_Household_Member_IncomeC__c.HOUSEHOLD_DETAIL__c</relatedList>
+        <relatedList>CARE_Household_Member_Income__c.HOUSEHOLDDETAIL__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

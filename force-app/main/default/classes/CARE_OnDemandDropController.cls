@@ -30,7 +30,7 @@ public class CARE_OnDemandDropController {
         careRes.NewAppIdForCare='';
         careRes.sContactCode = '';
         string enrollAppIdValue = '';
-        
+        Integer iLimit = integer.valueof(CARE_Constants.CARE_OnDemandDrop_QueryLimit);
         
         system.debug('perID Value---->' + perIdValue);
         
@@ -45,7 +45,7 @@ public class CARE_OnDemandDropController {
         List<CARE_App_Enrolled_SA__c> listCareAppId = new List<CARE_App_Enrolled_SA__c>();
         
         listCareAppId = [Select APPLICATION__r.Id from CARE_App_Enrolled_SA__c
-                    where SA_ID__c In: careEISiteMapData.keyset() AND END_DATE__c >: dDateToday Order by CreatedDate desc limit 1];
+                    where SA_ID__c In: careEISiteMapData.keyset() AND END_DATE__c >: dDateToday Order by CreatedDate desc limit : iLimit];
         
         system.debug('listCareAppId from App Enrolled------->'+ listCareAppId);
         if(listCareAppId.size() > 0){

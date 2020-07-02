@@ -71,6 +71,7 @@ export default class Care_History extends LightningElement {
     @track bIsLoaded = true;
     @track idRecLast;
     @track typeNumber;
+    @track bshowHistory = false;
     label = {
         DeleteSuccessMsg,
         TransactionErrorMsg,
@@ -96,10 +97,18 @@ export default class Care_History extends LightningElement {
 
         console.log(this.sSelectedHistoryPerId + '  HistoryFlag  ');
         if (data) {
+            console.log('data value ------->'+ JSON.stringify(data));
+            console.log('Console log 1');
             this.data = data.listHistoryWrapper;
             this.totalCount = data.iTotalRecCount;
             this.idRecLast = data.idLastRec;
-            console.log('total listHistoryWrapper data length ------->' , this.data.length);
+            if(this.data != undefined || this.data != ''){
+                this.bshowHistory = true;
+            }else{
+                this.bshowHistory = false;
+                this.showLoadingSpinner = false;
+            }
+            //console.log('total listHistoryWrapper data length ------->' , this.data.length);
             console.log('total count of select clause ------->' , this.totalCount);
             this.error = undefined;
             if (this.data) {
@@ -109,6 +118,7 @@ export default class Care_History extends LightningElement {
         } else if (error) {
             this.error = error;
             this.data = undefined;
+            this.bshowHistory = false;
         }
     }
 
@@ -136,7 +146,7 @@ export default class Care_History extends LightningElement {
                 const newData = currentRecord.concat(currentData);
                 this.data = newData;
                 this.idRecLast = result.idLastRec;
-                console.log('data length after concat ------->' + this.data.length); 
+                //console.log('data length after concat ------->' + this.data.length); 
                 if (this.data.length >= this.totalCount) {
                 console.log('Inside If block of LoadMoreData'); 
                     this.bIsLoaded = false;
@@ -247,8 +257,11 @@ export default class Care_History extends LightningElement {
         this.dispatchEvent(evt);
     }
 
-    get checkHistoryData() {
-        return this.data.length > 0;
-    }
+    /*get checkHistoryData() {
+        if(this.data != undefined || this.data != ''){
+            return this.data.length > 0;
+        }
+        
+    }*/
 
 }

@@ -55,25 +55,52 @@ public with sharing class CARE_HistoryTabController {
         public String sApplicationStatus {get;set;}
 
     }
+    public class TotalHistoryWrapper{
+       @AuraEnabled
+       public List<HistoryListWrapper> listHistoryWrapper {get;set;}
+        @AuraEnabled
+       public Integer iTotalRecCount {get;set;}
+        @AuraEnabled
+       public Id idLastRec {get;set;}
+    }
     
     //method to get the CARE app enrollment history details to whow under history tab 
     @AuraEnabled(Cacheable = true)
-    public static List<HistoryListWrapper> getEnrollHistoryData (String sPerID, String sMakeLiveCall ){
+    public static TotalHistoryWrapper getEnrollHistoryData (String sPerID, String sMakeLiveCall, String recordId){
         
-        List<HistoryListWrapper> listHistoryRecords = new List<HistoryListWrapper>();        
+        TotalHistoryWrapper totHistoryRecords = new TotalHistoryWrapper();
+        
+        List<HistoryListWrapper> listHistoryRecords = new List<HistoryListWrapper>();
+		List<CARE_Application__c> listcareAppRecordsNList = new list<CARE_Application__c>();        
         Date dTodaysDate = Date.today();
         Date dDateBeforeTwoYears = dTodaysDate.addYears(-2);
+        Integer iLimit = integer.valueof(CARE_Constants.CARE_History_QueryLimit);
         
         try{
-            
-            for( CARE_Application__c listcareAppRecords :[SELECT ID,NAME, APPLICATION_STATUS__c, RECEIVED_DATE__c, PROCESSED_DATE__c, CARE_CI_CC__r.DESCR254__c, 
-                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_CONTACT_DESC2__c, 
+            if(String.isBlank(recordId)){
+                listcareAppRecordsNList = [SELECT ID,NAME, APPLICATION_STATUS__c, RECEIVED_DATE__c, PROCESSED_DATE__c, CARE_CI_CC__r.DESCR254__c,
+                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_CONTACT_DESC2__c,
                                                           CARE_CI_CC__r.USER_ID__c,SOURCE_CHANNEL_TYPE__c, CreatedDate,
                                                           (SELECT SA_ID__c, START_DATE__c, END_DATE__c , Service_Agreement__r.Svc_Type_Code_EI__c,
-                                                           APPLICATION__c, RETRO_START_DATE__c, RETRO_END_DATE__c, CC_CL_CD__c, CCB_CONTACT_TYPE__c  FROM CARE_App_Enrolled_SA__r) 
-                                                          FROM CARE_Application__c WHERE PER_ID__C = : sPerID ORDER BY CreatedDate DESC] )
+                                                           APPLICATION__c, RETRO_START_DATE__c, RETRO_END_DATE__c, CC_CL_CD__c, CCB_CONTACT_TYPE__c  FROM CARE_App_Enrolled_SA__r)
+                                                          FROM CARE_Application__c WHERE PER_ID__C =: sPerID ORDER BY CreatedDate DESc, Id desc limit: iLimit];
                 
-            {
+                system.debug('listcareAppRecordsNList for blank record Id---->' + listcareAppRecordsNList.size());
+            }
+            else if(String.isNotBlank(recordId)){
+                listcareAppRecordsNList = [SELECT ID,NAME, APPLICATION_STATUS__c, RECEIVED_DATE__c, PROCESSED_DATE__c, CARE_CI_CC__r.DESCR254__c,
+                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_CONTACT_DESC2__c,
+                                                          CARE_CI_CC__r.USER_ID__c,SOURCE_CHANNEL_TYPE__c, CreatedDate,
+                                                          (SELECT SA_ID__c, START_DATE__c, END_DATE__c , Service_Agreement__r.Svc_Type_Code_EI__c,
+                                                           APPLICATION__c, RETRO_START_DATE__c, RETRO_END_DATE__c, CC_CL_CD__c, CCB_CONTACT_TYPE__c  FROM CARE_App_Enrolled_SA__r)
+                                                          FROM CARE_Application__c WHERE PER_ID__C =: sPerID and Id <: recordId ORDER BY CreatedDate DESc, Id desc limit: iLimit];
+                
+                system.debug('listcareAppRecordsNList for non blank record Id---->' + listcareAppRecordsNList.size());
+            }
+            
+           
+            for( CARE_Application__c listcareAppRecords :listcareAppRecordsNList ){
+                
                 if (listcareAppRecords.CARE_App_Enrolled_SA__r != null && listcareAppRecords.CARE_App_Enrolled_SA__r.size()>0)
                 {
                     for (CARE_App_Enrolled_SA__C listCareEnrolledRecords : listcareAppRecords.CARE_App_Enrolled_SA__r)
@@ -136,15 +163,19 @@ public with sharing class CARE_HistoryTabController {
                     }
                     else{objRec.bDeleteButton = false;}
                     listHistoryRecords.add(objRec);     
+                    
                 }
+                 Integer iCountTotal =  [SELECT count() FROM Care_Application__c WHERE PER_ID__C =: sPerID];
+
+                totHistoryRecords.listHistoryWrapper = listHistoryRecords;
+                totHistoryRecords.iTotalRecCount = iCountTotal;
+                totHistoryRecords.idLastRec = listcareAppRecordsNList[listcareAppRecordsNList.size()-1].Id;
             }
-        }
-               
-        catch(Exception ex){
+            }catch(Exception ex){
             
             system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
         }
-        return  listHistoryRecords;
+        return  totHistoryRecords;
     }
     
     //method to Delete the Enrollment record

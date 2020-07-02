@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>INCOME_DOC_TYPE__c</fullName>
+    <externalId>false</externalId>
+    <label>INCOME_DOC_TYPE</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1099R</fullName>
+                <default>false</default>
+                <label>1099R</label>
+            </value>
+            <value>
+                <fullName>Award Letter -Categorical</fullName>
+                <default>false</default>
+                <label>Award Letter -Categorical</label>
+            </value>
+            <value>
+                <fullName>Award Letter -Categorical Fixed</fullName>
+                <default>false</default>
+                <label>Award Letter -Categorical Fixed</label>
+            </value>
+            <value>
+                <fullName>Award Letter</fullName>
+                <default>false</default>
+                <label>Award Letter</label>
+            </value>
+            <value>
+                <fullName>Bank Statement</fullName>
+                <default>false</default>
+                <label>Bank Statement</label>
+            </value>
+            <value>
+                <fullName>Check Stub</fullName>
+                <default>false</default>
+                <label>Check Stub</label>
+            </value>
+            <value>
+                <fullName>Check Stub 2</fullName>
+                <default>false</default>
+                <label>Check Stub 2</label>
+            </value>
+            <value>
+                <fullName>Court Document</fullName>
+                <default>false</default>
+                <label>Court Document</label>
+            </value>
+            <value>
+                <fullName>Investment Account Statement</fullName>
+                <default>false</default>
+                <label>Investment Account Statement</label>
+            </value>
+            <value>
+                <fullName>IRS 1040 2018</fullName>
+                <default>false</default>
+                <label>IRS 1040 2018</label>
+            </value>
+            <value>
+                <fullName>IRS 1040 2019</fullName>
+                <default>false</default>
+                <label>IRS 1040 2019</label>
+            </value>
+            <value>
+                <fullName>IRS 1040 SR</fullName>
+                <default>false</default>
+                <label>IRS 1040 SR</label>
+            </value>
+            <value>
+                <fullName>IRS 1040X</fullName>
+                <default>false</default>
+                <label>IRS 1040X</label>
+            </value>
+            <value>
+                <fullName>IRS 1099</fullName>
+                <default>false</default>
+                <label>IRS 1099</label>
+            </value>
+            <value>
+                <fullName>IRS Transcript</fullName>
+                <default>false</default>
+                <label>IRS Transcript</label>
+            </value>
+            <value>
+                <fullName>Others</fullName>
+                <default>false</default>
+                <label>Others</label>
+            </value>
+            <value>
+                <fullName>Profit and Loss Statement</fullName>
+                <default>false</default>
+                <label>Profit and Loss Statement</label>
+            </value>
+            <value>
+                <fullName>Settlement Document</fullName>
+                <default>false</default>
+                <label>Settlement Document</label>
+            </value>
+            <value>
+                <fullName>Signed Letter</fullName>
+                <default>false</default>
+                <label>Signed Letter</label>
+            </value>
+            <value>
+                <fullName>Signed Letter W/O Amount</fullName>
+                <default>false</default>
+                <label>Signed Letter W/O Amount</label>
+            </value>
+            <value>
+                <fullName>Verification of Non Filing</fullName>
+                <default>false</default>
+                <label>Verification of Non Filing</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

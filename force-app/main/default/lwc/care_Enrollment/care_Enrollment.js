@@ -30,7 +30,7 @@ const columns = [
     {label: 'SA ID', fieldName: 'saID', type: 'text'},
     //{label: 'Application ID', fieldName: 'Name', type: 'text'},
      
-    {label: 'SA Type', fieldName: 'saType',type: 'text'},
+    {label: 'Service Type', fieldName: 'saType',type: 'text'},
     
     {label: 'Yes Date', fieldName: 'yesDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
     
@@ -53,7 +53,7 @@ const columnsWithEdit = [
     {label: 'SA ID', fieldName: 'saID', type: 'text'},
     //{label: 'Application ID', fieldName: 'Name', type: 'text'},
      
-    {label: 'SA Type', fieldName: 'saType',type: 'text'},
+    {label: 'Service Type', fieldName: 'saType',type: 'text'},
     
     {label: 'Yes Date', fieldName: 'yesDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
     

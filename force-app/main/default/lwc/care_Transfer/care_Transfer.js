@@ -47,7 +47,7 @@ export default class Care_Tranfer extends LightningElement {
         sComment: '',
         sContactCode: ''
 }
-//declare custom labels
+//declare custom label
 label = {
     CARE_NotEligiblePersonMsg,
     CARE_NotSelectedMsg,

@@ -12,10 +12,10 @@
     <columns>CC_ID__c</columns>
     <columns>CCB_CONTACT_CODE__c</columns>
     <columns>CARE_City__c</columns>
-    <columns>Discount__c</columns>
     <columns>CARE_Customer_Name__c</columns>
     <columns>RECORDTYPE</columns>
     <columns>CC_CL_CD__c</columns>
+    <columns>PARTICIPANT__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>APPLICATION_STATUS__c</field>

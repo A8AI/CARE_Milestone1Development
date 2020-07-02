@@ -19,11 +19,12 @@ public with sharing class CARE_IncomeQualificationController {
     @InvocableMethod
     public static List<FlowOutputs> getEnrollmentType(List<FlowInputs> listInputValues){
        List<FlowOutputs> listResults =new List<FlowOutputs>(); 
+       Integer iNumOfHouseholds=listInputValues[0].iNoOfHouseholds;
+       Decimal dTotalIncome= listInputValues[0].dTotalIncome;       
+       String sEnrollmentType = CARE_Constants.CARE_INCOME_NOT_QUALIFIED;
        try{
         //Get Input values from Flow
-        Integer iNumOfHouseholds=listInputValues[0].iNoOfHouseholds;
-        Decimal dTotalIncome= listInputValues[0].dTotalIncome;       
-        String sEnrollmentType = CARE_Constants.CARE_INCOME_NOT_QUALIFIED;        
+               
         Map<String,List<CAREFERAWrapper>> mapWrappersByType = new Map<String,List<CAREFERAWrapper>>();
         for(Low_Income_Qualification__c objQualification : [SELECT Id, Name, Low_Income_Type__c, No_of_Household__c, 
                                                          Qualifying_Income_Range_from__c, Qualifying_Income_Range_To__c

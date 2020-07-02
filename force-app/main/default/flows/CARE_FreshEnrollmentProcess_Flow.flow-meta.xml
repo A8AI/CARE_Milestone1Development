@@ -163,11 +163,62 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Set Qualified By Categorical</description>
+        <name>Set_Qualified_By_Categorical</name>
+        <label>Set Qualified By Categorical</label>
+        <locationX>1860</locationX>
+        <locationY>1378</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Categorical</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Customer_On_FERA</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Qualified By =Categorical</description>
+        <name>Set_Qualified_By_Categorical_2</name>
+        <label>Set Qualified By Categorical</label>
+        <locationX>1853</locationX>
+        <locationY>1942</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Categorical</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Customer_on_FERA_Discount</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Qualified By =Income; If not qualifying by 2 categories then all the qualification is through income. Hence setting it before proceeding further. This value is passed as parameter only for Discount Scenarios (2/4 CARE/FERA)</description>
+        <name>Set_Qualified_By_Income</name>
+        <label>Set Qualified By =Income</label>
+        <locationX>2138</locationX>
+        <locationY>1535</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Income</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Fixed_Income_Checked</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Set Valid RS Flag =False</description>
         <name>Set_Valid_RS_Flag_False</name>
         <label>Set Valid RS Flag False</label>
-        <locationX>3082</locationX>
-        <locationY>1109</locationY>
+        <locationX>3087</locationX>
+        <locationY>1093</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -221,7 +272,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Customer_On_FERA</targetReference>
+                <targetReference>Set_Qualified_By_Categorical</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -676,7 +727,7 @@
         <locationX>2137</locationX>
         <locationY>1728</locationY>
         <defaultConnector>
-            <targetReference>Fixed_Income_Checked</targetReference>
+            <targetReference>Set_Qualified_By_Income</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -746,7 +797,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Customer_on_FERA_Discount</targetReference>
+                <targetReference>Set_Qualified_By_Categorical_2</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -958,7 +1009,7 @@
             <targetReference>CARE_Application_Details</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <subflows>
         <description>Convert Rate Schedule String To Collection</description>
         <name>Convert_Rate_Schedule_String_To_Collection</name>
@@ -984,8 +1035,8 @@
         <description>Four Year CARE Certified 6014</description>
         <name>Four_Year_CARE_6014</name>
         <label>Four Year CARE 6014</label>
-        <locationX>1882</locationX>
-        <locationY>569</locationY>
+        <locationX>1817</locationX>
+        <locationY>581</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
             <name>recColValidSAIdsOfSelectedPremise_Input</name>
@@ -997,6 +1048,18 @@
             <name>varCareApplicationId_Input</name>
             <value>
                 <elementReference>varCareApplicationId_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varExistingDiscountType_Input</name>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varIsApplicationAccepted_Input</name>
+            <value>
+                <elementReference>varIsApplicationAccepted_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -1024,15 +1087,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varExistingDiscountType_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>varExistingDiscountType_Input</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varIsApplicationAccepted_Input</name>
+            <name>varHasDiscountOnOtherPremise_Input</name>
             <value>
-                <elementReference>varIsApplicationAccepted_Input</elementReference>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1089,6 +1158,18 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>varExistingDiscountType_Input</name>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varIsApplicationAccepted_Input</name>
+            <value>
+                <elementReference>varIsApplicationAccepted_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>varIsCareAppEnrolledSARequired_Input</name>
             <value>
                 <booleanValue>true</booleanValue>
@@ -1113,15 +1194,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varExistingDiscountType_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>varExistingDiscountType_Input</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varIsApplicationAccepted_Input</name>
+            <name>varHasDiscountOnOtherPremise_Input</name>
             <value>
-                <elementReference>varIsApplicationAccepted_Input</elementReference>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1140,6 +1227,12 @@
         <locationX>2653</locationX>
         <locationY>2046</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
+        <inputAssignments>
+            <name>colValidFERARateSchedule_Input</name>
+            <value>
+                <elementReference>colValidFERARateSchedule</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>recColValidSAIdsOfSelectedPremise_Input</name>
             <value>
@@ -1189,9 +1282,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>colValidFERARateSchedule_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>colValidFERARateSchedule</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1434,7 +1539,7 @@
         </outputAssignments>
     </subflows>
     <subflows>
-        <description>Update CC Code(6025)</description>
+        <description>Update CC Code(6025) : In case of over Income ,Drop existing discount. Hence passing discount details of other premise as well.</description>
         <name>Update_CC_Code_J</name>
         <label>Update CC Code- Over Income(6025)</label>
         <locationX>3126</locationX>
@@ -1453,12 +1558,6 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varTypeNumber_Input</name>
-            <value>
-                <stringValue>6025</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <name>varExistingDiscountType_Input</name>
             <value>
                 <elementReference>varExistingDiscountType_Input</elementReference>
@@ -1468,6 +1567,24 @@
             <name>varIsApplicationAccepted_Input</name>
             <value>
                 <elementReference>varIsApplicationAccepted_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varTypeNumber_Input</name>
+            <value>
+                <stringValue>6025</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+            <value>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1493,6 +1610,15 @@
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
+        <description>Other premise Discounted SAs (Passed from Main Flow)</description>
+        <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
         <isOutput>false</isOutput>
         <objectType>EI_Site__c</objectType>
     </variables>
@@ -1563,6 +1689,17 @@
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Flag - Discount on other Premise (Passed from main flow)</description>
+        <name>varHasDiscountOnOtherPremise_Input</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
     </variables>
     <variables>
         <description>Variable to hold whether customer has electric SA</description>
@@ -1637,6 +1774,14 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Categorical/Income/Not Qualified/None</description>
+        <name>varQualifiedBy</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>

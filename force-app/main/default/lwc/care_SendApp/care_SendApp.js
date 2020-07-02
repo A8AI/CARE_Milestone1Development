@@ -14,7 +14,7 @@ import CARE_SendAppConfirmationMsg from '@salesforce/label/c.CARE_SendAppConfirm
 import CARE_SendAppHeader from '@salesforce/label/c.CARE_SendAppHeader';
 
 export default class Care_SendApp extends LightningElement {
-//#region Variable
+//#region Variables
     @api sPersonId;// = '9999999999';
     @api sAccountId; // = '';
     @api sApplicantName;//='Sha';

@@ -9,5 +9,10 @@
     <columns>TYPE_DESC_LONG__c</columns>
     <columns>COMMENTS__c</columns>
     <filterScope>Everything</filterScope>
+    <filters>
+        <field>CATEGORY__c</field>
+        <operation>equals</operation>
+        <value>CARE Enrollment Contact Codes,On Demand Status Reason</value>
+    </filters>
     <label>All</label>
 </ListView>

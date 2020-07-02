@@ -39,6 +39,7 @@ public class CARE_Constants {
     public final static String CARE_ADJUSTMENT_RSN_CAT = 'Adjustment Reason';
     public final static String CARE_TRANSFER_RSN_CAT = 'Transfer Reason';
     public final static String CARE_REINSTATE_RSN_CAT = 'Reinstatement Reason';
+    public final static String CARE_OnDemandStatus_RSN_CAT = 'On Demand Status Reason';
     public final static String CARE_SEND_APP_RSN_CAT = 'CARE Enrollment Contact Codes';
     public final static String CARE_SEND_APP_CC_CODE = 'A';
     public final static String CARE_VALID_SA_CAT = 'Valid SA status';
@@ -56,10 +57,13 @@ public class CARE_Constants {
     public final static String CARE_CC_REINSTATE_ADJUSTMENT = '6035';
     public final static String CARE_CC_REINSTATE_NO_ADJUSTMENT = '6040';   
     public final static String CARE_CC_TRANSFER_FROM = '6042';
+    public final static String CARE_CC_TRANSFER = '6037';
     public final static String CARE_CC_TRANSFER_TO = '6044';   
     public final static String CARE_CC_ADD_ELEC_GAS = '6033';
     public final static String CARE_CC_ADJUSTMENT = '6034';
     public final static String CARE_CC_OnDemandDrop = '6026';
+    public final static String CARE_History_QueryLimit = '10';
+    public final static String CARE_OnDemandDrop_QueryLimit = '1';
     
     //Messages
     public final static String CARE_INVALID_CUST_CODE = 'Customer not Eligible!!!';
@@ -74,8 +78,29 @@ public class CARE_Constants {
     public final static String CARE_DOCUMENTUM = 'DOCUMENTUM';
     public final static String CARE_DATAXPORT = 'DATAXPORT';
     
+    // SA Statuses
+    public final static Set<String> CARE_SA_ACTIVE_STATUSES = new Set<string>{'10','20'};
+    
     //Application Status
     public final static String CARE_DECISION_MADE = 'Decision Made';
+    
+    // CARE_APP_Staging - Enrollment Statuses
+    public final static String CARE_STG_ENR_STATUS_NEW = 'New';
+    public final static String CARE_STG_ENR_STATUS_PENDING = 'Pending';
+    public final static String CARE_STG_ENR_STATUS_COMPLETED = 'Completed';
+    public final static String CARE_STG_ENR_STATUS_ERROR = 'Error';
+    public final static String CARE_STG_ENR_STATUS_IGNORED = 'Ignored';
+    
+    // CARE_APP_Staging - Error Codes
+    public final static String CARE_STG_ENR_ERROR_CODE_BAD_ACC = 'Bad ACC ID';
+    public final static String CARE_STG_ENR_ERROR_CODE_DUP = 'Duplicate';
+    public final static String CARE_STG_ENR_ERROR_CODE_IRS = 'Invalid Rate Schedule';
+    
+    
+    // CARE_APP_Staging - Error Messages
+    public final static String CARE_STG_ENR_ERROR_MSG_BAD_ACC = 'INVALID ACCT or ACCT NOT IN CCB DOWNLOAD.';
+    public final static String CARE_STG_ENR_ERROR_MSG_DUP = 'DUPLICATE ENTRY BASED ON BILLING ACCT ID.';
+    public final static String CARE_STG_ENR_ERROR_MSG_IRS = 'INVALID RATE SCHEDULE.';
     
     
     

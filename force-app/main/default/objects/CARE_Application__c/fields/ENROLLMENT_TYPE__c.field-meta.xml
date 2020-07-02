@@ -31,6 +31,11 @@
                 <default>false</default>
                 <label>OTHER</label>
             </value>
+            <value>
+                <fullName>PEV HU</fullName>
+                <default>false</default>
+                <label>PEV HU</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

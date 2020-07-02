@@ -26,6 +26,10 @@
                 <behavior>Required</behavior>
                 <field>ZIP_CODE__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>WAC_Agency__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

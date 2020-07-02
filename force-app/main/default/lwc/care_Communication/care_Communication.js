@@ -185,7 +185,7 @@ export default class Care_Communication extends LightningElement {
             this.phoneDetails.home = '';
         }    
         if(this.maskedPhoneDetails.work !== '' && this.maskedPhoneDetails.work !== undefined && this.maskedPhoneDetails.work !== null){
-            this.phoneDetails.work = this.maskedPhoneDetails.work.replace(/\D/g,''); //removes mask
+            this.phoneDetails.work = this.maskedPhoneDetails.work.replace(/\D/g,''); //remove mask
         }
         else{
             this.phoneDetails.work = '';

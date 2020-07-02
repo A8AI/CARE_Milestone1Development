@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All</fullName>
+    <columns>APPLICATION__c</columns>
+    <columns>NAME</columns>
+    <columns>SA_ID__c</columns>
+    <columns>CC_CL_CD__c</columns>
+    <columns>START_DATE__c</columns>
+    <columns>END_DATE__c</columns>
+    <columns>CCB_CONTACT_TYPE__c</columns>
+    <columns>ACCT_ID_NEW__c</columns>
+    <columns>ADJUSTED__c</columns>
+    <columns>CSR_ADJUSTED__c</columns>
+    <columns>LAST_BILL_DATE__c</columns>
+    <columns>SERVICE_TYPE_CODE__c</columns>
+    <columns>CREATED_DATE</columns>
+    <columns>SA_ENTITY_NAME__c</columns>
+    <columns>RS_CD__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

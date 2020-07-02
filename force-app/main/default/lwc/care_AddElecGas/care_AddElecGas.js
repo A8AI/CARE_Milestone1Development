@@ -53,7 +53,7 @@ export default class Care_AddElecGas extends LightningElement {
     @track bDisabled = false;
     //#endregion
 
-    //declare custom labels
+    //declare custom label
      label = {
         CARE_NotSelectedMsg,
         CARE_SelectReasonMsg,

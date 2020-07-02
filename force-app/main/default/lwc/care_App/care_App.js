@@ -97,7 +97,7 @@ export default class Care_App extends LightningElement {
 
     //////////////////
     //On selecting the record from the child lwc (same used in different place), 
-    //the values are captured in the specific track fields only.
+    //the values are captured in the specific track fields.
     //The 'name' attribute is used to identify the controlling fields in the parent lwc
     handleRecordSelection(event) {
         let elemName = event.target.name;

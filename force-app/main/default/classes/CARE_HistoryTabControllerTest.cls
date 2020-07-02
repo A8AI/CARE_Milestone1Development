@@ -79,14 +79,61 @@ public class CARE_HistoryTabControllerTest {
 
      @isTest
     static void testgetEnrollHistoryData2(){
+        date dToday = system.today();
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-    	List<CARE_Application__c> acc = [SELECT  Name,PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c,CCB_CONTACT_CODE__c From CARE_Application__c ];    // queried CARE_APPLICATION
+    	List<CARE_Application__c> acc = [SELECT Id, Name,PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c,CCB_CONTACT_CODE__c From CARE_Application__c ];    // queried CARE_APPLICATION
         List<CARE_Type__c> careType = [SELECT COMMENTS__c,TYPE_CODE__c,TYPE_NO__c FROM CARE_Type__c];
         System.debug('acc is '+acc);
         acc[0].CCB_CONTACT_CODE__c = careType[0].TYPE_CODE__c;
         update acc[0];
         Test.startTest();
-        CARE_HistoryTabController.getEnrollHistoryData(acc[0].PER_ID__c,'yes');
+        CARE_HistoryTabController.HistoryListWrapper saveResults = new CARE_HistoryTabController.HistoryListWrapper();
+        //List<HistoryListWrapper> listHistoryRecords = new List<HistoryListWrapper>();
+        saveResults.sApplicationName= 'TestApp';
+        saveResults.sId= acc[0].Id;
+        saveResults.sSAID= '1212121212';
+        saveResults.sSAType= 'E';
+        saveResults.sDiscountType= 'CARE';
+        saveResults.dStartDate= dToday;
+        saveResults.dEndDate= dToday;
+        saveResults.dReceiveDate= dToday;
+        saveResults.sContact= 'TestApp';
+        saveResults.sDescription= 'Test Desc';
+        saveResults.sCCBComment= 'Test Comment';
+        saveResults.sAppSource= 'Regular App';
+        saveResults.sCommittedBy= 'Test User';
+        saveResults.sFormatText= 'Test App';
+        saveResults.sViewButton= 'Test App';
+        saveResults.bDeleteButton= False;
+        saveResults.sApplicationStatus= 'New';
+        saveResults.sTypeNo= '6011';
+        //listHistoryRecords.add(saveResults);
+        
+        
+        CARE_HistoryTabController.TotalHistoryWrapper totResults = new CARE_HistoryTabController.TotalHistoryWrapper();
+        
+        //totResults.listHistoryWrapper = acc;
+        totResults.iTotalRecCount = 10;
+        totResults.idLastRec = acc[0].Id;
+        
+        CARE_App_Enrolled_SA__c objCareAppEnroll = new CARE_App_Enrolled_SA__c();
+        objCareAppEnroll.APPLICATION__c = acc[0].Id;
+        objCareAppEnroll.SA_ID__c = '1212121212';
+        objCareAppEnroll.PREM_ID__c = '2323232323';
+        objCareAppEnroll.ACCT_ID__c = '123456789';
+        objCareAppEnroll.CC_CL_CD__c = 'CARE';
+        //objCareAppEnroll.Service_Agreement__c = eiSite.Id;
+        objCareAppEnroll.PER_ID__c = '4545454545';
+        objCareAppEnroll.END_DATE__c = dToday;
+        objCareAppEnroll.SERVICE_FULL_ADDRESS__c = 'Test Add';
+        objCareAppEnroll.CC_CL_CD__c = 'C';
+        objCareAppEnroll.CCB_CONTACT_TYPE__c = '6042';
+        objCareAppEnroll.RS_CD__c = '4213122121';
+        insert objCareAppEnroll;
+        
+        
+        CARE_HistoryTabController.getEnrollHistoryData(acc[0].PER_ID__c,'yes', '');
+        //CARE_HistoryTabController.getEnrollHistoryData(acc[0].PER_ID__c,'yes', '');
         CARE_HistoryTabController.getSpecialMessage(acc[0].Name,careType[0].TYPE_NO__c);
         CARE_HistoryTabController.getSpecialMessage(acc[0].Name,null);
         Test.stopTest();
@@ -95,17 +142,45 @@ public class CARE_HistoryTabControllerTest {
     
      @isTest
     static void testgetEnrollHistoryData(){
+        date dToday = system.today();
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-        List<CARE_Application__c> objCareApp = [SELECT  PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c From CARE_Application__c ];    // queried CARE_APPLICATION
-        System.debug('acc is '+objCareApp);
-        EI_Site__c lstSite = [SELECT  Id, Person_ID_EI__c, Care_Stop_Date_EI__c, Imported_Site_Name_EI__c,Rate_Schedule_EI__c,Account_EI__r.Discount__c,Site_Premise_ID_EI__c,Res_Ind_EI__c,SAID_EI__c,Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c From EI_Site__c Limit 1];    // queried lstSite	
-        CARE_App_Enrolled_SA__c objCareAppEnrol = CARE_TestDataFactory.careAppEnrolledSa(objCareApp[0],lstSite);
-        insert objCareAppEnrol;
-        Test.startTest(); 
-        CARE_HistoryTabController.getEnrollHistoryData(objCareApp[0].PER_ID__c,'No');
-        CARE_HistoryTabController.deleteEnrollmentRecord(objCareApp[0].Id);
+        //List<CARE_Application__c> objCareApp = [SELECT  Id, PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c From CARE_Application__c ];    // queried CARE_APPLICATION
+        //System.debug('acc is '+objCareApp);
         
-        System.assertNotEquals(null, objCareApp[0].Id);
+       /* CARE_App_Enrolled_SA__c objCareAppEnroll = new CARE_App_Enrolled_SA__c();
+        objCareAppEnroll.APPLICATION__c = objCareApp[0].Id;
+        objCareAppEnroll.SA_ID__c = '1212121212';
+        objCareAppEnroll.PREM_ID__c = '2323232323';
+        objCareAppEnroll.ACCT_ID__c = '123456789';
+        objCareAppEnroll.CC_CL_CD__c = 'CARE';
+        //objCareAppEnroll.Service_Agreement__c = eiSite.Id;
+        objCareAppEnroll.PER_ID__c = '4545454545';
+        objCareAppEnroll.END_DATE__c = dToday;
+        objCareAppEnroll.SERVICE_FULL_ADDRESS__c = 'Test Add';
+        objCareAppEnroll.CC_CL_CD__c = 'C';
+        objCareAppEnroll.CCB_CONTACT_TYPE__c = '6042';
+        objCareAppEnroll.RS_CD__c = '4213122121';
+        insert objCareAppEnroll;*/
+        
+        Account objAccountRecord = PM_EI_TestDataUtility.createAccount();
+    insert objAccountRecord;
+    
+    CARE_Application__c objcareApp = new CARE_Application__c();
+        objcareApp.CARE_Account_ID__c = objAccountRecord.Id;
+        objcareApp.APPLICATION_STATUS__c = 'New';
+        objcareApp.APPLICANT_NAME__c = 'Test Care';
+        objcareApp.PER_ID__c = 'TestPerId';
+    	objcareApp.ENROLLMENT_TYPE__c = 'OTHER';
+    insert objcareApp;
+        
+        EI_Site__c lstSite = [SELECT  Id, Person_ID_EI__c, Care_Stop_Date_EI__c, Imported_Site_Name_EI__c,Rate_Schedule_EI__c,Account_EI__r.Discount__c,Site_Premise_ID_EI__c,Res_Ind_EI__c,SAID_EI__c,Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c From EI_Site__c Limit 1];    // queried lstSite	
+        //CARE_App_Enrolled_SA__c objCareAppEnrol = CARE_TestDataFactory.careAppEnrolledSa(objCareApp[0],lstSite);
+        //insert objCareAppEnrol;
+        Test.startTest(); 
+        CARE_HistoryTabController.getEnrollHistoryData(objCareApp.PER_ID__c,'No', objCareApp.Id);
+        CARE_HistoryTabController.deleteEnrollmentRecord(objCareApp.Id);
+        
+        System.assertNotEquals(null, objCareApp.Id);
         Test.stopTest();
     }
     private static List<CARE_Type__c> createCareTypeRecords(){

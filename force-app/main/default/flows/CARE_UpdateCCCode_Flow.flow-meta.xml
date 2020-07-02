@@ -4,8 +4,8 @@
         <description>Get start date and end date of Discount</description>
         <name>Get_Discount_Start_End_Date</name>
         <label>Get Discount Start&amp;End Date for SA</label>
-        <locationX>5553</locationX>
-        <locationY>697</locationY>
+        <locationX>6883</locationX>
+        <locationY>926</locationY>
         <actionName>CARE_DiscountDateController</actionName>
         <actionType>apex</actionType>
         <connector>
@@ -54,8 +54,8 @@
         <description>Add SA Details To Collection</description>
         <name>Add_SA_Details_To_Collection</name>
         <label>Add SA Details To Collection</label>
-        <locationX>4540</locationX>
-        <locationY>1460</locationY>
+        <locationX>5518</locationX>
+        <locationY>1669</locationY>
         <assignmentItems>
             <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
             <operator>Add</operator>
@@ -71,8 +71,8 @@
         <description>Add to Collection Variable</description>
         <name>Add_To_Collection_Variable</name>
         <label>Add To Collection Variable</label>
-        <locationX>1135</locationX>
-        <locationY>2572</locationY>
+        <locationX>1925</locationX>
+        <locationY>3206</locationY>
         <assignmentItems>
             <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
             <operator>Add</operator>
@@ -88,8 +88,8 @@
         <description>Assign greater date to a variable</description>
         <name>Assign_Greater_Date</name>
         <label>Assign Greater Date</label>
-        <locationX>5601</locationX>
-        <locationY>1453</locationY>
+        <locationX>6471</locationX>
+        <locationY>1932</locationY>
         <assignmentItems>
             <assignToReference>varGreatestDiscountEndDate</assignToReference>
             <operator>Assign</operator>
@@ -105,8 +105,8 @@
         <description>Set Long description in a variable to update it with Lan Id and  received date</description>
         <name>Assign_Long_Description</name>
         <label>Assign Long Description</label>
-        <locationX>3056</locationX>
-        <locationY>2203</locationY>
+        <locationX>3846</locationX>
+        <locationY>2837</locationY>
         <assignmentItems>
             <assignToReference>varLongDescriptionToBeUpdated</assignToReference>
             <operator>Assign</operator>
@@ -122,8 +122,8 @@
         <description>Assign Long Description To a Variable; Same will be evaluated by formula field and replace &lt;LAN ID&gt; and &lt;Received DATE&gt;</description>
         <name>Assign_Long_Description_To_a_Variable</name>
         <label>Assign Long Description To a Variable</label>
-        <locationX>1840</locationX>
-        <locationY>699</locationY>
+        <locationX>2313</locationX>
+        <locationY>838</locationY>
         <assignmentItems>
             <assignToReference>varLongDescriptionToBeUpdated</assignToReference>
             <operator>Assign</operator>
@@ -139,8 +139,8 @@
         <description>Assign Long Description</description>
         <name>Assign_LongDescription</name>
         <label>Assign Long Description</label>
-        <locationX>1989</locationX>
-        <locationY>2683</locationY>
+        <locationX>2779</locationX>
+        <locationY>3317</locationY>
         <assignmentItems>
             <assignToReference>varLongDescriptionToBeUpdated</assignToReference>
             <operator>Assign</operator>
@@ -156,8 +156,8 @@
         <description>Assign SA Details To a Record Variable</description>
         <name>Assign_SA_Details</name>
         <label>Assign SA Details</label>
-        <locationX>1239</locationX>
-        <locationY>2771</locationY>
+        <locationX>2029</locationX>
+        <locationY>3405</locationY>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.ACCT_ID__c</assignToReference>
             <operator>Assign</operator>
@@ -250,6 +250,13 @@
                 <elementReference>Loop_Existing_Enrolled_SAs.Service_Agreement__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Existing_Enrolled_SAs.SA_START_DATE__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Add_To_Collection_Variable</targetReference>
         </connector>
@@ -258,8 +265,8 @@
         <description>Assign SA Details To record collection List</description>
         <name>Assign_SA_Details_To_List</name>
         <label>Assign SA Details To List</label>
-        <locationX>2570</locationX>
-        <locationY>2602</locationY>
+        <locationX>3360</locationX>
+        <locationY>3236</locationY>
         <assignmentItems>
             <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
             <operator>Add</operator>
@@ -275,8 +282,8 @@
         <description>Assign SA Details To CARE App Enrolled Record Variable</description>
         <name>Assign_SA_Details_To_Record_Variable</name>
         <label>Assign SA Details To Record Variable</label>
-        <locationX>2570</locationX>
-        <locationY>2782</locationY>
+        <locationX>3360</locationX>
+        <locationY>3419</locationY>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.APPLICATION__c</assignToReference>
             <operator>Assign</operator>
@@ -295,7 +302,7 @@
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Valid_SA_3.SA_Start_Date_EI__c</elementReference>
+                <elementReference>Loop_Valid_SA_3.Care_Start_Date_EI__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -354,16 +361,134 @@
                 <stringValue>CARE</stringValue>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Valid_SA_3.SA_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Assign_SA_Details_To_List</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assign SA Details To Record Variable</description>
+        <name>Assign_SA_Details_To_RecordVariable</name>
+        <label>Assign SA Details To Record Variable</label>
+        <locationX>6411</locationX>
+        <locationY>2976</locationY>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.APPLICATION__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varNewApplicationID</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.Service_Agreement__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Care_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.END_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxTodaysDate</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.ACCT_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Billing_Account_ID_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.PREM_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Site_Premise_ID_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.PER_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Person_ID_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_ID__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.SAID_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.CCB_CONTACT_TYPE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>6042</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.RS_CD__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.Rate_Schedule_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.CC_CL_CD__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA.SA_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_SA_Record_To_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assign SA Record To Collection</description>
+        <name>Assign_SA_Record_To_Collection</name>
+        <label>Assign SA Record To Collection</label>
+        <locationX>6424</locationX>
+        <locationY>3265</locationY>
+        <assignmentItems>
+            <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>recVarCareAppEnrollingSA</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Discounted_SA</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Assign SA To Enrolling SA Collection</description>
         <name>Assign_SA_To_Collection</name>
         <label>Assign SA To Collection</label>
-        <locationX>4790</locationX>
-        <locationY>2532</locationY>
+        <locationX>5168</locationX>
+        <locationY>3651</locationY>
         <assignmentItems>
             <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
             <operator>Add</operator>
@@ -376,11 +501,28 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Clear Record Collection - Used for creating care app enrolled SAs</description>
+        <name>Clear_Record_Collection</name>
+        <label>Clear Record Collection</label>
+        <locationX>6038</locationX>
+        <locationY>2765</locationY>
+        <assignmentItems>
+            <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
+            <operator>RemoveAll</operator>
+            <value>
+                <elementReference>recColNewCareAppEnrollingSAList</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Discounted_SA</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Set Result as error message</description>
         <name>Fault_Message</name>
         <label>Fault Message</label>
-        <locationX>2953</locationX>
-        <locationY>28</locationY>
+        <locationX>3628</locationX>
+        <locationY>50</locationY>
         <assignmentItems>
             <assignToReference>varCCCodeDescription_Output</assignToReference>
             <operator>Assign</operator>
@@ -393,8 +535,8 @@
         <description>Fault Message</description>
         <name>Fault_Message2</name>
         <label>Fault Message</label>
-        <locationX>2568</locationX>
-        <locationY>4457</locationY>
+        <locationX>3306</locationX>
+        <locationY>5361</locationY>
         <assignmentItems>
             <assignToReference>varCCCodeDescription_Output</assignToReference>
             <operator>Assign</operator>
@@ -407,8 +549,8 @@
         <description>Remove All Item from List - Care App Enrolling SA List</description>
         <name>Remove_All_Item_from_List</name>
         <label>Remove All Item from List</label>
-        <locationX>2956</locationX>
-        <locationY>2582</locationY>
+        <locationX>3746</locationX>
+        <locationY>3216</locationY>
         <assignmentItems>
             <assignToReference>recColNewCareAppEnrollingSAList</assignToReference>
             <operator>RemoveAll</operator>
@@ -424,8 +566,8 @@
         <description>Set Application Status Decision Made</description>
         <name>Set_Application_Status_DecisionMade</name>
         <label>Set Application Status Decision Made</label>
-        <locationX>1742</locationX>
-        <locationY>1147</locationY>
+        <locationX>2177</locationX>
+        <locationY>1246</locationY>
         <assignmentItems>
             <assignToReference>varApplicationStatus</assignToReference>
             <operator>Assign</operator>
@@ -441,8 +583,8 @@
         <description>Set Application Status In-Progress</description>
         <name>Set_Application_Status_In_Progress</name>
         <label>Set Application Status In-Progress</label>
-        <locationX>1869</locationX>
-        <locationY>988</locationY>
+        <locationX>2527</locationX>
+        <locationY>1072</locationY>
         <assignmentItems>
             <assignToReference>varApplicationStatus</assignToReference>
             <operator>Assign</operator>
@@ -458,8 +600,8 @@
         <description>Set Discount type CARE</description>
         <name>Set_Discount_Type_CARE</name>
         <label>Set Discount Type (CARE)</label>
-        <locationX>1447</locationX>
-        <locationY>301</locationY>
+        <locationX>1409</locationX>
+        <locationY>707</locationY>
         <assignmentItems>
             <assignToReference>varCCCLCD</assignToReference>
             <operator>Assign</operator>
@@ -475,8 +617,8 @@
         <description>Set Discount Type =FERA</description>
         <name>Set_Discount_Type_FERA</name>
         <label>Set Discount Type (FERA)</label>
-        <locationX>1353</locationX>
-        <locationY>299</locationY>
+        <locationX>1268</locationX>
+        <locationY>663</locationY>
         <assignmentItems>
             <assignToReference>varCCCLCD</assignToReference>
             <operator>Assign</operator>
@@ -492,8 +634,8 @@
         <description>Set Enrolling SA Details To end discount</description>
         <name>Set_Enrolling_SA_Details</name>
         <label>Set Enrolling SA Details</label>
-        <locationX>5132</locationX>
-        <locationY>2378</locationY>
+        <locationX>5187</locationX>
+        <locationY>3492</locationY>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
@@ -571,16 +713,40 @@
                 <elementReference>Loop_Valid_SA_2.Rate_Schedule_EI__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Valid_SA_2.SA_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Assign_SA_To_Collection</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Long Description For Discount Drop</description>
+        <name>Set_Long_Description_For_Discount_Drop</name>
+        <label>Set Long Description For Discount Drop</label>
+        <locationX>5675</locationX>
+        <locationY>2588</locationY>
+        <assignmentItems>
+            <assignToReference>varLongDescriptionToBeUpdated</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Discount_Drop.TYPE_DESC_LONG__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Create_Transaction_To_Drop_Discount</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Set Out Put Values</description>
         <name>Set_Output_Values</name>
         <label>Set Output Values</label>
-        <locationX>4085</locationX>
-        <locationY>1602</locationY>
+        <locationX>4843</locationX>
+        <locationY>2199</locationY>
         <assignmentItems>
             <assignToReference>varCCCodeDescription_Output</assignToReference>
             <operator>Assign</operator>
@@ -600,8 +766,8 @@
         <description>Set Result: Result is always full qualification out put.</description>
         <name>Set_Output_Variable</name>
         <label>Set Output Variable</label>
-        <locationX>3442</locationX>
-        <locationY>3759</locationY>
+        <locationX>4232</locationX>
+        <locationY>4393</locationY>
         <assignmentItems>
             <assignToReference>varCCCodeDescription_Output</assignToReference>
             <operator>Assign</operator>
@@ -621,8 +787,8 @@
         <description>Set out put variable to send back the results</description>
         <name>Set_Output_Variables</name>
         <label>Set Output Variables</label>
-        <locationX>3761</locationX>
-        <locationY>1013</locationY>
+        <locationX>4506</locationX>
+        <locationY>1172</locationY>
         <assignmentItems>
             <assignToReference>varCCCodeDescription_Output</assignToReference>
             <operator>Assign</operator>
@@ -645,8 +811,8 @@
         <description>Set SA Details in record type variable</description>
         <name>Set_SA_Details</name>
         <label>Set SA Details</label>
-        <locationX>5313</locationX>
-        <locationY>1538</locationY>
+        <locationX>6121</locationX>
+        <locationY>1977</locationY>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.Service_Agreement__c</assignToReference>
             <operator>Assign</operator>
@@ -724,6 +890,13 @@
                 <elementReference>Loop_Valid_SA.Rate_Schedule_EI__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SA_START_DATE__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Valid_SA.SA_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Add_SA_Details_To_Collection</targetReference>
         </connector>
@@ -732,8 +905,8 @@
         <description>Set Valid RS Flag False</description>
         <name>Set_Valid_RS_Flag_False</name>
         <label>Set Valid RS Flag False</label>
-        <locationX>4723</locationX>
-        <locationY>1020</locationY>
+        <locationX>5778</locationX>
+        <locationY>949</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -749,8 +922,8 @@
         <description>Set Valid RS Flag True</description>
         <name>Set_Valid_RS_Flag_True</name>
         <label>Set Valid RS Flag True</label>
-        <locationX>4822</locationX>
-        <locationY>1270</locationY>
+        <locationX>5569</locationX>
+        <locationY>1331</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -765,8 +938,8 @@
     <decisions>
         <name>Check_Current_Date_is_Greater</name>
         <label>Check Current Date is Greater or Not</label>
-        <locationX>5423</locationX>
-        <locationY>1283</locationY>
+        <locationX>6298</locationX>
+        <locationY>1765</locationY>
         <defaultConnector>
             <targetReference>Set_SA_Details</targetReference>
         </defaultConnector>
@@ -791,8 +964,8 @@
         <description>SA  Type =E/G</description>
         <name>Check_SA_Type</name>
         <label>Check SA Type</label>
-        <locationX>4506</locationX>
-        <locationY>1009</locationY>
+        <locationX>5468</locationX>
+        <locationY>951</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Electric</name>
@@ -829,8 +1002,8 @@
         <description>Check customer has existing  CARE Discount</description>
         <name>Does_Customer_Has_CARE_Discount</name>
         <label>Does Customer Has CARE Discount?</label>
-        <locationX>3424</locationX>
-        <locationY>2115</locationY>
+        <locationX>4214</locationX>
+        <locationY>2742</locationY>
         <defaultConnector>
             <targetReference>Set_Output_Variable</targetReference>
         </defaultConnector>
@@ -861,9 +1034,9 @@
     <decisions>
         <description>Check customer has existing discount</description>
         <name>Does_Customer_Has_Discount</name>
-        <label>Does Customer Has Discount?</label>
-        <locationX>4096</locationX>
-        <locationY>2103</locationY>
+        <label>Does Customer Has Discount On Selected Premise?</label>
+        <locationX>4816</locationX>
+        <locationY>2737</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes_On_Discount</name>
@@ -885,8 +1058,8 @@
         <description>Check Enrolled SA Exists ; Perform delete only if it not &apos;ACCEPT&apos; button Click;</description>
         <name>Does_Enrolled_SA_Exists</name>
         <label>Does Enrolled SA Exists?</label>
-        <locationX>2634</locationX>
-        <locationY>1143</locationY>
+        <locationX>3082</locationX>
+        <locationY>1532</locationY>
         <defaultConnector>
             <targetReference>Is_CARE_App_SA_Required</targetReference>
         </defaultConnector>
@@ -911,8 +1084,8 @@
         <description>Check Enrolling Discount Type</description>
         <name>Enrolling_Discount_Type</name>
         <label>Enrolling Discount Type?</label>
-        <locationX>4533</locationX>
-        <locationY>437</locationY>
+        <locationX>5428</locationX>
+        <locationY>638</locationY>
         <defaultConnector>
             <targetReference>Get_Discount_Start_End_Date</targetReference>
         </defaultConnector>
@@ -934,11 +1107,37 @@
         </rules>
     </decisions>
     <decisions>
-        <description>Check Is Adjustment Involved and Clicked Accept Button</description>
+        <description>Has Discount on Other Premise?</description>
+        <name>Has_Discount_on_Other_Premise</name>
+        <label>Has Discount on Other Premise?</label>
+        <locationX>5273</locationX>
+        <locationY>2471</locationY>
+        <defaultConnector>
+            <targetReference>Type_Of_CC_Code</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_DiscountOnOtherPrmise</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varHasDiscountOnOtherPremise_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Yes_Accepted_True</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_CC_Code_Details_For_Discount_Drop</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check Is Adjustment Involved and Clicked Accept Button. Adjustment will be accounted only on accept button click.</description>
         <name>Is_Adjustment_Involved</name>
         <label>Is Adjustment Involved?</label>
-        <locationX>2428</locationX>
-        <locationY>1493</locationY>
+        <locationX>3078</locationX>
+        <locationY>1900</locationY>
         <defaultConnector>
             <targetReference>Delete_Existing_Enrolled_SA</targetReference>
         </defaultConnector>
@@ -970,8 +1169,8 @@
         <description>Check the application accepted flag</description>
         <name>Is_Application_Accepted</name>
         <label>Is Application Accepted?</label>
-        <locationX>3738</locationX>
-        <locationY>1627</locationY>
+        <locationX>4535</locationX>
+        <locationY>2132</locationY>
         <defaultConnector>
             <targetReference>Set_Output_Values</targetReference>
         </defaultConnector>
@@ -987,7 +1186,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Type_Of_CC_Code</targetReference>
+                <targetReference>Is_Giving_Discount</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -996,8 +1195,8 @@
         <description>Check application is Accepted? Based on that set the status</description>
         <name>Is_ApplicationAccepted</name>
         <label>Is Application Accepted?</label>
-        <locationX>1679</locationX>
-        <locationY>898</locationY>
+        <locationX>2302</locationX>
+        <locationY>1067</locationY>
         <defaultConnector>
             <targetReference>Set_Application_Status_In_Progress</targetReference>
         </defaultConnector>
@@ -1022,8 +1221,8 @@
         <description>Check whether Care App enrolled SA is required or not</description>
         <name>Is_CARE_App_SA_Required</name>
         <label>Is CARE App SA Required?</label>
-        <locationX>3949</locationX>
-        <locationY>1345</locationY>
+        <locationX>4764</locationX>
+        <locationY>1752</locationY>
         <defaultConnector>
             <targetReference>Is_Application_Accepted</targetReference>
         </defaultConnector>
@@ -1048,8 +1247,11 @@
         <description>Check is care discounted SA or not</description>
         <name>Is_CARE_Discounted</name>
         <label>Is CARE Discounted?</label>
-        <locationX>2722</locationX>
-        <locationY>2948</locationY>
+        <locationX>3512</locationX>
+        <locationY>3582</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Valid_SA_3</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_CARE_Discounted</name>
@@ -1078,8 +1280,8 @@
         <description>Is Current SA Rate Schedule Valid or not</description>
         <name>Is_Current_SA_RS_Valid</name>
         <label>Is RS Valid?</label>
-        <locationX>5203</locationX>
-        <locationY>937</locationY>
+        <locationX>6153</locationX>
+        <locationY>1553</locationY>
         <defaultConnector>
             <targetReference>Loop_Valid_SA</targetReference>
         </defaultConnector>
@@ -1104,8 +1306,8 @@
         <description>Is Discount Applicable?</description>
         <name>Is_Discount_Applicable</name>
         <label>Is Discount Applicable?</label>
-        <locationX>1595</locationX>
-        <locationY>692</locationY>
+        <locationX>1431</locationX>
+        <locationY>1146</locationY>
         <defaultConnector>
             <targetReference>Get_CC_Code_and_Description</targetReference>
         </defaultConnector>
@@ -1145,8 +1347,8 @@
         <description>Check if discount on SA is valid</description>
         <name>Is_Discount_On_SA_Valid</name>
         <label>Is Discount On SA Valid?</label>
-        <locationX>4747</locationX>
-        <locationY>2262</locationY>
+        <locationX>5084</locationX>
+        <locationY>3342</locationY>
         <defaultConnector>
             <targetReference>Loop_Valid_SA_2</targetReference>
         </defaultConnector>
@@ -1168,11 +1370,44 @@
         </rules>
     </decisions>
     <decisions>
+        <description>Check if Giving Discount: Then need to drop other premise discount if any</description>
+        <name>Is_Giving_Discount</name>
+        <label>Is Giving Discount?</label>
+        <locationX>4543</locationX>
+        <locationY>2412</locationY>
+        <defaultConnector>
+            <targetReference>Type_Of_CC_Code</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_DiscountInvolved</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsFERADiscount_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsCAREDiscount_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Has_Discount_on_Other_Premise</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
         <description>Is RS Valid</description>
         <name>Is_RS_Valid</name>
         <label>Is RS Valid?</label>
-        <locationX>5027</locationX>
-        <locationY>1285</locationY>
+        <locationX>5772</locationX>
+        <locationY>1391</locationY>
         <defaultConnector>
             <targetReference>Loop_Valid_FERA_RateSchedule</targetReference>
         </defaultConnector>
@@ -1194,16 +1429,15 @@
         </rules>
     </decisions>
     <decisions>
-        <description>If Over Income , end the existing Customer Discount. New Transaction is not required for this scenario.
-If Adjustment check box is checked ,then create new transaction and enrolled SA.</description>
+        <description>If Over Income or Drop, End the existing Customer Discount. New Transaction is not required for this scenario.</description>
         <name>Type_Of_CC_Code</name>
         <label>Type Of CC Code?</label>
-        <locationX>3734</locationX>
-        <locationY>2103</locationY>
+        <locationX>4540</locationX>
+        <locationY>2606</locationY>
         <defaultConnector>
             <targetReference>Set_Output_Values</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
         <rules>
             <name>OverIncome_Drop</name>
             <conditionLogic>or</conditionLogic>
@@ -1240,32 +1474,6 @@ If Adjustment check box is checked ,then create new transaction and enrolled SA.
                 <targetReference>Does_Customer_Has_CARE_Discount</targetReference>
             </connector>
             <label>FERA Enrollment</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <description>Check is it a New FERA enrollment</description>
-        <name>Was_New_FERA_Enrollment</name>
-        <label>Was New FERA Enrollment?</label>
-        <locationX>3588</locationX>
-        <locationY>3283</locationY>
-        <defaultConnector>
-            <targetReference>Set_Output_Variable</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes_FERA_Enrollment</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>varIsFERADiscount_Input</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <booleanValue>true</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Does_Customer_Has_CARE_Discount</targetReference>
-            </connector>
-            <label>Yes FERA Enrollment</label>
         </rules>
     </decisions>
     <description>Sub flow called to Update CC Code and Create CARE Enrolled SAs.</description>
@@ -1310,11 +1518,26 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
     <interviewLabel>CARE Update CC Code Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>CARE Update CC Code Flow</label>
     <loops>
+        <description>Loop through discounted SA and add it to record collection variable to create care app enrolled records.</description>
+        <name>Loop_Discounted_SA</name>
+        <label>Loop Discounted SA</label>
+        <locationX>6041</locationX>
+        <locationY>3267</locationY>
+        <collectionReference>recColSAIdsOfOtherPremiseDiscount_Input</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Assign_SA_Details_To_RecordVariable</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Create_Care_App_Enrolled_SA_For_Discount_Drop</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
         <description>Loop Through existing enrolled SAs and add it to Newly Enrollling SA Variable</description>
         <name>Loop_Existing_Enrolled_SAs</name>
         <label>Loop Existing Enrolled SAs</label>
-        <locationX>1489</locationX>
-        <locationY>2549</locationY>
+        <locationX>2279</locationX>
+        <locationY>3183</locationY>
         <collectionReference>recColExistingEnrolledSAs</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1328,8 +1551,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Loop Valid FERA RS</description>
         <name>Loop_Valid_FERA_RateSchedule</name>
         <label>Loop Valid FERA RS</label>
-        <locationX>4932</locationX>
-        <locationY>1055</locationY>
+        <locationX>5689</locationX>
+        <locationY>1160</locationY>
         <collectionReference>colValidFERARateSchedule_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1343,8 +1566,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Loop through all valid SA and assign it to a new record collection with start and end date.</description>
         <name>Loop_Valid_SA</name>
         <label>Loop Valid SA</label>
-        <locationX>4096</locationX>
-        <locationY>939</locationY>
+        <locationX>4818</locationX>
+        <locationY>1201</locationY>
         <collectionReference>recColValidSAIdsOfSelectedPremise_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1358,8 +1581,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Loop through All Valid SA To end Discount</description>
         <name>Loop_Valid_SA_2</name>
         <label>Loop Valid SAs</label>
-        <locationX>4398</locationX>
-        <locationY>2407</locationY>
+        <locationX>4791</locationX>
+        <locationY>3543</locationY>
         <collectionReference>recColValidSAIdsOfSelectedPremise_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1373,8 +1596,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Loop through all valid SA to fetch Care discounted SAs</description>
         <name>Loop_Valid_SA_3</name>
         <label>Loop Valid SAs To Fetch CARE</label>
-        <locationX>2953</locationX>
-        <locationY>2833</locationY>
+        <locationX>3743</locationX>
+        <locationY>3467</locationY>
         <collectionReference>recColValidSAIdsOfSelectedPremise_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -1401,8 +1624,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Create Care App Enrolled SA</description>
         <name>Create_Care_App_Enrolled_SA</name>
         <label>Create Care App Enrolled SA To Stop Discount</label>
-        <locationX>4400</locationX>
-        <locationY>3051</locationY>
+        <locationX>4798</locationX>
+        <locationY>4402</locationY>
         <connector>
             <targetReference>Set_Output_Variable</targetReference>
         </connector>
@@ -1412,11 +1635,22 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <inputReference>recColNewCareAppEnrollingSAList</inputReference>
     </recordCreates>
     <recordCreates>
+        <description>Create Care App Enrolled SA For Discount Drop (other Premise)</description>
+        <name>Create_Care_App_Enrolled_SA_For_Discount_Drop</name>
+        <label>Create Care App Enrolled SA For Discount Drop</label>
+        <locationX>5641</locationX>
+        <locationY>2947</locationY>
+        <connector>
+            <targetReference>Type_Of_CC_Code</targetReference>
+        </connector>
+        <inputReference>recColNewCareAppEnrollingSAList</inputReference>
+    </recordCreates>
+    <recordCreates>
         <description>Create Care App Enrolled SA For Transfer</description>
         <name>Create_Care_App_Enrolled_SA_For_Transfer</name>
         <label>Create Care App Enrolled SA For Transfer</label>
-        <locationX>3182</locationX>
-        <locationY>3066</locationY>
+        <locationX>3972</locationX>
+        <locationY>3700</locationY>
         <connector>
             <targetReference>Set_Output_Variable</targetReference>
         </connector>
@@ -1429,8 +1663,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Create Enrolled SA</description>
         <name>Create_Enrolled_SA</name>
         <label>Create Enrolled SA</label>
-        <locationX>4099</locationX>
-        <locationY>545</locationY>
+        <locationX>4809</locationX>
+        <locationY>601</locationY>
         <connector>
             <targetReference>Update_Greater_Discount_Date</targetReference>
         </connector>
@@ -1443,10 +1677,10 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
         <description>Create Enrolled SA For Adjustment Transaction</description>
         <name>Create_Enrolled_SA_For_Adjustment</name>
         <label>Create Enrolled SA For Adjustment</label>
-        <locationX>2108</locationX>
-        <locationY>3133</locationY>
+        <locationX>5258</locationX>
+        <locationY>5032</locationY>
         <connector>
-            <targetReference>Was_New_FERA_Enrollment</targetReference>
+            <targetReference>Has_Discount_on_Other_Premise</targetReference>
         </connector>
         <faultConnector>
             <targetReference>Fault_Message2</targetReference>
@@ -1458,8 +1692,8 @@ SUBSTITUTE({!varLongDescriptionToBeUpdated}, &quot;&lt;LAN ID&gt;&quot;, {!fxLAN
 A new transaction (With Retro dates blank in care App enrolled SA) will be created for actual discount transaction.</description>
         <name>Create_New_Transaction</name>
         <label>Create New Transaction</label>
-        <locationX>1867</locationX>
-        <locationY>2157</locationY>
+        <locationX>2657</locationX>
+        <locationY>2791</locationY>
         <assignRecordIdToReference>varNewApplicationID</assignRecordIdToReference>
         <connector>
             <targetReference>Get_Enrolled_SA_of_Application</targetReference>
@@ -1701,11 +1935,233 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <object>CARE_Application__c</object>
     </recordCreates>
     <recordCreates>
+        <description>Create Transaction To Drop Discount on Other Premise</description>
+        <name>Create_Transaction_To_Drop_Discount</name>
+        <label>Create Transaction To Drop Discount on Other Premise</label>
+        <locationX>5898</locationX>
+        <locationY>2602</locationY>
+        <assignRecordIdToReference>varNewApplicationID</assignRecordIdToReference>
+        <connector>
+            <targetReference>Clear_Record_Collection</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ACCT_ID__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.ACCT_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ANNUAL_HOUSEHOLD_INCOME__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.ANNUAL_HOUSEHOLD_INCOME__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>APPLICANT_NAME__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.APPLICANT_NAME__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>APPLICATION_STATUS__c</field>
+            <value>
+                <stringValue>Decision Made</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>APPLICATION_TYPE__c</field>
+            <value>
+                <stringValue>Enrollment</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>BUREAU_INDIAN_AFFAIRS__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.BUREAU_INDIAN_AFFAIRS__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CALFRESH_SNAP__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.CALFRESH_SNAP__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CALWORKS_TANF__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.CALWORKS_TANF__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CARE_Account_ID__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.CARE_Account_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CARE_CI_CC__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.CARE_CI_CC__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCB_CONTACT_CODE__c</field>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Discount_Drop.TYPE_CODE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCB_CONTACT_COMMENT__c</field>
+            <value>
+                <elementReference>fxUpdatedCCCodeLongDescription</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCB_CONTACT_DESC__c</field>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Discount_Drop.TYPE_DESC__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CC_CL_CD__c</field>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>COC_CODE__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.COC_CODE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>EMAIL_ADDRESS__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.EMAIL_ADDRESS__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>ENROLLMENT_TYPE__c</field>
+            <value>
+                <stringValue>ENROLLMENT</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>FIXED_INCOME__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.FIXED_INCOME__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HEAD_START_INCOME__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.HEAD_START_INCOME__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>HEALTHY_FAMILIES__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.HEALTHY_FAMILIES__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>IS_SIGNED__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.IS_SIGNED__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>LIHEAP__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.LIHEAP__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MEDICAID_OVER65__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.MEDICAID_OVER65__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>MEDICAID_UNDER65__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.MEDICAID_UNDER65__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NEED_NAME_CHANGE__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.NEED_NAME_CHANGE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NO_ADULT__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.NO_ADULT__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>NO_CHILD__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.NO_CHILD__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PER_ID__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.PER_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PREM_ID__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.PREM_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>PROCESSED_DATE__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.PROCESSED_DATE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RECEIVED_DATE__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.RECEIVED_DATE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>REQUEST_DROP__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.REQUEST_DROP__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SOURCE_CHANNEL_TYPE__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.SOURCE_CHANNEL_TYPE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>SSI__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.SSI__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WIC__c</field>
+            <value>
+                <elementReference>Get_Main_Application_Details.WIC__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>CARE_Application__c</object>
+    </recordCreates>
+    <recordCreates>
         <description>Create Transaction To End Existing CARE Discount</description>
         <name>Create_Transaction_To_End_Existing_CARE_Discount</name>
         <label>Create Transaction To End Existing CARE Discount</label>
-        <locationX>2965</locationX>
-        <locationY>2390</locationY>
+        <locationX>3762</locationX>
+        <locationY>3024</locationY>
         <assignRecordIdToReference>varNewApplicationID</assignRecordIdToReference>
         <connector>
             <targetReference>Remove_All_Item_from_List</targetReference>
@@ -1941,8 +2397,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Delete Existing Enrolled SA of the application id (If any)</description>
         <name>Delete_Existing_Enrolled_SA</name>
         <label>Delete Existing Enrolled SA</label>
-        <locationX>3013</locationX>
-        <locationY>1506</locationY>
+        <locationX>3506</locationX>
+        <locationY>1830</locationY>
         <connector>
             <targetReference>Is_CARE_App_SA_Required</targetReference>
         </connector>
@@ -1962,8 +2418,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>To Check Care App Enrolled SA Present</description>
         <name>Get_Care_App_Enrolled_SA</name>
         <label>Get Care App Enrolled SA</label>
-        <locationX>2340</locationX>
-        <locationY>1139</locationY>
+        <locationX>2835</locationX>
+        <locationY>1531</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Does_Enrolled_SA_Exists</targetReference>
@@ -1985,8 +2441,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Get CC Code and Description For Stamping in Main Application</description>
         <name>Get_CC_Code_and_Description</name>
         <label>Get CC Code and Description</label>
-        <locationX>1622</locationX>
-        <locationY>16</locationY>
+        <locationX>2082</locationX>
+        <locationY>705</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Long_Description_To_a_Variable</targetReference>
@@ -2015,8 +2471,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>CC Code Details of Adjustment</description>
         <name>Get_CC_Code_Details_For_Adjustment</name>
         <label>Get CC Code Details For Adjustment</label>
-        <locationX>1797</locationX>
-        <locationY>2568</locationY>
+        <locationX>2587</locationX>
+        <locationY>3202</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_LongDescription</targetReference>
@@ -2039,11 +2495,38 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
+        <description>Get CC Code and Description for Discount Drop on other premise.</description>
+        <name>Get_CC_Code_Details_For_Discount_Drop</name>
+        <label>Get CC Code Details For Discount Drop</label>
+        <locationX>5483</locationX>
+        <locationY>2579</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Set_Long_Description_For_Discount_Drop</targetReference>
+        </connector>
+        <filters>
+            <field>TYPE_NO__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>6042</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>CARE_Type__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>TYPE_CODE__c</queriedFields>
+        <queriedFields>TYPE_DESC_LONG__c</queriedFields>
+        <queriedFields>TYPE_DESC__c</queriedFields>
+        <sortField>TYPE_NO__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
         <description>Get CC Code Details, for creating transfer transaction</description>
         <name>Get_CC_Code_Details_For_Transfer</name>
         <label>Get CC Code Details</label>
-        <locationX>3246</locationX>
-        <locationY>2347</locationY>
+        <locationX>4036</locationX>
+        <locationY>2981</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_Long_Description</targetReference>
@@ -2069,8 +2552,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Get Existing Enrolled SA Details</description>
         <name>Get_Enrolled_SA_of_Application</name>
         <label>Get Enrolled SA of Application</label>
-        <locationX>1650</locationX>
-        <locationY>2328</locationY>
+        <locationX>2440</locationX>
+        <locationY>2962</locationY>
         <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Existing_Enrolled_SAs</targetReference>
@@ -2104,8 +2587,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Get Main Application Details based on Current application id</description>
         <name>Get_Main_Application_Details</name>
         <label>Get Main Application Details</label>
-        <locationX>702</locationX>
-        <locationY>733</locationY>
+        <locationX>697</locationX>
+        <locationY>1137</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Is_Discount_Applicable</targetReference>
@@ -2126,9 +2609,9 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
     <recordUpdates>
         <description>Update CC Code and Description in CARE Application</description>
         <name>Update_CC_Code_And_Description</name>
-        <label>Update CC Code And Description</label>
-        <locationX>2062</locationX>
-        <locationY>1138</locationY>
+        <label>Update CC Code And Description -Main Application</label>
+        <locationX>2614</locationX>
+        <locationY>1460</locationY>
         <connector>
             <targetReference>Get_Care_App_Enrolled_SA</targetReference>
         </connector>
@@ -2172,14 +2655,20 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
                 <elementReference>varCCCLCD</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>QUALIFIED_BY__c</field>
+            <value>
+                <elementReference>varQualifiedBy_Input</elementReference>
+            </value>
+        </inputAssignments>
         <object>CARE_Application__c</object>
     </recordUpdates>
     <recordUpdates>
         <description>Update Greater Discount Date In Main Transaction Enrolled SA- This is performed after any adjustment transaction(if any)</description>
         <name>Update_Greater_Discount_Date</name>
         <label>Update Greater Discount Date In Main Transaction</label>
-        <locationX>3744</locationX>
-        <locationY>787</locationY>
+        <locationX>4527</locationX>
+        <locationY>738</locationY>
         <connector>
             <targetReference>Set_Output_Variables</targetReference>
         </connector>
@@ -2205,8 +2694,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Update Main Application with CC Code of Adjustment Transaction</description>
         <name>Update_Main_Application_CC_Code</name>
         <label>Update Main Application As Adjustment Transaction</label>
-        <locationX>1827</locationX>
-        <locationY>2936</locationY>
+        <locationX>2617</locationX>
+        <locationY>3570</locationY>
         <connector>
             <targetReference>Update_Type_number_of_Enrolled_SAs</targetReference>
         </connector>
@@ -2244,8 +2733,8 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <description>Update Type Number n the main applications related enrolled SAs.(It is converting into Adjustment Transaction)</description>
         <name>Update_Type_number_of_Enrolled_SAs</name>
         <label>Update Type number of Enrolled SAs</label>
-        <locationX>1642</locationX>
-        <locationY>3154</locationY>
+        <locationX>2432</locationX>
+        <locationY>3788</locationY>
         <connector>
             <targetReference>Create_Enrolled_SA_For_Adjustment</targetReference>
         </connector>
@@ -2269,12 +2758,12 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
     </recordUpdates>
     <start>
         <locationX>50</locationX>
-        <locationY>709</locationY>
+        <locationY>1121</locationY>
         <connector>
             <targetReference>Get_Main_Application_Details</targetReference>
         </connector>
     </start>
-    <status>Active</status>
+    <status>Draft</status>
     <variables>
         <description>ValidRateSchedule - Input (If FERA Qualified from FRESH enrollment/Re certification Sub flow)</description>
         <name>colValidFERARateSchedule_Input</name>
@@ -2309,6 +2798,15 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>CARE_App_Enrolled_SA__c</objectType>
+    </variables>
+    <variables>
+        <description>Discounted SA from other premises (other than selected)</description>
+        <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
     </variables>
     <variables>
         <description>All Valid SA Details of Selected Premise</description>
@@ -2385,7 +2883,7 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>Existing Discount Of the Customer (CARE/FERA) passed from main flow.If value exists in this field,this discount will always be on the selected premise.Otherwise flow would end in the beginning stating discount on other premise. Hence for ending any of the existing discount ,just need to use the valid SA passed from main flow.</description>
+        <description>Existing Discount Of the Customer (CARE/FERA) passed from main flow.</description>
         <name>varExistingDiscountType_Input</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
@@ -2401,6 +2899,17 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <isOutput>false</isOutput>
         <value>
             <dateValue>1900-01-01</dateValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Flag - Discount on other premise</description>
+        <name>varHasDiscountOnOtherPremise_Input</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
         </value>
     </variables>
     <variables>
@@ -2501,6 +3010,14 @@ A new transaction (With Retro dates blank in care App enrolled SA) will be creat
         <value>
             <numberValue>0.0</numberValue>
         </value>
+    </variables>
+    <variables>
+        <description>Categorical/Income/Not Qualified/None</description>
+        <name>varQualifiedBy_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <description>Type Number to fetch the CC Code and Description.</description>

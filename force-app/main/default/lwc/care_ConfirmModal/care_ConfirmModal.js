@@ -8,7 +8,7 @@ export default class Care_ConfirmModal extends LightningElement {
     @api footerNoText;
 
     handleNoClick() {
-        // Create the event with the data.
+        // Creates the event with the data.
         const selectedNoEvent = new CustomEvent("nobuttonevent", {
             detail: {showChildModal: false}
         });

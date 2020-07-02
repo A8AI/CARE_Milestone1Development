@@ -40,6 +40,7 @@ public class CARE_EnrollTabController {
             obj.rStartDate    = pfs.RETRO_START_DATE__c;
             obj.rEndDate      = pfs.RETRO_END_DATE__c;
             obj.lastBillDate  = pfs.LAST_BILL_DATE__c;
+            obj.ccbSAstartDate= pfs.SA_START_DATE__c;
             //obj.ccbSAstartDate= pfs.Service_Agreement__r.SA_Start_Date_EI__c;
             obj.noDate        = pfs.END_DATE__c;
             obj.saID          = pfs.SA_ID__c;

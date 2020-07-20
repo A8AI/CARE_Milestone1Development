@@ -47,6 +47,8 @@ label = {
         this.dispatchEvent(evt);
     }
 
+    
+
     // to close modal window set 'bShowModal' tarck value as false
     closeConfirmationModal() {
         this.bShowLoadingSpinner = false;
@@ -75,6 +77,9 @@ label = {
     }
 
     sendApp(){
+        const historyTabRefreshEvent = new CustomEvent("historytabrefreshfromchild", {
+            detail: 'History'   //To refresh History Tab
+        });
         this.bShowLoadingSpinner = true;
         if(this.sPersonId === '' || this.sPersonId === null || this.sPersonId === undefined){
             this.showToastMessage('Invalid Person Id', 'Person Id is either blank or null.', 'error');
@@ -96,6 +101,7 @@ label = {
         .then(result => {
             if (result.bSuccess) {
                 this.showToastMessage(this.label.CARE_SuccessHeader, this.label.CARE_SendAppSuccessMsg, 'success');
+                this.dispatchEvent(historyTabRefreshEvent);
             }
             else {
                 this.showToastMessage(this.label.CARE_ErrorHeader, result.sErrorMessage, 'error');

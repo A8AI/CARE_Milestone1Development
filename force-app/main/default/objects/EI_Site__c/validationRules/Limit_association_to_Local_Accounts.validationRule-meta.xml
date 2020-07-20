@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Limit_association_to_Local_Accounts</fullName>
+    <active>false</active>
+    <description>Limit association of SAs to Local Accounts</description>
+    <errorConditionFormula>AND(
+Res_Ind_EI__c = &quot;N&quot;,
+OR(
+Account_EI__r.RecordType.Name =&quot;Residential Local Account&quot;,
+Account_EI__r.RecordType.Name =&quot;Residential Primary Account&quot;,
+Account_EI__r.RecordType.Name =&quot;Residential Master Account&quot;,
+Account_EI__r.RecordType.Name =&quot;Partner Account&quot;,
+Account_EI__r.RecordType.Name =&quot;PG&amp;E Internal Account Layout&quot;,
+Account_EI__r.RecordType.Name =&quot;Non-Residential Master Account&quot;,
+Account_EI__r.RecordType.Name =&quot;Non-Residential Primary Account&quot;)
+)</errorConditionFormula>
+    <errorMessage>You can only associate Service Agreements with Non-Res Local Accounts.</errorMessage>
+</ValidationRule>

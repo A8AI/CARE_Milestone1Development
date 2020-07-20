@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Doing_Bus_As_EI__c</fullName>
+    <description>The trade name, or fictitious business name, under which the business or operation is conducted and presented to the world.  This is not the legal name of the legal person (or persons) who actually own it and are responsible for it.</description>
+    <encryptionScheme>None</encryptionScheme>
+    <externalId>false</externalId>
+    <inlineHelpText>The trade name, or fictitious business name, under which the business or operation is conducted and presented to the world.  This is not the legal name of the legal person (or persons) who actually own it and are responsible for it.</inlineHelpText>
+    <label>Doing Business As</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>TextArea</type>
+</CustomField>

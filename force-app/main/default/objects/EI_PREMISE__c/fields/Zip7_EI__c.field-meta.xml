@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Zip7_EI__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Lookup up to the eligible Zip 7 item.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Lookup up to the eligible Zip 7 item.</inlineHelpText>
+    <label>Zip7</label>
+    <referenceTo>ESA_Zip7__c</referenceTo>
+    <relationshipLabel>Premises</relationshipLabel>
+    <relationshipName>Premises</relationshipName>
+    <required>false</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

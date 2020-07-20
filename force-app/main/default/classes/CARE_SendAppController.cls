@@ -50,7 +50,7 @@ public class CARE_SendAppController {
         SendAppWrapper sendAppWrapper = new SendAppWrapper();
         try{
             //get the cc code details for Send App
-            listCareType = CARE_UtilityController.getCCCode(null, CARE_Constants.CARE_SEND_APP_CC_CODE, CARE_Constants.CARE_SEND_APP_RSN_CAT);   
+            listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_SEND_APP, null, null);   
             sendAppWrapper.sComment = listCareType[0].TYPE_DESC_LONG__c;
             sendAppWrapper.sContactCode = listCareType[0].TYPE_CODE__c;
             sendAppWrapper.bSuccess = true;
@@ -88,7 +88,7 @@ system.debug('mapSAForPerId==>'+ mapValidSAForPerId);
 if(mapValidSAForPerId.isEmpty()){
 */
             //Get the CC Code for 'A' for stamping
-            List<CARE_Type__c> listCareType = CARE_UtilityController.getCCCode(null, CARE_Constants.CARE_SEND_APP_CC_CODE, CARE_Constants.CARE_SEND_APP_RSN_CAT);
+            List<CARE_Type__c> listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_SEND_APP, null, null);
             
             //Create record in CARE_Application__c
             CARE_Application__c careApp = new CARE_Application__c();   
@@ -100,12 +100,13 @@ if(mapValidSAForPerId.isEmpty()){
             careApp.PER_ID__c = objSendApp.sPerId;
             careApp.CARE_Account_ID__c = objSendApp.sAccId;
             careApp.ACCT_ID__c = objSendApp.sBillingAccId;
+            careApp.CCB_Contact_Type_No__c = CARE_Constants.CARE_CC_SEND_APP;
             careApp.CCB_CONTACT_CODE__c = listCareType[0].TYPE_CODE__c;
             careApp.CCB_CONTACT_DESC__c= listCareType[0].TYPE_DESC__c;
             careApp.CCB_CONTACT_COMMENT__c = listCareType[0].TYPE_DESC_LONG__c.replace(CARE_Constants.CARE_LAN_ID_PLACEHOLDER, (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '');
             careApp.ENROLLMENT_TYPE__c = 'OTHER'; //ENROLLMENT, PEV, PEV NOTICE, OTHER
-            careApp.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
-            careApp.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other  
+            //careApp.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
+            //careApp.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other  
             careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_REGULAR_APP;
             
             

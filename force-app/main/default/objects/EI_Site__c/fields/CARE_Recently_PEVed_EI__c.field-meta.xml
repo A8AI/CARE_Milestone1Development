@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_Recently_PEVed_EI__c</fullName>
+    <description>Is CARE post enrollment verified during last two years?</description>
+    <externalId>false</externalId>
+    <formula>IF (   ISBLANK(CARE_last_PEV_date_EI__c), false, 
+ IF (   today() - CARE_last_PEV_date_EI__c  &lt;= 730, true, false  )    
+
+)</formula>
+    <inlineHelpText>Is CARE post enrollment verified during last two years?</inlineHelpText>
+    <label>CARE Recently PEVed</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -48,30 +48,30 @@ public class CARE_CommunicationControllerTest {
         //setUpData();
         Test.startTest(); 
         List<CARE_CommunicationController.DataTableWrapper> listPhoneDetails = new List<CARE_CommunicationController.DataTableWrapper>();
-        listPhoneDetails = CARE_CommunicationController.getPhoneDetails(a.Billing_Person_ID_EI__c);
+        listPhoneDetails = CARE_CommunicationController.getPhoneDetails(a.Id);
         System.assertEquals(1, listPhoneDetails.size(),'Success');
         
         CARE_CommunicationController.DataTableWrapper saveResults = new CARE_CommunicationController.DataTableWrapper();
         saveResults.home= '8085835332';
         saveResults.work= '9039780462';
         saveResults.mobile= '8109145322'; 
-        CARE_CommunicationController.savePhoneDetails(saveResults, a.Billing_Person_ID_EI__c);
+        CARE_CommunicationController.savePhoneDetails(saveResults, a.Id);
         //System.assertEquals(1, saveResults.size(),'Success');
         
         List<Account> languageDetails = new List<Account>();
-        languageDetails = CARE_CommunicationController.getLangDetails(a.Billing_Person_ID_EI__c);
+        languageDetails = CARE_CommunicationController.getLangDetails(a.Id);
         System.assertEquals(1, languageDetails.size(),'Success');
         
         string language = 'Vietnamese';
-        CARE_CommunicationController.saveLangDetails(language, a.Billing_Person_ID_EI__c);
+        CARE_CommunicationController.saveLangDetails(language, a.Id);
         
         List<Account> commDetails = new List<Account>();
-        commDetails = CARE_CommunicationController.getCommDetails(a.Billing_Person_ID_EI__c);
+        commDetails = CARE_CommunicationController.getCommDetails(a.Id);
         System.assertEquals(1, commDetails.size(),'Success');
         
         
         string commPref =  'Email';  
-     	bCommStatus = CARE_CommunicationController.saveCommDetails(commPref, a.Billing_Person_ID_EI__c);
+     	bCommStatus = CARE_CommunicationController.saveCommDetails(commPref, a.Id);
         //System.assertEquals(true, bCommStatus);
         Test.stopTest();
     }

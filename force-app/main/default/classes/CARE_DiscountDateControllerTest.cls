@@ -26,21 +26,21 @@ public class CARE_DiscountDateControllerTest {
     listFlowInputs=createFlowInputs('1122334455',Date.today()-30,Date.today()+30,Date.today()-30,2);
     List<CARE_DiscountDateController.FlowOutputs> listFlowOutputs =new List<CARE_DiscountDateController.FlowOutputs>();
     listFlowOutputs= CARE_DiscountDateController.getDiscountDates(listFlowInputs);
-  	dFinalEndDate=(Date.today()-30).addDays(810);
+  	dFinalEndDate=(Date.today()-30).addDays(820);
     System.assertEquals(dFinalEndDate, listFlowOutputs[0].dDiscountEndDate);
         
     //4 Year Discount Scenario
     listFlowInputs.clear();
     listFlowInputs=createFlowInputs('1122334455',Date.today()-30,Date.today()+30,Date.today()-30,4);
     listFlowOutputs= CARE_DiscountDateController.getDiscountDates(listFlowInputs);
-    dFinalEndDate=(Date.today()-30).addDays(1530);
+    dFinalEndDate=(Date.today()-30).addDays(1550);
     System.assertEquals(dFinalEndDate, listFlowOutputs[0].dDiscountEndDate);
     
     //SA Start Date=null Scenario
     listFlowInputs.clear();
     listFlowInputs=createFlowInputs('1122334455',Date.today()-30,Date.today()+30,null,4);
     listFlowOutputs= CARE_DiscountDateController.getDiscountDates(listFlowInputs);
-    dFinalEndDate=Date.today().addDays(1530);
+    dFinalEndDate=Date.today().addDays(1550);
     System.assertEquals(dFinalEndDate, listFlowOutputs[0].dDiscountEndDate);    
     Test.stopTest();
     }

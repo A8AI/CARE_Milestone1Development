@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Building_Type_EI__c</fullName>
+    <description>Building type, used to lookup deemed savings information from a reference database (such as DEER)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Building type, used to lookup deemed savings information from a reference database (such as DEER)</inlineHelpText>
+    <label>Building Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ASM - Assembly</fullName>
+                <default>false</default>
+                <label>ASM - Assembly</label>
+            </value>
+            <value>
+                <fullName>CNC - Health/Medical - Clinic</fullName>
+                <default>false</default>
+                <label>CNC - Health/Medical - Clinic</label>
+            </value>
+            <value>
+                <fullName>ECC - Education - Community College</fullName>
+                <default>false</default>
+                <label>ECC - Education - Community College</label>
+            </value>
+            <value>
+                <fullName>EPR - Education - Primary School</fullName>
+                <default>false</default>
+                <label>EPR - Education - Primary School</label>
+            </value>
+            <value>
+                <fullName>ERC - Education - Removable Classroom</fullName>
+                <default>false</default>
+                <label>ERC - Education - Removable Classroom</label>
+            </value>
+            <value>
+                <fullName>ESE - Education - Secondary School</fullName>
+                <default>false</default>
+                <label>ESE - Education - Secondary School</label>
+            </value>
+            <value>
+                <fullName>EUN - Education - University</fullName>
+                <default>false</default>
+                <label>EUN - Education - University</label>
+            </value>
+            <value>
+                <fullName>GRO - Grocery</fullName>
+                <default>false</default>
+                <label>GRO - Grocery</label>
+            </value>
+            <value>
+                <fullName>GST - Lodging - Guest Rooms</fullName>
+                <default>false</default>
+                <label>GST - Lodging - Guest Rooms</label>
+            </value>
+            <value>
+                <fullName>HSP - Health/Medical - Hospital</fullName>
+                <default>false</default>
+                <label>HSP - Health/Medical - Hospital</label>
+            </value>
+            <value>
+                <fullName>HTL - Lodging - Hotel</fullName>
+                <default>false</default>
+                <label>HTL - Lodging - Hotel</label>
+            </value>
+            <value>
+                <fullName>MBT - Manufacturing - Bio-Tech</fullName>
+                <default>false</default>
+                <label>MBT - Manufacturing - Bio-Tech</label>
+            </value>
+            <value>
+                <fullName>MFM - Residential Multi-family</fullName>
+                <default>false</default>
+                <label>MFM - Residential Multi-family</label>
+            </value>
+            <value>
+                <fullName>MLI - Manufacturing - Light Industry</fullName>
+                <default>false</default>
+                <label>MLI - Manufacturing - Light Industry</label>
+            </value>
+            <value>
+                <fullName>MTL - Lodging - Motel</fullName>
+                <default>false</default>
+                <label>MTL - Lodging - Motel</label>
+            </value>
+            <value>
+                <fullName>NRS - Health/Medical - Clinic</fullName>
+                <default>false</default>
+                <label>NRS - Health/Medical - Clinic</label>
+            </value>
+            <value>
+                <fullName>OFL - Office - Large</fullName>
+                <default>false</default>
+                <label>OFL - Office - Large</label>
+            </value>
+            <value>
+                <fullName>OFS - Office - Small</fullName>
+                <default>false</default>
+                <label>OFS - Office - Small</label>
+            </value>
+            <value>
+                <fullName>RFF - Restaurant - Fast Food</fullName>
+                <default>false</default>
+                <label>RFF - Restaurant - Fast Food</label>
+            </value>
+            <value>
+                <fullName>RSD - Restaurant - Sit Down</fullName>
+                <default>false</default>
+                <label>RSD - Restaurant - Sit Down</label>
+            </value>
+            <value>
+                <fullName>RT3 - Retail - 3 Story Large</fullName>
+                <default>false</default>
+                <label>RT3 - Retail - 3 Story Large</label>
+            </value>
+            <value>
+                <fullName>RTL - Retail - Single Story large</fullName>
+                <default>false</default>
+                <label>RTL - Retail - Single Story large</label>
+            </value>
+            <value>
+                <fullName>RTS - Retail - Small</fullName>
+                <default>false</default>
+                <label>RTS - Retail - Small</label>
+            </value>
+            <value>
+                <fullName>SCN - Storage - Conditioned</fullName>
+                <default>false</default>
+                <label>SCN - Storage - Conditioned</label>
+            </value>
+            <value>
+                <fullName>SUN - Storage - Unconditioned</fullName>
+                <default>false</default>
+                <label>SUN - Storage - Unconditioned</label>
+            </value>
+            <value>
+                <fullName>WRF - Storage - Refrigerated</fullName>
+                <default>false</default>
+                <label>WRF - Storage - Refrigerated</label>
+            </value>
+            <value>
+                <fullName>SFM - Single Family</fullName>
+                <default>false</default>
+                <label>SFM - Single Family</label>
+            </value>
+            <value>
+                <fullName>HGR</fullName>
+                <default>false</default>
+                <label>HGR</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

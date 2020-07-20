@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Complete_History</fullName>
+    <availability>online</availability>
+    <description>History from different objects</description>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Lead/Project History</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>var ur ;
+if(window.parent.location.href.indexOf(&quot;pgecommunity&quot;) != -1) {
+ur= &quot;/energyinsight/apex/SearchDoubleDipRecordsVF?premise={!EI_PREMISE__c.Name}&quot;;
+}else{
+ur= &quot;/apex/SearchDoubleDipRecordsVF?premise={!EI_PREMISE__c.Name}&quot;;
+}
+window.open(ur,&quot;_blank&quot;);</url>
+</WebLink>

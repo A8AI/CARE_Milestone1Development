@@ -26,7 +26,10 @@
                     </lightning-datatable>
                 </template>
                 <template if:false={checkCCBHistoryData}>
-                    <div class="slds-text-heading_large">No Records Found</div>
+                    <!--<div class="slds-text-heading_large">No Records Found</div>-->
+                    <div class="slds-modal__content slds-p-around_medium" style="text-align:left" id="modal-content-id-1">
+                        <p>No Records Found !!</p>
+                    </div>
                 </template>
 
 

@@ -7,11 +7,11 @@
         <label>Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Readonly</behavior>
+                <behavior>Required</behavior>
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>SYSTEM_BEGIN_DATE__c</field>
             </layoutItems>
             <layoutItems>
@@ -23,7 +23,7 @@
                 <field>SYSTEM_VALUE__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>SYSTEM_VALUE_CODE__c</field>
             </layoutItems>
             <layoutItems>

@@ -209,10 +209,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>COMMENTS__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>DATA_ENTRY_COMPLETE__c</field>
             </layoutItems>
             <layoutItems>
@@ -558,6 +554,22 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>NO_ATTACHMENTS_RECEIVED__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>HOME_PHONE_NO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>WORK_PHONE_NO__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>APPCODE__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CARE_Alternate_Phone_Type__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>

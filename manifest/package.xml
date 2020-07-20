@@ -32,6 +32,9 @@
 		<members>CARE_ImageUploadControllerTest</members>
 		<members>CARE_IncomeQualificationControllerTest</members>
 		<members>CARE_OnDemandDropControllerTest</members>
+		<!--<members>CARE_OnDemandPEVController</members>
+		<members>CARE_OnDemandPEVControllerTest</members>
+		<members>CARE_PEVHUController</members>-->
 		<members>CARE_ReinstateControllerTest</members>
 		<members>CARE_SearchControllerTest</members>
 		<members>CARE_SendAppControllerTest</members>
@@ -52,6 +55,7 @@
         <members>Account.CARE_PROBATION_END_DATE__c</members>
         <members>Account.CARE_ON_PROBATION__c</members>
         <members>Account.CARE_IN_PEV__c</members>
+		<members>Account.CARE_Probation_Waiver_Date__c</members>
         <members>Account.PREFERRED_LANGUAGE__c</members>
         <members>Account.PREFERRED_PHONE_TYPE__c</members>
         <members>Account.ALTERNATIVE_PHONE_TYPE__c</members>
@@ -60,6 +64,7 @@
         <members>CARE_Application__c.ACCT_ID__c</members>
 		<members>CARE_Application__c.AGREED_TO_ESA__c</members>
 		<members>CARE_Application__c.ANNUAL_HOUSEHOLD_INCOME__c</members>
+		<members>CARE_Application__c.APPCODE__c</members>
         <members>CARE_Application__c.APPLICANT_NAME__c</members>
         <members>CARE_Application__c.APPLICATION_EXTERNAL_ID__c</members>
         <members>CARE_Application__c.APPLICATION_STATUS__c</members>
@@ -67,6 +72,7 @@
         <members>CARE_Application__c.BUREAU_INDIAN_AFFAIRS__c</members>
         <members>CARE_Application__c.CALFRESH_SNAP__c</members>
         <members>CARE_Application__c.CALWORKS_TANF__c</members>
+		<members>CARE_Application__c.CARE_Alternate_Phone_Type__c</members>
         <members>CARE_Application__c.PARTICIPANT__c</members>
         <members>CARE_Application__c.CARE1_RECORD_NUMBER__c</members>
         <members>CARE_Application__c.CASH_OTHER_INCOME__c</members>
@@ -82,10 +88,12 @@
         <members>CARE_Application__c.CCB_CONTACT_DESC__c</members>
         <members>CARE_Application__c.CCB_CONTACT_CODE2__c</members>
         <members>CARE_Application__c.CCB_CONTACT_DESC2__c</members>
+		<members>CARE_Application__c.CCB_Contact_Type_No__c</members>
+		<members>CARE_Application__c.CCB_Contact_Type_No2__c</members>
         <members>CARE_Application__c.CCB_SA_DATE__c</members>
         <members>CARE_Application__c.CCB_UNIT_DATE__c</members>
 		<members>CARE_Application__c.COC_CODE__c</members>
-		<members>CARE_Application__c.COMMENTS__c</members>
+		<!--<members>CARE_Application__c.COMMENTS__c</members>-->
         <members>CARE_Application__c.CUSTOMER_TYPE__c</members>
         <members>CARE_Application__c.DATA_ENTRY_COMPLETE__c</members>
         <members>CARE_Application__c.DATA_ENTRY_COMPLETE_DATE__c</members>
@@ -115,6 +123,7 @@
         <members>CARE_Application__c.GUARDIAN_ATTORNEY__c</members>
         <members>CARE_Application__c.HEAD_START_INCOME__c</members>
         <members>CARE_Application__c.HEALTHY_FAMILIES__c</members>
+		<members>CARE_Application__c.HOME_PHONE_NO__c</members>
         <members>CARE_Application__c.HOUSE_QUALIFY__c</members>
         <members>CARE_Application__c.IN_PEV__c</members>
         <members>CARE_Application__c.INCOMPLETE_INCOME__c</members>
@@ -179,6 +188,7 @@
 		<members>CARE_Application__c.WAGES_PROFITS__c</members>
         <members>CARE_Application__c.WIC__c</members>
         <members>CARE_Application__c.WORKERS_COMP__c</members>
+		<members>CARE_Application__c.WORK_PHONE_NO__c</members>
 		<members>CARE_Application__c.Total_Persons_in_Household__c</members>
 		<members>CARE_Application__c.On_Probation__c</members>
 		<members>CARE_Application__c.NO_ATTACHMENTS_RECEIVED__c</members>
@@ -264,6 +274,8 @@
         <members>CARE_CC_Batch_Detail__c.CC_TYPE_CD__c</members>
         <members>CARE_CC_Batch_Detail__c.CC_TYPE_CD2__c</members>
         <members>CARE_CC_Batch_Detail__c.CCB_CONTACT_COMMENT2__c</members>
+		<members>CARE_CC_Batch_Detail__c.CCB_Contact_Type_No__c</members>
+		<members>CARE_CC_Batch_Detail__c.CCB_Contact_Type_No2__c</members>
         <members>CARE_CC_Batch_Detail__c.DATE1__c</members>
         <members>CARE_CC_Batch_Detail__c.DATE2__c</members>
         <members>CARE_CC_Batch_Detail__c.DATE3__c</members>
@@ -650,10 +662,10 @@
         <members>CARE_Household_Member_Income__c.LINE_9A__c</members>
         <members>CARE_Household_Member_Income__c.LINE_29__c</members>
         <members>CARE_Household_Member_Income__c.LINE_31__c</members>
-        <members>CARE_Household_Member_Income__c.NAME_Member_Income_Seq__c</members>
+        <!--<members>CARE_Household_Member_Income__c.Name</members>-->
         <members>CARE_Household_Member_Income__c.NO_MONTHS__c</members>
         <members>CARE_Household_Member_Income__c.PERIOD_TYPE__c</members>
-		<members>CARE_Household_Member_Income__c.HOUSEHOLD_DETAIL__c</members>
+		<members>CARE_Household_Member_Income__c.HOUSEHOLDDETAIL__c</members>
 		<members>CARE_Household_Member_Income__c.PEV_RESULT_NO__c</members>
 		<members>CARE_Household_Member_Income__c.ROLLOVER__c</members>
 		<members>CARE_Household_Member_Income__c.SCHEDULE_1__c</members>
@@ -698,6 +710,7 @@
 		<members>CARE_Facility_Enrolled_SA__c.EXTERNAL_ID__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.CARE_Facility_Name__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.FACILITY_TYPE__c</members>
+		<members>CARE_Facility_Enrolled_SA__c.Initial_Start_Date__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.IS_COMMON_AREA__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.IS_SATELLITE__c</members>
         <members>CARE_Facility_Enrolled_SA__c.METER_TYPE__c</members>
@@ -1031,6 +1044,18 @@
         <members>CARE_AddElecGasHeader</members>
         <members>CARE_SendAppHeader</members>
 		<members>CARE_TransferHeader</members>
+		<members>CARE_CommentFieldLengthValidationMsg</members>
+		<members>CARE_AdultFieldValidationMsg</members>
+		<members>CARE_StartDateValidationMsg</members>
+		<members>CARE_CurrencySymbol</members>
+		<members>CARE_PEVHUSaveMsg</members>
+		<members>CARE_PEVHUProcessingMsg</members>
+		<members>CARE_PEVHUAcceptMsg</members>
+		<members>CARE_PEVHUCreateErrorMsg</members>
+		<members>CARE_DropReasonMsg</members>
+		<members>CARE_ReceiveDateMsg</members>
+		<members>CARE_NoCitySearchAllowMsg</members>
+		<members>CARE_ValidValuesMsg</members>
         <name>CustomLabel</name>
     </types>
 	
@@ -1061,7 +1086,7 @@
 		<members>CARE_Household_Member_IncomeC__c</members>
 		<members>CARE_Application_PA_Selected__c</members>
         <members>EI_Prem_Char__c</members>
-		 <members>CARE_INCOME_SOURCE_DOC__c</members>
+		<members>CARE_INCOME_SOURCE_DOC__c</members>
 		<members>EI_SA_Char__c</members>
         <members>CARE_Usage_Baseline__c</members>
         <members>CARE_Income_Document_Type__c</members>
@@ -1078,6 +1103,9 @@
 		<members>WAC_RPT_Detail_Out__c</members>
 		<members>WAC_RPT_Header__c</members>
 		<members>WAC_RPT_Zip__c</members>
+		<members>EI_Site__c</members>
+		<members>EI_PREMISE__c</members>
+		<members>EI_Space_Location__c</members>
         <name>CustomObject</name>
     </types>
 	
@@ -1104,6 +1132,8 @@
         <members>CARE_CI_CC__c-CARE CI CC Layout</members>
         <members>CARE_Type__c-CARE Type Layout</members>
         <members>CARE_Type__c-Admin Reason CARE Type Layout</members>
+		<members>CARE_Type__c-Admin CC Code CARE Type Layout</members>
+		<members>CARE_Type__c-Admin Valid Rate Schedule CARE Type Layout</members>
 		<members>CARE_CC_Batch__c-CARE CC Batch Layout</members>
         <members>CARE_CC_Batch_Detail__c-CARE CC Batch Detail Layout</members>
 		<members>CARE_APP_Image_List__c-CARE APP Image List Layout</members>
@@ -1129,7 +1159,7 @@
         <members>EI_SA_Char__c-EI SA Char Layout</members>
         <members>CARE_Usage_Baseline__c-CARE Usage Baseline Layout</members>
         <members>CARE_Income_Document_Type__c-CARE Income Document Type Layout</members>
-        <members>CARE_Income_Entry_Form__c-CARE Income Entry Form Layout</members>
+        <!--<members>CARE_Income_Entry_Form__c-CARE Income Entry Form Layout</members>-->
         <members>CARE_Income_Sources__c-CARE Income Sources Layout</members>
 		<members>CARE_System_Value__c-CARE System Value Layout</members>
         <members>EI_SA_Staging__c-EI SA Staging Layout</members>
@@ -1160,6 +1190,8 @@
         <members>care_AddElecGas</members>
         <members>care_CCBHistory</members>
         <members>care_Communication</members>
+		<!--<members>care_OnDemandPEV</members>-->
+		<!--<members>care_PevHu</members>-->
 		<members>care_SpecialMessageModal</members>
 		<members>care_Utilities</members>
 		<name>LightningComponentBundle</name>
@@ -1170,6 +1202,8 @@
 		<members>CARE_Type__c.Reinstatement</members>
 		<members>CARE_Type__c.Transfer</members>
 		<members>CARE_Type__c.Add_Electric_Gas</members>
+		<members>CARE_Type__c.CC_Code_Maintenance</members>
+		<members>CARE_Type__c.Valid_Rate_Schedule_Maintenance</members>
 		<name>ListView</name>
 	</types>
 	
@@ -1187,6 +1221,7 @@
 		<members>Admin</members>
 		<!--<members>EI Read Only</members>-->
 		<members>Integration User</members>
+		<members>CSR</members>
 		<!--<members>ReadOnly</members>
 		<members>Technology Enablement</members>-->
 		<name>Profile</name>
@@ -1206,6 +1241,10 @@
 		<members>Account.CARE_Migrant</members>
 		<members>Account.CARE_Non_Profit</members>
 		<members>Account.CARE_Sub_Metered</members>
+		<members>CARE_Type__c.Reason_Maintenance</members>
+		<members>CARE_Type__c.CC_Code_Maintenance</members>
+		<members>CARE_Type__c.Misc</members>
+		<members>CARE_Type__c.Valid_Rate_Schedule</members>
 		<name>RecordType</name>
 	</types>
 	
@@ -1234,6 +1273,7 @@
 		<members>Energy_Insight_Logo_EI/EnergyInsightCAREAPPLogo.jpg</members>
 		<name>Document</name>
 	</types>
+
 	
 	
 

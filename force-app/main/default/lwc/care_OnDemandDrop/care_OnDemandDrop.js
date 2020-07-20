@@ -14,6 +14,14 @@ import DropValidationMsg from '@salesforce/label/c.CARE_DropValidationMsg';
 import DropInvalidCaseIDMsg from '@salesforce/label/c.CARE_DropInvalidCaseIDMsg';
 import DropEmailSourceValidationMsg from '@salesforce/label/c.CARE_DropEmailSourceValidationMsg';
 import TransactionErrorMsg from '@salesforce/label/c.CARE_TransactionErrorMsg';
+import CommentFieldLengthValidationMsg from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
+import CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
+import ErrorHeader from '@salesforce/label/c.CARE_ErrorHeader';
+import SuccessHeader from '@salesforce/label/c.CARE_SuccessHeader';
+import DropReasonMsg from '@salesforce/label/c.CARE_DropReasonMsg';
+import ReceiveDateMsg from '@salesforce/label/c.CARE_ReceiveDateMsg';
+
+
 //import OnDemandDropHeader from '@salesforce/label/c.CARE_OnDemandDropHeader';
 
 
@@ -31,6 +39,7 @@ export default class ModalPopupLWC extends LightningElement {
     @track bOtherOptions = false;
     @track appEnrolledSA = '';
     @track inCorrectCaseIdValue = '';
+    @track nameEvent;
     @api sSelectedPerId;
     @api listSelectedPremIds;
     @api bModalFlag;
@@ -57,9 +66,26 @@ export default class ModalPopupLWC extends LightningElement {
         DropValidationMsg,
         DropInvalidCaseIDMsg,
         DropEmailSourceValidationMsg,
-        TransactionErrorMsg
+        TransactionErrorMsg,
+        CommentFieldLengthValidationMsg,
+        CommentFieldValidationMsg,
+        ErrorHeader,
+        SuccessHeader,
+        DropReasonMsg,
+        ReceiveDateMsg
         //OnDemandDropHeader
     };
+
+    //Toast Message to show 
+    showToastMessage(toastTitle, msg, toastVariant) {
+        const evt = new ShowToastEvent({
+            title: toastTitle,
+            message: msg,
+            variant: toastVariant,
+            mode: 'dismissable'
+        });
+        this.dispatchEvent(evt);
+    }
 
     @wire(getPicklistValues, {
         recordTypeId : '012000000000000AAA',
@@ -76,7 +102,7 @@ export default class ModalPopupLWC extends LightningElement {
         }
     }
 
-    @wire(getReceivedDateSession)
+ /*   @wire(getReceivedDateSession)
     receiveDateValue({error, data}){
         if (data) {
             this.OnDemandDropObj.receiveDateValue = data;
@@ -86,7 +112,7 @@ export default class ModalPopupLWC extends LightningElement {
             this.contacts = undefined;
         }
     }
-
+*/
     openOnDemandModal() {
         this.showLoadingSpinner = true;
         console.log(` Person Id from parent `, this.sSelectedPerId);
@@ -95,11 +121,13 @@ export default class ModalPopupLWC extends LightningElement {
 
         getPerIdValue({perIdValue : this.sSelectedPerId}).then(result =>{
 
-            console.log(` result: ` + result);
+            console.log(` result: ` , result);
             this.oldCareApplicationId = result.oldAppIdForCare;
             this.newCareApplicationId = result.NewAppIdForCare;
             this.OnDemandDropObj.dropReasonValue = result.descLongValue;
             this.OnDemandDropObj.sContactCCCode = result.sContactCode;
+            this.OnDemandDropObj.receiveDateValue = result.dReceiveDate;
+            this.OnDemandDropObj.dropDateValue = result.dDropDate;
 
             console.log(` old care AppId----->: ` ,this.oldCareApplicationId);
             console.log(` new care AppId----->: ` ,this.newCareApplicationId);
@@ -108,23 +136,19 @@ export default class ModalPopupLWC extends LightningElement {
                 this.isModalOpen = true;
                 this.showLoadingSpinner = false; 
             }else{
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Error!!',
-                    //message: 'Customer is Not enrolled in CARE/FERA!!',
-                    message:this.label.NotEligibleMsg,
-                    variant: 'error'
-                }),); 
+                this.showToastMessage(this.label.ErrorHeader, this.label.NotEligibleMsg, 'error');
             }
             
         }).catch(error =>{
             this.error = error.message;
-            console.error('error in getting the list', error.body.message);
-            this.dispatchEvent(new ShowToastEvent({
+            //console.error('error in getting the list', error.body.message);
+            this.showToastMessage(this.label.ErrorHeader, this.label.NotEligibleMsg, 'error');
+            /*this.dispatchEvent(new ShowToastEvent({
                 title: 'Error!!',
                 //message: 'Application Error!!. Please try after some time',
                 message:this.label.TransactionErrorMsg,
                 variant: 'error'
-            }),);
+            }),);*/
             //this.showLoadingSpinner = false;
             
         });
@@ -142,6 +166,7 @@ export default class ModalPopupLWC extends LightningElement {
         }
         if(event.target.dataset.id === 'dropReasonField'){
             this.OnDemandDropObj.dropReasonValue = value;
+            //this.dropReasonValueLength = this.OnDemandDropObj.dropReasonValue.length;
 
         }else if(event.target.dataset.id === 'dropSourceField'){
             this.OnDemandDropObj.dropSourceValue = value;
@@ -173,44 +198,60 @@ export default class ModalPopupLWC extends LightningElement {
     }
 
     submitDetails(event) {
-        let nameEvent;
+               //let nameEvent;
+        let bReasonCheck = true;
     if(event.target.name === 'confirm'){
-        nameEvent = event.target.name;
+        this.nameEvent = event.target.name;
     }
-    console.log('event name is---->', nameEvent);
+    console.log('event name is---->', this.nameEvent);
 
+        //Validations
         if(this.OnDemandDropObj.dropSourceValue === '' || this.OnDemandDropObj.dropSourceValue === undefined){
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error!!',
-                    //message: 'Drop Source is required in order to drop a customer!!',
-                    message:this.label.DropValidationMsg,
-                    variant: 'error',
-                }),
-            );
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.DropValidationMsg, 'error');
+
+        }
+        else if(this.OnDemandDropObj.dropReasonValue === '' || this.OnDemandDropObj.dropReasonValue === undefined){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.DropReasonMsg, 'error');
+            
+        }
+        else if((this.OnDemandDropObj.dropSourceValue === 'CC&B Case' || this.OnDemandDropObj.dropSourceValue === 'SF Case') && (this.OnDemandDropObj.caseIDValue === '' || this.OnDemandDropObj.caseIDValue === undefined)){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.DropCaseourceValidationMsg, 'error');
+            
+        }
+        else if((this.OnDemandDropObj.dropSourceValue === 'CC&B Case' || this.OnDemandDropObj.dropSourceValue === 'SF Case') && this.OnDemandDropObj.caseIDValue !== '' && this.bCaseIdIncorrect === false){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.DropInvalidCaseIDMsg, 'error');
+            
+        }
+        else if(this.OnDemandDropObj.receiveDateValue === '' || this.OnDemandDropObj.receiveDateValue === undefined || this.OnDemandDropObj.receiveDateValue === null){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.ReceiveDateMsg, 'error');
+        }
+        else if(this.OnDemandDropObj.dropReasonValue.length > 256){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldLengthValidationMsg, 'error');
+            
+        }
+        else if(this.OnDemandDropObj.dropReasonValue.indexOf(',') !== -1){
+            bReasonCheck = false;
+            this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldValidationMsg, 'error');     
+        }
         
-        }else if((this.OnDemandDropObj.dropSourceValue === 'CC&B Case' || this.OnDemandDropObj.dropSourceValue === 'SF Case') && (this.OnDemandDropObj.caseIDValue === '' || this.OnDemandDropObj.caseIDValue === undefined)){
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error!!',
-                    //message:'Case ID is Required when Drop Source is SF Case or CC&B Case!!',
-                    message:this.label.DropCaseourceValidationMsg,
-                    variant: 'error',
-                }),
-            );
-        }else if((this.OnDemandDropObj.dropSourceValue === 'CC&B Case' || this.OnDemandDropObj.dropSourceValue === 'SF Case') && this.OnDemandDropObj.caseIDValue != '' && this.bCaseIdIncorrect === false){
-            this.dispatchEvent(
-                new ShowToastEvent({
-                    title: 'Error!!',
-                    //message: 'Case ID must be 15 or 18 character Salesforce ID if entered!!',
-                    message:this.label.DropInvalidCaseIDMsg,
-                    variant: 'error',
-                }),
-            );
-        }else {
+        if(bReasonCheck){
+            this.doOnDemandDrop();
+        }
+    }
+
+    doOnDemandDrop() {  
+        const historyTabRefreshEvent = new CustomEvent("historytabrefreshfromchild", {
+            detail: 'History'   //To refresh History Tab
+        });                 
     console.log(` Customer values inside button click method `, this.OnDemandDropObj);
     this.showLoadingSpinner = true;
-    getOnDemandDropInfoList({onDemandDropData : this.OnDemandDropObj, oldAppIdCare : this.oldCareApplicationId, perID: this.sSelectedPerId, newAppIdCare : this.newCareApplicationId, nameOfEvent : nameEvent}).then(result => {
+    getOnDemandDropInfoList({onDemandDropData : this.OnDemandDropObj, oldAppIdCare : this.oldCareApplicationId, perID: this.sSelectedPerId, newAppIdCare : this.newCareApplicationId, nameOfEvent : this.nameEvent}).then(result => {
 
         console.log('result ===> '+result);
         console.log('result Stringify===> '+JSON.stringify(result));
@@ -218,42 +259,34 @@ export default class ModalPopupLWC extends LightningElement {
         //this.inCorrectCaseIdValue = result.inCorrectCaseId;
         //this.bCheckImageId = result.bImageCheck;
         //this.dropSourceName = result.dropSourceName;
-        console.log(` App Enrolled SA ID`+ result.careAppEnrolledID);
-        console.log(` In correct CASE ID `+ result.inCorrectCaseId);
-        console.log(` drop source name `+ result.dropSourceName);
-        console.log(` Image check value `+ result.bImageCheck);
+        //console.log(` App Enrolled SA ID`+ result.careAppEnrolledID);
+        //console.log(` In correct CASE ID `+ result.inCorrectCaseId);
+        //console.log(` drop source name `+ result.dropSourceName);
+        //console.log(` Image check value `+ result.bImageCheck);
         // Show success messsage
         if(result.careAppEnrolledID != '' && result.dropSourceName != ''){// || this.dropSourceName === 'Emailed' || this.dropSourceName === 'Called - In'){
-            this.dispatchEvent(new ShowToastEvent({
-                title: 'Success!!',
-                //message: 'Drop transaction successful. Click on History tab to view transaction details!!',
-                message:this.label.TransactionSuccessMsg,
-                variant: 'success' 
-        }),)
+        this.showToastMessage(this.label.SuccessHeader, this.label.TransactionSuccessMsg, 'success');    
+    
+        this.dispatchEvent(historyTabRefreshEvent);
         this.showLoadingSpinner = false;
         //this.OnDemandDropObj = {};
+        this.OnDemandDropObj.dropSourceValue = '';
+        this.OnDemandDropObj.caseIDValue = '';
+        this.OnDemandDropObj.sContactCCCode = '';
         this.OnDemandDropObj.dropSourceValue = '';
         this.oldCareApplicationId = '';
         this.caseIDLength = null;
         this.perIdValue = '';
         this.isModalOpen = false;
-    }else if(result.careAppEnrolledID === '' && result.inCorrectCaseId === '' && result.bImageCheck === true){
-        
-            this.dispatchEvent(new ShowToastEvent({
-                title: 'Error!!',
-                //message: 'Case ID provided is incorrect. Please enter correct Case ID!!',
-                message:this.label.DropInvalidCaseIDMsg,
-                variant: 'error',          
-        }),)
+    }
+    else if(result.careAppEnrolledID === '' && result.inCorrectCaseId === '' && result.bImageCheck === true){
+        this.showToastMessage(this.label.ErrorHeader, this.label.DropInvalidCaseIDMsg, 'error');
         this.showLoadingSpinner = false;
         this.isModalOpen = true;
-    }else if(result.careAppEnrolledID === '' && result.inCorrectCaseId === '' && result.bImageCheck === false){
-        this.dispatchEvent(new ShowToastEvent({
-            title: 'Error!!',
-            //message: 'Please upload atleast one document or Image ID when Drop Source is Emailed!!',
-            message:this.label.DropEmailSourceValidationMsg,
-            variant: 'error',          
-    }),)
+    }
+    else if(result.careAppEnrolledID === '' && result.inCorrectCaseId === '' && result.bImageCheck === false){
+        this.showToastMessage(this.label.ErrorHeader, this.label.DropEmailSourceValidationMsg, 'error');
+
     this.showLoadingSpinner = false;
     this.isModalOpen = true;
     }
@@ -261,24 +294,18 @@ export default class ModalPopupLWC extends LightningElement {
 
     .catch(error => {
         this.error = error.message;
-        this.dispatchEvent(new ShowToastEvent({
-            title: 'Error!!',
-            //message: 'Application Error!!. Please try after some time',
-            message:this.label.TransactionErrorMsg,
-            variant: 'error'
-        }),);
+        this.showToastMessage(this.label.ErrorHeader, this.label.TransactionErrorMsg, 'error');
         this.showLoadingSpinner = false;
         //this.caseIDLength = null;
         this.isModalOpen = true;
     });
         
-        //this.isModalOpen = false;
-        }
     }
+    
 
-    get checkAppId() {
+    /*get checkAppId() {
         return this.disableImageButton.length > 0;
-    }
+    }*/
     closeConfirmationModal(event) {
         //this.bShowConfirmationModal = false;
         this.bShowConfirmationModal = event.detail.showChildModal; //read from child lwc and assign here
@@ -299,10 +326,14 @@ export default class ModalPopupLWC extends LightningElement {
         }else{
         deleteCareAppRecord({ newCareIdToDelete : this.newCareApplicationId });
         this.OnDemandDropObj.dropSourceValue = '';
+        this.OnDemandDropObj.caseIDValue = '';
+        this.OnDemandDropObj.sContactCCCode = '';
+        this.OnDemandDropObj.dropSourceValue = '';
         this.oldCareApplicationId = '';
         this.caseIDLength = null;
         this.perIdValue = '';
         this.isModalOpen = false;
+
     }
 }
 }

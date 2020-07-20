@@ -214,6 +214,7 @@ public class CARE_AddElecGasController {
             careAppObj.PER_ID__c = objAddElecGasInput.sPerId; 
             careAppObj.CARE_Account_ID__c = listAddElecGas[0].sAccountId;
             careAppObj.ACCT_ID__c = listAddElecGas[0].sBillingAccountId;
+            careAppObj.CCB_Contact_Type_No__c = CARE_Constants.CARE_CC_ADD_ELEC_GAS;
             careAppObj.CCB_CONTACT_CODE__c = listCareType[0].TYPE_CODE__c;
             careAppObj.CCB_CONTACT_DESC__c= listCareType[0].TYPE_DESC__c;
             careAppObj.CCB_CONTACT_COMMENT__c = objAddElecGasInput.sComment; //listCareType[0].TYPE_DESC_LONG__c;       
@@ -221,8 +222,8 @@ public class CARE_AddElecGasController {
             //careAppObj.START_DATE__c = dTodaysDate; //TBD //Yes date = last billing date or SA start date if last billing date is null 
             //No date = that of the other commodity, but greater one if there are multiple
             //careAppObj.END_DATE__c = objAddElecGasInput.dHighestDtOfExistingComm;
-            careAppObj.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
-            careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other 
+            //careAppObj.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
+            //careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other 
             careAppObj.CC_CL_CD__c = listAddElecGas[0].sDiscountType; // It will be always 'C', stamp with the Account's discount
             careAppobj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_ADD_ELEC_GAS_SRC;
             

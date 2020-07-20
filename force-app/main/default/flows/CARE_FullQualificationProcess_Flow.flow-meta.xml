@@ -4,8 +4,8 @@
         <description>Set Flag to a boolean variable to process further. From UI , String &apos;Yes&apos;/&apos;No&apos; is receiving.</description>
         <name>Assign_Accepted_Flag_to_a_Variable</name>
         <label>Set Is Accepted Flag to True</label>
-        <locationX>2395</locationX>
-        <locationY>442</locationY>
+        <locationX>2377</locationX>
+        <locationY>337</locationY>
         <assignmentItems>
             <assignToReference>varIsApplicationAccepted</assignToReference>
             <operator>Assign</operator>
@@ -14,14 +14,14 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Accepted_Collection</targetReference>
+            <targetReference>Loop_Is_Accepted_Collection</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Assign application id to a variable</description>
         <name>Assign_Application_Id</name>
         <label>Assign Application Id in a Variable</label>
-        <locationX>1441</locationX>
+        <locationX>1373</locationX>
         <locationY>232</locationY>
         <assignmentItems>
             <assignToReference>varCareApplicationId</assignToReference>
@@ -38,10 +38,10 @@
         <description>Assign Person Id To Variable</description>
         <name>Assign_Person_Id_To_Variable</name>
         <label>Assign Person Id To Variable</label>
-        <locationX>1892</locationX>
-        <locationY>429</locationY>
+        <locationX>1808</locationX>
+        <locationY>521</locationY>
         <assignmentItems>
-            <assignToReference>varPersonID_Input</assignToReference>
+            <assignToReference>varPersonID</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Person_Id</elementReference>
@@ -52,11 +52,28 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Assign the premise ID received based on Account ID to Premise Collection Variable (This collection variable is used for manual process, Hence if we assign the premise ID received based on account id(For Batch process) to the same collection, remaining process will Same for manual and Automation.</description>
+        <name>Assign_Premise_ID_To_Collection</name>
+        <label>Assign Premise ID To Collection</label>
+        <locationX>1953</locationX>
+        <locationY>1582</locationY>
+        <assignmentItems>
+            <assignToReference>colPremiseIDs_Input</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varPremiseID</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Customer_SA_ID_On_All_Premises</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Assign Valid SA of Selected Premise to Collection Variable for future reference</description>
-        <name>Assign_SA_Ids_To_Collection_Variable</name>
+        <name>Assign_SA_Ids_To_Valid_SA_Id_Collection</name>
         <label>Assign SA Ids To Valid SA Id Collection</label>
-        <locationX>2227</locationX>
-        <locationY>1613</locationY>
+        <locationX>3543</locationX>
+        <locationY>2055</locationY>
         <assignmentItems>
             <assignToReference>recColValidSAIdsOfSelectedPremise</assignToReference>
             <operator>Add</operator>
@@ -65,15 +82,15 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Valid_Rate_Schedule</targetReference>
+            <targetReference>Is_Care_End_Date_is_future_date</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Assign Valid SA Ids To Variable</description>
         <name>Assign_Valid_SA_IDs_To_Variable</name>
         <label>Assign Valid SA Ids To Collection Variable</label>
-        <locationX>4517</locationX>
-        <locationY>2147</locationY>
+        <locationX>4337</locationX>
+        <locationY>2092</locationY>
         <assignmentItems>
             <assignToReference>recColValidSAIdsOfAllPremises</assignToReference>
             <operator>Add</operator>
@@ -86,11 +103,28 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Set Billing Account Id in a Variable</description>
+        <name>Set_Billing_Account_ID</name>
+        <label>Set Billing Account ID</label>
+        <locationX>1278</locationX>
+        <locationY>1433</locationY>
+        <assignmentItems>
+            <assignToReference>varBillingAccountID</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Account_ID</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Account_ID</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Set Care customer flag - True  if Care End date is future date.</description>
         <name>Set_CARE_FERA_Customer_Flag</name>
         <label>Set Current CARE/FERA Customer Flag=True</label>
-        <locationX>3197</locationX>
-        <locationY>1959</locationY>
+        <locationX>2479</locationX>
+        <locationY>2207</locationY>
         <assignmentItems>
             <assignToReference>varIsCAREFERACustomer</assignToReference>
             <operator>Assign</operator>
@@ -113,8 +147,8 @@
         <description>Set Current  SA RS Valid Flag True</description>
         <name>Set_Current_Item_is_Valid</name>
         <label>Set Current  SA RS Valid Flag True</label>
-        <locationX>4353</locationX>
-        <locationY>2055</locationY>
+        <locationX>4111</locationX>
+        <locationY>2071</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -130,8 +164,8 @@
         <description>Set Current SA RS Valid Flag To False</description>
         <name>Set_Current_SA_RS_Valid_Flag_False</name>
         <label>Set Current  SA RS Valid Flag False</label>
-        <locationX>4478</locationX>
-        <locationY>1630</locationY>
+        <locationX>3838</locationX>
+        <locationY>1607</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -147,8 +181,8 @@
         <description>Set Flag for customer has discount on other premise other than selected</description>
         <name>Set_Discount_On_Other_Premise_Flag</name>
         <label>Set Discounted On Other Premise Flag =True</label>
-        <locationX>3216</locationX>
-        <locationY>1299</locationY>
+        <locationX>2471</locationX>
+        <locationY>1649</locationY>
         <assignmentItems>
             <assignToReference>varHasDiscountOnOtherPremise</assignToReference>
             <operator>Assign</operator>
@@ -157,7 +191,7 @@
             </value>
         </assignmentItems>
         <assignmentItems>
-            <assignToReference>recColSAIdsOfOtherDiscountedPremise</assignToReference>
+            <assignToReference>recColSAIdsOfOtherPremiseDiscount</assignToReference>
             <operator>Add</operator>
             <value>
                 <elementReference>loopVarSAID</elementReference>
@@ -168,11 +202,45 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Set Is Invoked From Scheduler =True</description>
+        <name>Set_Invoked_Flag_True</name>
+        <label>Set Invoked From Scheduler Flag=True</label>
+        <locationX>2823</locationX>
+        <locationY>705</locationY>
+        <assignmentItems>
+            <assignToReference>varIsInvokedFromScheduler</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Is_Scheduler_Invoked</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Boolean Flag False</description>
+        <name>Set_Is_Invoked_Falg_False</name>
+        <label>Set Is Invoked Falg=False</label>
+        <locationX>2537</locationX>
+        <locationY>427</locationY>
+        <assignmentItems>
+            <assignToReference>varIsInvokedFromScheduler</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Is_Scheduler_Invoked</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Set Is Accepted Flag =False</description>
         <name>Set_IsAccepted_Flag_False</name>
         <label>Set Is Accepted Flag False</label>
-        <locationX>2078</locationX>
-        <locationY>212</locationY>
+        <locationX>2043</locationX>
+        <locationY>350</locationY>
         <assignmentItems>
             <assignToReference>varIsApplicationAccepted</assignToReference>
             <operator>Assign</operator>
@@ -181,15 +249,15 @@
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Loop_Accepted_Collection</targetReference>
+            <targetReference>Loop_Is_Accepted_Collection</targetReference>
         </connector>
     </assignments>
     <assignments>
         <description>Set Recertification Flag =True</description>
         <name>Set_Recertification_Qualified_Flag</name>
         <label>Set Recertification Qualified Flag =True</label>
-        <locationX>3642</locationX>
-        <locationY>1655</locationY>
+        <locationX>3162</locationX>
+        <locationY>1904</locationY>
         <assignmentItems>
             <assignToReference>varIsQualifiedForRecertification</assignToReference>
             <operator>Assign</operator>
@@ -205,8 +273,8 @@
         <description>Check Is accepted Flag received from UI. Since all the inputs receiving from UI are List of String , Yes/No will be the input.Based on that Boolean flag will set in Flow.</description>
         <name>Check_Is_Accepted_Value</name>
         <label>Check Is Accepted Value=Yes</label>
-        <locationX>2158</locationX>
-        <locationY>419</locationY>
+        <locationX>2207</locationX>
+        <locationY>348</locationY>
         <defaultConnector>
             <targetReference>Set_IsAccepted_Flag_False</targetReference>
         </defaultConnector>
@@ -215,7 +283,7 @@
             <name>IsAccepted_Yes</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Loop_Accepted_Collection</leftValueReference>
+                <leftValueReference>Loop_Is_Accepted_Collection</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <stringValue>Yes</stringValue>
@@ -228,36 +296,89 @@
         </rules>
     </decisions>
     <decisions>
-        <description>Check SA Status - Active or Not and Rate Schedule is Valid</description>
-        <name>Check_SA_Status</name>
-        <label>Is SA Status Active?</label>
-        <locationX>2823</locationX>
-        <locationY>1473</locationY>
+        <description>Check Is Invoked From Schedule Value =Yes.
+Note: Input to the flow is list of strings and  &apos;Yes&apos;  is passed from Batch Job.For Further use in flow  a boolean variable will set based on the input.</description>
+        <name>Check_Is_Invoked_From_Schedule_Value</name>
+        <label>Check Is Invoked From Schedule =Yes</label>
+        <locationX>2715</locationX>
+        <locationY>568</locationY>
         <defaultConnector>
-            <targetReference>Loop_All_SA_IDs</targetReference>
+            <targetReference>Set_Is_Invoked_Falg_False</targetReference>
         </defaultConnector>
-        <defaultConnectorLabel>Not Active</defaultConnectorLabel>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
         <rules>
-            <name>SA_Active</name>
+            <name>Yes_From_Batch</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>colActiveSAStatus</leftValueReference>
-                <operator>Contains</operator>
+                <leftValueReference>Loop_Is_Scheduler_Invoked</leftValueReference>
+                <operator>EqualTo</operator>
                 <rightValue>
-                    <elementReference>loopVarSAID.Svc_Status_Code_EI__c</elementReference>
+                    <stringValue>Yes</stringValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Loop_Valid_Rate_Schedule</targetReference>
+                <targetReference>Set_Invoked_Flag_True</targetReference>
             </connector>
-            <label>Active</label>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check Valid Premise ID Exists.If Not Update CC code IR.</description>
+        <name>Check_Premise_ID_Exists</name>
+        <label>Check Premise ID Exists?</label>
+        <locationX>1695</locationX>
+        <locationY>1727</locationY>
+        <defaultConnector>
+            <targetReference>Update_CC_Code_IR</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_PremiseExists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varPremiseID</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_Premise_ID_To_Collection</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check SA Is From Selected Premise</description>
+        <name>Check_SA_ID_From_Selected_Premise</name>
+        <label>Check SA Is From Selected Premise?</label>
+        <locationX>3597</locationX>
+        <locationY>2288</locationY>
+        <defaultConnector>
+            <targetReference>Is_Care_End_Date_is_future_date</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_From_Selected_Premise</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>colPremiseIDs_Input</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>loopVarSAID.Site_Premise_ID_EI__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Assign_SA_Ids_To_Valid_SA_Id_Collection</targetReference>
+            </connector>
+            <label>Yes</label>
         </rules>
     </decisions>
     <decisions>
         <description>Does Customer has CC Code VH in last 2 years</description>
         <name>Does_Customer_has_CC_Code_VH</name>
         <label>Does Customer has CC Code VH/M?</label>
-        <locationX>3662</locationX>
+        <locationX>3742</locationX>
         <locationY>365</locationY>
         <defaultConnector>
             <targetReference>Update_CC_Code_6027</targetReference>
@@ -298,7 +419,7 @@
         <description>Does Customer Requested For Drop</description>
         <name>Does_Customer_Requested_For_Drop</name>
         <label>Does Customer Requested For Drop?</label>
-        <locationX>4994</locationX>
+        <locationX>5074</locationX>
         <locationY>1120</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -336,7 +457,7 @@
         <description>Does Meet Re certification Criteria - Criteria has to be created after confirmation</description>
         <name>Does_Meet_Recertification_Criteria</name>
         <label>Does Meet Re certification Criteria?</label>
-        <locationX>5272</locationX>
+        <locationX>5352</locationX>
         <locationY>1114</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -374,8 +495,8 @@
         <description>Check any Valid SA exists to proceed.</description>
         <name>Does_Valid_SA_Exists</name>
         <label>Does Valid SA Exists?</label>
-        <locationX>3070</locationX>
-        <locationY>867</locationY>
+        <locationX>3258</locationX>
+        <locationY>857</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes_Valid_SA_Exists</name>
@@ -412,8 +533,8 @@
         <description>Check whether care end date is future date?</description>
         <name>Is_Care_End_Date_is_future_date</name>
         <label>Is Care End Date is future date?</label>
-        <locationX>3737</locationX>
-        <locationY>2188</locationY>
+        <locationX>3327</locationX>
+        <locationY>2243</locationY>
         <defaultConnector>
             <targetReference>Loop_All_SA_Ids_of_Customer</targetReference>
         </defaultConnector>
@@ -466,7 +587,7 @@
         <description>Check Customer is care customer based on the varIsCareCustomer Flag</description>
         <name>Is_Current_CARE_FERA_Customer</name>
         <label>Is current CARE FERA Customer?</label>
-        <locationX>4319</locationX>
+        <locationX>4399</locationX>
         <locationY>1179</locationY>
         <defaultConnector>
             <targetReference>New_Enrollment_Process</targetReference>
@@ -505,10 +626,10 @@
     </decisions>
     <decisions>
         <description>Check Is current SA Valid</description>
-        <name>Is_Current_SA_Valid</name>
-        <label>Is Current SA Valid?</label>
-        <locationX>4003</locationX>
-        <locationY>2185</locationY>
+        <name>Is_Current_SA_RS_Valid</name>
+        <label>Is Current SA RS Valid?</label>
+        <locationX>3717</locationX>
+        <locationY>2093</locationY>
         <defaultConnector>
             <targetReference>Loop_All_SA_Ids_of_Customer</targetReference>
         </defaultConnector>
@@ -524,7 +645,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Care_End_Date_is_future_date</targetReference>
+                <targetReference>Check_SA_ID_From_Selected_Premise</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -533,7 +654,7 @@
         <description>Check Whether Customer is on Promotion based on the output from sub flow - Output variable Name : varProbationStatus</description>
         <name>Is_Customer_On_Probation</name>
         <label>Is Customer On Probation?</label>
-        <locationX>3658</locationX>
+        <locationX>3738</locationX>
         <locationY>850</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -562,17 +683,43 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Customer_SA_ID_On_All_Premises</targetReference>
+                <targetReference>Is_Current_CARE_FERA_Customer</targetReference>
             </connector>
             <label>Not On Probation</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check whether it is invoked from Scheduled  Batch</description>
+        <name>Is_Invoked_From_Scheduler</name>
+        <label>Is Invoked From Scheduler?</label>
+        <locationX>1530</locationX>
+        <locationY>1183</locationY>
+        <defaultConnector>
+            <targetReference>Customer_SA_ID_On_All_Premises</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_FromBatchJob</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsInvokedFromScheduler</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_Account_ID</targetReference>
+            </connector>
+            <label>Yes</label>
         </rules>
     </decisions>
     <decisions>
         <description>Is Qualified for Re-certification?</description>
         <name>Is_Qualified_For_Recertification</name>
         <label>Is Qualified For Recertification?</label>
-        <locationX>3449</locationX>
-        <locationY>1644</locationY>
+        <locationX>2752</locationX>
+        <locationY>1849</locationY>
         <defaultConnector>
             <targetReference>Loop_All_SA_Ids_of_Customer</targetReference>
         </defaultConnector>
@@ -601,36 +748,10 @@
         </rules>
     </decisions>
     <decisions>
-        <description>Is Rate Schedule Valid?</description>
-        <name>Is_Rate_Schedule_Valid</name>
-        <label>Is Rate Schedule Valid?</label>
-        <locationX>2220</locationX>
-        <locationY>1872</locationY>
-        <defaultConnector>
-            <targetReference>Loop_Valid_Rate_Schedule</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>No</defaultConnectorLabel>
-        <rules>
-            <name>Yes_Valid_RS</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>Loop_Valid_Rate_Schedule</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <elementReference>loopVarSAID.Rate_Schedule_EI__c</elementReference>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Assign_SA_Ids_To_Collection_Variable</targetReference>
-            </connector>
-            <label>Yes Valid RS</label>
-        </rules>
-    </decisions>
-    <decisions>
         <name>Is_Rate_Schedule_Valid2</name>
         <label>Is Rate Schedule Valid?</label>
-        <locationX>4818</locationX>
-        <locationY>2052</locationY>
+        <locationX>4316</locationX>
+        <locationY>1844</locationY>
         <defaultConnector>
             <targetReference>Loop_Valid_Rate_Schedule2</targetReference>
         </defaultConnector>
@@ -655,8 +776,8 @@
         <description>Is SA Status Active</description>
         <name>Is_SA_Status_Active</name>
         <label>Is SA Status Active?</label>
-        <locationX>4245</locationX>
-        <locationY>1583</locationY>
+        <locationX>3712</locationX>
+        <locationY>1483</locationY>
         <defaultConnector>
             <targetReference>Loop_All_SA_Ids_of_Customer</targetReference>
         </defaultConnector>
@@ -681,8 +802,8 @@
         <description>Is this Discount on Care processor Selected Premise?</description>
         <name>Is_This_Discount_On_Selected_Premise</name>
         <label>Is this Discount on Selected Premise?</label>
-        <locationX>3192</locationX>
-        <locationY>1642</locationY>
+        <locationX>2464</locationX>
+        <locationY>1939</locationY>
         <defaultConnector>
             <targetReference>Set_Discount_On_Other_Premise_Flag</targetReference>
         </defaultConnector>
@@ -719,42 +840,26 @@
     <interviewLabel>CARE Full Qualification Process Flow {!$Flow.CurrentDateTime}</interviewLabel>
     <label>CARE Full Qualification Process Flow</label>
     <loops>
-        <description>Loop through Is Accepted Flag collection; Input to flow is always a list.</description>
-        <name>Loop_Accepted_Collection</name>
-        <label>Loop Is Accepted Flag Collection Input</label>
-        <locationX>2082</locationX>
-        <locationY>698</locationY>
-        <collectionReference>colIsApplicationAccepted_Input</collectionReference>
+        <description>Loop through Account Id Input</description>
+        <name>Loop_Account_ID</name>
+        <label>Loop Account ID</label>
+        <locationX>1540</locationX>
+        <locationY>1414</locationY>
+        <collectionReference>colBillingAccountID_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
-            <targetReference>Check_Is_Accepted_Value</targetReference>
+            <targetReference>Set_Billing_Account_ID</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Loop_Premise_ID</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
-        <description>Loop all SA IDs</description>
-        <name>Loop_All_SA_IDs</name>
-        <label>Loop All SA IDs Of Premise</label>
-        <locationX>2478</locationX>
-        <locationY>1309</locationY>
-        <assignNextValueToReference>loopVarSAID</assignNextValueToReference>
-        <collectionReference>All_SA_IDs_Of_A_Premise</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Check_SA_Status</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Loop_Premise_ID</targetReference>
+            <targetReference>Check_Premise_ID_Exists</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
         <description>Loop through all SA Ids and find Valid SA based on SA Rate and Status</description>
         <name>Loop_All_SA_Ids_of_Customer</name>
         <label>Loop All SA Ids of Customer</label>
-        <locationX>3876</locationX>
-        <locationY>1434</locationY>
+        <locationX>3366</locationX>
+        <locationY>1422</locationY>
         <assignNextValueToReference>loopVarSAID</assignNextValueToReference>
         <collectionReference>Customer_SA_ID_On_All_Premises</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -762,14 +867,14 @@
             <targetReference>Is_SA_Status_Active</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Is_Current_CARE_FERA_Customer</targetReference>
+            <targetReference>Does_Valid_SA_Exists</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
         <description>Loop application Id and store in a variable</description>
         <name>Loop_Application_ID</name>
         <label>Loop Application ID</label>
-        <locationX>1117</locationX>
+        <locationX>1197</locationX>
         <locationY>413</locationY>
         <collectionReference>colCareApplicationIDs_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -781,10 +886,40 @@
         </noMoreValuesConnector>
     </loops>
     <loops>
+        <description>Loop through Is Accepted Flag collection; Input to flow is always a list.</description>
+        <name>Loop_Is_Accepted_Collection</name>
+        <label>Loop Is Accepted Flag Collection Input</label>
+        <locationX>2188</locationX>
+        <locationY>663</locationY>
+        <collectionReference>colIsApplicationAccepted_Input</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Is_Accepted_Value</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Loop_Is_Scheduler_Invoked</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Loop through Collection Input(Flag) Received from Scheduler.</description>
+        <name>Loop_Is_Scheduler_Invoked</name>
+        <label>Loop Is Invoked From Scheduler</label>
+        <locationX>2547</locationX>
+        <locationY>820</locationY>
+        <collectionReference>colIsInvokedFromScheduler_Input</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Is_Invoked_From_Schedule_Value</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Is_Invoked_From_Scheduler</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
         <description>Loop Person Id and assign it to a variable</description>
         <name>Loop_Person_Id</name>
         <label>Loop Person Id</label>
-        <locationX>1542</locationX>
+        <locationX>1622</locationX>
         <locationY>712</locationY>
         <collectionReference>colPersonIDs_Input</collectionReference>
         <iterationOrder>Asc</iterationOrder>
@@ -792,53 +927,22 @@
             <targetReference>Assign_Person_Id_To_Variable</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Loop_Accepted_Collection</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
-        <description>Loop through Premise IDs and get all SA IDs for the person and Premise</description>
-        <name>Loop_Premise_ID</name>
-        <label>Loop Selected Premise IDs</label>
-        <locationX>2371</locationX>
-        <locationY>874</locationY>
-        <assignNextValueToReference>varPremiseID</assignNextValueToReference>
-        <collectionReference>colPremiseIDs_Input</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>All_SA_IDs_Of_A_Premise</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Does_Valid_SA_Exists</targetReference>
-        </noMoreValuesConnector>
-    </loops>
-    <loops>
-        <description>Loop Valid Rate Schedule</description>
-        <name>Loop_Valid_Rate_Schedule</name>
-        <label>Loop Valid Rate Schedule</label>
-        <locationX>2620</locationX>
-        <locationY>1830</locationY>
-        <collectionReference>colValidRateSchedules</collectionReference>
-        <iterationOrder>Asc</iterationOrder>
-        <nextValueConnector>
-            <targetReference>Is_Rate_Schedule_Valid</targetReference>
-        </nextValueConnector>
-        <noMoreValuesConnector>
-            <targetReference>Loop_All_SA_IDs</targetReference>
+            <targetReference>Loop_Is_Accepted_Collection</targetReference>
         </noMoreValuesConnector>
     </loops>
     <loops>
         <description>To check rate schedule is valid or not</description>
         <name>Loop_Valid_Rate_Schedule2</name>
         <label>Loop Valid Rate Schedule</label>
-        <locationX>4437</locationX>
-        <locationY>1870</locationY>
+        <locationX>3849</locationX>
+        <locationY>1875</locationY>
         <collectionReference>colValidRateSchedules</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Is_Rate_Schedule_Valid2</targetReference>
         </nextValueConnector>
         <noMoreValuesConnector>
-            <targetReference>Is_Current_SA_Valid</targetReference>
+            <targetReference>Is_Current_SA_RS_Valid</targetReference>
         </noMoreValuesConnector>
     </loops>
     <processMetadataValues>
@@ -855,51 +959,10 @@
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <recordLookups>
-        <description>Get All SA Ids of a Person and  a Premise</description>
-        <name>All_SA_IDs_Of_A_Premise</name>
-        <label>Get All Valid SA IDs of Premise</label>
-        <locationX>2721</locationX>
-        <locationY>1074</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Loop_All_SA_IDs</targetReference>
-        </connector>
-        <filters>
-            <field>Person_ID_EI__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>varPersonID_Input</elementReference>
-            </value>
-        </filters>
-        <filters>
-            <field>Site_Premise_ID_EI__c</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>varPremiseID</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>false</getFirstRecordOnly>
-        <object>EI_Site__c</object>
-        <queriedFields>Id</queriedFields>
-        <queriedFields>SAID_EI__c</queriedFields>
-        <queriedFields>Svc_Status_Code_EI__c</queriedFields>
-        <queriedFields>Svc_Type_Code_EI__c</queriedFields>
-        <queriedFields>Site_Premise_ID_EI__c</queriedFields>
-        <queriedFields>Person_ID_EI__c</queriedFields>
-        <queriedFields>SA_Start_Date_EI__c</queriedFields>
-        <queriedFields>Billing_Account_ID_EI__c</queriedFields>
-        <queriedFields>Account_EI__c</queriedFields>
-        <queriedFields>CARE_DISCOUNT_TYPE__c</queriedFields>
-        <queriedFields>Care_Start_Date_EI__c</queriedFields>
-        <queriedFields>Care_Stop_Date_EI__c</queriedFields>
-        <queriedFields>Rate_Schedule_EI__c</queriedFields>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
-    <recordLookups>
         <description>Get CARE Application Details - To be used in decision boxes</description>
         <name>Care_Application_Details</name>
         <label>Get Care Application Details</label>
-        <locationX>4750</locationX>
+        <locationX>4830</locationX>
         <locationY>1118</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -922,7 +985,7 @@
         <description>Get Customer Probation Status</description>
         <name>Customer_Probation_Status</name>
         <label>Get Probation Status</label>
-        <locationX>3453</locationX>
+        <locationX>3533</locationX>
         <locationY>850</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -932,7 +995,7 @@
             <field>Billing_Person_ID_EI__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>varPersonID_Input</elementReference>
+                <elementReference>varPersonID</elementReference>
             </value>
         </filters>
         <filters>
@@ -966,8 +1029,8 @@
         <description>Get customer SA ID from all premises</description>
         <name>Customer_SA_ID_On_All_Premises</name>
         <label>Get All SA  Ids  from all premises</label>
-        <locationX>3981</locationX>
-        <locationY>866</locationY>
+        <locationX>2452</locationX>
+        <locationY>1263</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_All_SA_Ids_of_Customer</targetReference>
@@ -976,7 +1039,7 @@
             <field>Person_ID_EI__c</field>
             <operator>EqualTo</operator>
             <value>
-                <elementReference>varPersonID_Input</elementReference>
+                <elementReference>varPersonID</elementReference>
             </value>
         </filters>
         <getFirstRecordOnly>false</getFirstRecordOnly>
@@ -992,13 +1055,15 @@
         <queriedFields>CARE_DISCOUNT_TYPE__c</queriedFields>
         <queriedFields>Rate_Schedule_EI__c</queriedFields>
         <queriedFields>Billing_Account_ID_EI__c</queriedFields>
+        <queriedFields>SA_Start_Date_EI__c</queriedFields>
+        <queriedFields>Person_ID_EI__c</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>
         <description>Get Active status of SA</description>
         <name>Get_Active_Status</name>
         <label>Get Active Status</label>
-        <locationX>511</locationX>
+        <locationX>591</locationX>
         <locationY>686</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1037,7 +1102,7 @@
         <description>Get Valid Rate Schedules (Comma separated Values)</description>
         <name>Get_Valid_Rate_Schedules</name>
         <label>Get Valid Rate Schedules</label>
-        <locationX>721</locationX>
+        <locationX>801</locationX>
         <locationY>692</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
@@ -1081,17 +1146,17 @@
     </recordLookups>
     <start>
         <locationX>50</locationX>
-        <locationY>699</locationY>
+        <locationY>667</locationY>
         <connector>
             <targetReference>Get_Active_Status</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
         <description>Get Active Status Collection (convert Comma Separated String To List)</description>
         <name>Get_Active_Status_Collection</name>
         <label>Convert Active Status String To Collection</label>
-        <locationX>558</locationX>
+        <locationX>638</locationX>
         <locationY>409</locationY>
         <connector>
             <targetReference>Get_Valid_Rate_Schedules</targetReference>
@@ -1112,7 +1177,7 @@
         <description>Get Customer CC Code For Last 2 Years</description>
         <name>Get_Customer_CCCode_For_Last_2_Years</name>
         <label>Get Customer CCCode For Last 2 Years</label>
-        <locationX>3667</locationX>
+        <locationX>3747</locationX>
         <locationY>618</locationY>
         <connector>
             <targetReference>Does_Customer_has_CC_Code_VH</targetReference>
@@ -1121,7 +1186,7 @@
         <inputAssignments>
             <name>varPersonId_Input</name>
             <value>
-                <elementReference>varPersonID_Input</elementReference>
+                <elementReference>varPersonID</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1137,7 +1202,7 @@
         <description>Get Rate Schedule Collection (Convert Comma Separated String)</description>
         <name>Get_Rate_Schedule_Collection</name>
         <label>Convert Rate Schedule String To Collection</label>
-        <locationX>768</locationX>
+        <locationX>848</locationX>
         <locationY>425</locationY>
         <connector>
             <targetReference>Loop_Application_ID</targetReference>
@@ -1158,8 +1223,8 @@
         <description>Call Fresh Enrollment Process</description>
         <name>New_Enrollment_Process</name>
         <label>New Enrollment Process</label>
-        <locationX>4904</locationX>
-        <locationY>251</locationY>
+        <locationX>4981</locationX>
+        <locationY>252</locationY>
         <flowName>CARE_FreshEnrollmentProcess_Flow</flowName>
         <inputAssignments>
             <name>recColValidSAIdsOfSelectedPremise_Input</name>
@@ -1180,15 +1245,27 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varPersonId_Input</name>
-            <value>
-                <elementReference>varPersonID_Input</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <name>varIsApplicationAccepted_Input</name>
             <value>
                 <elementReference>varIsApplicationAccepted</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varPersonId_Input</name>
+            <value>
+                <elementReference>varPersonID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+            <value>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1204,7 +1281,7 @@
         <description>Call CARE/FERA Recertification Process</description>
         <name>Recertification_Process</name>
         <label>Recertification Process</label>
-        <locationX>5627</locationX>
+        <locationX>5707</locationX>
         <locationY>696</locationY>
         <flowName>CARE_RecertificationProcess_Flow</flowName>
         <inputAssignments>
@@ -1226,15 +1303,27 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varPersonId_Input</name>
-            <value>
-                <elementReference>varPersonID_Input</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <name>varIsApplicationAccepted_Input</name>
             <value>
                 <elementReference>varIsApplicationAccepted</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varPersonId_Input</name>
+            <value>
+                <elementReference>varPersonID</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+            <value>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1250,8 +1339,8 @@
         <description>CC Code = IR ; Number 6023</description>
         <name>Update_CC_Code_6023</name>
         <label>Update CC Code 6023 (IR)</label>
-        <locationX>3046</locationX>
-        <locationY>541</locationY>
+        <locationX>3319</locationX>
+        <locationY>543</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
             <name>recColValidSAIdsOfSelectedPremise_Input</name>
@@ -1290,7 +1379,7 @@
         <description>CC code =3 ;No :6026 ; Requested for Drop</description>
         <name>Update_CC_Code_6026</name>
         <label>Update CC Code- Drop (6026)</label>
-        <locationX>5001</locationX>
+        <locationX>5081</locationX>
         <locationY>838</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
@@ -1306,12 +1395,6 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varTypeNumber_Input</name>
-            <value>
-                <stringValue>6026</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
             <name>varExistingDiscountType_Input</name>
             <value>
                 <elementReference>varExistingDiscountType</elementReference>
@@ -1321,6 +1404,24 @@
             <name>varIsApplicationAccepted_Input</name>
             <value>
                 <elementReference>varIsApplicationAccepted</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varTypeNumber_Input</name>
+            <value>
+                <stringValue>6026</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+            <value>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1336,7 +1437,7 @@
         <description>CC Code - VE ; No :6027</description>
         <name>Update_CC_Code_6027</name>
         <label>Update CC Code = VE (6027)</label>
-        <locationX>3889</locationX>
+        <locationX>3969</locationX>
         <locationY>138</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
@@ -1376,7 +1477,7 @@
         <description>Update CC Code =VHE  No:6028</description>
         <name>Update_CC_Code_6028</name>
         <label>Update CC Code =VHE (6028)</label>
-        <locationX>3507</locationX>
+        <locationX>3587</locationX>
         <locationY>125</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
@@ -1413,10 +1514,44 @@
         </outputAssignments>
     </subflows>
     <subflows>
+        <description>Update CC Code =IR</description>
+        <name>Update_CC_Code_IR</name>
+        <label>Update CC Code IR(6023)</label>
+        <locationX>1690</locationX>
+        <locationY>1994</locationY>
+        <flowName>CARE_UpdateCCCode_Flow</flowName>
+        <inputAssignments>
+            <name>varCareApplicationId_Input</name>
+            <value>
+                <elementReference>varCareApplicationId</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varIsApplicationAccepted_Input</name>
+            <value>
+                <elementReference>varIsApplicationAccepted</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varTypeNumber_Input</name>
+            <value>
+                <stringValue>6023</stringValue>
+            </value>
+        </inputAssignments>
+        <outputAssignments>
+            <assignToReference>varCCCodeDescription_Output</assignToReference>
+            <name>varCCCodeDescription_Output</name>
+        </outputAssignments>
+        <outputAssignments>
+            <assignToReference>varCCCodeLongDescription_Output</assignToReference>
+            <name>varCCCodeLongDescription_Output</name>
+        </outputAssignments>
+    </subflows>
+    <subflows>
         <description>Update CC Code M</description>
         <name>Update_CC_Code_M</name>
         <label>Update CC Code M(6050)</label>
-        <locationX>3682</locationX>
+        <locationX>3762</locationX>
         <locationY>128</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
         <inputAssignments>
@@ -1461,6 +1596,15 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <description>Billing Account Id from Scheduler.
+Note: Input will be list of Strings(But only one Account ID will be passed)</description>
+        <name>colBillingAccountID_Input</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
         <description>Only list of Application id can be passed to Flow from Apex.Expected only one record in this collection.</description>
         <name>colCareApplicationIDs_Input</name>
         <dataType>String</dataType>
@@ -1471,6 +1615,14 @@
     <variables>
         <description>Application Accepted or Not: Yes /No</description>
         <name>colIsApplicationAccepted_Input</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Collection Flag passed from scheduler (Batch Job).</description>
+        <name>colIsInvokedFromScheduler_Input</name>
         <dataType>String</dataType>
         <isCollection>true</isCollection>
         <isInput>true</isInput>
@@ -1520,7 +1672,7 @@
     </variables>
     <variables>
         <description>SA details of Other Discounted Premise (If customer has discount on other premise, Need to drop before giving discount</description>
-        <name>recColSAIdsOfOtherDiscountedPremise</name>
+        <name>recColSAIdsOfOtherPremiseDiscount</name>
         <dataType>SObject</dataType>
         <isCollection>true</isCollection>
         <isInput>false</isInput>
@@ -1544,6 +1696,14 @@
         <isInput>false</isInput>
         <isOutput>false</isOutput>
         <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
+        <description>Variable to hold Billing Account ID</description>
+        <name>varBillingAccountID</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <description>Main Application Id Passed From UI</description>
@@ -1641,6 +1801,17 @@
         </value>
     </variables>
     <variables>
+        <description>Flag : To check whether flow is invoked from Batch Process or Enrollment Form.</description>
+        <name>varIsInvokedFromScheduler</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
         <description>Temp Variable to to store Re certification Qualification - To be deleted and update Re certification logic</description>
         <name>varIsQualifiedForRecertification</name>
         <dataType>Boolean</dataType>
@@ -1653,18 +1824,18 @@
     </variables>
     <variables>
         <description>Person ID Passed from UI</description>
-        <name>varPersonID_Input</name>
+        <name>varPersonID</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>
-        <description>Hold the premise id in Loop</description>
+        <description>Hold the premise id Received from Apex( In case of Batch Process)</description>
         <name>varPremiseID</name>
         <dataType>String</dataType>
         <isCollection>false</isCollection>
-        <isInput>true</isInput>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>

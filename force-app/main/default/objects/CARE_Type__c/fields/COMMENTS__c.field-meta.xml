@@ -3,7 +3,7 @@
     <fullName>COMMENTS__c</fullName>
     <encryptionScheme>None</encryptionScheme>
     <externalId>false</externalId>
-    <label>COMMENTS</label>
+    <label>SPECIAL MESSAGE</label>
     <length>2000</length>
     <trackTrending>false</trackTrending>
     <type>LongTextArea</type>

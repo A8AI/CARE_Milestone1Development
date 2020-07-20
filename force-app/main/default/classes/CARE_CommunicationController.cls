@@ -13,26 +13,9 @@ Modification Log     :
 *                                                                          CARE Application: 
 ****************************************************************************************************************************************/
 
-public with sharing class CARE_CommunicationController {
-     @AuraEnabled(cacheable=false)
+public class CARE_CommunicationController {
     
-    public static List<DataTableWrapper> getPhoneDetails(String selectedPerId){
-      
-        List<DataTableWrapper> response = new List<DataTableWrapper>();
-        List<Account> resList = [select Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c from Account where Billing_Person_ID_EI__c =: selectedPerId LIMIT 1];
-         
-        DataTableWrapper obj = new DataTableWrapper();
-        for(Account res : resList){
-            obj.phone1           = res.Bus_Phone_1_EI__c;
-            obj.phone2           = res.Bus_Phone_2_EI__c;
-            obj.mobile1          = res.Primary_Contact_Mobile_EI__c;
-            response.add(obj);
-        }
-        
-        return response;
-    }
-    
-    public with sharing class DataTableWrapper{
+    public class DataTableWrapper{
         @AuraEnabled
         public String phone1 {get;set;}
         @AuraEnabled
@@ -45,29 +28,35 @@ public with sharing class CARE_CommunicationController {
         public String work {get;set;}
          @AuraEnabled
         public String mobile {get;set;}
-        /* @AuraEnabled
-        public String communication {get;set;}
-         @AuraEnabled
-        public String comDetails {get;set;}*/
         @AuraEnabled 
         public String sLabel {get;set;}
         @AuraEnabled 
         public String sValue {get;set;}
-        /*@AuraEnabled 
-        public String contactMethod {get;set;}
-        @AuraEnabled 
-        public String lang {get;set;}
-        @AuraEnabled 
-        public String id {get;set;} */
+    }
     
+    @AuraEnabled(cacheable=false)    
+    public static List<DataTableWrapper> getPhoneDetails(Id selectedAccountId){
+      
+        List<DataTableWrapper> response = new List<DataTableWrapper>();
+        List<Account> resList = [select Id, Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c from Account where id =: selectedAccountId];
+         system.debug('resList-->'+resList);
+        DataTableWrapper obj = new DataTableWrapper();
+        for(Account res : resList){
+            obj.phone1           = res.Bus_Phone_1_EI__c;
+            obj.phone2           = res.Bus_Phone_2_EI__c;
+            obj.mobile1          = res.Primary_Contact_Mobile_EI__c;
+            response.add(obj);
+        }
+        system.debug('response-->'+response);
+        return response;
     }
     
     @AuraEnabled
-    public static Boolean savePhoneDetails(DataTableWrapper updatePhoneRec, String perIdValue) {
+    public static Boolean savePhoneDetails(DataTableWrapper updatePhoneRec, Id selectedAccountId) {
         // Describe the SObject using its object type.
         Boolean bStatus;
         try{
-        List<Account> saveResList = [select id,Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c from Account where Billing_Person_ID_EI__c =: perIdValue];
+        List<Account> saveResList = [select id,Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c from Account where Id =: selectedAccountId];
         for(Account res : saveResList){
             //upRec.home          = res1.Bus_Phone_1_EI__c = ;
             res.Bus_Phone_1_EI__c= updatePhoneRec.home;
@@ -86,42 +75,9 @@ public with sharing class CARE_CommunicationController {
             system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
         }
 
-        
-        //System.debug('upRec---> '+upRec);
        return bStatus;
     }  
-    
-   /* @AuraEnabled(cacheable=true)
-    
-    public static List<DataTableWrapper> getCommunicationDetails(){
-      
-        List<DataTableWrapper> response2 = new List<DataTableWrapper>();
-        List<Account> resList2 = [select PREFERRED_CONTACT_METHOD__c  from Account where Billing_Person_ID_EI__c = '0123456001'LIMIT 1];
-         
-        DataTableWrapper obj = new DataTableWrapper();
-        for(Account res2 : resList2){
-            obj.communication           = res2.PREFERRED_CONTACT_METHOD__c ;
-            response2.add(obj);
-        }
-        
-        return response2;
-    } 
-    
-    @AuraEnabled
-    public static void saveCommunicationDetails(DataTableWrapper upRec2) {
-        // Describe the SObject using its object type.
-        List<Account> saveResList2 = [select id,PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c = '0123456001'];
-        for(Account res2 : saveResList2){
-            
-            res2.PREFERRED_CONTACT_METHOD__c = upRec2.comDetails;
-            update res2;
-            system.debug('res2:' +res2);g
-        }
-        
-        
-        System.debug('upRec---> '+upRec2);
-        //return upRec;
-    }  */
+ 
     
      @AuraEnabled(cacheable = true)
     public static List < DataTableWrapper > fetchPickListValue(sObject objInfo, string picklistFieldApi) {
@@ -129,13 +85,13 @@ public with sharing class CARE_CommunicationController {
         Schema.DescribeSObjectResult objDescribe = objInfo.getSObjectType().getDescribe();
  
         // Get a map of fields for the SObject
-        map < String, Schema.SObjectField > fieldMap = objDescribe.fields.getMap();
+        map <String, Schema.SObjectField> fieldMap = objDescribe.fields.getMap();
  
         // Get the list of picklist values for this field.
-        list < Schema.PicklistEntry > values = fieldMap.get(picklistFieldApi).getDescribe().getPickListValues();
+        list <Schema.PicklistEntry> values = fieldMap.get(picklistFieldApi).getDescribe().getPickListValues();
  
         // Create a list of wrapper to store picklist value/lable
-        list < DataTableWrapper > objWrapper = new list < DataTableWrapper > ();
+        list <DataTableWrapper> objWrapper = new list < DataTableWrapper > ();
  
         for (Schema.PicklistEntry a: values) {
             DataTableWrapper oFetchValueWrapper = new DataTableWrapper();
@@ -146,22 +102,22 @@ public with sharing class CARE_CommunicationController {
         return objWrapper;
  
     }
+    
     @AuraEnabled(cacheable = false)
-    public static List < Account > getCommDetails(String selectedPerId) {
+    public static List <Account> getCommDetails(Id selectedAccountId) {
         // Describe the SObject using its object type.
         //List<Account> ac = [select Billing_Person_ID_EI__c from Account where Billing_Person_ID_EI__c!=null ];
-        LIST<Account> acc = [Select Id, Billing_Person_ID_EI__c, NAME, PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: selectedPerId and PREFERRED_CONTACT_METHOD__c !=null LIMIT 1 ];
+        //LIST<Account> acc = [Select Id, Billing_Person_ID_EI__c, NAME, PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: selectedPerId and PREFERRED_CONTACT_METHOD__c !=null LIMIT 1 ];
+        LIST<Account> acc = [Select Id, Billing_Person_ID_EI__c, NAME, PREFERRED_CONTACT_METHOD__c from Account where id =: selectedAccountId];
         return acc;
-    }     
+    }   
+    
     @AuraEnabled
-    public static Boolean saveCommDetails(string updateCommRec, String perIdValue) {
+    public static Boolean saveCommDetails(string updateCommRec, Id selectedAccountId) {
         // Describe the SObject using its object type.
-       /* update upRec1;
-        System.debug('upRec1---> '+upRec1); */
-        //return upRec1;
         Boolean bStatus = false; 
         try{ 
-        List<Account> saveResList = [Select Id,PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: perIdValue];
+        List<Account> saveResList = [Select Id,PREFERRED_CONTACT_METHOD__c from Account where Id =: selectedAccountId];
         for(Account res : saveResList){
             //upRec.home          = res1.Bus_Phone_1_EI__c = ;
             res.PREFERRED_CONTACT_METHOD__c = updateCommRec;
@@ -186,16 +142,16 @@ public with sharing class CARE_CommunicationController {
        
     } 
     
-     @AuraEnabled(cacheable = false)
-    public static List < Account > getLangDetails(String selectedPerId) {
+    @AuraEnabled(cacheable = false)
+    public static List <Account> getLangDetails(Id selectedAccountId) {
         // Describe the SObject using its object type.
         //List<Account> ac = [select Billing_Person_ID_EI__c from Account where Billing_Person_ID_EI__c!=null ];
-        LIST<Account> acc = [Select Id,Languages_Other_Than_English_EI__c from Account where Billing_Person_ID_EI__c =: selectedPerId LIMIT 1 ];
+        LIST<Account> acc = [Select Id,Languages_Other_Than_English_EI__c from Account where Id =: selectedAccountId LIMIT 1 ];
         return acc;
     } 
 
     @AuraEnabled
-    public static Boolean saveLangDetails(string updateLangRec, String perIdValue) {
+    public static Boolean saveLangDetails(string updateLangRec, Id selectedAccountId) {
         // Describe the SObject using its object type.
        /* update upRec1;
         System.debug('upRec1---> '+upRec1); */
@@ -203,7 +159,7 @@ public with sharing class CARE_CommunicationController {
         Boolean bStatus = false; 
         
         try{
-                List<Account> saveResList = [Select Id,Languages_Other_Than_English_EI__c from Account where Billing_Person_ID_EI__c =: perIdValue];
+                List<Account> saveResList = [Select Id,Languages_Other_Than_English_EI__c from Account where Id =: selectedAccountId];
             for(Account res : saveResList){
                 //upRec.home          = res1.Bus_Phone_1_EI__c = ;
                 res.Languages_Other_Than_English_EI__c = updateLangRec;

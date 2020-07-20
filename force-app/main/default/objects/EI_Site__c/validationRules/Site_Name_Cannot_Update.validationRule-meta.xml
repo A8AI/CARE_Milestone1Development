@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Site_Name_Cannot_Update</fullName>
+    <active>true</active>
+    <description>Site name cannot be changed by anyone except integration user profile and system administrator.</description>
+    <errorConditionFormula>AND(ISCHANGED(Name),NOT(OR($Profile.Name==&apos;System Administrator&apos;,$Profile.Name==&apos;Integration User&apos;, $Permission.EV_Appl_Approver_permission_SA_Object )))</errorConditionFormula>
+    <errorDisplayField>Name</errorDisplayField>
+    <errorMessage>Site name cannot be changed</errorMessage>
+</ValidationRule>

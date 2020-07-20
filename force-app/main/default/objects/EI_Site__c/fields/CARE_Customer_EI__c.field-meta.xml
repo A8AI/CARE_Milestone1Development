@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_Customer_EI__c</fullName>
+    <externalId>false</externalId>
+    <formula>if ( ISBLANK(Care_Start_Date_EI__c) &amp;&amp; ISBLANK(CARE_Last_Drop_Date_EI__c) &amp;&amp; ISBLANK( CARE_Recert_Date_EI__c) &amp;&amp; CARE_Recently_PEVed_EI__c = false, false,  
+if ( !ISBLANK(Care_Start_Date_EI__c) &amp;&amp; !ISBLANK(CARE_Last_Drop_Date_EI__c) &amp;&amp;  Care_Start_Date_EI__c &gt; CARE_Last_Drop_Date_EI__c, true, 
+if ( !ISBLANK(CARE_Last_Drop_Date_EI__c) &amp;&amp; !ISBLANK(CARE_Recert_Date_EI__c) &amp;&amp; CARE_Recert_Date_EI__c &gt; CARE_Last_Drop_Date_EI__c, true, 
+if ( !ISBLANK(Care_Start_Date_EI__c)    &amp;&amp; ISBLANK(CARE_Last_Drop_Date_EI__c), true, 
+if ( !ISBLANK(CARE_Recert_Date_EI__c)   &amp;&amp; ISBLANK(CARE_Last_Drop_Date_EI__c), true, 
+if ( ISBLANK(CARE_Last_Drop_Date_EI__c) &amp;&amp; CARE_Recently_PEVed_EI__c = true, true,  
+false 
+)  
+)
+)
+)
+)
+)</formula>
+    <label>CARE Customer</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

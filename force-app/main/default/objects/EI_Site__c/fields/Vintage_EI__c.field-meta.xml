@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vintage_EI__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Use only as applicable, per program. If not applicable, choose OTR No Vintage Available</inlineHelpText>
+    <label>Vintage</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>75 - Built before 1978</fullName>
+                <default>false</default>
+                <label>75 - Built before 1978</label>
+            </value>
+            <value>
+                <fullName>85 - Built 1978 - 1992</fullName>
+                <default>false</default>
+                <label>85 - Built 1978 - 1992</label>
+            </value>
+            <value>
+                <fullName>96 - Built 1993 - 2001</fullName>
+                <default>false</default>
+                <label>96 - Built 1993 - 2001</label>
+            </value>
+            <value>
+                <fullName>03 - Built 2002 - 2005</fullName>
+                <default>false</default>
+                <label>03 - Built 2002 - 2005</label>
+            </value>
+            <value>
+                <fullName>07 - Built 2006 - 2009</fullName>
+                <default>false</default>
+                <label>07 - Built 2006 - 2009</label>
+            </value>
+            <value>
+                <fullName>11 - Built 2010 - 2013</fullName>
+                <default>false</default>
+                <label>11 - Built 2010 - 2013</label>
+            </value>
+            <value>
+                <fullName>14 - Built after 2013</fullName>
+                <default>false</default>
+                <label>14 - Built after 2013</label>
+            </value>
+            <value>
+                <fullName>M1 - Mobile Home - Before 1976</fullName>
+                <default>false</default>
+                <label>M1 - Mobile Home - Before 1976</label>
+            </value>
+            <value>
+                <fullName>M2 - Mobile Home - 1976 - 1994</fullName>
+                <default>false</default>
+                <label>M2 - Mobile Home - 1976 - 1994</label>
+            </value>
+            <value>
+                <fullName>M3 - Mobile Home - 1995 - 2005</fullName>
+                <default>false</default>
+                <label>M3 - Mobile Home - 1995 - 2005</label>
+            </value>
+            <value>
+                <fullName>M4 - Mobile Home - After 2005</fullName>
+                <default>false</default>
+                <label>M4 - Mobile Home - After 2005</label>
+            </value>
+            <value>
+                <fullName>EX</fullName>
+                <default>false</default>
+                <label>EX</label>
+            </value>
+            <value>
+                <fullName>ANY</fullName>
+                <default>false</default>
+                <label>ANY</label>
+            </value>
+            <value>
+                <fullName>Old - Mobile Home - Before 1995</fullName>
+                <default>false</default>
+                <label>Old - Mobile Home - Before 1995</label>
+            </value>
+            <value>
+                <fullName>Rec - Mobile Home - After 2015</fullName>
+                <default>false</default>
+                <label>Rec - Mobile Home - After 2015</label>
+            </value>
+            <value>
+                <fullName>Old - Built - Before 2002</fullName>
+                <default>false</default>
+                <label>Old - Built - Before 2002</label>
+            </value>
+            <value>
+                <fullName>Rec - Built - After 2017</fullName>
+                <default>false</default>
+                <label>Rec - Built - After 2017</label>
+            </value>
+            <value>
+                <fullName>Ex - Built 2002 - 2016</fullName>
+                <default>false</default>
+                <label>Ex - Built 2002 - 2016</label>
+            </value>
+            <value>
+                <fullName>Ex - Mobile Home - 1995 - 2014</fullName>
+                <default>false</default>
+                <label>Ex - Mobile Home - 1995 - 2014</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

@@ -63,6 +63,21 @@
         </values>
     </picklistValues>
     <picklistValues>
+        <picklist>CARE_Alternate_Phone_Type__c</picklist>
+        <values>
+            <fullName>Home</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Mobile</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Work</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
         <picklist>CARE_Phone_Type__c</picklist>
         <values>
             <fullName>Home</fullName>
@@ -216,6 +231,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>PEV HU</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>PEV Receipt</fullName>
             <default>false</default>
         </values>
@@ -277,7 +296,7 @@
     <picklistValues>
         <picklist>QUALIFIED_BY__c</picklist>
         <values>
-            <fullName>Catagorical</fullName>
+            <fullName>Categorical</fullName>
             <default>false</default>
         </values>
         <values>
@@ -313,6 +332,10 @@
         </values>
         <values>
             <fullName>CARE MyEnergy</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE New_Mover</fullName>
             <default>false</default>
         </values>
         <values>

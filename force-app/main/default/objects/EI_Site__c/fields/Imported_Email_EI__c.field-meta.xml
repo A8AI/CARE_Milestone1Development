@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Imported_Email_EI__c</fullName>
+    <description>Exact text of the imported email field. May or may not contain a valid email address.  If valid, will be transferred into the &apos;main&apos; email field via a workflow field update.</description>
+    <encryptionScheme>CaseSensitiveDeterministicEncryption</encryptionScheme>
+    <externalId>false</externalId>
+    <inlineHelpText>Exact text of the imported email field. May or may not contain a valid email address.  If valid, will be transferred into the &apos;main&apos; email field via a workflow field update.</inlineHelpText>
+    <label>Imported Email</label>
+    <length>80</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

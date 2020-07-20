@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Max_kW_Demand_Rollup_EI__c</fullName>
+    <description>Rolls up the &quot;Max kW Demand&quot; field from the related Usages records</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Max kW Demand from the related Usages records.</inlineHelpText>
+    <label>Max kW Demand</label>
+    <summarizedField>EI_Usage__c.Max_kW_Demand_EI__c</summarizedField>
+    <summaryForeignKey>EI_Usage__c.Site_EI__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Streetlight_SA_restrictions</fullName>
+    <active>true</active>
+    <description>If the New Streetlight SA check box is checked and Profile is not Syst Admin or Financing Manager then trigger rule</description>
+    <errorConditionFormula>IF (
+
+AND (
+$Profile.Name = &quot;OBF Application Managers&quot;,
+New_Streetlight_SA_EI__c = TRUE
+),
+FALSE, 
+
+IF(
+AND (
+OR($Profile.Name = &quot;System Administrator&quot;,
+$Profile.Name = &quot;Technology Enablement&quot;),
+New_Streetlight_SA_EI__c = TRUE
+),
+FALSE, 
+
+
+IF(
+New_Streetlight_SA_EI__c = TRUE,
+
+TRUE,FALSE
+
+)))</errorConditionFormula>
+    <errorMessage>You must be a System Admin or Financing Manager to create a New Streetlight SA</errorMessage>
+</ValidationRule>

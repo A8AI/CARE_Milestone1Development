@@ -1,5 +1,6 @@
 //#region Import
 import { LightningElement, track, api } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import createCareAppImageList from '@salesforce/apex/CARE_ImageUploadController.createCareAppImageList';
 import getCareAppImageList from '@salesforce/apex/CARE_ImageUploadController.getCareAppImageList';
 import deleteCareAppImageList from '@salesforce/apex/CARE_ImageUploadController.deleteCareAppImageList';
@@ -44,7 +45,7 @@ const columnsViewOnly = [
 ];
 //#endregion
 
-export default class Care_ImageUpload extends LightningElement {
+export default class Care_ImageUpload extends NavigationMixin(LightningElement) {
     //#region Variables
     @api recordId;
     @api viewOnly;// = false;
@@ -290,10 +291,10 @@ export default class Care_ImageUpload extends LightningElement {
         const allInputValid = [...this.template.querySelectorAll('lightning-input')]
             .reduce((validSoFar, inputCmp) => {
                 var value = inputCmp.value.trim();
-                if (!(value.length === 8 || value.length === 10)) {
+                if (!(value.length === 8 || value.length === 15 || value.length === 18)) {
                     inputCmp.setCustomValidity(this.label.CARE_ImageIdLengthMismatchMsg);
                 }
-                else if (!(/^\d+$/.test(value))) {
+                else if (value.length === 8 && !(/^\d+$/.test(value))) {
                     inputCmp.setCustomValidity(this.label.CARE_ImageIdPatternMismatchMsg);
                 }
                 else {
@@ -345,10 +346,10 @@ export default class Care_ImageUpload extends LightningElement {
         const allInputValid = [...this.template.querySelectorAll('lightning-input')]
             .reduce((validSoFar, inputCmp) => {
                 var value = inputCmp.value.trim();
-                if (!(value.length === 8 || value.length === 10)) {
+                if (!(value.length === 8 || value.length === 10 || value.length === 18)) {
                     inputCmp.setCustomValidity(this.label.CARE_ImageIdLengthMismatchMsg);
                 }
-                else if (!(/^\d+$/.test(value))) {
+                else if (value.length === 8 && !(/^\d+$/.test(value))) {
                     inputCmp.setCustomValidity(this.label.CARE_ImageIdPatternMismatchMsg);
                 }
                 else {
@@ -392,16 +393,43 @@ export default class Care_ImageUpload extends LightningElement {
     handlePreview(event) {
         this.startIdx = Number(event.target.dataset.id);
 
-        let sId = event.target.dataset.api;
-        if (sId !== '' && sId !== undefined) {
-            this.sectionName = 'UploadedImageID';
-            this.rowId = sId;
+        //generate the Url
+        let sImgIDVal = this.imageList[this.startIdx].sImageId;
+        if(sImgIDVal.length === 8){ //to redirect to Care_App_Image_List record page
+            let sId = event.target.dataset.api;
+            if (sId !== '' && sId !== undefined) {
+                this.sectionName = 'UploadedImageID';
+                this.rowId = sId;
+            }
+    
+            // var baseURL = window.location.hostname;
+            // baseURL = 'https://' + baseURL + '/lightning/r/Care_App_Image_List__c/' + this.rowId + '/view';
+            // window.open(baseURL, '_blank');
+            this[NavigationMixin.GenerateUrl]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: this.rowId,
+                    actionName: 'view',
+                },
+            }).then(url => {
+                window.open(url);
+            });
         }
+        else{ //to redirect to Case record page because the saved image ID is 15/18 digit Salesforce Case Id
+            // var baseURL = window.location.hostname;
+            // baseURL = 'https://' + baseURL + '/lightning/r/Case/' + sImgIDVal + '/view';
+            // window.open(baseURL, '_blank');
 
-        var baseURL = window.location.hostname;
-        baseURL = 'https://' + baseURL + '/lightning/r/Care_App_Image_List__c/' + this.rowId + '/view';
-        window.open(baseURL, '_blank');
-
+            this[NavigationMixin.GenerateUrl]({
+                type: 'standard__recordPage',
+                attributes: {
+                    recordId: sImgIDVal,
+                    actionName: 'view',
+                },
+            }).then(url => {
+                window.open(url);
+            });
+        }
     }
     //#endregion
 

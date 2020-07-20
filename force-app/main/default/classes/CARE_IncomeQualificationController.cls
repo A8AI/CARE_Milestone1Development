@@ -50,7 +50,7 @@ public with sharing class CARE_IncomeQualificationController {
                 if(null != setHouseholds){
                     if(setHouseholds.contains(iNumOfHouseholds)){
                         MinMaxWrapper minMaxWrapper = minMaxWrapperMap.get(iNumOfHouseholds);
-                        if(dTotalIncome > minMaxWrapper.minRange && dTotalIncome < minMaxWrapper.maxRange){
+                        if(dTotalIncome >= minMaxWrapper.minRange && dTotalIncome <= minMaxWrapper.maxRange){
                             sEnrollmentType = sEnrollType;
                             break;
                         }
@@ -65,7 +65,7 @@ public with sharing class CARE_IncomeQualificationController {
                             Integer iRemaining = iNumOfHouseholds - iSecondMaxValInSet;
                             Decimal dMinEligibleRange = (maxWrapper.minRange == 0) ? 0 : (secondMaxWrapper.minRange + (iRemaining * maxWrapper.minRange));
                                 Decimal dMaxEligibleIncome = secondMaxWrapper.maxRange + (iRemaining * maxWrapper.maxRange);
-                            if(dTotalIncome > dMinEligibleRange && dTotalIncome < dMaxEligibleIncome){
+                            if(dTotalIncome >= dMinEligibleRange && dTotalIncome <= dMaxEligibleIncome){
                                 sEnrollmentType = sEnrollType;
                                 break;
                             }

@@ -11,29 +11,59 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Categorical</fullName>
+                <fullName>Award Letter Categorical</fullName>
                 <default>false</default>
-                <label>Categorical</label>
+                <label>Award Letter Categorical</label>
             </value>
             <value>
-                <fullName>Single Amt</fullName>
+                <fullName>1040 X</fullName>
                 <default>false</default>
-                <label>Single Amt</label>
+                <label>1040 X</label>
             </value>
             <value>
-                <fullName>Other</fullName>
+                <fullName>1099</fullName>
                 <default>false</default>
-                <label>Other</label>
+                <label>1099</label>
             </value>
             <value>
-                <fullName>IRS Transcript</fullName>
+                <fullName>Transcript</fullName>
                 <default>false</default>
-                <label>IRS Transcript</label>
+                <label>Transcript</label>
             </value>
             <value>
-                <fullName>IRS 1040</fullName>
+                <fullName>IRS 1040 2019</fullName>
                 <default>false</default>
-                <label>IRS 1040</label>
+                <label>IRS 1040 2019</label>
+            </value>
+            <value>
+                <fullName>Award Letter Categorical Fixed</fullName>
+                <default>false</default>
+                <label>Award Letter Categorical Fixed</label>
+            </value>
+            <value>
+                <fullName>Bank Statement</fullName>
+                <default>false</default>
+                <label>Bank Statement</label>
+            </value>
+            <value>
+                <fullName>Multi Pay Periods Two</fullName>
+                <default>false</default>
+                <label>Multi Pay Periods Two</label>
+            </value>
+            <value>
+                <fullName>Multi Pay Periods</fullName>
+                <default>false</default>
+                <label>Multi Pay Periods</label>
+            </value>
+            <value>
+                <fullName>IRS 1040 SR</fullName>
+                <default>false</default>
+                <label>IRS 1040 SR</label>
+            </value>
+            <value>
+                <fullName>IRS 1040 2018</fullName>
+                <default>false</default>
+                <label>IRS 1040 2018</label>
             </value>
         </valueSetDefinition>
     </valueSet>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Master_Meter</fullName>
+    <columns>NAME</columns>
+    <columns>Account_EI__c</columns>
+    <columns>Billing_Account_ID_EI__c</columns>
+    <columns>Cust_Primary_Name_EI__c</columns>
+    <columns>Rate_Schedule_EI__c</columns>
+    <columns>X18_Digit_Salesforce_ID__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>MasterMeter__c</field>
+        <operation>equals</operation>
+        <value>Y</value>
+    </filters>
+    <label>Master Meter</label>
+</ListView>

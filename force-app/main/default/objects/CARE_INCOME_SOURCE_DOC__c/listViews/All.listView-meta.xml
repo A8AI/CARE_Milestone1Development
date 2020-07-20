@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>DISCOUNT_LENGTH_IN_DAYS__c</columns>
+    <columns>SOURCE_NO__c</columns>
+    <columns>DOC_TYPE_NO__c</columns>
+    <columns>FORM_TYPE_NO__c</columns>
+    <columns>HAS_PAY_PERIOD__c</columns>
+    <columns>EXTERNAL_ID__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

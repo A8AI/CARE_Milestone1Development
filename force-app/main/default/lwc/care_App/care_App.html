@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 7/2/2020, 9:12:13 PM
+  @Last Modified On   : 7/10/2020, 1:41:02 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
@@ -39,8 +39,8 @@
                     </div>
 
                     <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
-                        <lightning-input label="Street" type="text" data-id="streetField" autocomplete="off"
-                            onchange={handleChange}></lightning-input>
+                        <lightning-input label="Street" min-length="5" type="text" data-id="streetField" autocomplete="off"
+                            onchange={handleChange} message-when-too-short="Please enter atleast 5 characters"></lightning-input>
                     </div>
                     <div class="slds-p-left_small slds-p-top_xx-small slds-size_1-of-8">
                         <lightning-input label="Space" type="text" data-id="spaceField" autocomplete="off"
@@ -59,7 +59,7 @@
 
                 <div class="slds-grid slds-wrap">
                     <div class="slds-p-left_small slds-p-top_small slds-size_1-of-8">
-                        <c-care_-search-auto-complete name="SAIDField" input-label="SAID" object-api-name="EI_Site__c"
+                        <c-care_-search-auto-complete name="SAIDField" input-label="SA ID" object-api-name="EI_Site__c"
                             field-api-name="SAID_EI__c" onrecordselect={handleRecordSelection}
                             onhandletyping={handletyping} class="slds-m-bottom_small c-layout__half-width">
                         </c-care_-search-auto-complete>
@@ -155,12 +155,13 @@
                     <div if:true={bCustomerDetailFlag} class="slds-float_right">
                         <table>
                             <tr>
-                            <td><c-care_-send-app s-applicant-name={sSelectedCustName} s-billing-account-id={sSelectedBillingAccId}  s-account-id={sSelectedEIAccountId} s-person-id={sSelectedPersonId}></c-care_-send-app></td>
-                            <td> <c-care_-on-demand-drop s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag=false></c-care_-on-demand-drop></td>
-                            <td> <c-care_-transfer s-selected-per-id={sSelectedPersonId}></c-care_-transfer></td>
-                            <td><c-care_-adjustment s-selected-per-id={sSelectedPersonId}></c-care_-adjustment></td>
-                            <td><c-care_-add-elec-gas s-selected-per-id={sSelectedPersonId}></c-care_-add-elec-gas></td>
-                            <td><c-care_-reinstate s-selected-per-id={sSelectedPersonId}></c-care_-reinstate></td>
+                            <td><c-care_-send-app  onhistorytabrefreshfromchild={historyTabRefreshFromChild}  s-applicant-name={sSelectedCustName} s-billing-account-id={sSelectedBillingAccId}  s-account-id={sSelectedEIAccountId} s-person-id={sSelectedPersonId}></c-care_-send-app></td>
+                            <td><c-care_-on-demand-p-e-v   onhistorytabrefreshfromchild={historyTabRefreshFromChild} s-applicant-name={sSelectedCustName} s-billing-account-id={sSelectedBillingAccId}  s-account-id={sSelectedEIAccountId} s-person-id={sSelectedPersonId}></c-care_-on-demand-p-e-v></td>
+                            <td> <c-care_-on-demand-drop  onhistorytabrefreshfromchild={historyTabRefreshFromChild}  s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag=false></c-care_-on-demand-drop></td>
+                            <td> <c-care_-transfer onhistorytabrefreshfromchild={historyTabRefreshFromChild} s-selected-per-id={sSelectedPersonId}></c-care_-transfer></td>
+                            <td><c-care_-adjustment onhistorytabrefreshfromchild={historyTabRefreshFromChild} s-selected-per-id={sSelectedPersonId}></c-care_-adjustment></td>
+                            <td><c-care_-add-elec-gas onhistorytabrefreshfromchild={historyTabRefreshFromChild} s-selected-per-id={sSelectedPersonId}></c-care_-add-elec-gas></td>
+                            <td><c-care_-reinstate onhistorytabrefreshfromchild={historyTabRefreshFromChild} s-selected-per-id={sSelectedPersonId}></c-care_-reinstate></td>
                            
                             </tr>
                         </table>
@@ -172,18 +173,24 @@
                 <div class="slds-col slds-size_3-of-3">                
                     <lightning-tabset>
                         <lightning-tab label="History" onactive={refreshTabData}>
-                            <c-care_-history s-live-call={sHistoryRefresh} s-selected-history-per-id={sSelectedPersonId} list-selected-history-prem-ids={listSelectedPremId} ></c-care_-history>
+                            <c-care_-history s-live-call={sHistoryRefresh} s-selected-history-per-id={sSelectedPersonId} 
+                            list-selected-history-prem-ids={listSelectedPremId} ></c-care_-history>
                             
                         </lightning-tab>
 
                         <lightning-tab label="PEV" onactive={refreshTabData}>
-                            <c-care_-pev-hu s-selected-per-id={sSelectedPersonId} list-selected-prem-ids=""></c-care_-pev-hu>
+                            <c-care_-pev-hu s-selected-applicant-name={sSelectedCustName} s-selected-acct-id={sSelectedEIAccountId} 
+                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} 
+                            b-acc-on-probation={sSelectedProbStatus} s-selected-app-id="tab" s-live-call={sHistoryRefresh} view-only="false"></c-care_-pev-hu>
                         </lightning-tab>
 
 
                         <lightning-tab label="Enroll" onactive={refreshTabData} >
 
-                            <c-care_-enrollment s-selected-name={sSelectedCustName} s-selected-billing-acct-id={sSelectedBillingAccId} s-live-app-call={sHistoryRefresh} s-selected-app-id="tab" s-selected-acct-id={sSelectedEIAccountId} s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} b-modal-flag={bCallFromModal} ></c-care_-enrollment>
+                            <c-care_-enrollment s-selected-name={sSelectedCustName} s-selected-billing-acct-id={sSelectedBillingAccId} 
+                            s-live-app-call={sHistoryRefresh} s-selected-app-id="tab" s-selected-acct-id={sSelectedEIAccountId} 
+                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} 
+                            b-modal-flag={bCallFromModal} ></c-care_-enrollment>
 
                         </lightning-tab>
                     </lightning-tabset>

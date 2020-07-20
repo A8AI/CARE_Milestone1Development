@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ESA_CARE_PEV_High_Usage</fullName>
+    <columns>NAME</columns>
+    <columns>City_EI__c</columns>
+    <columns>County_EI__c</columns>
+    <columns>Zip_Code_EI__c</columns>
+    <columns>ESA_Last_Treated_EI__c</columns>
+    <columns>CARE_HU_Certification_Date_EI__c</columns>
+    <columns>Care_Enrolled_EI__c</columns>
+    <columns>Care_Start_Date_EI__c</columns>
+    <columns>High_Usage_Gas_EI__c</columns>
+    <columns>High_Usage_Electric_EI__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Care_Enrolled_EI__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>CARE_HU_Certification_Date_EI__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <label>ESA CARE PEV High Usage</label>
+    <language>en_US</language>
+    <sharedTo>
+        <group>ESA_Externals_w_o_CBO</group>
+        <group>ESA_Program_Managers</group>
+    </sharedTo>
+</ListView>

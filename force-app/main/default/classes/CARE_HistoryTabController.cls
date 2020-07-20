@@ -20,6 +20,8 @@ public with sharing class CARE_HistoryTabController {
         @AuraEnabled
         public String sApplicationName {get; set;}
         @AuraEnabled
+        public String sIdTable {get;set;}
+        @AuraEnabled
         public String sId {get;set;}
         @AuraEnabled
         public String sSAID {get;set;}
@@ -79,7 +81,7 @@ public with sharing class CARE_HistoryTabController {
         try{
             if(String.isBlank(recordId)){
                 listcareAppRecordsNList = [SELECT ID,NAME, APPLICATION_STATUS__c, RECEIVED_DATE__c, PROCESSED_DATE__c, CARE_CI_CC__r.DESCR254__c,
-                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_CONTACT_DESC2__c,
+                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_Contact_Type_No__c, CCB_CONTACT_DESC2__c,
                                                           CARE_CI_CC__r.USER_ID__c,SOURCE_CHANNEL_TYPE__c, CreatedDate,
                                                           (SELECT SA_ID__c, START_DATE__c, END_DATE__c , Service_Agreement__r.Svc_Type_Code_EI__c,
                                                            APPLICATION__c, RETRO_START_DATE__c, RETRO_END_DATE__c, CC_CL_CD__c, CCB_CONTACT_TYPE__c  FROM CARE_App_Enrolled_SA__r)
@@ -89,7 +91,7 @@ public with sharing class CARE_HistoryTabController {
             }
             else if(String.isNotBlank(recordId)){
                 listcareAppRecordsNList = [SELECT ID,NAME, APPLICATION_STATUS__c, RECEIVED_DATE__c, PROCESSED_DATE__c, CARE_CI_CC__r.DESCR254__c,
-                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_CONTACT_DESC2__c,
+                                                          CCB_CONTACT_CODE__c, CCB_CONTACT_CODE2__c, CCB_CONTACT_DESC__c, CCB_Contact_Type_No__c, CCB_CONTACT_DESC2__c,
                                                           CARE_CI_CC__r.USER_ID__c,SOURCE_CHANNEL_TYPE__c, CreatedDate,
                                                           (SELECT SA_ID__c, START_DATE__c, END_DATE__c , Service_Agreement__r.Svc_Type_Code_EI__c,
                                                            APPLICATION__c, RETRO_START_DATE__c, RETRO_END_DATE__c, CC_CL_CD__c, CCB_CONTACT_TYPE__c  FROM CARE_App_Enrolled_SA__r)
@@ -102,12 +104,13 @@ public with sharing class CARE_HistoryTabController {
             for( CARE_Application__c listcareAppRecords :listcareAppRecordsNList ){
                 
                 if (listcareAppRecords.CARE_App_Enrolled_SA__r != null && listcareAppRecords.CARE_App_Enrolled_SA__r.size()>0)
-                {
+                {   integer cnt = 0; 
                     for (CARE_App_Enrolled_SA__C listCareEnrolledRecords : listcareAppRecords.CARE_App_Enrolled_SA__r)
                     {
                         HistoryListWrapper objRec = new HistoryListWrapper ();
                         objRec.sApplicationName = listcareAppRecords.Name;
                         objRec.sId =  listcareAppRecords.ID;
+                        objRec.sIdTable =  listcareAppRecords.ID + '@@@' + cnt;
                         objRec.dReceiveDate = listcareAppRecords.PROCESSED_DATE__c == null ? listcareAppRecords.RECEIVED_DATE__c : listcareAppRecords.PROCESSED_DATE__c;
                         objRec.sDiscountType = listCareEnrolledRecords.CC_CL_CD__c; //listcareAppRecords.CC_CL_CD__c;
                         objRec.sDescription =  listcareAppRecords.CCB_CONTACT_DESC2__c == null ? listcareAppRecords.CCB_CONTACT_DESC__c : listcareAppRecords.CCB_CONTACT_DESC2__c;                        
@@ -120,7 +123,7 @@ public with sharing class CARE_HistoryTabController {
                         objRec.sSAType = listCareEnrolledRecords.Service_Agreement__r.Svc_Type_Code_EI__c;
                         objRec.dStartDate = listCareEnrolledRecords.RETRO_START_DATE__C == null? listCareEnrolledRecords.START_DATE__c : listCareEnrolledRecords.RETRO_START_DATE__C; 
                         objRec.dEndDate = listCareEnrolledRecords.END_DATE__c;
-                        objRec.sTypeNo = listCareEnrolledRecords.CCB_CONTACT_TYPE__c; 
+                        objRec.sTypeNo = listcareAppRecords.CCB_Contact_Type_No__c != '' ? listcareAppRecords.CCB_Contact_Type_No__c : ''; 
                         //objRec.dEndDate = listCareEnrolledRecords.RETRO_END_DATE__c == null? listCareEnrolledRecords.SA_END_DATE__c : listCareEnrolledRecords.RETRO_END_DATE__c;
                         //format text based on the created date
                         objRec.sFormatText = listcareAppRecords.CreatedDate >= dDateBeforeTwoYears ? 'slds-text-title_bold':'slds-text-color_weak';
@@ -136,16 +139,19 @@ public with sharing class CARE_HistoryTabController {
                         else{
                             objRec.bDeleteButton = false;
                         }                                               
-                        listHistoryRecords.add(objRec);                         
+                        listHistoryRecords.add(objRec);
+                        cnt++;
                     }
                 } 
                 else {
                     HistoryListWrapper objRec = new HistoryListWrapper ();
                     objRec.sApplicationName = listcareAppRecords.Name;
                     objRec.sId =  listcareAppRecords.ID;
+                    objRec.sIdTable =  listcareAppRecords.ID;
                     objRec.dReceiveDate = listcareAppRecords.PROCESSED_DATE__c == null ? listcareAppRecords.RECEIVED_DATE__c : listcareAppRecords.PROCESSED_DATE__c;
                     objRec.sDescription =  listcareAppRecords.CCB_CONTACT_DESC2__c == null ? listcareAppRecords.CCB_CONTACT_DESC__c : listcareAppRecords.CCB_CONTACT_DESC2__c;              
                     objRec.sContact =  listcareAppRecords.CCB_CONTACT_CODE2__c == null? listcareAppRecords.CCB_CONTACT_CODE__c : listcareAppRecords.CCB_CONTACT_CODE2__c;  
+                    objRec.sTypeNo = listcareAppRecords.CCB_Contact_Type_No__c != '' ? listcareAppRecords.CCB_Contact_Type_No__c : ''; 
                     objRec.sCCBComment =  listcareAppRecords.CARE_CI_CC__r.DESCR254__c; 
                     objRec.sCommittedBy =  listcareAppRecords.CARE_CI_CC__r.USER_ID__c; 
                     objRec.sAppSource =  listcareAppRecords.SOURCE_CHANNEL_TYPE__c;  
@@ -202,6 +208,8 @@ public with sharing class CARE_HistoryTabController {
         public static string getSpecialMessage(String sApplicationNo, String sTypeNo)
     {
         String sSpecialMessage='';
+        system.debug('CARE sApplicationNo----->'+sApplicationNo);
+        system.debug('CARE sTypeNo----->'+sTypeNo);
         
         try{
             String scomments;
@@ -216,14 +224,27 @@ public with sharing class CARE_HistoryTabController {
               scomments=[SELECT COMMENTS__c FROM CARE_Type__c 
                          WHERE TYPE_CODE__c=:careAppObj.CCB_CONTACT_CODE__c LIMIT 1].COMMENTS__c;
             }
-             
+             system.debug('scomments is----->'+scomments);
             if(string.isNotBlank(scomments)){
-             scomments = scomments.replace(CARE_Constants.CARE_DISCOUNT_TYPE_PLACEHOLDER, careAppObj.CC_CL_CD__c);
-             sSpecialMessage = scomments.replace(CARE_Constants.CARE_CC_DATE_PLACEHOLDER, careAppObj.PROCESSED_DATE__c.format());
+                if(scomments.contains(CARE_Constants.CARE_DISCOUNT_TYPE_PLACEHOLDER)){
+                    sSpecialMessage = scomments.replace(CARE_Constants.CARE_DISCOUNT_TYPE_PLACEHOLDER, careAppObj.CC_CL_CD__c);
+             		//sSpecialMessage = scomments.replace(CARE_Constants.CARE_CC_DATE_PLACEHOLDER, careAppObj.PROCESSED_DATE__c.format());
+                }
+                else if(scomments.contains(CARE_Constants.CARE_CC_DATE_PLACEHOLDER)){
+                    sSpecialMessage = scomments.replace(CARE_Constants.CARE_CC_DATE_PLACEHOLDER, careAppObj.PROCESSED_DATE__c.format());
+                } 
+                else if(scomments.contains(CARE_Constants.CARE_DISCOUNT_TYPE_PLACEHOLDER) && scomments.contains(CARE_Constants.CARE_CC_DATE_PLACEHOLDER)){
+                    scomments = scomments.replace(CARE_Constants.CARE_DISCOUNT_TYPE_PLACEHOLDER, careAppObj.CC_CL_CD__c);
+                    sSpecialMessage = scomments.replace(CARE_Constants.CARE_CC_DATE_PLACEHOLDER, careAppObj.PROCESSED_DATE__c.format());
+                }
+                else{
+                    sSpecialMessage = scomments;
+                }
             }
             else{
              sSpecialMessage = CARE_Constants.CARE_NO_SPECIAL_MSG;
             }
+            system.debug('sSpecialMessage is----->'+sSpecialMessage);
         }
           catch(Exception ex){
           system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());

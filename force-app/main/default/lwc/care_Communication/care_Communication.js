@@ -18,6 +18,7 @@ export default class Care_Communication extends LightningElement {
     showLoadingSpinner = false;
     @api sSelectedPerId;
     @api listSelectedPremIds = [];
+    @api sSelectedAccId;
 
     @track error;
     @track phoneDetails = {
@@ -85,14 +86,14 @@ export default class Care_Communication extends LightningElement {
         this.bShowModal = true;
         this.showLoadingSpinner = true;
 
-        getPhoneDetails({ selectedPerId: this.sSelectedPerId })
+        getPhoneDetails({ selectedAccountId: this.sSelectedAccId })
             .then(data => {
-                this.maskedPhoneDetails.home = phoneMask(data[0].phone1);
-                this.maskedPhoneDetails.work = phoneMask(data[0].phone2);
-                this.maskedPhoneDetails.mobile = phoneMask(data[0].mobile1);
-                console.log('Data1:', data);
-                data = [];
-
+                if(data.length > 0){
+                    this.maskedPhoneDetails.home = phoneMask(data[0].phone1);
+                    this.maskedPhoneDetails.work = phoneMask(data[0].phone2);
+                    this.maskedPhoneDetails.mobile = phoneMask(data[0].mobile1);
+                    console.log('Data1:', data);
+                }
                 this.showLoadingSpinner = false;
 
             })
@@ -118,7 +119,7 @@ export default class Care_Communication extends LightningElement {
     openCommunicationModal() {
         this.cShowModal = true;
         this.showLoadingSpinner = true;
-        getCommDetails({ selectedPerId: this.sSelectedPerId })
+        getCommDetails({ selectedAccountId: this.sSelectedAccId })
             .then(data => {
                 if (data.hasOwnProperty(0)) {
                     this.selectedVal = data;
@@ -145,11 +146,11 @@ export default class Care_Communication extends LightningElement {
     openLanguageModal() {
         this.dShowModal = true;
         this.showLoadingSpinner = true;
-        getLangDetails({ selectedPerId: this.sSelectedPerId })
+        getLangDetails({ selectedAccountId: this.sSelectedAccId })
             .then(data => {
                 if (data.hasOwnProperty(0)) {
                     this.fetchLanguage.id = data[0].Id;
-                    this.fetchLanguage.selectedLang = data[0].Languages_Other_Than_English_EI__c;
+                    this.fetchLanguage.selectedLang = (data[0].Languages_Other_Than_English_EI__c !== null && data[0].Languages_Other_Than_English_EI__c !== undefined) ? data[0].Languages_Other_Than_English_EI__c : '';
                     console.log('Fetched data:', data);
                     console.log('Fetched lang id:', this.fetchLanguage.id);
                     console.log('Fetched lang selectedLang:', this.fetchLanguage.selectedLang);
@@ -174,9 +175,9 @@ export default class Care_Communication extends LightningElement {
         this.dShowModal = false;
     }
     saveAndClose(event) {
-        console.log('Save and close method value1:', this.maskedPhoneDetails.home);
-        console.log('Save and close method value2:', this.maskedPhoneDetails.work);
-        console.log('Save and close method value3:', this.maskedPhoneDetails.mobile);
+        //console.log('Save and close method value1:', this.maskedPhoneDetails.home);
+        //console.log('Save and close method value2:', this.maskedPhoneDetails.work);
+        //console.log('Save and close method value3:', this.maskedPhoneDetails.mobile);
 
         if(this.maskedPhoneDetails.home !== '' && this.maskedPhoneDetails.home !== undefined && this.maskedPhoneDetails.home !== null){
             this.phoneDetails.home = this.maskedPhoneDetails.home.replace(/\D/g,''); //remove mask
@@ -197,12 +198,12 @@ export default class Care_Communication extends LightningElement {
             this.phoneDetails.mobile = '';
         } 
 
-        console.log('Save and close method value1:', this.phoneDetails.home);
-        console.log('Save and close method value2:', this.phoneDetails.work);
-        console.log('Save and close method value3:', this.phoneDetails.mobile);
+        //console.log('Save and close method value1:', this.phoneDetails.home);
+        //console.log('Save and close method value2:', this.phoneDetails.work);
+        //console.log('Save and close method value3:', this.phoneDetails.mobile);
 
         this.showLoadingSpinner = true;
-        savePhoneDetails({ updatePhoneRec: this.phoneDetails, perIdValue: this.sSelectedPerId })
+        savePhoneDetails({ updatePhoneRec: this.phoneDetails, selectedAccountId: this.sSelectedAccId })
             .then(result => {
                 console.log('resultafterApex call==>' + JSON.stringify(result));
 
@@ -213,7 +214,7 @@ export default class Care_Communication extends LightningElement {
                     //this.bShowModal = false;
 
                     this.showLoadingSpinner = false;
-
+                    this.bShowModal = false;
                 }
                 else {
                     this.showToastMessage('Application Error', ' Please try after sometime.', 'error');
@@ -232,14 +233,14 @@ export default class Care_Communication extends LightningElement {
     saveCommunicationModal(event) {
         console.log('Selected Communication picklist value: ', this.communication.contactMethod);
         this.showLoadingSpinner = true;
-        saveCommDetails({ updateCommRec: this.communication.contactMethod, perIdValue: this.sSelectedPerId })
+        saveCommDetails({ updateCommRec: this.communication.contactMethod, selectedAccountId: this.sSelectedAccId })
             .then(result => {
                 console.log('resultafterApex call==>' + JSON.stringify(result));
 
                 if (result) {
                     this.showToastMessage('Success', 'Successfully Saved details ', 'success');
                     this.showLoadingSpinner = false;
-
+                    this.cShowModal = false;
                 }
                 else {
                     this.showToastMessage('Application Error', ' Please try after sometime.', 'error');
@@ -257,13 +258,13 @@ export default class Care_Communication extends LightningElement {
     saveLanguageModal(event) {
         console.log('Selected Language picklist value: ', this.saveLanguage.lang);
         this.showLoadingSpinner = true;
-        saveLangDetails({ updateLangRec: this.saveLanguage.lang, perIdValue: this.sSelectedPerId }).then(result => {
+        saveLangDetails({ updateLangRec: this.saveLanguage.lang, selectedAccountId: this.sSelectedAccId }).then(result => {
             console.log('resultafterApex call==>' + JSON.stringify(result));
 
             if (result) {
                 this.showToastMessage('Success', 'Successfully Saved details ', 'success');
                 this.showLoadingSpinner = false;
-
+                this.dShowModal = false;
             }
             else {
                 this.showToastMessage('Application Error', ' Please try after sometime.', 'error');

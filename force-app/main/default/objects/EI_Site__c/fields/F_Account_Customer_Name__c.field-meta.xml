@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Account_Customer_Name__c</fullName>
+    <description>As part of encryption case 00276311, creating a formula field for Account.Name to display encrypted Customer Name (api: Encrypted_Account_Name__c) since Account.Name is overwritten with AccountNumber</description>
+    <externalId>false</externalId>
+    <formula>Account_EI__r.Encrypted_Account_Name__c</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Account Customer Name</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

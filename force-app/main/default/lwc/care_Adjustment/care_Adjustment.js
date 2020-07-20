@@ -18,6 +18,9 @@ import CARE_RetroStartDateValidationMsg from '@salesforce/label/c.CARE_RetroStar
 import CARE_RetroDateValidationMsg from '@salesforce/label/c.CARE_RetroDateValidationMsg';
 import CARE_NotModifiedRstREndMsg from '@salesforce/label/c.CARE_NotModifiedRstREndMsg';
 import CARE_AdjustmentHeader from '@salesforce/label/c.CARE_AdjustmentHeader';
+import CARE_CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
+import CARE_NotEligibleMsg from '@salesforce/label/c.CARE_NotEligibleMsg';
+import CARE_CommentFieldLengthValidationMsg  from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
 
 
 export default class Care_Adjustment extends LightningElement {
@@ -57,7 +60,10 @@ export default class Care_Adjustment extends LightningElement {
         CARE_RetroStartDateValidationMsg,
         CARE_RetroDateValidationMsg,
         CARE_NotModifiedRstREndMsg,
-        CARE_AdjustmentHeader
+        CARE_AdjustmentHeader,
+        CARE_CommentFieldLengthValidationMsg,
+        CARE_CommentFieldValidationMsg,
+        CARE_NotEligibleMsg 
      }
 
     //Toast Message to show 
@@ -178,7 +184,7 @@ export default class Care_Adjustment extends LightningElement {
             //Put that erroneous record in the list
             if (element.dRetroStartDate >= this.dTodaysDate && element.dRetroStartDate !== null && element.dRetroStartDate !== undefined) {
                 this.listErrorStartDate.push(element);
-            } else if (!this.bAdjustment && (element.dRetroEndDate < element.dRetroStartDate || element.dRetroEndDate > this.dTodaysDate)
+            } else if (!this.bAdjustment && (element.dRetroEndDate < element.dRetroStartDate || element.dRetroEndDate >= element.dStartDate)
                 && (element.dRetroStartDate !== null && element.dRetroStartDate !== undefined && element.dRetroEndDate !== null && element.dRetroEndDate !== undefined)) {
                 this.listErrorStartEndDate.push(element);
             }
@@ -235,7 +241,22 @@ export default class Care_Adjustment extends LightningElement {
             this.listErrorStartDate = [];
             this.listErrorStartEndDate = [];
         }
-
+        else if(this.objInputFields.sComment.length > 256){
+            bValidInput = false;
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldLengthValidationMsg, 'error');
+            this.listRetroStartEndDate = [];
+            this.listRetroStartDate = [];
+            this.listErrorStartDate = [];
+            this.listErrorStartEndDate = [];
+        }
+        else if(this.objInputFields.sComment.indexOf(',') !== -1){
+                bValidInput = false;
+                this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldValidationMsg, 'error');
+                this.listRetroStartEndDate = [];
+                this.listRetroStartDate = [];
+                this.listErrorStartDate = [];
+                this.listErrorStartEndDate = [];
+        }
         //validation passed proceed with Apex call
         if (bValidInput) {
             this.doAdjust();
@@ -247,6 +268,9 @@ export default class Care_Adjustment extends LightningElement {
     }
 
     doAdjust() {
+        const historyTabRefreshEvent = new CustomEvent("historytabrefreshfromchild", {
+            detail: 'History'   //To refresh History Tab
+        });
         this.showLoadingSpinner = true;
         this.objInputFields.sPerId = this.sSelectedPerId;
         createAdjustmentSA({
@@ -261,6 +285,7 @@ export default class Care_Adjustment extends LightningElement {
                     this.showToastMessage(this.label.CARE_SuccessHeader, this.label.CARE_TransactionSuccessMsg, 'success');
                     this.bFormEdited = false;
                     this.showLoadingSpinner = false;
+                    this.dispatchEvent(historyTabRefreshEvent);
                     this.closeModal();
                 } else {
                     this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');

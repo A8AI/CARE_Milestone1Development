@@ -4,14 +4,14 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 6/22/2020, 9:54:51 PM
+  @Last Modified On   : 7/14/2020, 12:44:53 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    6/12/2020   Cognizant Technology Solutions     Initial Version
 -->
 <template>
     <!-- lightning button for open modal window -->
-    <lightning-button label="Adjustment" title="Adjustment" onclick={openModal} class="slds-m-left_x-small">
+    <lightning-button label="Adjustments" title="Adjustments" onclick={openModal} class="slds-m-left_x-small">
     </lightning-button>
 
     <!--Use template if:true to display/hide popup based on isModalOpen value-->
@@ -35,7 +35,7 @@
                 </header>
                 <!-- Modal/Popup Box LWC body starts here -->
                 <div class="slds-modal__content slds-p-around_x-small" id="modal-content-id-1">
-
+                
                     <div class="slds-p-left_small">
                         <lightning-input label="Yes Date Adjustment Only?" type="checkbox" data-id="yesDateAdjustField"
                             onchange={handleAdjustmentChecked}></lightning-input>
@@ -49,7 +49,7 @@
                                 <tr class="slds-line-height_reset">
 
                                     <th class="" scope="col">
-                                        <div class="slds-truncate" title="Billing Account">Billing Account</div>
+                                        <div class="slds-truncate" title="Account">Account</div>
                                     </th>
                                     <th class="" scope="col">
                                         <div class="slds-truncate" title="SAID">SA ID</div>

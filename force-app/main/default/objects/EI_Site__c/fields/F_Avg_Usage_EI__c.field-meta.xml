@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Avg_Usage_EI__c</fullName>
+    <description>Average usage based on all related usage records.</description>
+    <externalId>false</externalId>
+    <formula>IF( ISNULL( Total_Usage_Value_Rollup_EI__c ) ,0,
+IF(Total_Usage_Value_Rollup_EI__c =0,0,
+Total_Usage_Value_Rollup_EI__c / Number_Usage_Records_EI__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Average usage based on all related usage records.</inlineHelpText>
+    <label>Avg Usage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

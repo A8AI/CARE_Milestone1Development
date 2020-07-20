@@ -163,18 +163,19 @@ public with sharing class CARE_UtilityController {
         List <CARE_Type__c> listCareType = new List <CARE_Type__c>();
         try
         {
-            if(String.isNotBlank(sCareTypeNo)) 
-            {
-                listCareType = [SELECT ID,TYPE_CODE__c, TYPE_DESC__c, TYPE_DESC_LONG__c  FROM CARE_Type__c 
-                                WHERE TYPE_NO__c = :sCareTypeNo AND START_DATE__c <:dTodaysDate AND END_DATE__c >:dTodaysDate ];
+            //if(String.isNotBlank(sCareTypeNo)) 
+            //{
+                listCareType = [SELECT ID,TYPE_CODE__c, TYPE_NO__c, TYPE_DESC__c, TYPE_DESC_LONG__c  FROM CARE_Type__c 
+                                WHERE TYPE_NO__c = :sCareTypeNo ];
+                                //AND START_DATE__c <:dTodaysDate AND END_DATE__c >:dTodaysDate 
                 
-            }
-            else
+           // }
+           /* else
             {
                 listCareType = [SELECT ID,TYPE_CODE__c, TYPE_DESC__c, TYPE_DESC_LONG__c  FROM CARE_Type__c 
                                 WHERE TYPE_CODE__C = :sTypeCode AND CATEGORY__c = :sCategory AND START_DATE__c <:dTodaysDate AND END_DATE__c >:dTodaysDate ];
             }
-            
+            */
             for (CARE_Type__c careTypeRecord :listCareType)
             {
                 listCareTypeResult.add(careTypeRecord);
@@ -189,7 +190,7 @@ public with sharing class CARE_UtilityController {
     
     //method to check if Customer on probation
     public static Boolean checkCustomerOnProbation (String sPerID){
-        Boolean bProbation ;
+        Boolean bProbation;
         try{
             
             list<Account> listProbationAccount = [SELECT ID,CARE_ON_PROBATION__c FROM ACCOUNT 
@@ -197,7 +198,8 @@ public with sharing class CARE_UtilityController {
                                                   AND CARE_PROBATION_END_DATE__c >:dTodaysDate];
             
             if(listProbationAccount.size()>0){
-                bProbation = true;
+                bProbation = (listProbationAccount[0].CARE_ON_PROBATION__c == true) ? true : false;
+                //bProbation = true;
             }
             else {
                 bProbation = false;
@@ -336,7 +338,7 @@ public with sharing class CARE_UtilityController {
     //This method is used to delete all the records of ContentDocument and related object records against the application Id
     @AuraEnabled
     public static Boolean deleteUploadedContents(Id idApplication){
-        Boolean bDeleteSuccess = false;
+        Boolean bDeleteSuccess = true;
         List<Id> listConDocIds = new List<Id>();
         List<Id> listConVerIds = new List<Id>();
         try{
@@ -365,6 +367,7 @@ public with sharing class CARE_UtilityController {
                             System.debug('The following error has occurred.');                    
                             System.debug(err.getStatusCode() + ': ' + err.getMessage());
                             System.debug('Account fields that affected this error: ' + err.getFields());
+                            throw new AuraHandledException(err.getStatusCode() + ': ' + err.getMessage() + ': ' + err.getFields());
                         }
                     }
                 }                
@@ -382,5 +385,245 @@ public with sharing class CARE_UtilityController {
     public static Id getObjectRecordTypeId(String sRecordTypeDevName){
         return Schema.SObjectType.CARE_Application__c.getRecordTypeInfosByDeveloperName().get(sRecordTypeDevName).getRecordTypeId();
     }
+    
+    //This method returns the Lan Id and Profile name for logged in User
+    @AuraEnabled
+    public static List<User> getUserDetails(Id userId){
+        
+        List<User> listUserDetails = new List<User>();
+        String sUserId = string.valueOf(userId);
+        
+        try{
+        if(string.isNotBlank(sUserId)){
+          listUserDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId limit 1];
+            
+          system.debug('listUserDetails with string Id--->'+ listUserDetails);
+        }
+        else if(string.isBlank(sUserId)){
+            
+            Id loggedUserId = UserInfo.getUserId();
+            listUserDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :loggedUserId limit 1]; 
+            
+            system.debug('listUserDetails without string Id--->'+ listUserDetails);
+        }   
+        
+    }catch (Exception ex) {
+            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+        } 
+        return listUserDetails;       
+    }
+    
+    @AuraEnabled
+    public static void sendExceptionEmail(String classname, String subject, String body, Integer lineNo, String sPerId) {
+        
+        String emailBody;
+        //Get the email address of the current logged in user.
+        //String userName = UserInfo.getUserName();
+        //User activeUser = [Select Email From User where Username = : userName limit 1];
+        String userEmail = 'a8ai@pge.com';  //Fetch from System Value object
+        //String bodyMail = 'Invalid id: 0013600001wDuFUAA'; // ex.getMessage()
+		//String mainMessage = 'There was error in Care Enrollment '; //Vary as part class/batch functionality
+		//String messsage = 'for Person ID-> 1020304050'; //Only if Person Id is available.
+		
+        // Create an email message object and send email to the currently logged user!
+        Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+        String[] toAddresses = new String[] {userEmail};
+            mail.setToAddresses(toAddresses);
+        mail.setSubject('Error in CARE Enrollment');        
+        emailBody = ('Dear User,' + '<br/><br>' +
+                     'There was an error for CARE Enrollment for Person ID-> ' + sPerId + '.<br/><br>'+
+                     'The class name is-> ' + classname +'. The Exception type is-> ' + subject + '.<br/><br>' +
+                     'Exception occured at line no ' + lineNo + ', with error message as-> ' + body + '.<br/><br>'+ 
+					 'For help with the issue please contact Energy Insight Support team.' + '<br/><br>' +
+                      + '<br></br><br></br>' + 'Regards, <br></br> Energy Insight Support team');
+        //mail.setPlainTextBody(emailBody);
+        mail.setHTMLBody(emailBody);
+        // Pass this email message to the built-in sendEmail method
+        // of the Messaging class
+        Messaging.SendEmailResult[] results = Messaging.sendEmail(
+            new Messaging.SingleEmailMessage[] { mail });
+    }
+    
+   @AuraEnabled
+    // To get System Information PEV/Enrollment Tab after accepting application
+    public static List<CARE_Application__c> getSystemInfoCareAppData(String sSelectedAppId){
+        List<CARE_Application__c> listCareApp = new List<CARE_Application__c>();
+        try{
+            String sSoqlAppQuery = 'Select Id, APPLICATION_STATUS__c, LastModifiedBy.LAN_ID_EI__c, LastModifiedDate, QUALIFIED_BY__c  from CARE_Application__c where Id=:sSelectedAppId ';
+            System.debug('sSoqlAppQuery==>' + sSoqlAppQuery );
+            listCareApp = Database.query(sSoqlAppQuery);
+            System.debug('listCareApp---> '+listCareApp);
+        }
+        catch (Exception ex){
+            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+        }
+        return listCareApp;
+    }
+    
+    @AuraEnabled
+    // To get System Information PEV/Enrollment Tab after accepting application
+    public static Boolean setCancelStatusCareApplication(String sSelectedAppId){
+        Boolean status = false;
+        List<CARE_Application__c> listCareApp = new List<CARE_Application__c>();
+        try{
+            String sSoqlAppQuery = 'Select Id, APPLICATION_STATUS__c  from CARE_Application__c where Id=:sSelectedAppId';
+            System.debug('sSoqlAppQuery==>' + sSoqlAppQuery );
+            listCareApp = Database.query(sSoqlAppQuery);
+            System.debug('listCareApp---> '+listCareApp);
+            if(listCareApp.size() > 0){
+                listCareApp[0].APPLICATION_STATUS__c = CARE_Constants.CARE_STG_ENR_STATUS_CANCELLED;
+                Database.SaveResult[] srList = Database.update(listCareApp, false);
+                for (Database.SaveResult sr : srList) {
+                    if (sr.isSuccess()) {
+                        System.debug('Successfully Updated Record: ' + sr.getId());
+                        status = true;
+                        
+                    }
+                    else {
+                        // Operation failed, so get all errors               
+                        for(Database.Error err : sr.getErrors()) {
+                            System.debug('The following error has occurred.');                   
+                            System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                            System.debug('fields that affected this error: ' + err.getFields());
+                        }
+                    }
+                    
+                }
+ 
+            }
+        }
+        catch (Exception ex){
+            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+        }
+        return status;
+    }
+    
+    @AuraEnabled
+    // To get System Information PEV/Enrollment Tab after accepting application
+    public static List<String> determineProbationStatusForAccount( List<String> perIdList){
+        
+        Date dTodaysDate = Date.today();
+        Date dDateBeforeTwoYears = dTodaysDate.addYears(-2);
+        //string sCCCode;
+        Map<string, List<CARE_CC_Batch_Detail__c>> mapOfProbationRecord = new Map<string, List<CARE_CC_Batch_Detail__c>>();
+        List<String> personIdList = new List<String>();
+        boolean bIsOnProbation = false;
+        
+        List<CARE_CC_Batch_Detail__c> probationCheckList = [select Id, PER_ID__c, CCB_Contact_Type_No__c, CARE_CI_CC__r.CC_TYPE_CD__c
+                                                           from CARE_CC_Batch_Detail__c 
+                                                           where PER_ID__c IN : perIdList and CARE_CI_CC__r.CC_TYPE_CD__c != null and CARE_CI_CC__r.CC_DTTM__c >=: dDateBeforeTwoYears
+                                                           order by CARE_CI_CC__r.CC_DTTM__c DESC];
+        
+        
+        if(probationCheckList.size() > 0){
+            for(CARE_CC_Batch_Detail__c probCheck : probationCheckList){
+                if(mapOfProbationRecord.get(probCheck.PER_ID__c) == null){
+                	mapOfProbationRecord.put(probCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{probCheck});
+                }else{
+                    if(mapOfProbationRecord.get(probCheck.PER_ID__c).size() != 2){
+                        mapOfProbationRecord.get(probCheck.PER_ID__c).add(probCheck);                       
+                    }
+                }
+        }
+     }
+     	system.debug('mapOfProbationRecord---->'+ mapOfProbationRecord);
+        system.debug('size of map---->'+ mapOfProbationRecord.size());
+        
+        String sMapCCVal1;
+        String sMapCCVal2;
+        String sMaptypeNoVal1;
+        String sMaptypeNoVal2;
+        //Integer i = 0;
+        for(String perIdKey : mapOfProbationRecord.keyset()){
+            Integer i = 0;
+            for(CARE_CC_Batch_Detail__c ccBatch : mapOfProbationRecord.get(perIdKey)){
+                system.debug('CCB_Contact_Type_No__c---->'+ ccBatch.CCB_Contact_Type_No__c);
+        		system.debug('CARE_CI_CC__r.CC_TYPE_CD__c---->'+ ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c);
+                i = i + 1;
+                if(mapOfProbationRecord.get(perIdKey).size() == 1){
+                    if (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'N' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == '3' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'J'){
+                        bIsOnProbation = true;
+                        personIdList.add(perIdKey);
+                    }
+                }
+                else if(mapOfProbationRecord.get(perIdKey).size() == 2){
+                   //String sMapCCVal1;
+                   //String sMapCCVal2;
+                   //String sMaptypeNoVal1;
+                   //String sMaptypeNoVal2;
+                    if(i == 1){
+                        sMapCCVal1 = ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c;
+                        sMaptypeNoVal1 = ccBatch.CCB_Contact_Type_No__c;
+                        system.debug('sMapCCVal1---->'+ sMapCCVal1);
+        				system.debug('sMaptypeNoVal1---->'+ sMaptypeNoVal1);
+                        system.debug('inside if block when i = 1---->');
+                        
+                    }
+                    else{
+                        sMapCCVal2 = ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c;
+                        sMaptypeNoVal2 = ccBatch.CCB_Contact_Type_No__c;
+                        system.debug('sMapCCVal1 inside else---->'+ sMapCCVal1);
+                        system.debug('sMapCCVal2---->'+ sMapCCVal2);
+        				system.debug('sMaptypeNoVal2---->'+ sMaptypeNoVal2);
+                        system.debug('inside else block when i != 1---->');
+                        
+                        if(((sMapCCVal1 == 'H RAND CERT' || sMapCCVal1 == 'RANDOM CERT') && (sMapCCVal2 == 'N' || sMapCCVal2 == '3' || sMapCCVal2 == 'J' )) ||
+                          ((sMapCCVal1 == 'H RAND CERT' || sMapCCVal1 == 'ESA COMP' || sMapCCVal1 == '7' || sMaptypeNoVal1 == '6046') && (sMapCCVal2 == 'NH' || sMapCCVal2 == 'DE' || sMapCCVal2 == 'DH'))){
+                            bIsOnProbation = false;
+                        }
+                        else if(sMapCCVal1 == 'N' || sMapCCVal1 == '3' || sMapCCVal1 == 'J' || sMapCCVal1 == 'NH' || sMapCCVal1 == 'DE' || sMapCCVal1 == 'DH'){
+                           system.debug('inside 1st else if---->');
+                            bIsOnProbation = true;
+                           personIdList.add(perIdKey); 
+                        }
+                        else if(((sMapCCVal1 != 'H RAND CERT' || sMapCCVal1 != 'RANDOM CERT') && (sMapCCVal2 == 'N' || sMapCCVal2 == '3' || sMapCCVal2 == 'J' )) ||
+                          ((sMapCCVal1 != 'H RAND CERT' || sMapCCVal1 != 'ESA COMP' || sMapCCVal1 != '7' || sMaptypeNoVal1 != '6046') && (sMapCCVal2 == 'NH' || sMapCCVal2 == 'DE' || sMapCCVal2 == 'DH'))){
+                            system.debug('inside 2nd else if---->');
+                              bIsOnProbation = true;
+                           personIdList.add(perIdKey);
+                        }
+                    }
+                    
+                }
+            }
+        } 
+        system.debug('bIsOnProbation boolean----->'+ bIsOnProbation);
+        system.debug('personIdList contents----->'+personIdList);
+       
+       return personIdList;
+        
+    }
+    
+    @AuraEnabled
+    // To get System Information PEV/Enrollment Tab after accepting application
+    public static void setProbationStatusOnAccount(List<String> perIdListForProbation){
+        
+        List<String> probationList = new List<String>();
+        List<Account> accListToUpdate = new List<Account>();
+        probationList = CARE_UtilityController.determineProbationStatusForAccount(perIdListForProbation);
+        
+        system.debug('probationList of records returned----->');
+        
+        List<Account> listOfAccounts = [select Id, CARE_ON_PROBATION__c from Account where Billing_Person_ID_EI__c IN: probationList];
+        
+        if(listOfAccounts.size() > 0){
+            for(Account acct : listOfAccounts){
+                acct.CARE_ON_PROBATION__c = true;
+                accListToUpdate.add(acct);
+            }
+        }
+        
+        if(accListToUpdate.size() > 0){
+            update accListToUpdate;
+        }
+    }
+    
+    /*public class AccountProbationWrapper{
+        @AuraEnabled 
+        public List<String> probationList {get;set;}
+        @AuraEnabled 
+        public boolean bProbation {get;set;}
+    }*/
+
     
 }

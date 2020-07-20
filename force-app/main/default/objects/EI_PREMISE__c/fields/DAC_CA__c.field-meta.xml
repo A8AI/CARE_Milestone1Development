@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>DAC_CA__c</fullName>
+    <defaultValue>&quot;UNKNOWN&quot;</defaultValue>
+    <description>DAC value for California based on Internal seeding files from Asset Data Management GIS Analytics.</description>
+    <externalId>false</externalId>
+    <label>DAC CA</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>IN DAC</fullName>
+                <default>false</default>
+                <label>IN DAC</label>
+            </value>
+            <value>
+                <fullName>OUTSIDE DAC</fullName>
+                <default>false</default>
+                <label>OUTSIDE DAC</label>
+            </value>
+            <value>
+                <fullName>UNKNOWN</fullName>
+                <default>true</default>
+                <label>UNKNOWN</label>
+            </value>
+            <value>
+                <fullName>BAD ADDRESS</fullName>
+                <default>false</default>
+                <label>BAD ADDRESS</label>
+            </value>
+            <value>
+                <fullName>UNEXPECTED ERROR</fullName>
+                <default>false</default>
+                <label>UNEXPECTED ERROR</label>
+            </value>
+            <value>
+                <fullName>&apos;OUTSIDE OF PGE TERRITORY</fullName>
+                <default>false</default>
+                <label>&apos;OUTSIDE OF PGE TERRITORY</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

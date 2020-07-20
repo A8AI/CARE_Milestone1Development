@@ -10,10 +10,9 @@
   1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
 -->
 <template>
-    <lightning-input placeholder="Type here...."  label={inputLabel} onchange={handleKeyChange} onfocus={handleKeyChange} onkeypress={lastSpace} onfocusout={handleOnBlur}
-        class="slds-m-bottom_xx-small" value={searchKey} min-length="10" max-length="10" autocomplete="off"
-        message-when-too-short="Please enter 10 characters numbers only including leading zeroes" message-when-too-long="Please enter 10 characters numbers only including leading zeroes" pattern="[0-9]{10}"
-        message-when-pattern-mismatch="Please enter 10 characters numbers only including leading zeroes"></lightning-input>
+    <lightning-input  placeholder="Type here...."  label={inputLabel} onchange={handleKeyChange} onfocus={handleKeyChange} onkeypress={lastSpace} onfocusout={handleOnBlur}
+        class="slds-m-bottom_xx-small" value={searchKey}  autocomplete="off"
+        ></lightning-input>
         
                 <template if:true={showListBox}>
                     <div class="slds-form-element__control">

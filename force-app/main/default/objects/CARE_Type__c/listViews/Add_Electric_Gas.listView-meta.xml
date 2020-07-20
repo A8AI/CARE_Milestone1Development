@@ -11,7 +11,7 @@
     <filters>
         <field>CATEGORY__c</field>
         <operation>equals</operation>
-        <value>Add Electric Gas</value>
+        <value>Add Electric Gas Reason</value>
     </filters>
     <label>Add Electric Gas Reason</label>
     <sharedTo>

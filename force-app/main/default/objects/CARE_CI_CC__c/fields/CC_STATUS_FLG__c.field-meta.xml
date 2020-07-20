@@ -5,7 +5,7 @@
     <externalId>false</externalId>
     <label>CC STATUS FLG</label>
     <length>4</length>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>false</unique>

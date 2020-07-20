@@ -46,11 +46,11 @@ public class CARE_DiscountDateController {
         }
         if(iNoOfYears==2) 
         {   
-            dFinalEndDate=dFinalStartDate.addDays(810);
+            dFinalEndDate=dFinalStartDate.addDays(820);
         }
         else if(iNoOfYears==4) 
         {
-            dFinalEndDate=dFinalStartDate.addDays(1530);             
+            dFinalEndDate=dFinalStartDate.addDays(1550);             
         }            
         
         FlowOutputs outPut=new FlowOutputs();

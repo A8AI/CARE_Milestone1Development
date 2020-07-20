@@ -12,9 +12,9 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Catagorical</fullName>
+                <fullName>Categorical</fullName>
                 <default>false</default>
-                <label>Catagorical</label>
+                <label>Categorical</label>
             </value>
             <value>
                 <fullName>Income</fullName>

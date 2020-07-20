@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Enforce_Account_for_New_Construction</fullName>
+    <active>true</active>
+    <description>Makes sure that the &apos;Account&apos; field is filled in for &apos;New Construction&apos; projects</description>
+    <errorConditionFormula>AND(
+  ISBLANK(Account_EI__c),
+  SA_is_for_New_Cnst_Proj_EI__c  = true
+)</errorConditionFormula>
+    <errorDisplayField>Account_EI__c</errorDisplayField>
+    <errorMessage>You must fill in the Account field for &apos;New Construction&apos; SAs. If you don&apos;t have a specific account, please select &apos;New Construction Account&apos;.</errorMessage>
+</ValidationRule>

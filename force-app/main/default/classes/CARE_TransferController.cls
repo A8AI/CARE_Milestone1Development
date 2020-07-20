@@ -231,7 +231,8 @@ public with sharing class CARE_TransferController {
             careAppFromObj.ENROLLMENT_TYPE__c = 'OTHER';
             careAppFromObj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_TRANSFER_SRC;
             careAppFromObj.PROCESSED_DATE__c  = dTodaysDate;
-            careAppFromObj.PER_ID__c = objTransferInput.sPerId;                          
+            careAppFromObj.PER_ID__c = objTransferInput.sPerId; 
+            careAppFromObj.CCB_Contact_Type_No__c = sTransferFromCCCode;
             careAppFromObj.CCB_CONTACT_CODE__c = listCareTypeFrom[0].TYPE_CODE__c;
             careAppFromObj.CCB_CONTACT_DESC__c= listCareTypeFrom[0].TYPE_DESC__c;
             careAppFromObj.CCB_CONTACT_COMMENT__c = sContactComment;                        
@@ -275,7 +276,7 @@ public with sharing class CARE_TransferController {
             for ( WrapperTransfer TranferToObj :listTranferTo ){
                 sSAListTo.add (TranferToObj.sSAId);
             }            
-            String sTransferToObj = String.join(sSAListTo, ', ');
+            String sTransferToObj = String.join(sSAListTo, '; ');
             String sTransferToContactComment = objTransferInput.sComment.replace(CARE_Constants.CARE_SA_ID_PLACEHOLDER, sTransferToObj);
             
             //create CARE APP Transaction To create discounts for the ‘To’ Premise/Premises
@@ -287,7 +288,8 @@ public with sharing class CARE_TransferController {
             careAppToObj.ENROLLMENT_TYPE__c = 'OTHER';
             careAppToObj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_TRANSFER_SRC;
             careAppToObj.PROCESSED_DATE__c = dTodaysDate;
-            careAppToObj.PER_ID__c = objTransferInput.sPerId;                          
+            careAppToObj.PER_ID__c = objTransferInput.sPerId;   
+            careAppToObj.CCB_Contact_Type_No__c = sTransferToCCCode;
             careAppToObj.CCB_CONTACT_CODE__c = listCareTypeTo[0].TYPE_CODE__c;
             careAppToObj.CCB_CONTACT_DESC__c= listCareTypeTo[0].TYPE_DESC__c;
             careAppToObj.CCB_CONTACT_COMMENT__c = sTransferToContactComment;   //objTransferInput.sComment; //Comment updated in Modal      

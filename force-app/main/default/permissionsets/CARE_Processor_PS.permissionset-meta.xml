@@ -201,6 +201,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>Account.CARE_Probation_Waiver_Date__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>Account.CDW_Extract_Time__c</field>
         <readable>true</readable>
@@ -1211,6 +1216,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_APP_Image_List__c.IMAGE_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>CARE_APP_Image_List__c.IMAGE_TYPE__c</field>
         <readable>true</readable>
@@ -1831,6 +1841,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.APPCODE__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>CARE_Application__c.APPLICATION_EXTERNAL_ID__c</field>
         <readable>true</readable>
@@ -1874,6 +1889,11 @@
         <editable>true</editable>
         <field>CARE_Application__c.CARE_Alternate_Phone_Number__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.CARE_Alternate_Phone_Type__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -2071,11 +2091,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Application__c.COMMENTS__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Application__c.CUSTOMER_TYPE__c</field>
         <readable>false</readable>
@@ -2219,6 +2234,11 @@
         <editable>true</editable>
         <field>CARE_Application__c.HEALTHY_FAMILIES__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.HOME_PHONE_NO__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -2564,6 +2584,11 @@
         <editable>true</editable>
         <field>CARE_Application__c.WORKERS_COMP__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.WORK_PHONE_NO__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -3002,6 +3027,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CARE_CI_CC__c.CC_STATUS_FLG__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CARE_CI_CC__c.CC_TYPE_CD__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3017,8 +3047,33 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CARE_CI_SA__c.ACCT_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CI_SA__c.CARE_END_DT__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CI_SA__c.Discount_Type__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CARE_CI_SA__c.EXTERNAL_ID__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CI_SA__c.PER_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CI_SA__c.PREM_ID__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -3546,6 +3601,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Household_Member_IncomeC__c.EXTERNAL_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>CARE_Household_Member_IncomeC__c.INCOME_SEQ__c</field>
         <readable>true</readable>
@@ -4036,11 +4096,6 @@
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Household_Member_Income__c.NAME_Member_Income_Seq__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>true</editable>
         <field>CARE_Household_Member_Income__c.PEV_RESULT_NO__c</field>
         <readable>true</readable>
@@ -4162,7 +4217,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CARE_System_Value__c.SYSTEM_BEGIN_DATE__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CARE_System_Value__c.SYSTEM_END_DATE__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_System_Value__c.SYSTEM_VALUE_CODE__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4383,11 +4448,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Type__c.TYPE_DESC__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Type__c.TYPE_NO__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

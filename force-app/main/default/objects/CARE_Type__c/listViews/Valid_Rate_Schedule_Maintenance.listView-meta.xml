@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Valid_Rate_Schedule_Maintenance</fullName>
+    <columns>NAME</columns>
+    <columns>CATEGORY__c</columns>
+    <columns>TYPE_DESC__c</columns>
+    <columns>START_DATE__c</columns>
+    <columns>END_DATE__c</columns>
+    <columns>TYPE_CODE__c</columns>
+    <columns>TYPE_NO__c</columns>
+    <columns>IS_ACTIVE__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>CATEGORY__c</field>
+        <operation>equals</operation>
+        <value>Valid Rate Schedule</value>
+    </filters>
+    <label>Valid Rate Schedule Maintenance</label>
+    <sharedTo>
+        <role>Application_Processor</role>
+    </sharedTo>
+</ListView>

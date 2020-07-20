@@ -11,4 +11,14 @@ const formatString = (stringToFormat, ...formattingArguments) => {
     });
 };
 
-export { phoneMask, formatString }
+//This is reusable function to check if string is blank (or) undefined (or) null
+const isBlank = (val) => {
+    return (val === '' || val === undefined || val === null);
+};
+
+//This is reusable function to check if string is not blank
+const isNotBlank = (val) => {   
+    return (val !== '' && val !== undefined && val !== null);
+};
+
+export { phoneMask, formatString, isBlank, isNotBlank }

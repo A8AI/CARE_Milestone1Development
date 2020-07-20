@@ -83,7 +83,7 @@ public class CARE_EnrollTabControllerTest {
                                                 from CARE_App_Enrolled_SA__c];
         Test.startTest();
             CARE_EnrollTabController.getRelatedSA(objCareAppEnrol[0].APPLICATION__r.Id,'true');
-        	CARE_EnrollTabController.sendReceivedDate();
+        	CARE_EnrollTabController.sendReceivedDate('test');
         Test.stopTest();
 
     }
@@ -108,6 +108,8 @@ public class CARE_EnrollTabControllerTest {
     }
     @isTest
     public static void testhandleButtonClickOnUI(){
+        List<Account> listAccountRecords = createAccountRecords();
+        insert listAccountRecords;
             List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
      	    List<CARE_App_Enrolled_SA__c> listCareAppEnroll = [select  Id, APPLICATION__c,SA_ID__c,PREM_ID__c,ACCT_ID__c,CC_CL_CD__c,Service_Agreement__c,PER_ID__c, END_DATE__c,SERVICE_FULL_ADDRESS__c from CARE_App_Enrolled_SA__c];
  	        List<CARE_APPLICATION__c> careApp = [SELECT IS_RECERT__c,NO_ADULT__c,CARE_Account_ID__c,NO_CHILD__c,IS_SIGNED__c,REQUEST_DROP__c,NEED_NAME_CHANGE__c,APPLICANT_NAME__c,RECEIVED_DATE__c,PROCESSED_DATE__c,SOURCE_CHANNEL_TYPE__c,FORM_CODE__c,COC_CODE__c,APPLICATION_STATUS__c,LIHEAP__c,WIC__c,CALFRESH_SNAP__c,CALWORKS_TANF__c,HEAD_START_INCOME__c,SSI__c,HEALTHY_FAMILIES__c,NSLP__c,BUREAU_INDIAN_AFFAIRS__c,MEDICAID_UNDER65__c,MEDICAID_OVER65__c,EMAIL_ADDRESS__c,ANNUAL_HOUSEHOLD_INCOME__c,FIXED_INCOME__c,ENROLLMENT_TYPE__c,PER_ID__c from CARE_APPLICATION__c];//queried Care Application 
@@ -147,6 +149,8 @@ public class CARE_EnrollTabControllerTest {
         CARE_EnrollTabController.prePopulatEnrollData(careApp[0].PER_ID__c,careApp[0].Id);
         CARE_EnrollTabController.prePopulatEnrollData(careApp[0].PER_ID__c,'tab');
         CARE_EnrollTabController.handleButtonClickOnUI(testCustWrapper,careApp[0].PER_ID__c,ID,'save',false,careApp[0].Id,careApp[0].CARE_Account_ID__c);
+        CARE_EnrollTabController.updateAccountEmail(testCustWrapper, careApp[0].PER_ID__c);
+        CARE_EnrollTabController.getPhoneDetails(listAccountRecords[0].Id);
         //CARE_EnrollTabController.handleButtonClickOnUI(testCustWrapper,careApp[0].PER_ID__c,ID,'accept',true,careApp[0].Id,careApp[0].CARE_Account_ID__c);
         //CARE_EnrollTabController.handleButtonClickOnUI(testCustWrapper,careApp[0].PER_ID__c,ID,'accept',false,careApp[0].Id,careApp[0].CARE_Account_ID__c);
         //CARE_EnrollTabController.handleButtonClickOnUI(testCustWrapper,careApp[0].PER_ID__c,ID,'verify',false,careApp[0].Id,careApp[0].CARE_Account_ID__c);

@@ -173,4 +173,26 @@ public class CARE_TestDataFactory {
         obCont.SA_ID__c = appEnrol.SA_ID__c;
         return obCont;
     }
+    
+    // Insert all the necessary pre-requisite custom setttings which is being used in the WebService test Apex Callout Requests
+   public static void setup(){
+        
+        List<CARE_End_Point_URL__c> EndPointURLs = New List<CARE_End_Point_URL__c>();
+        
+        List<CARE_Environment_Details__c> currEnvDetails = New List<CARE_Environment_Details__c>();
+        CARE_Environment_Details__c currEnv = new CARE_Environment_Details__c();
+        currEnv.Name = 'Environment Name';
+        currEnv.Environment__c = 'dev';
+        currEnvDetails.add(currEnv);
+        insert currEnvDetails;
+        
+        CARE_End_Point_URL__c getLastBillDateServParam = new CARE_End_Point_URL__c();
+        getLastBillDateServParam.Name = 'GetLastBillDate';
+        getLastBillDateServParam.URL__c = 'https://pge.com/service/billingservice/getlastbilldate/';
+        getLastBillDateServParam.Timeout__c = 60000;
+        EndPointURLs.add(getLastBillDateServParam);
+        
+        insert EndPointURLs;
+    }
+  
 }

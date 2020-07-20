@@ -19,7 +19,7 @@
                 <field>ENTRY_DATE_CARE1__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>EXTERNAL_ID__c</field>
             </layoutItems>
             <layoutItems>

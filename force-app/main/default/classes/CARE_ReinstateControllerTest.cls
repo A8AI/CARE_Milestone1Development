@@ -54,7 +54,19 @@ public class CARE_ReinstateControllerTest {
         
         //Create CARE Type
         List<CARE_Type__c>listCareType = createCareTypeRecords();
-        insert listCareType;   
+        insert listCareType;  
+        
+        //Create CARE CC
+        List<CARE_CI_CC__c>listCC = createCareCICCRecords(listAccount);
+        insert listCC;
+        
+        //Create CARE CC BATCH
+        List<CARE_CC_Batch__c> listCCBatch  = createCareCCBatchRecords();
+        insert listCCBatch;
+        
+        //Create CARE CC BATCH DETAIL
+        List<CARE_CC_Batch_Detail__c>listCCBatchDetail = createCARECCBatchDetailRecords(listAccount,listCareApp,listCC,listCCBatch);
+        insert listCCBatchDetail;
     }
     
     //**********************Test Methods************************************************************************
@@ -81,6 +93,7 @@ public class CARE_ReinstateControllerTest {
         update siteObj;
         System.runAs(user1[0]){
         objWrapperResponse = CARE_ReinstateController.getReinstateDetails(sPerId);
+        system.debug('@@@@HH' + objWrapperResponse);    
         System.assertEquals('Income Proof Provided', objWrapperResponse.listReinstateReason[0].value);
         
         //Previous Enrollment is not having a valid rate/End date       
@@ -223,12 +236,27 @@ public class CARE_ReinstateControllerTest {
         CARE_Application__c objCareApp = CARE_TestDataFactory.careApplication(listAccountRecords[0]);
         objCareApp.APPLICANT_NAME__c = listSiteRecords[0].Imported_Site_Name_EI__c;
         objCareApp.CC_CL_CD__c = 'CARE';
-        objCareApp.ENROLLMENT_TYPE__c = 'OTHER';
+        objCareApp.ENROLLMENT_TYPE__c = 'ENROLLMENT';
         objCareApp.CCB_CONTACT_CODE__c = 'FC';
         objCareApp.PER_ID__c = listAccountRecords[0].Billing_Person_ID_EI__c;
         listCareAppRecords.add(objCareApp);
         return listCareAppRecords;
     }
+    
+     //create Care CI CC
+    private static List<CARE_CI_CC__c> createCareCICCRecords( List<Account>listAccountRecords){
+        
+        List <CARE_CI_CC__c> listCareRecords = new List<CARE_CI_CC__c>();
+        CARE_CI_CC__c obj = new CARE_CI_CC__c();
+        obj.CC_STATUS_FLG__c = 'S';
+        obj.CC_CL_CD__c = 'CARE';
+        obj.CC_TYPE_CD__c = 'FC';
+        obj.USER_ID__c = 'XCVK';
+        obj.PER_ID__c = listAccountRecords[0].Billing_Person_ID_EI__c;
+        listCareRecords.add(obj);
+        return listCareRecords;
+    }   
+    
     
     //create Care App Enrolled SA Records
     private static List<CARE_App_Enrolled_SA__c> createCareAppEnrolledSARecords( List<CARE_Application__c>listCareAppRecords , List<EI_Site__c> listSiteRecords){
@@ -240,6 +268,38 @@ public class CARE_ReinstateControllerTest {
         
         listCareAppEnrolledSARecords.add(objCareAppEnrollmentRecord);
         return listCareAppEnrolledSARecords;
+    }
+    
+        //create Care CC Batch detail Records
+    private static List<CARE_CC_Batch_Detail__c> createCARECCBatchDetailRecords( List<Account>listAccountRecords, List<CARE_Application__c>listCareAppRecords , List<CARE_CI_CC__c> listCCRecords, List<CARE_CC_Batch__c> listCCBatch){
+        List <CARE_CC_Batch_Detail__c> listCareRecords = new List<CARE_CC_Batch_Detail__c>();
+        
+        CARE_CC_Batch_Detail__c objRecord = new CARE_CC_Batch_Detail__c();
+        objRecord.APPLICATION__c = listCareAppRecords[0].Id;
+        objRecord.CARE_CI_CC__c = listCCRecords[0].Id;
+        objRecord.CARE_CC_Batch__c = listCCBatch[0].Id;
+        objRecord.CC_DTTM__c = Date.today();
+        objRecord.ACCT_ID__c = '1234567890';
+        objRecord.DETAIL_STATUS_CODE__c = 'Validate';
+        objRecord.ELEC_SA_ID__c = '7899999';
+        objRecord.EXTERNAL_ID__c = '90990988';
+        objRecord.GAS_SA_ID__c = '8990008';
+        objRecord.SOURCE_CHANNEL_TYPE__c = 'ESA';
+        objRecord.USER_ID_CARE1__c = 'FGCTY';
+        objRecord.PER_ID__c = listAccountRecords[0].Billing_Person_ID_EI__c;
+        listCareRecords.add(objRecord);
+        return listCareRecords;
+    }
+    
+         //create CARE_CC_Batch
+    private static List<CARE_CC_Batch__c> createCareCCBatchRecords(){
+        
+        List <CARE_CC_Batch__c> listCareRecords = new List<CARE_CC_Batch__c>();
+        CARE_CC_Batch__c obj = new CARE_CC_Batch__c();
+        obj.BATCH_DATE__c = Date.today();
+        obj.BATCH_STATUS_CODE__c = 'Completed';
+        listCareRecords.add(obj);
+        return listCareRecords;
     }
     
     //create Care Type records for Reason list & CC Code.      

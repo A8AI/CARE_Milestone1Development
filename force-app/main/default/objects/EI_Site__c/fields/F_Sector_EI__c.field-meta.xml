@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Sector_EI__c</fullName>
+    <description>Sector of the associated NAICS Code</description>
+    <externalId>false</externalId>
+    <formula>TEXT(NAICS_Code_relation_EI__r.Sector_EI__c)</formula>
+    <inlineHelpText>Sector of the associated NAICS Code</inlineHelpText>
+    <label>Sector</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

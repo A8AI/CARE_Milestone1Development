@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>prior_rep_assigned_date_ei__c</fullName>
+    <description>Prior Rep Assigned Date for CC&amp;B SA REP-OUT</description>
+    <encryptionScheme>None</encryptionScheme>
+    <externalId>false</externalId>
+    <inlineHelpText>Prior Rep Assigned Date for CC&amp;B SA REP-OUT</inlineHelpText>
+    <label>Prior Rep Assigned Date</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Date</type>
+</CustomField>

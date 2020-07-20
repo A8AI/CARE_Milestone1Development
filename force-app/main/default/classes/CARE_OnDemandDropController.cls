@@ -30,12 +30,16 @@ public class CARE_OnDemandDropController {
         careRes.NewAppIdForCare='';
         careRes.sContactCode = '';
         string enrollAppIdValue = '';
+        string descLongVal = '';
         Integer iLimit = integer.valueof(CARE_Constants.CARE_OnDemandDrop_QueryLimit);
+        List<User> userDetails = new List<User>();
         
         system.debug('perID Value---->' + perIdValue);
         
+        try{
         Id userId = UserInfo.getUserId();            
-        User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+        //User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+        userDetails = CARE_UtilityController.getUserDetails(userId);
         
         Map<String, EI_Site__c> careEISiteMapData = new Map<String, EI_Site__c>();
      	careEISiteMapData = CARE_UtilityController.getActiveSADetailsForPersonId(perIdValue);
@@ -58,10 +62,12 @@ public class CARE_OnDemandDropController {
             List<CARE_Type__c> listCareTypeDesc = new List<CARE_Type__c>();
         //get the cc code details for Transfer Drop
          	listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_OnDemandDrop,null,null);
-            
-            string sLanID = listCareTypeDesc[0].TYPE_DESC_LONG__c.replace('<LAN ID>', (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '');
+            system.debug('listCareTypeDesc---->'+listCareTypeDesc);
+            string sLanID = listCareTypeDesc[0].TYPE_DESC_LONG__c.replace('<LAN ID>', userDetails[0].LAN_ID_EI__c != null ? userDetails[0].LAN_ID_EI__c : ''); //(userDetails.LAN_ID_EI__c != '') ? userDetails.LAN_ID_EI__c : '');
         	//string descLongVal = sLanID.replace('<Date Received>', dTodayDate);//String.valueOf(dToday));
         	//string sContactCode = listCareTypeDesc[0].TYPE_CODE__c;
+        	Date dCurrentDate = CARE_UtilityController.getReceivedDateSession();
+        
         	
         Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
         
@@ -88,7 +94,7 @@ public class CARE_OnDemandDropController {
                 appCare.REQUEST_DROP__c = careAppRecord[0].REQUEST_DROP__c;
                 appCare.NEED_NAME_CHANGE__c = careAppRecord[0].NEED_NAME_CHANGE__c;
                 appCare.APPLICANT_NAME__c = careAppRecord[0].APPLICANT_NAME__c;
-                appCare.RECEIVED_DATE__c = careAppRecord[0].RECEIVED_DATE__c != null ? careAppRecord[0].RECEIVED_DATE__c : careAppRecord[0].PROCESSED_DATE__c;
+                appCare.RECEIVED_DATE__c = dCurrentDate; //careAppRecord[0].RECEIVED_DATE__c != null ? careAppRecord[0].RECEIVED_DATE__c : careAppRecord[0].PROCESSED_DATE__c;
                 appCare.PROCESSED_DATE__c = dDateToday; //careAppRecord[0].PROCESSED_DATE__c;
                 appCare.SOURCE_CHANNEL_TYPE__c = 'Regular App';
                 appCare.FORM_CODE__c = careAppRecord[0].FORM_CODE__c;
@@ -116,6 +122,7 @@ public class CARE_OnDemandDropController {
                 appCare.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
                 appCare.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
                 appCare.CCB_CONTACT_COMMENT__c = careAppRecord[0].CCB_CONTACT_COMMENT__c;
+            	appCare.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
                 appCare.DROP_SOURCE__c = careAppRecord[0].DROP_SOURCE__c;
                 //appCare.REASON_DESC__c = careAppRecord[0].REASON_DESC__c;
                 appCare.CC_CL_CD__c = careAppRecord[0].CC_CL_CD__c;
@@ -147,15 +154,24 @@ public class CARE_OnDemandDropController {
             
         }
         
+            
         string dateReceivedForComment = careAppNewRecord[0].RECEIVED_DATE__c.format();
-        string descLongVal = sLanID.replace('<Date Received>', dateReceivedForComment);//String.valueOf(dToday));
+        descLongVal = sLanID.replace('<Date Received>', dateReceivedForComment);//String.valueOf(dToday));
                 
         	careRes.oldAppIdForCare=enrollAppIdValue;
 			careRes.descLongValue=descLongVal;
+            careRes.dReceiveDate = careAppNewRecord[0].RECEIVED_DATE__c;
+            careRes.dDropDate   = dDateToday;
         	careRes.NewAppIdForCare=NewCareId;
         	careRes.sContactCode = careAppNewRecord[0].CCB_CONTACT_CODE__c;
         
-        
+		}catch(Exception ex){
+            //EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_OnDemandDropController', ex));
+            //CARE_UtilityController.sendExceptionEmail('CARE_OnDemandDropController', ex.getTypeName(), ex.getMessage(), ex.getLineNumber(), perIdValue);
+
+            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+            
+        }        
         //return careEISiteMapData;
         return careRes;
     }
@@ -169,6 +185,10 @@ public class CARE_OnDemandDropController {
 		public string descLongValue{get;set;}
         @AuraEnabled
 		public string sContactCode{get;set;}
+          @AuraEnabled
+		public Date dReceiveDate{get;set;}
+          @AuraEnabled
+		public Date dDropDate{get;set;}
 }
     
     public class onDemandDropInfoWrapper{
@@ -287,6 +307,7 @@ public class CARE_OnDemandDropController {
             system.debug('inside updateCareAppRecord----->');
         
         List<CARE_Application__c> careAppList = new List<CARE_Application__c>();
+            Date dCurrentDate = CARE_UtilityController.getReceivedDateSession();
             
          List<CARE_Application__c> careAppListToUpdate =[select Id, DROP_SOURCE__c, CCB_CONTACT_COMMENT__c, 
                                                         RECEIVED_DATE__c, PER_ID__c
@@ -295,7 +316,7 @@ public class CARE_OnDemandDropController {
             
             if(careAppListToUpdate != null){
             for(CARE_Application__c appCare : careAppListToUpdate){                 
-                appCare.RECEIVED_DATE__c = onDemandDropData.receiveDateValue != null ? onDemandDropData.receiveDateValue : dDateToday;
+                appCare.RECEIVED_DATE__c = onDemandDropData.receiveDateValue != null ? onDemandDropData.receiveDateValue : dCurrentDate;
                 appCare.PER_ID__c = perID;
                 appCare.CCB_CONTACT_COMMENT__c = onDemandDropData.dropReasonValue;
                 appCare.DROP_SOURCE__c = onDemandDropData.dropSourceValue;

@@ -15,7 +15,7 @@ import DeleteMsgHeader from '@salesforce/label/c.CARE_DeleteMsgHeader';
 const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date',
                         typeAttributes: {day: "numeric", month: "numeric",year: "numeric"},
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
-                {label: 'Transaction Number', fieldName: 'sApplicationName',type: 'text',
+                {label: 'Transaction Number', fieldName: 'sApplicationName',type: 'text', initialWidth: 140,
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'Contact',fieldName: 'sContact',type: 'text',
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
@@ -27,7 +27,7 @@ const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date'
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'SA Type',fieldName: 'sSAType',type: 'text',
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
-                {label: 'Yes date', fieldName: 'dStartDate', type: 'date', 
+                {label: 'Yes Date', fieldName: 'dStartDate', type: 'date', 
                         typeAttributes: {day: "numeric", month: "numeric", year: "numeric"},
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'No Date',fieldName: 'dEndDate',type: 'date',
@@ -53,8 +53,9 @@ export default class Care_History extends LightningElement {
     @api sSelectedHistoryPerId;
     @api sLiveCall;
     @api listSelectedHistoryPremIds;
-
-    @track data = [];
+    sSecondHistoryCall = '';
+    listHistorydata = [];
+    listHistoryAllData = [];
     @track columns = columns;
     @track bShowModal = false;
     @track bShowDeleteModal = false;
@@ -72,6 +73,7 @@ export default class Care_History extends LightningElement {
     @track idRecLast;
     @track typeNumber;
     @track bshowHistory = false;
+    bNoLoadMoreCall = true;
     label = {
         DeleteSuccessMsg,
         TransactionErrorMsg,
@@ -99,25 +101,25 @@ export default class Care_History extends LightningElement {
         if (data) {
             console.log('data value ------->'+ JSON.stringify(data));
             console.log('Console log 1');
-            this.data = data.listHistoryWrapper;
+            this.listHistorydata = data.listHistoryWrapper;
             this.totalCount = data.iTotalRecCount;
             this.idRecLast = data.idLastRec;
-            if(this.data != undefined || this.data != ''){
+            if(this.listHistorydata != undefined && this.listHistorydata != ''){
                 this.bshowHistory = true;
             }else{
                 this.bshowHistory = false;
                 this.showLoadingSpinner = false;
             }
-            //console.log('total listHistoryWrapper data length ------->' , this.data.length);
+            //console.log('total listHistoryWrapper data length ------->' , this.listHistorydata.length);
             console.log('total count of select clause ------->' , this.totalCount);
             this.error = undefined;
-            if (this.data) {
+            if (this.listHistorydata) {
                 this.showLoadingSpinner = false;
             }
 
         } else if (error) {
             this.error = error;
-            this.data = undefined;
+            this.listHistorydata = undefined;
             this.bshowHistory = false;
         }
     }
@@ -132,22 +134,26 @@ export default class Care_History extends LightningElement {
         }
         this.tableElement = event.target;
         this.loadMoreStatus = 'Loading';
-        const currentRecord = this.data;
+        let currentRecord = this.listHistorydata;
+
         //const lastRecId = currentRecord[currentRecord.length - 1].sId;
         const lastRecId = this.idRecLast;
+        console.log('data length before concat ------->' + JSON.stringify(this.listHistorydata)); 
+               
         console.log('lastRecId ------->' + lastRecId);
-        if (this.data.length < this.totalCount) {
+        if (this.listHistorydata.length < this.totalCount) {
             getEnrollHistoryData({ sPerID: this.sSelectedHistoryPerId, sMakeLiveCall: this.sLiveCall, recordId: lastRecId})
             .then(result => {
                 console.log('result length before concat ------->' + result.listHistoryWrapper.length);
                 //console.log('result with recordID ------->' + JSON.stringify(result));
-                const currentData = result.listHistoryWrapper;
+                this.bNoLoadMoreCall = false;
+                let currentData = result.listHistoryWrapper;
                 //Appends new data to the end of the table
-                const newData = currentRecord.concat(currentData);
-                this.data = newData;
+                let newData = currentRecord.concat(currentData);
+                this.listHistorydata = newData;
                 this.idRecLast = result.idLastRec;
-                //console.log('data length after concat ------->' + this.data.length); 
-                if (this.data.length >= this.totalCount) {
+                console.log('data length after concat ------->' + JSON.stringify(this.listHistorydata)); 
+                if (this.listHistorydata.length >= this.totalCount) {
                 console.log('Inside If block of LoadMoreData'); 
                     this.bIsLoaded = false;
                     //event.target.enableInfiniteLoading = false;
@@ -174,8 +180,8 @@ export default class Care_History extends LightningElement {
     
     
     //call refresh data after Delete click to update the wired hisotry cache
-    @api refreshData() {
-        return refreshApex(this._wiredHistoryResult);
+    refreshData() {
+            return refreshApex(this._wiredHistoryResult);
     }
 
     //handle row action of lightning data table for View & Delete button click
@@ -214,9 +220,33 @@ export default class Care_History extends LightningElement {
             })
 
             .then(() => {
+                //if(this.bIsLoaded)
+                this.sLiveCall = new Date().toLocaleString();
                 this.showToastMessage('Record Deleted', this.label.DeleteSuccessMsg, 'success');
-                this.refreshData();
+                this.bIsLoaded = true;
                 this.bShowDeleteModal = false;
+                /*if(this.bNoLoadMoreCall){
+                    this.refreshData('first');
+                }else{
+                  let deletedIndexList = [];
+                    const tempCurrentData = this.listHistorydata;
+                    for (let cnt = 0; cnt < tempCurrentData.length; cnt++) {
+                        if(tempCurrentData[cnt].sId == this.selectedRecord){
+                            deletedIndexList.push(cnt);
+                        }
+                    }
+                    console.log("deletedIndexList",deletedIndexList);
+                    console.log("deletedInde data before",this.listHistorydata.length);
+                    if(deletedIndexList.length > 0 && this.loadMoreStatus != undefined){
+                        tempCurrentData.splice(deletedIndexList[0], deletedIndexList.length);
+                        this.refreshData(tempCurrentData);
+                        //this.listHistorydata = tempCurrentData;
+                        console.log("deletedInde data after",tempCurrentData.length);
+                    }
+                }
+                */
+            
+                
             })
             .catch((error) => {
                 this.showToastMessage('Application Error', this.label.TransactionErrorMsg, 'error');
@@ -231,8 +261,16 @@ export default class Care_History extends LightningElement {
     //show message based on ApplicationRecord
     showSpecialMessageModal(currentRow) {
         this.sApplicationNo = currentRow.sApplicationName;
-        this.typeNumber = currentRow.sTypeNo;
+        //this.typeNumber = currentRow.sTypeNo;
+       if(currentRow.sTypeNo === undefined || currentRow.sTypeNo === ''){
+            this.typeNumber = '';
+        }else{
+            this.typeNumber = currentRow.sTypeNo; 
+        }
         this.bShowMessageModal = true;
+        console.log('sApplicationNo from parent History', this.sApplicationNo);
+        console.log('typeNumber from parent History', this.typeNumber);
+        console.log('bShowMessageModal from parent History', this.bShowMessageModal);
     }
     //close Special msg modal Popup
     closeMessageModal(event) {
@@ -258,8 +296,8 @@ export default class Care_History extends LightningElement {
     }
 
     /*get checkHistoryData() {
-        if(this.data != undefined || this.data != ''){
-            return this.data.length > 0;
+        if(this.listHistorydata != undefined || this.listHistorydata != ''){
+            return this.listHistorydata.length > 0;
         }
         
     }*/

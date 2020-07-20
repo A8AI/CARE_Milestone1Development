@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Avg_Bill_Amount_EI__c</fullName>
+    <description>Average bill amount based on all related usage records.</description>
+    <externalId>false</externalId>
+    <formula>IF( ISNULL( Usage_Billing_Amount_EI__c ) ,0,
+IF(Usage_Billing_Amount_EI__c =0,0,
+Usage_Billing_Amount_EI__c / Number_Usage_Records_EI__c ))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Average bill amount based on all related usage records.</inlineHelpText>
+    <label>Avg Bill Amount</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

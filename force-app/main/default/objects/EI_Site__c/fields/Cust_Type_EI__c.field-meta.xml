@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cust_Type_EI__c</fullName>
+    <description>Customer classification</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Customer classification</inlineHelpText>
+    <label>Customer Type</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>AGR</fullName>
+                <default>false</default>
+                <label>AGR</label>
+            </value>
+            <value>
+                <fullName>COM/IND</fullName>
+                <default>false</default>
+                <label>COM/IND</label>
+            </value>
+            <value>
+                <fullName>ESP</fullName>
+                <default>false</default>
+                <label>ESP</label>
+            </value>
+            <value>
+                <fullName>ESP NEGY</fullName>
+                <default>false</default>
+                <label>ESP NEGY</label>
+            </value>
+            <value>
+                <fullName>GSP</fullName>
+                <default>false</default>
+                <label>GSP</label>
+            </value>
+            <value>
+                <fullName>GSP NEGY</fullName>
+                <default>false</default>
+                <label>GSP NEGY</label>
+            </value>
+            <value>
+                <fullName>NMDL</fullName>
+                <default>false</default>
+                <label>NMDL</label>
+            </value>
+            <value>
+                <fullName>NON CIS</fullName>
+                <default>false</default>
+                <label>NON CIS</label>
+            </value>
+            <value>
+                <fullName>PYMT MGT</fullName>
+                <default>false</default>
+                <label>PYMT MGT</label>
+            </value>
+            <value>
+                <fullName>RES</fullName>
+                <default>false</default>
+                <label>RES</label>
+            </value>
+            <value>
+                <fullName>ST GOV</fullName>
+                <default>false</default>
+                <label>ST GOV</label>
+            </value>
+            <value>
+                <fullName>TOU NEGY</fullName>
+                <default>false</default>
+                <label>TOU NEGY</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

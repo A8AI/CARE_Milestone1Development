@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Special_Flag__c</fullName>
+    <externalId>false</externalId>
+    <label>Special Flag</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>K12 School ComCollege</fullName>
+                <default>false</default>
+                <label>K12 School ComCollege</label>
+            </value>
+            <value>
+                <fullName>Community College</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Community College</label>
+            </value>
+            <value>
+                <fullName>K12 School</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>K12 School</label>
+            </value>
+            <value>
+                <fullName>MDA List</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>MDA List</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

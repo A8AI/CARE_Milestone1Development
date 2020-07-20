@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Latest_Usage_Period_End_EI__c</fullName>
+    <description>Date of the period end of the latest associated usage record</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Date of the period end of the latest associated usage record</inlineHelpText>
+    <label>Latest Usage Period End</label>
+    <summarizedField>EI_Usage__c.Period_End_EI__c</summarizedField>
+    <summaryForeignKey>EI_Usage__c.Site_EI__c</summaryForeignKey>
+    <summaryOperation>max</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

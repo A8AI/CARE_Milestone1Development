@@ -19,7 +19,14 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>CARE_AdjustmentHeader</shortDescription>
-        <value>Adjustment ( Contact Code: {0} )</value>
+        <value>Adjustments ( Contact Code: {0} )</value>
+    </labels>
+    <labels>
+        <fullName>CARE_AdultFieldValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for adult field greater than zero</shortDescription>
+        <value>Adult field must have valid value greater than zero !!</value>
     </labels>
     <labels>
         <fullName>CARE_ApplicantNameMsg</fullName>
@@ -33,7 +40,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast message for both retro dates validation</shortDescription>
-        <value>If entered, both Retro start and End date must have a value!!</value>
+        <value>If entered, both Retro Start date and Retro End Date must have a value!!</value>
     </labels>
     <labels>
         <fullName>CARE_CancelHeader</fullName>
@@ -43,11 +50,18 @@
         <value>Cancel the Transaction?</value>
     </labels>
     <labels>
+        <fullName>CARE_CommentFieldLengthValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show if Comment Length is exceeding 256 Characters.</shortDescription>
+        <value>Comment length should be less than 256 characters!!</value>
+    </labels>
+    <labels>
         <fullName>CARE_CommentFieldValidationMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast message to remove comma from comment box</shortDescription>
-        <value>Please remove comma(,) from comment field in order to proceed!!</value>
+        <value>Please remove comma(,) from Comment field in order to proceed!!</value>
     </labels>
     <labels>
         <fullName>CARE_ConfirmationDeleteMsg</fullName>
@@ -62,6 +76,13 @@
         <protected>false</protected>
         <shortDescription>Modal Popup Message to show in CARE App for confirmation</shortDescription>
         <value>Are you sure you want to cancel the transaction?</value>
+    </labels>
+    <labels>
+        <fullName>CARE_CurrencySymbol</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_CurrencySymbol</shortDescription>
+        <value>$</value>
     </labels>
     <labels>
         <fullName>CARE_DeleteMsgHeader</fullName>
@@ -97,6 +118,13 @@
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App if entered CaseID is invalid</shortDescription>
         <value>Case ID provided is incorrect, Case ID must be 15 or 18 character Salesforce ID !!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_DropReasonMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for Drop Reason</shortDescription>
+        <value>Drop Reason field cannot be left blank. Please enter a reason!!</value>
     </labels>
     <labels>
         <fullName>CARE_DropValidationMsg</fullName>
@@ -173,7 +201,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>CARE_ImageIdLengthMismatchMsg</shortDescription>
-        <value>Please enter 8 or 10 numeric characters</value>
+        <value>Enter 8 numeric or 15/18 alphanumeric</value>
     </labels>
     <labels>
         <fullName>CARE_ImageIdPatternMismatchMsg</fullName>
@@ -197,11 +225,18 @@
         <value>You can&apos;t select this SAID as it belongs to different Person ID. Please do reselection of all records of same person!!</value>
     </labels>
     <labels>
+        <fullName>CARE_NoCitySearchAllowMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message No City Search Allowed</shortDescription>
+        <value>Please provide one or more fields along with city</value>
+    </labels>
+    <labels>
         <fullName>CARE_NotEligibleMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App if Customer is not having a Current discount</shortDescription>
-        <value>Selected Customer is Not enrolled in CARE/FERA!!.</value>
+        <value>Selected Customer is Not enrolled in CARE/FERA!!</value>
     </labels>
     <labels>
         <fullName>CARE_NotEligiblePersonMsg</fullName>
@@ -232,6 +267,41 @@
         <value>Please select atleast one record!!</value>
     </labels>
     <labels>
+        <fullName>CARE_PEVHUAcceptMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PEVHUAcceptMsg</shortDescription>
+        <value>{0} is accepted successfully!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_PEVHUCreateErrorMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PEVHUCreateErrorMsg</shortDescription>
+        <value>Error while creating record for {0} form!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_PEVHUProcessingMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PEVHUProcessingMsg</shortDescription>
+        <value>{0} processing complete!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_PEVHUSaveMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PEVHUSaveMsg</shortDescription>
+        <value>{0} form saved!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ReceiveDateMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for Receive Date</shortDescription>
+        <value>Please select a date in Received Date field !!</value>
+    </labels>
+    <labels>
         <fullName>CARE_RecordsCustNotFound</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -250,14 +320,14 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App for Retro Date Validation.</shortDescription>
-        <value>Retro end date should be greater than Retro start date and not greater than Todays date!!</value>
+        <value>Retro End Date should be greater than Retro Start Date and less than Yes Date!!</value>
     </labels>
     <labels>
         <fullName>CARE_RetroStartDateValidationMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>CARE_RetroStartDateValidationMsg</shortDescription>
-        <value>Retro start date should be less than Todays date.</value>
+        <value>Retro Start Date should be less than Todays date.</value>
     </labels>
     <labels>
         <fullName>CARE_SaveSuccessMsg</fullName>
@@ -309,6 +379,13 @@
         <value>Contact has been created to send an Enrollment Application!!</value>
     </labels>
     <labels>
+        <fullName>CARE_StartDateValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to show Retro No Date cannot be left blank</shortDescription>
+        <value>Retro End Date cannot be left blank if Retro Start Date is edited for that row!!</value>
+    </labels>
+    <labels>
         <fullName>CARE_SuccessHeader</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -342,5 +419,12 @@
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App if Override is not selected for different Prem</shortDescription>
         <value>Please select SA from same Premise or select override !!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_ValidValuesMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Enter Valid Msg for Search</shortDescription>
+        <value>Please enter valid values as highlighted &amp; mentioned over each field.</value>
     </labels>
 </CustomLabels>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FM_cant_edit_existing_SA</fullName>
+    <active>true</active>
+    <description>If the SA has an external id the New Streetlight SA checkbox cannot be checked</description>
+    <errorConditionFormula>AND (
+
+NOT(ISBLANK( External_ID_EI__c )),
+
+ New_Streetlight_SA_EI__c = TRUE)</errorConditionFormula>
+    <errorDisplayField>New_Streetlight_SA_EI__c</errorDisplayField>
+    <errorMessage>New Streetlight SA checkbox cannot be checked when External ID is populated</errorMessage>
+</ValidationRule>

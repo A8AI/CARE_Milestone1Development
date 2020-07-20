@@ -85,7 +85,7 @@ public class CARE_ImageUploadControllerTest {
         List<CARE_Application__c> lstCareApp = [SELECT Id FROM CARE_Application__c WHERE PER_ID__c = '0123456003'];
         
         //Select the existing
-        List<CARE_APP_Image_List__c> lstExisting = [SELECT Id, Name, IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
+        List<CARE_APP_Image_List__c> lstExisting = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
                                                     FROM CARE_APP_Image_List__c
                                                     WHERE Application__c =:lstCareApp[0].Id
                                                     ORDER by Name];
@@ -94,7 +94,8 @@ public class CARE_ImageUploadControllerTest {
             wrapperObj1.sId = ci.Id;
             wrapperObj1.iImageIndex = 0;
             wrapperObj1.iNumber = 1;
-            wrapperObj1.sImageId = String.valueOf(ci.IMAGE_ID__c);
+			//wrapperObj1.sImageId = String.valueOf(ci.IMAGE_ID__c);
+			wrapperObj1.sImageId = ci.EXTERNAL_IMAGE_ID__c;
             lstWrapperObj.add(wrapperObj1);
         }
         //Add extra value //insert
@@ -129,7 +130,7 @@ public class CARE_ImageUploadControllerTest {
             List<CARE_Application__c> lstCareApp = [SELECT Id FROM CARE_Application__c WHERE PER_ID__c = '0123456003'];
             
             //Select the existing
-            List<CARE_APP_Image_List__c> lstExisting = [SELECT Id, Name, IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
+            List<CARE_APP_Image_List__c> lstExisting = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
                                                         FROM CARE_APP_Image_List__c
                                                         WHERE Application__c =:lstCareApp[0].Id
                                                         ORDER by Name];
@@ -137,7 +138,7 @@ public class CARE_ImageUploadControllerTest {
             CARE_ImageUploadController.deleteCareAppImageList(lstExisting[0].Id);
             
             //Check the existing
-            List<CARE_APP_Image_List__c> lstAfterDel = [SELECT Id, Name, IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
+            List<CARE_APP_Image_List__c> lstAfterDel = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
                                                         FROM CARE_APP_Image_List__c
                                                         WHERE Application__c =:lstCareApp[0].Id
                                                         ORDER by Name];
@@ -294,12 +295,14 @@ public class CARE_ImageUploadControllerTest {
     private static List<CARE_APP_Image_List__c> createCareAppImagesLists(List<CARE_Application__c> lstCareApp){
         List<CARE_APP_Image_List__c> lstcareAppImgList = new List<CARE_APP_Image_List__c>();
         CARE_APP_Image_List__c careAppImgList1 = CARE_TestDataFactory.careImage(lstCareApp[0]);
-        careAppImgList1.IMAGE_ID__c = Long.valueOf('88888888'); //8 digit - DATAXPORT
+        //careAppImgList1.IMAGE_ID__c = Long.valueOf('88888888'); //8 digit - DATAXPORT
+        careAppImgList1.EXTERNAL_IMAGE_ID__c = '88888888'; //8 digit - DATAXPORT
         careAppImgList1.SOURCE_SYSTEM__c = 'DATAXPORT';
         lstcareAppImgList.add(careAppImgList1);
         
         CARE_APP_Image_List__c careAppImgList2 = CARE_TestDataFactory.careImage(lstCareApp[0]);
-        careAppImgList2.IMAGE_ID__c = Long.valueOf('5555555555'); //10 digit - DOCUMENTUM
+        //careAppImgList2.IMAGE_ID__c = Long.valueOf('5555555555'); //10 digit - DOCUMENTUM
+        careAppImgList2.EXTERNAL_IMAGE_ID__c = '5555555555'; //10 digit - DOCUMENTUM
         careAppImgList2.SOURCE_SYSTEM__c = 'DOCUMENTUM';
         lstcareAppImgList.add(careAppImgList2);
         

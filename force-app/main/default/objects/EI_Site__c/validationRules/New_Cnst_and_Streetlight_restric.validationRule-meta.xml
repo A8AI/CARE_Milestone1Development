@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>New_Cnst_and_Streetlight_restric</fullName>
+    <active>true</active>
+    <description>The New Construction check box and the New Streetlight SA check box cannot be checked at the same time</description>
+    <errorConditionFormula>IF (
+
+AND( 
+SA_is_for_New_Cnst_Proj_EI__c = TRUE,
+
+ New_Streetlight_SA_EI__c = TRUE), TRUE, FALSE
+)</errorConditionFormula>
+    <errorMessage>You cannot check both the SA is for New Construction Project check box and the New Streetlight SA check box</errorMessage>
+</ValidationRule>

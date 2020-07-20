@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_CARE_Recently_Moved_EI__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF (   ISBLANK(CARE_Moved_In_Date_EI__c), false, 
+ IF (   today() - CARE_Moved_In_Date_EI__c  &lt;= 730, true, false  )    
+
+)</formula>
+    <label>CARE Recently Moved</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

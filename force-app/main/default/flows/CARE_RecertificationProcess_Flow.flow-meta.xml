@@ -119,6 +119,57 @@
         </connector>
     </assignments>
     <assignments>
+        <description>Set Qualified By =Categorical</description>
+        <name>Set_Qualified_By_Categorical</name>
+        <label>Set Qualified By =Categorical</label>
+        <locationX>1874</locationX>
+        <locationY>975</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Categorical</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Customer_on_FERA</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Qualified By Categorical</description>
+        <name>Set_Qualified_By_Categorical_2</name>
+        <label>Set Qualified By Categorical</label>
+        <locationX>1765</locationX>
+        <locationY>1425</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Categorical</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Customer_On_FERADiscount</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Qualified By =Income</description>
+        <name>Set_Qualified_By_Income</name>
+        <label>Set Qualified By =Income</label>
+        <locationX>2072</locationX>
+        <locationY>1196</locationY>
+        <assignmentItems>
+            <assignToReference>varQualifiedBy</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Income</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Fixed_Income_Checked</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
         <description>Set Valid RS Flag False</description>
         <name>Set_Valid_RS_Flag_False</name>
         <label>Set Valid RS Flag False</label>
@@ -177,7 +228,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Customer_on_FERA</targetReference>
+                <targetReference>Set_Qualified_By_Categorical</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -658,7 +709,7 @@
         <locationX>1960</locationX>
         <locationY>1345</locationY>
         <defaultConnector>
-            <targetReference>Fixed_Income_Checked</targetReference>
+            <targetReference>Set_Qualified_By_Income</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
@@ -728,7 +779,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Is_Customer_On_FERADiscount</targetReference>
+                <targetReference>Set_Qualified_By_Categorical_2</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -924,6 +975,18 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>varExistingDiscountType_Input</name>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varIsApplicationAccepted_Input</name>
+            <value>
+                <elementReference>varIsApplicationAccepted_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>varIsCareAppEnrolledSARequired_Input</name>
             <value>
                 <booleanValue>true</booleanValue>
@@ -948,15 +1011,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varExistingDiscountType_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>varExistingDiscountType_Input</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varIsApplicationAccepted_Input</name>
+            <name>varHasDiscountOnOtherPremise_Input</name>
             <value>
-                <elementReference>varIsApplicationAccepted_Input</elementReference>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1013,6 +1082,18 @@
             </value>
         </inputAssignments>
         <inputAssignments>
+            <name>varExistingDiscountType_Input</name>
+            <value>
+                <elementReference>varExistingDiscountType_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varIsApplicationAccepted_Input</name>
+            <value>
+                <elementReference>varIsApplicationAccepted_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <name>varIsCareAppEnrolledSARequired_Input</name>
             <value>
                 <booleanValue>true</booleanValue>
@@ -1037,15 +1118,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varExistingDiscountType_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>varExistingDiscountType_Input</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>varIsApplicationAccepted_Input</name>
+            <name>varHasDiscountOnOtherPremise_Input</name>
             <value>
-                <elementReference>varIsApplicationAccepted_Input</elementReference>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1064,6 +1151,12 @@
         <locationX>3510</locationX>
         <locationY>1942</locationY>
         <flowName>CARE_UpdateCCCode_Flow</flowName>
+        <inputAssignments>
+            <name>colValidFERARateSchedule_Input</name>
+            <value>
+                <elementReference>colValidFERARateSchedule</elementReference>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <name>recColValidSAIdsOfSelectedPremise_Input</name>
             <value>
@@ -1113,9 +1206,21 @@
             </value>
         </inputAssignments>
         <inputAssignments>
-            <name>colValidFERARateSchedule_Input</name>
+            <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
             <value>
-                <elementReference>colValidFERARateSchedule</elementReference>
+                <elementReference>recColSAIdsOfOtherPremiseDiscount_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varHasDiscountOnOtherPremise_Input</name>
+            <value>
+                <elementReference>varHasDiscountOnOtherPremise_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varQualifiedBy_Input</name>
+            <value>
+                <elementReference>varQualifiedBy</elementReference>
             </value>
         </inputAssignments>
         <outputAssignments>
@@ -1421,6 +1526,15 @@
         <objectType>EI_Site__c</objectType>
     </variables>
     <variables>
+        <description>SA IDs of Discounted Premise (Passed From Main flow)</description>
+        <name>recColSAIdsOfOtherPremiseDiscount_Input</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
         <description>All Valid SA ID Details of Selected Premise from main flow.</description>
         <name>recColValidSAIdsOfSelectedPremise_Input</name>
         <dataType>SObject</dataType>
@@ -1488,6 +1602,17 @@
         <isOutput>false</isOutput>
     </variables>
     <variables>
+        <description>Flag:Discount on other Premise</description>
+        <name>varHasDiscountOnOtherPremise_Input</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
         <description>Variable to hold whether customer has electric SA</description>
         <name>varHasElectricSA</name>
         <dataType>Boolean</dataType>
@@ -1548,6 +1673,14 @@
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Categorical/Income/Not Qualified/None</description>
+        <name>varQualifiedBy</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
 </Flow>

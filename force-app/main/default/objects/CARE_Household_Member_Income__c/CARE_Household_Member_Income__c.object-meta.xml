@@ -155,9 +155,9 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>CARE Household Member Income</label>
     <nameField>
-        <encryptionScheme>None</encryptionScheme>
-        <label>Income Source TypeCode</label>
-        <type>Text</type>
+        <displayFormat>CTMI{0000000000}</displayFormat>
+        <label>NAME (Member Income Seq)</label>
+        <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE Household Member Income</pluralLabel>
     <searchLayouts/>

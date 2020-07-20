@@ -45,7 +45,7 @@ public class CARE_ImageUploadController {
             for(CareAppImageWrapper imageWrap : listImagesWrap){
                 CARE_APP_Image_List__c careAppImgList = new CARE_APP_Image_List__c();
                 
-                String imageType = (imageWrap.sImageId.length() == 10) ? CARE_Constants.CARE_DOCUMENTUM : CARE_Constants.CARE_DATAXPORT;
+                String imageType = (imageWrap.sImageId.length() == 8) ? CARE_Constants.CARE_DATAXPORT : CARE_Constants.CARE_CASE;
                 
                 if(String.isNotEmpty(imageWrap.sId)){ //For update
                     careAppImgList.Id = imageWrap.sId;
@@ -55,7 +55,8 @@ public class CARE_ImageUploadController {
                 if(String.isEmpty(imageWrap.sId)){ //For insert
                     careAppImgList.Application__c = idApplication;
                 }
-                careAppImgList.IMAGE_ID__c = Long.valueOf(imageWrap.sImageId);
+                //careAppImgList.IMAGE_ID__c = Long.valueOf(imageWrap.sImageId);
+                careAppImgList.EXTERNAL_IMAGE_ID__c = imageWrap.sImageId;
                 
                 listCareAppImgList.add(careAppImgList);
             }
@@ -73,13 +74,14 @@ public class CARE_ImageUploadController {
     public static List<CareAppImageWrapper> getCareAppImageList(Id idApplication){
         List<CareAppImageWrapper> listCareAppImageWrapper =  new List<CareAppImageWrapper>();
         try{            
-            List<CARE_APP_Image_List__c> listCareAppImgList = [SELECT Id, Name, IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
+            List<CARE_APP_Image_List__c> listCareAppImgList = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
                                                                FROM CARE_APP_Image_List__c
                                                                WHERE Application__c =:idApplication
                                                                ORDER by Name];
             for(CARE_APP_Image_List__c careAppImg : listCareAppImgList){
                 CareAppImageWrapper careAppImgWrap =  new CareAppImageWrapper();
-                careAppImgWrap.sImageId = String.valueOf(careAppImg.IMAGE_ID__c);
+                //careAppImgWrap.sImageId = String.valueOf(careAppImg.IMAGE_ID__c);
+                careAppImgWrap.sImageId = careAppImg.EXTERNAL_IMAGE_ID__c;
                 careAppImgWrap.sId = careAppImg.Id;
                 
                 listCareAppImageWrapper.add(careAppImgWrap);
@@ -96,7 +98,7 @@ public class CARE_ImageUploadController {
     @AuraEnabled
     public static void deleteCareAppImageList(String sId){
         try {
-            List<CARE_APP_Image_List__c> listCareAppImgList = [SELECT Id, Name, IMAGE_ID__c
+            List<CARE_APP_Image_List__c> listCareAppImgList = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c
                                                                FROM CARE_APP_Image_List__c
                                                                WHERE Id =:sId];
             

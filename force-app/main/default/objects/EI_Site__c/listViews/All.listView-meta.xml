@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>Account_EI__c</columns>
+    <columns>Utility_Account_Number_EI__c</columns>
+    <columns>SAID_EI__c</columns>
+    <columns>NAME</columns>
+    <columns>Person_ID_EI__c</columns>
+    <columns>EI_Premise__c</columns>
+    <columns>DR_Premise_Type_EI__c</columns>
+    <columns>F_Svc_Status_EI__c</columns>
+    <columns>DR_Bill_Cycle_Cd_EI__c</columns>
+    <columns>Billing_Account_ID_EI__c</columns>
+    <columns>DR_FERA_Flag_EI__c</columns>
+    <columns>CARE_Customer_EI__c</columns>
+    <columns>Rate_Schedule_EI__c</columns>
+    <columns>F_IsActive_Formula_EI__c</columns>
+    <columns>Svc_Status_Code_EI__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>All</label>
+</ListView>

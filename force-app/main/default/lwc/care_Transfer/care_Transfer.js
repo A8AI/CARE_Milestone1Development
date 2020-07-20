@@ -16,12 +16,15 @@ import CARE_ErrorHeader from '@salesforce/label/c.CARE_ErrorHeader';
 import CARE_SuccessHeader from '@salesforce/label/c.CARE_SuccessHeader';
 import CARE_CancelHeader from '@salesforce/label/c.CARE_CancelHeader';
 import CARE_TransferHeader from '@salesforce/label/c.CARE_TransferHeader';
+import CARE_CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
+import CARE_CommentFieldLengthValidationMsg from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
+
 
 //column definition of From Section
 const columnTransferFrom = [
     { label: 'Account', fieldName: 'sAccountId', type: 'text'},
-    { label: 'Premise', fieldName: 'sPremiseId', type: 'text' },
-    { label: 'SA', fieldName: 'sSAId', type: 'text'  },
+    { label: 'Premise ID', fieldName: 'sPremiseId', type: 'text' },
+    { label: 'SA ID', fieldName: 'sSAId', type: 'text'  },
     { label: 'SA Type', fieldName: 'sSAType', type: 'text' },
     { label: 'Discount Type', fieldName: 'sDiscountType', type: 'text'  }
 ];
@@ -60,7 +63,9 @@ label = {
     CARE_ErrorHeader,
     CARE_SuccessHeader,
     CARE_CancelHeader,
-    CARE_TransferHeader
+    CARE_TransferHeader,
+    CARE_CommentFieldValidationMsg,
+    CARE_CommentFieldLengthValidationMsg   
  }
 
     //Open Transfer button Modal Popup
@@ -132,17 +137,17 @@ label = {
         let firstRecordOverRide;
         let overRideErrorCondition;
         let errorSelection;
-    
+
         this.dataTransferTo.forEach(ele => {
-            if(ele.sSelectedRecord){
+            if (ele.sSelectedRecord) {
                 this.listValidPremise.push(ele.sPremiseId)
             }
-});
+        });
 
         this.dataTransferTo.forEach(element => {
 
             //check if record is in selected premise & is a valid SA (active & Rate scedhule)
-            if (this.listValidPremise.includes(element.sPremiseId) && !element.bSelectionDisabled){
+            if (this.listValidPremise.includes(element.sPremiseId) && !element.bSelectionDisabled) {
 
                 this.listValidTranferTo.push(element);
             }
@@ -152,7 +157,7 @@ label = {
                 firstRecordOverRide = element.bOverRide;
                 isFirstRecord = true;
             }
-           //loop through other records and check if selected records is having same premise
+            //loop through other records and check if selected records is having same premise
             else {
                 if (element.sSelectedRecord && firstRecordPremId != element.sPremiseId) {
                     overRideErrorCondition = true;
@@ -161,7 +166,7 @@ label = {
         });
         //check if atleast one SA is selected
         console.log('listValidPremise===>', JSON.stringify(this.listValidPremise));
-        console.log('listValidTranferTo===>',  JSON.stringify(this.listValidTranferTo));
+        console.log('listValidTranferTo===>', JSON.stringify(this.listValidTranferTo));
         console.log('reasonSelected===>', this.objInputFields.sReason);
         if (this.listValidTranferTo.length === 0) {
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotSelectedMsg, 'error');
@@ -180,7 +185,17 @@ label = {
             this.listValidTranferTo = [];
             this.listValidPremise = [];
         }
-         //premise are different , check if overide is checked for each selected record
+        //check if Comment is valid (char length <256 and should not contain ',')
+        else if (this.objInputFields.sComment.includes(",")) {
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldValidationMsg, 'error');
+            this.listValidTranferTo = [];
+            this.listValidPremise = [];
+        } else if (this.objInputFields.sComment.length > 256) {
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldLengthValidationMsg, 'error');
+            this.listValidTranferTo = [];
+            this.listValidPremise = [];
+        }
+        //premise are different , check if overide is checked for each selected record
         else {
             if (overRideErrorCondition) {
                 errorSelection = false;
@@ -201,10 +216,13 @@ label = {
             else {
                 this.doTranfer();
             }
-        }       
+        }
     }
     //call Apex method for updating Transfer Transaction
     doTranfer() {
+        const historyTabRefreshEvent = new CustomEvent("historytabrefreshfromchild", {
+            detail: 'History'   //To refresh History Tab
+        });
         this.showLoadingSpinner = true;
         this.objInputFields.sPerId = this.sSelectedPerId;
         updateSADetails({
@@ -218,6 +236,7 @@ label = {
                     this.showToastMessage(this.label.CARE_SuccessHeader, this.label.CARE_TransactionSuccessMsg, 'success');
                     this.bFormEdited = false;
                     this.showLoadingSpinner = false;
+                    this.dispatchEvent(historyTabRefreshEvent);
                     this.closeModal();
                 }
                 else {

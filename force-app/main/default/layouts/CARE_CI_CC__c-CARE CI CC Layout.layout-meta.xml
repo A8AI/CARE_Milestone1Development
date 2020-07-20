@@ -23,7 +23,7 @@
                 <field>CC_ID__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>CC_STATUS_FLG__c</field>
             </layoutItems>
             <layoutItems>

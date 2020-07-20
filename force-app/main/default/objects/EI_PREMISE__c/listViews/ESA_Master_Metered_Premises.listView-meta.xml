@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ESA_Master_Metered_Premises</fullName>
+    <booleanFilter>1 and 2</booleanFilter>
+    <columns>NAME</columns>
+    <columns>City_EI__c</columns>
+    <columns>County_EI__c</columns>
+    <columns>Zip_Code_EI__c</columns>
+    <columns>ESA_Last_Treated_EI__c</columns>
+    <columns>Care_Enrolled_EI__c</columns>
+    <columns>Care_Start_Date_EI__c</columns>
+    <columns>CARE_Recently_PEVed_EI__c</columns>
+    <columns>High_Usage_Gas_EI__c</columns>
+    <columns>High_Usage_Electric_EI__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Master_Metered_EI__c</field>
+        <operation>equals</operation>
+        <value>1</value>
+    </filters>
+    <filters>
+        <field>County_EI__c</field>
+        <operation>equals</operation>
+        <value>ALAMEDA</value>
+    </filters>
+    <label>ESA Master Metered Premises</label>
+    <language>en_US</language>
+    <sharedTo>
+        <group>ESA_CBO</group>
+        <group>ESA_Externals_w_o_CBO</group>
+        <group>ESA_Program_Managers</group>
+    </sharedTo>
+</ListView>

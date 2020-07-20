@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All_Site_Service_Agreements</fullName>
+    <columns>NAME</columns>
+    <columns>Building_Type_EI__c</columns>
+    <columns>Climate_Zone_EI__c</columns>
+    <columns>Vintage_EI__c</columns>
+    <columns>F_Svc_Status_EI__c</columns>
+    <columns>SA_End_Date_EI__c</columns>
+    <columns>Svc_Status_Code_EI__c</columns>
+    <columns>Svc_Type_Code_EI__c</columns>
+    <columns>Cust_Type_EI__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>NAICS1_Code_relation_EI__c</field>
+        <operation>contains</operation>
+        <value>1125</value>
+    </filters>
+    <label>E2RI_Test</label>
+    <language>en_US</language>
+</ListView>

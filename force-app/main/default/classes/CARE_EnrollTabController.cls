@@ -16,6 +16,7 @@ Modification Log     :
 public class CARE_EnrollTabController {
     
     public static date today = system.today();
+    public static Date dDateAfterNinetyDays = today.addDays(+90);
     public static Id currentLoggedInUser = UserInfo.getUserId();
     public static Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
     
@@ -29,8 +30,7 @@ public class CARE_EnrollTabController {
         DataTableWrapper response = new DataTableWrapper();
         List<CARE_App_Enrolled_SA__c> saList = [select Id, SA_ID__c, Service_Agreement__r.Svc_Type_Code_EI__c ,SA_START_DATE__c, 
                                                 END_DATE__c, RETRO_START_DATE__c,RETRO_END_DATE__c,
-                                                LAST_BILL_DATE__c, Service_Agreement__r.SA_Start_Date_EI__c, START_DATE__c            
-                                                //from CARE_App_Enrolled_SA__c where Id =: careAppId order by SA_ID__c];
+                                                LAST_BILL_DATE__c, Service_Agreement__r.SA_Start_Date_EI__c, START_DATE__c  
                                                 from CARE_App_Enrolled_SA__c where APPLICATION__r.Id =: selectedAppId order by SA_ID__c];
         
         for(CARE_App_Enrolled_SA__c pfs : saList){
@@ -88,6 +88,12 @@ public class CARE_EnrollTabController {
         @AuraEnabled 
         public String value {get;set;}
     }
+    
+    public class AccountWrapper{
+        @AuraEnabled public String sHomePhone {get;set;}
+        @AuraEnabled public String sWorkPhone {get;set;}
+        @AuraEnabled public String sMobilePhone {get;set;}
+    }
         
     public class DataTableWrapper{
         @AuraEnabled
@@ -105,7 +111,7 @@ public class CARE_EnrollTabController {
     
     @AuraEnabled(Cacheable = true)
     //public static List<CARE_Received_Date_Settings__c> sendReceivedDate(){
-    public static Map<String,Date> sendReceivedDate(){
+    public static Map<String,Date> sendReceivedDate(String sLiveCall){
         Map<String,Date> listDates = new Map<String,date>();
         date dToday = date.today();
         listDates.put('processDateValue', dToday);
@@ -116,15 +122,35 @@ public class CARE_EnrollTabController {
     
     @AuraEnabled(Cacheable = true)
     //public static List<CARE_Received_Date_Settings__c> sendReceivedDate(){
-    public static date determineisNewEnrollment(String selectedPerId){
+    public static boolean determineisNewEnrollment(String selectedPerId, String sLiveCall){
+        
+       boolean bIsNewCustomer = false;
+        system.debug('selectedPerId for isNewEnrollment---->'+selectedPerId);
         
         Map<String, EI_Site__c> careEISiteMapData = new Map<String, EI_Site__c>();
         careEISiteMapData = CARE_UtilityController.getActiveSADetailsForPersonId(selectedPerId);
         system.debug('careEISiteMapData for is new enrollment: '+ careEISiteMapData);
+        date noDateValue;
         
-        date noDateValue = [Select END_DATE__c from CARE_App_Enrolled_SA__c
-                    where SA_ID__c In: careEISiteMapData.keyset() Order by CreatedDate desc limit 1].END_DATE__c;
-        return noDateValue;
+        if(careEISiteMapData.size() > 0){
+                //for(string careEISite : careEISiteMapData.keyset()){ 
+                for(EI_Site__c careEISite : careEISiteMapData.values()){
+                    //if(careEISite.get(careEISite).Care_Stop_Date_EI__c != null && careEISite.get(careEISite).Care_Stop_Date_EI__c > today && careEISite.get(careEISite).Care_Stop_Date_EI__c >= dDateAfterNinetyDays){
+                     if(careEISite.Care_Stop_Date_EI__c != null && careEISite.Care_Stop_Date_EI__c > today && careEISite.Care_Stop_Date_EI__c >= dDateAfterNinetyDays){   
+                       bIsNewCustomer = false;
+                  		break; 
+                    }
+                }
+        }
+           
+        else{
+            bIsNewCustomer = true;
+        }
+        
+        
+        /*date noDateValue = [Select END_DATE__c from CARE_App_Enrolled_SA__c
+                    where SA_ID__c In: careEISiteMapData.keyset() Order by CreatedDate desc limit 1].END_DATE__c;*/
+        return bIsNewCustomer;
         
     }
     
@@ -136,15 +162,15 @@ public class CARE_EnrollTabController {
         try{
         String soqlWhereClause;
         if(sSelectedAppId == 'tab'){
-            soqlWhereClause = ' PER_ID__c =: selectPerId AND APPLICATION_STATUS__c = \'In-Progress\' Order by CreatedDate desc limit 1';
+            soqlWhereClause = ' PER_ID__c =: selectPerId AND APPLICATION_STATUS__c = \'In-Progress\' AND ENROLLMENT_TYPE__c = \'ENROLLMENT\' Order by CreatedDate desc limit 1';
         }else{
             soqlWhereClause = ' Id=:sSelectedAppId';
         }
-        String sSoqlAppQuery = 'Select Id, IS_RECERT__c, NO_ADULT__c, APPLICANT_NAME__c, APPLICATION_STATUS__c,'
-                + 'NO_CHILD__c, IS_SIGNED__c, REQUEST_DROP__c, NEED_NAME_CHANGE__c, RECEIVED_DATE__c,'
-                + 'SOURCE_CHANNEL_TYPE__c, PROCESSED_DATE__c, FORM_CODE__c, COC_CODE__c, LIHEAP__c,' 
-                + 'MEDICAID_UNDER65__c, MEDICAID_OVER65__c, EMAIL_ADDRESS__c, ANNUAL_HOUSEHOLD_INCOME__c,'
-                + 'FIXED_INCOME__c, WIC__c, CALFRESH_SNAP__c, CALWORKS_TANF__c, HEAD_START_INCOME__c,'
+        String sSoqlAppQuery = 'Select Id, IS_RECERT__c, NO_ADULT__c, APPLICANT_NAME__c,IS_ADJUSTMENT__c,REASON_DESC__c, APPLICATION_STATUS__c,'
+                + 'NO_CHILD__c, IS_SIGNED__c, REQUEST_DROP__c, NEED_NAME_CHANGE__c, RECEIVED_DATE__c, LastModifiedBy.LAN_ID_EI__c, '
+                + 'SOURCE_CHANNEL_TYPE__c, PROCESSED_DATE__c, FORM_CODE__c, COC_CODE__c, LIHEAP__c, LastModifiedDate,' 
+                + 'MEDICAID_UNDER65__c, MEDICAID_OVER65__c, EMAIL_ADDRESS__c, ANNUAL_HOUSEHOLD_INCOME__c, QUALIFIED_BY__c, CARE_Account_ID__c,'
+                + 'FIXED_INCOME__c, WIC__c, CALFRESH_SNAP__c, CALWORKS_TANF__c, HEAD_START_INCOME__c, PREM_ID__c,'
                 + 'SSI__c, HEALTHY_FAMILIES__c,PROCESS_NOTES__c, NSLP__c, BUREAU_INDIAN_AFFAIRS__c, CCB_CONTACT_DESC__c, CCB_CONTACT_COMMENT__c'
                 + ' from CARE_Application__c where ' + soqlWhereClause;
                         
@@ -197,6 +223,9 @@ public class CARE_EnrollTabController {
         @AuraEnabled public string adjustReasonValue{get;set;}
         @AuraEnabled public string ccbCommentValue{get;set;}
         @AuraEnabled public boolean isDuplicateValue{get;set;}
+        @AuraEnabled public String sHomePhone{get;set;}
+        @AuraEnabled public String sWorkPhone{get;set;}
+        @AuraEnabled public String sMobilePhone{get;set;}
         //@AuraEnabled public CustomerInfoWrapper customerDetails{get;set;}	
         
     }
@@ -239,6 +268,8 @@ public class CARE_EnrollTabController {
         finalResult careRes = new finalResult();
         verificationResult vRes = new verificationResult();
         
+        system.debug('eIAcctId is---->'+ eIAcctId);
+        
         careRes.bImageCheck = true;
         careRes.applicationId='';
 		careRes.ccCodeDescription='';
@@ -247,6 +278,8 @@ public class CARE_EnrollTabController {
         careRes.careCCLongDescValue = '';
         vRes.ccCodeDescription = '';
         vRes.ccCodeDescriptionLong = '';
+        
+        List<Account> accUpdateEmailList  = new List<Account>();
         
         if(eventName == 'save'){
             careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID, appIdCareApplication, eIAcctId);
@@ -269,8 +302,20 @@ public class CARE_EnrollTabController {
             sIsAccepted = 'Yes';
             if(String.isNotBlank(appIdCareApplication)){ 
                 if(CARE_UtilityController.checkIfImageIDExists(appIdCareApplication) || CARE_UtilityController.checkIfUploadedImageExists(appIdCareApplication) ){
+                    	
+                    AccountWrapper accPhoneDetails = getPhoneDetails(eIAcctId);
+                        MassRecordData.sHomePhone = accPhoneDetails.sHomePhone;
+                        MassRecordData.sWorkPhone = accPhoneDetails.sWorkPhone;
+                        MassRecordData.sMobilePhone = accPhoneDetails.sMobilePhone;
+                    
+                    system.debug('MassRecordData.sMobilePhone--->'+MassRecordData.sMobilePhone);
+                    system.debug('MassRecordData.sWorkPhone--->'+MassRecordData.sWorkPhone);
+                    system.debug('MassRecordData.sHomePhone--->'+MassRecordData.sHomePhone);
+                    
                         careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId);          
             			vRes = GetCCCode(careAppId, perID,  premID, sIsAccepted);
+                    	accUpdateEmailList = updateAccountEmail(MassRecordData, perID);
+                    
                         careRes.applicationId=appIdCareApplication;
                         careRes.ccCodeDescription=vRes.ccCodeDescription;
                         careRes.careCCLongDescValue = vRes.ccCodeDescriptionLong;
@@ -312,8 +357,7 @@ public class CARE_EnrollTabController {
     }
     
     
-    @AuraEnabled
-    public static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId){
+    private static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId){
         String careAppId;
         
         system.debug('Inside createUpdateCareAppRecord method---->:');
@@ -351,6 +395,9 @@ public class CARE_EnrollTabController {
             caObj.MEDICAID_UNDER65__c = MassRecordData.mediUnderValue;
             caObj.MEDICAID_OVER65__c = MassRecordData.mediOverValue;
             caObj.EMAIL_ADDRESS__c = MassRecordData.emailValue;
+            caObj.PHONE_NO__c = MassRecordData.sMobilePhone;
+            caObj.HOME_PHONE_NO__c = MassRecordData.sHomePhone;
+            caObj.WORK_PHONE_NO__c = MassRecordData.sWorkPhone;
             caObj.ANNUAL_HOUSEHOLD_INCOME__c = MassRecordData.annualIncValue;
             caObj.FIXED_INCOME__c = MassRecordData.fixedIncValue;
             caObj.PROCESS_NOTES__c = MassRecordData.processNoteValue != null ? MassRecordData.processNoteValue : MassRecordData.adjustReasonValue;
@@ -403,8 +450,7 @@ public class CARE_EnrollTabController {
         return careAppId;
     }
     
-    @AuraEnabled
-    public static verificationResult GetCCCode(String careAppId, String perID, List<String> premID, string sIsAccepted){
+    private static verificationResult GetCCCode(String careAppId, String perID, List<String> premID, string sIsAccepted){
        
         verificationResult vRes = new verificationResult();
         
@@ -437,12 +483,53 @@ public class CARE_EnrollTabController {
         ccDescription = (String)getCodeFlow.getVariableValue('varCCCodeDescription_Output');
         ccDescriptionLong = (String)getCodeFlow.getVariableValue('varCCCodeLongDescription_Output');
         //System.debug('CC Code---->'+ccCode);
-        System.debug('Description---->'+ccDescription);       
+        System.debug('Description from Flow Returned---->'+ccDescription);
+        System.debug('Description Long Returned from Flow---->'+ccDescriptionLong); 
         
         vRes.ccCodeDescription = ccDescription;
         vRes.ccCodeDescriptionLong = ccDescriptionLong;
         return vRes;
         
+    }
+    
+    public static List<Account> updateAccountEmail(CustomerInfoWrapper MassRecordData, String perID){
+        
+        system.debug('inside update Account email update method----->');
+        
+        List<Account> emailUpdateList = new List<Account>();
+        List<Account> listUpdateEmail = new List<Account>();
+        
+        if(string.isNotBlank(MassRecordData.emailValue)){
+        	listUpdateEmail = [Select Id, Email_adr_EI__c from Account where Billing_Person_ID_EI__c =: perID];
+        }
+              
+            for(Account acc : listUpdateEmail){
+                acc.Email_adr_EI__c = MassRecordData.emailValue;
+                emailUpdateList.add(acc);
+            }
+            
+        if(emailUpdateList.size() > 0){
+            system.debug('email updated with value---->'+ emailUpdateList);
+            update emailUpdateList;
+        }
+        return emailUpdateList;
+    }
+    
+    public static AccountWrapper getPhoneDetails(Id idAcc){   
+        
+        system.debug('inside get phone details method---->');
+        List<Account> listAccPhone = [SELECT Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c 
+                                      FROM Account
+                                      WHERE Id =:idAcc];
+        
+        AccountWrapper accWrapper = new AccountWrapper();
+        if(!listAccPhone.isEmpty() && listAccPhone.size() > 0){
+            accWrapper.sHomePhone = listAccPhone[0].Bus_Phone_1_EI__c;
+            accWrapper.sWorkPhone = listAccPhone[0].Bus_Phone_2_EI__c;
+            accWrapper.sMobilePhone = listAccPhone[0].Primary_Contact_Mobile_EI__c;
+        }     
+        system.debug('accWrapper-->'+accWrapper);
+        return accWrapper;
     }
     
     /*@AuraEnabled

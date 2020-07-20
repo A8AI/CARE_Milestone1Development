@@ -141,6 +141,11 @@
                 <default>false</default>
                 <label>DataXport PEV Notice</label>
             </value>
+            <value>
+                <fullName>CARE New_Mover</fullName>
+                <default>false</default>
+                <label>CARE New_Mover</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

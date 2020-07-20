@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Avg_Cost_Per_Therm_EI__c</fullName>
+    <description>Average $/Therm (Thru-Put) based on related usage records.</description>
+    <externalId>false</externalId>
+    <formula>IF( ISNULL( Total_Usage_Value_Rollup_EI__c ) ,0,
+IF(Total_Usage_Value_Rollup_EI__c =0,0,
+IF( Svc_Type_Code_EI__c =&quot;G&quot;, Usage_Billing_Amount_EI__c / Total_Usage_Value_Rollup_EI__c ,0)))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>Average $/Therm (Thru-Put) based on related usage records.</inlineHelpText>
+    <label>Avg Blended Gas Rate (Therm)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

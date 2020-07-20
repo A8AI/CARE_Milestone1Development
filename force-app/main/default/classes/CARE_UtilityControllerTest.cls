@@ -175,6 +175,10 @@ insert objImage;*/
     
     @isTest
     public static void testgetSADetailsForPersonId(){
+        Id userId = UserInfo.getUserId();
+        String sSubject = 'Error In CARE Enrollment';
+        String sBody = 'For help in the issue please contact Energy Insight SupportTeam';
+        Integer iLineNo = 201;
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
         Account acc = [SELECT ID,CARE_ON_PROBATION__c,Billing_Person_ID_EI__c,Billing_Account_ID_EI__c,CARE_PROBATION_START_DATE__c,CARE_PROBATION_END_DATE__c FROM ACCOUNT];
         acc.CARE_PROBATION_END_DATE__c = date.today()+3;
@@ -206,6 +210,10 @@ insert objImage;*/
         CARE_UtilityController.checkIfImageIDExists(acc.Id);
         CARE_UtilityController.checkEmployeeDiscount(lstSite.Person_ID_EI__c);
         CARE_UtilityController.checkEmployeeDiscount(acc.Id);
+        CARE_UtilityController.getUserDetails(userId);
+        CARE_UtilityController.sendExceptionEmail('CARE_UtilityControllerTest',sSubject,sBody,iLineNo,careApp[0].PER_ID__c);
+        CARE_UtilityController.getSystemInfoCareAppData(careApp[0].Id);
+        CARE_UtilityController.setCancelStatusCareApplication(careApp[0].Id);
         Test.stopTest();       
     }
     
@@ -302,5 +310,6 @@ insert objImage;*/
         Id recTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
         System.assertEquals(recTypeId != null,true);    
     }
+     
     
 }

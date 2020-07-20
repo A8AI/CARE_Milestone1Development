@@ -10,12 +10,36 @@ export default class Care_SearchAutoComplete extends LightningElement {
     @api fieldApiName;
     @api inputLabel;
     @api name;
+    @api checkInpulValidFlag;
     listRecordsSession = [];
 
     //public method
     @api handleClearFields() {
-        this.searchKey = '';
+        this.template.querySelector('lightning-input').setCustomValidity("");
+      /*  const allInputValidCV = [...this.template.querySelectorAll('lightning-input')]
+    .reduce((validSoFar, inputCmp) => {
+        inputCmp.reportValidity();
+        return validSoFar && inputCmp.checkValidity();
+    }, true);
+    */
+    this.handleSubmitFields(); 
+    this.searchKey = '';
+     
+    
     }
+
+    //public method
+    @api handleSubmitFields() {
+        const allInputValidSubmit = [...this.template.querySelectorAll('lightning-input')]
+    .reduce((validSoFar, inputCmp) => {
+        inputCmp.reportValidity();
+        return validSoFar && inputCmp.checkValidity();
+    }, true);
+        this.checkInpulValidFlag = allInputValidSubmit;
+    
+    
+    }
+
 
     get showListBox() {
         return this.listOfRec.length > 0;
@@ -107,6 +131,26 @@ export default class Care_SearchAutoComplete extends LightningElement {
             this.listOfRec =  '';
         }
         */
+    if((this.searchKey.length < 10 && this.searchKey.length > 0) || this.searchKey.length > 10 ){
+        this.template.querySelector('lightning-input').setCustomValidity("Please enter 10 characters numbers only including leading zeroes");
+    }else if( this.searchKey.length == 10 && this.searchKey.match(/^\d{10}$/) == null){
+        this.template.querySelector('lightning-input').setCustomValidity("Please enter 10 characters numbers only including leading zeroes");
+   
+    }
+    else{
+        this.template.querySelector('lightning-input').setCustomValidity("");
+    }
+   
+
+  /*const allInputValid = [...this.template.querySelectorAll('lightning-input')]
+  .reduce((validSoFar, inputCmp) => {
+      inputCmp.reportValidity();
+      return validSoFar && inputCmp.checkValidity();
+  }, true);
+  */
+      this.handleSubmitFields();
+
+    
        console.log("Blur");
        this.listOfRec =  '';
         

@@ -1009,7 +1009,7 @@
             <targetReference>CARE_Application_Details</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <subflows>
         <description>Convert Rate Schedule String To Collection</description>
         <name>Convert_Rate_Schedule_String_To_Collection</name>

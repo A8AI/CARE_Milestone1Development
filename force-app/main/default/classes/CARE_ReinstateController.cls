@@ -28,6 +28,10 @@ public with sharing class CARE_ReinstateController {
         public String sCommentWithAdjustment{get;set;}
         @AuraEnabled
         public String sCommentWithOutAdjustment{get;set;}
+        @AuraEnabled
+        public String sCommentWithAdjustmentESACOMP{get;set;}
+        @AuraEnabled
+        public String sCommentWithOutAdjustmentESACOMP{get;set;}
         @AuraEnabled 
         public Date dTodaysDate{get;set;}
         @AuraEnabled 
@@ -40,6 +44,8 @@ public with sharing class CARE_ReinstateController {
             listReinstateReason = new List<WrapperReinstateReason>();
             sCommentWithOutAdjustment = '';
             sCommentWithAdjustment = '';
+            sCommentWithAdjustmentESACOMP = '';
+            sCommentWithOutAdjustmentESACOMP = '';
             sContactCode = '';
         }
     }
@@ -110,8 +116,17 @@ public with sharing class CARE_ReinstateController {
                 return null;
             }
             else{                      
-                //check if customer is having a previous active enrollent with Valid CC Code & Future End Date            
-                List<CARE_App_Enrolled_SA__c> listCareAppEnrolledSA = new List <CARE_App_Enrolled_SA__c> ([SELECT SA_ID__c, START_DATE__c, END_DATE__c,Service_Agreement__r.Id, 
+                 List<CARE_CC_Batch_Detail__c> listCareCCBatchForCust = [select Id, CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c, APPLICATION__c from CARE_CC_Batch_Detail__c
+                                              					where PER_ID__c =: sPerID 
+                                                                AND APPLICATION__r.PER_ID__C = : sPerID
+                                                                AND  ((APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_CARE_DISCOUNT_TYPE AND CARE_CI_CC__r.CC_TYPE_CD__c IN: CARE_Constants.CARE_CC_CODE_CARE)
+                                                                          OR (APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_FERA_DISCOUNT_TYPE AND CARE_CI_CC__r.CC_TYPE_CD__c IN: CARE_Constants.CARE_CC_CODE_FERA)
+                                                                     ) 
+                                                                ORDER BY CC_DTTM__c DESC];
+                if(listCareCCBatchForCust.size()>0){
+                    sLatestCareAppID = listCareCCBatchForCust[0].APPLICATION__c;
+                    //check if customer is having a previous active enrollent with Valid CC Code & Future End Date            
+                    List<CARE_App_Enrolled_SA__c> listCareAppEnrolledSA = new List <CARE_App_Enrolled_SA__c> ([SELECT SA_ID__c, START_DATE__c, END_DATE__c,Service_Agreement__r.Id, 
                                                                                                            Service_Agreement__r.Svc_Type_Code_EI__c, Service_Agreement__r.CARE_DISCOUNT_TYPE__c,
                                                                                                            Service_Agreement__r.SA_Start_Date_EI__c,
                                                                                                            Service_Agreement__r.Imported_Site_Name_EI__c,
@@ -121,62 +136,75 @@ public with sharing class CARE_ReinstateController {
                                                                                                            APPLICATION__r.CARE_Account_ID__c
                                                                                                            FROM CARE_App_Enrolled_SA__C 
                                                                                                            WHERE END_DATE__c>:dTodaysDate
-                                                                                                           AND APPLICATION__r.PER_ID__C = : sPerID 
-                                                                                                           AND  ((APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_CARE_DISCOUNT_TYPE AND APPLICATION__r.CCB_CONTACT_CODE__c IN: CARE_Constants.CARE_CC_CODE_CARE)
-                                                                                                                 OR (APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_FERA_DISCOUNT_TYPE AND APPLICATION__r.CCB_CONTACT_CODE__c IN: CARE_Constants.CARE_CC_CODE_FERA)
-                                                                                                                ) 
-                                                                                                           ORDER BY APPLICATION__r.CreatedDate DESC]);
-                //get the latest transaction record with a valid Rate Schedule & Status Code from history transaction
-                if  (listCareAppEnrolledSA!= null && listCareAppEnrolledSA.size()>0 ){                    
-                   sLatestCareAppID = listCareAppEnrolledSA[0].APPLICATION__c;
-                    
-                    for (CARE_App_Enrolled_SA__c careAppobj : listCareAppEnrolledSA){
+                                                                                                           AND APPLICATION__r.PER_ID__C = : sPerID
+                                                                                                           AND APPLICATION__r.Id = : sLatestCareAppID    
+                                                                                                               
+                                                                                                           ]);
+                
+                    //get the latest transaction record with a valid Rate Schedule & Status Code from history transaction
+                    if  (listCareAppEnrolledSA!= null && listCareAppEnrolledSA.size()>0 ){                    
+                       
                         
-                        if(careAppobj.APPLICATION__c == sLatestCareAppID ){
-                        
-                        WrapperReinstate objRec = new WrapperReinstate ();
-                        objRec.idSARecID = careAppobj.Service_Agreement__r.Id;
-                        objRec.idAccountID = careAppobj.APPLICATION__r.CARE_Account_ID__c;
-                        objRec.sBillingAccountId = careAppobj.ACCT_ID__C;
-                        objRec.sPremiseId = careAppobj.PREM_ID__c;
-                        objRec.sSAId = careAppobj.SA_ID__c;
-                        objRec.sSAType = careAppobj.Service_Agreement__r.Svc_Type_Code_EI__c; 
-                        objRec.sDiscountType = careAppobj.CC_CL_CD__c;
-                        objRec.dEndDate = careAppobj.END_DATE__c;
-                        objRec.sRateSchedule = careAppobj.RS_CD__c; 
-                        objRec.dSAStartDate = careAppobj.Service_Agreement__r.SA_Start_Date_EI__c;
-                        objRec.sApplicantName = careAppobj.Service_Agreement__r.Imported_Site_Name_EI__c;
-                        
-                        reinstateResponse.listReinstate.add(objRec);                        
+                        for (CARE_App_Enrolled_SA__c careAppobj : listCareAppEnrolledSA){
+                            
+                            //if(careAppobj.APPLICATION__c == sLatestCareAppID ){
+                            
+                            WrapperReinstate objRec = new WrapperReinstate ();
+                            objRec.idSARecID = careAppobj.Service_Agreement__r.Id;
+                            objRec.idAccountID = careAppobj.APPLICATION__r.CARE_Account_ID__c;
+                            objRec.sBillingAccountId = careAppobj.ACCT_ID__C;
+                            objRec.sPremiseId = careAppobj.PREM_ID__c;
+                            objRec.sSAId = careAppobj.SA_ID__c;
+                            objRec.sSAType = careAppobj.Service_Agreement__r.Svc_Type_Code_EI__c; 
+                            objRec.sDiscountType = careAppobj.CC_CL_CD__c;
+                            objRec.dEndDate = careAppobj.END_DATE__c;
+                            objRec.sRateSchedule = careAppobj.RS_CD__c; 
+                            objRec.dSAStartDate = careAppobj.Service_Agreement__r.SA_Start_Date_EI__c;
+                            objRec.sApplicantName = careAppobj.Service_Agreement__r.Imported_Site_Name_EI__c;
+                            
+                            reinstateResponse.listReinstate.add(objRec);                        
+                            //}
                         }
+    
+                        //get the Transfer reason list  
+                        List <String> listReinstateReason = CARE_UtilityController.getReasonList('Reinstatement Reason');
+                        for(String sReasonRec : listReinstateReason){
+                            
+                            WrapperReinstateReason objReinstateReason = new WrapperReinstateReason ();
+                            objReinstateReason.label = sReasonRec;
+                            objReinstateReason.value = sReasonRec;  
+                            reinstateResponse.listReinstateReason.add(objReinstateReason);
+                        } 
+                      
+                        //get the cc code details for Reinstate reason without adjustment
+                        listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT,null,null);                
+                        reinstateResponse.sCommentWithAdjustment = listCareType[0].TYPE_DESC_LONG__c;
+                        
+                        //get the cc code details for Reinstare reason with adjustment
+                        listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT,null,null);
+                        reinstateResponse.sCommentWithOutAdjustment = listCareType[0].TYPE_DESC_LONG__c;   
+                        
+                        //get the cc code details for Reinstate reason without adjustment for selected reason -ESA COMP Reinstatement
+                        listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT_ESA_COMP,null,null);                
+                        reinstateResponse.sCommentWithOutAdjustmentESACOMP = listCareType[0].TYPE_DESC_LONG__c;
+                        
+                        //get the cc code details for Reinstate reason with adjustment  for selected reason -ESA COMP Reinstatement
+                        listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT_ESA_COMP,null,null);                
+                        reinstateResponse.sCommentWithAdjustmentESACOMP = listCareType[0].TYPE_DESC_LONG__c;                                        
+                     
+                        reinstateResponse.dTodaysDate = dTodaysDate;
+                        reinstateResponse.dDateBeforeNinetyDays = dTodaysDate.addDays(-90);
+                        reinstateResponse.sContactCode = listCareType[0].TYPE_CODE__c;
+                            
+                        return reinstateResponse;   
                     }
-
-                    //get the Transfer reason list  
-                    List <String> listReinstateReason = CARE_UtilityController.getReasonList('Reinstatement Reason');
-                    for(String sReasonRec : listReinstateReason){
-                        
-                        WrapperReinstateReason objReinstateReason = new WrapperReinstateReason ();
-                        objReinstateReason.label = sReasonRec;
-                        objReinstateReason.value = sReasonRec;  
-                        reinstateResponse.listReinstateReason.add(objReinstateReason);
-                    } 
-                  
-                    //get the cc code details for Reinstate reason without adjustment
-                    listCareType = CARE_UtilityController.getCCCode(CARE_COnstants.CARE_CC_REINSTATE_NO_ADJUSTMENT,null,null);                
-                    reinstateResponse.sCommentWithAdjustment = listCareType[0].TYPE_DESC_LONG__c;
+                    else{
+                        return null;
+                    }
                     
-                    //get the cc code details for Reinstare reason with adjustment
-                    listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT,null,null);                
-                    reinstateResponse.sCommentWithOutAdjustment = listCareType[0].TYPE_DESC_LONG__c;                    
-                    reinstateResponse.dTodaysDate = dTodaysDate;
-                    reinstateResponse.dDateBeforeNinetyDays = dTodaysDate.addDays(-90);
-					reinstateResponse.sContactCode = listCareType[0].TYPE_CODE__c;
-                        
-                    return reinstateResponse;   
-                }
-                else{
+                }else{
                     return null;
-                }                
+                }     
             }
             
         }
@@ -195,12 +223,26 @@ public with sharing class CARE_ReinstateController {
             List<CARE_App_Enrolled_SA__c>listCareAppEnrolledSA = new List<CARE_App_Enrolled_SA__c>();
             //get the cc code details for Reinstate based on Adjustment value.
             if(bIfAdjustment){
-                sTypeNo = CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT;
-                listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null);
+                //reason selected is ESA COMP
+                if(CARE_Constants.CARE_REINSTATE_RSN_ESA_COMP.contains(objReinstateInput.sReason)){
+                    sTypeNo = CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT_ESA_COMP;
+                    listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null); 
+                }
+                else{
+                    sTypeNo = CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT;
+                    listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null);
+                }                
             }
             else{
-                sTypeNo = CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT;
-                listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null);
+                //reason selected is ESA COMP
+                if(CARE_Constants.CARE_REINSTATE_RSN_ESA_COMP.contains(objReinstateInput.sReason)){
+                    sTypeNo = CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT_ESA_COMP;
+                    listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null); 
+                }
+                else{
+                    sTypeNo = CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT;
+                    listCareType = CARE_UtilityController.getCCCode(sTypeNo,null,null);
+                }
             }
             
             //get RecordType id from constant class
@@ -211,7 +253,7 @@ public with sharing class CARE_ReinstateController {
             
             careAppobj.RecordTypeId = careAppRecTypeId;
             careAppobj.APPLICANT_NAME__c =  listReinstateSA[0].sApplicantName;
-            careAppObj.APPLICATION_STATUS__c = 'Decision Made';
+            careAppObj.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
             careAppObj.ENROLLMENT_TYPE__c = 'OTHER';
             careAppobj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_REINSTATE_SRC;
             careAppObj.PROCESSED_DATE__c  = dTodaysDate;
@@ -219,6 +261,7 @@ public with sharing class CARE_ReinstateController {
             careAppObj.CCB_CONTACT_CODE__c = listCareType[0].TYPE_CODE__c;
             careAppObj.CCB_CONTACT_DESC__c= listCareType[0].TYPE_DESC__c;
             careAppObj.CCB_CONTACT_COMMENT__c = objReinstateInput.sComment;//Comment updated in Modal 
+            careAppObj.CCB_Contact_Type_No__c = sTypeNo;
             careAppObj.REASON_DESC__c = objReinstateInput.sReason; //Reason selected in Modal        
             careAppObj.CARE_Account_ID__c = listReinstateSA[0].idAccountID;//EI Account Id
             careAppObj.ACCT_ID__c = listReinstateSA[0].sBillingAccountId;

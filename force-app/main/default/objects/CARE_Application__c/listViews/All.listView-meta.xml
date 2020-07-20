@@ -21,5 +21,10 @@
         <field>APPLICATION_STATUS__c</field>
         <operation>notEqual</operation>
     </filters>
+    <filters>
+        <field>END_DATE__c</field>
+        <operation>notEqual</operation>
+    </filters>
     <label>All</label>
+    <language>en_US</language>
 </ListView>

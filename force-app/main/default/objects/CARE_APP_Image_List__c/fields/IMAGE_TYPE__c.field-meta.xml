@@ -21,6 +21,11 @@
                 <default>false</default>
                 <label>DOCUMENTUM</label>
             </value>
+            <value>
+                <fullName>CASE</fullName>
+                <default>false</default>
+                <label>CASE</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -45,7 +45,7 @@
                         </div>
             
                         <div class="slds-p-left_xx-large slds-size_1-of-4 slds-p-top_medium">
-                            <lightning-input type="date" label="Received Date" date-style="short" data-id="receivedDateField" value={OnDemandDropObj.receiveDateValue} onfocusout={handleChange}></lightning-input>
+                            <lightning-input required type="date" label="Received Date" date-style="short" data-id="receivedDateField" value={OnDemandDropObj.receiveDateValue} onfocusout={handleChange}></lightning-input>
                         </div>
                     </div>
 
@@ -77,6 +77,7 @@
                     <div if:true={showLoadingSpinner}>
                         <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
                      </div>
+                     <br/><br/><br/><br/><br/><br/>
                 </div>
                 <!-- Modal/Popup Box LWC footer starts here -->
                 <footer class="slds-modal__footer">

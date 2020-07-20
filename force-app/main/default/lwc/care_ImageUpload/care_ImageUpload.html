@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 6/21/2020, 12:57:44 AM
+  @Last Modified On   : 7/10/2020, 1:19:07 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    5/29/2020   Cognizant Technology Solutions     Initial Version
@@ -61,14 +61,14 @@
                                             {image.iNumber}</td>
                                         <td title="" class="slds-truncate">
                                             <div if:true={showViewOnly}>
-                                                <lightning-input name='imageIdName' type='text' max-length='10'
+                                                <lightning-input name='imageIdName' type='text' max-length='18'
                                                     variant="label-hidden" label="no label" placeholder="Enter Image ID"
                                                     value={image.sImageId} key={image.iImageIndex}
                                                     data-id={image.iImageIndex} data-api="imageId" read-only>
                                                 </lightning-input>
                                             </div>
                                             <div if:false={showViewOnly}>
-                                                <lightning-input name='imageIdName' type='text' max-length='10'
+                                                <lightning-input name='imageIdName' type='text' max-length='18'
                                                     variant="label-hidden" label="no label" placeholder="Enter Image ID"
                                                     value={image.sImageId}  
                                                     key={image.iImageIndex} data-id={image.iImageIndex} data-api="imageId" autocomplete="off"

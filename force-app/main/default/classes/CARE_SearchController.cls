@@ -335,7 +335,7 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
             soqlWhereClause += ' AND Phone_1_EI__c = \''+ searchDetails.sPhone + '\''; 
         }        
         if(searchDetails.sStreet != null && searchDetails.sStreet.trim() != ''){
-            String sStreet = '\'%' + String.escapeSingleQuotes(searchDetails.sStreet) + '%\'';
+            String sStreet = '\'' + String.escapeSingleQuotes(searchDetails.sStreet) + '%\'';
             soqlWhereClause += ' AND Svc_Full_Adr_EI__c LIKE ' + sStreet; // use wildcard serach
         }        
         if(searchDetails.sCity != null && searchDetails.sCity.trim() != ''){

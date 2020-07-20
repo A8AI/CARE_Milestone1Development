@@ -1,7 +1,7 @@
 <template>
     <template if:true={bshowHistory}>
         <div style="height: 300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
-            <lightning-datatable data={data} columns={columns} key-field="sId" hide-checkbox-column="true"
+            <lightning-datatable data={listHistorydata} columns={columns} key-field="sIdTable" hide-checkbox-column="true"
             enable-infinite-loading={bIsLoaded}
             onloadmore={loadMoreData}            
             onrowaction={handleRowAction}>

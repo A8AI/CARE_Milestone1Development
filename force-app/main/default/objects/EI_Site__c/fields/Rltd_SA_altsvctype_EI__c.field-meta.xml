@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rltd_SA_altsvctype_EI__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <inlineHelpText>Look up a related SA for an additional service type.  For example, if this site/SA is an Electric service type, use this field to connect to a gas service type.</inlineHelpText>
+    <label>Related SA (alt. service type)</label>
+    <referenceTo>EI_Site__c</referenceTo>
+    <relationshipLabel>Site/Service Agreements</relationshipLabel>
+    <relationshipName>Sites_Svc_Agreements</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

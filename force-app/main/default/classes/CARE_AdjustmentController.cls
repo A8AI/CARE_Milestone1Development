@@ -120,7 +120,7 @@ public class CARE_AdjustmentController {
                 adjustmentResponse.sContactCode = listCareType[0].TYPE_CODE__c;
                 
                 adjustmentResponse.dTodaysDate = dTodaysDate;
-             }
+            }
             
         }
         catch(Exception ex){
@@ -152,7 +152,7 @@ public class CARE_AdjustmentController {
     /******************************************PUBLIC METHODS*************************************** */     
     
     /******************************************PRIVATE METHODS*************************************** */ 
-
+    
     private static string createcareAppRecord(List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput){
         string careNewAppId = '';
         
@@ -175,19 +175,20 @@ public class CARE_AdjustmentController {
         careAppObj.PER_ID__c = objAdjustmentInput.sPerId; 
         careAppObj.CARE_Account_ID__c = listAdjustmentSA[0].idAccountID;
         careAppObj.ACCT_ID__c = listAdjustmentSA[0].sBillingAccountId;
+        careAppObj.CCB_Contact_Type_No__c = CARE_Constants.CARE_CC_ADJUSTMENT;
         careAppObj.CCB_CONTACT_CODE__c = listCareType[0].TYPE_CODE__c;
         careAppObj.CCB_CONTACT_DESC__c= listCareType[0].TYPE_DESC__c;
         careAppObj.CCB_CONTACT_COMMENT__c = objAdjustmentInput.sComment; 
         careAppObj.REASON_DESC__c = objAdjustmentInput.sReason; 
         //careAppObj.START_DATE__c = listAdjustmentSA[0].dStartDate;
         //careAppObj.END_DATE__c = listAdjustmentSA[0].dEndDate;
-        careAppObj.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
-        careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other 
+        //careAppObj.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA //Not required, for migration only
+        //careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other //Not required, for migration only
         careAppObj.CC_CL_CD__c = listAdjustmentSA[0].sDiscountType;//This will be Account's discount for stamping
         careAppObj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_ADJUSTMENT_SRC;
         
         listCareApp.add(careAppObj);
- 
+        
         Database.SaveResult[] srList = Database.insert(listCareApp, false);
         
         // Iterate through each returned result
@@ -214,26 +215,27 @@ public class CARE_AdjustmentController {
         List<CARE_App_Enrolled_SA__c> listCareAppAdjustedSAToInsert = new List<CARE_App_Enrolled_SA__c>();
         
         for (WrapperAdjustment objWrapperAdjust : listAdjustmentSA ){
-            CARE_App_Enrolled_SA__c careEnrolledSAObj = new CARE_App_Enrolled_SA__c(); 
-            
-            careEnrolledSAObj.ACCT_ID__c = objWrapperAdjust.sBillingAccountId;
-            careEnrolledSAObj.APPLICATION__c = sCareNewAppId;
-            careEnrolledSAObj.CC_CL_CD__c = objWrapperAdjust.sDiscountType; //This will be Account's discount for stamping
-            careEnrolledSAObj.CCB_CONTACT_TYPE__c = CARE_Constants.CARE_CC_ADJUSTMENT;
-            careEnrolledSAObj.PER_ID__c = objAdjustmentInput.sPerId;
-            careEnrolledSAObj.PREM_ID__c = objWrapperAdjust.sPremiseId;
-            careEnrolledSAObj.SA_ID__c = objWrapperAdjust.sSAId;
-            careEnrolledSAObj.START_DATE__c = objWrapperAdjust.dStartDate; 
-            careEnrolledSAObj.END_DATE__c = objWrapperAdjust.dEndDate;
-            careEnrolledSAObj.SA_START_DATE__c = objWrapperAdjust.dSAStartDate;
-            careEnrolledSAObj.Service_Agreement__c = objWrapperAdjust.idSARecID;
-            careEnrolledSAObj.RS_CD__c = objWrapperAdjust.sRateSchedule;
-            careEnrolledSAObj.RETRO_START_DATE__c = objWrapperAdjust.dRetroStartDate;
-            //do not update the Retro End Date if, 'checkbox from UI is checked for 'Yes Start Date Only'
-            careEnrolledSAObj.RETRO_END_DATE__c = (bRetroStartDateOnly) ? null : objWrapperAdjust.dRetroEndDate;
-            
-            listCareAppAdjustedSAToInsert.add(careEnrolledSAObj);
-            
+            if(objWrapperAdjust.dRetroStartDate != null){
+                CARE_App_Enrolled_SA__c careEnrolledSAObj = new CARE_App_Enrolled_SA__c(); 
+                
+                careEnrolledSAObj.ACCT_ID__c = objWrapperAdjust.sBillingAccountId;
+                careEnrolledSAObj.APPLICATION__c = sCareNewAppId;
+                careEnrolledSAObj.CC_CL_CD__c = objWrapperAdjust.sDiscountType; //This will be Account's discount for stamping
+                careEnrolledSAObj.CCB_CONTACT_TYPE__c = CARE_Constants.CARE_CC_ADJUSTMENT;
+                careEnrolledSAObj.PER_ID__c = objAdjustmentInput.sPerId;
+                careEnrolledSAObj.PREM_ID__c = objWrapperAdjust.sPremiseId;
+                careEnrolledSAObj.SA_ID__c = objWrapperAdjust.sSAId;
+                careEnrolledSAObj.START_DATE__c = objWrapperAdjust.dStartDate; 
+                careEnrolledSAObj.END_DATE__c = objWrapperAdjust.dEndDate;
+                careEnrolledSAObj.SA_START_DATE__c = objWrapperAdjust.dSAStartDate;
+                careEnrolledSAObj.Service_Agreement__c = objWrapperAdjust.idSARecID;
+                careEnrolledSAObj.RS_CD__c = objWrapperAdjust.sRateSchedule;
+                careEnrolledSAObj.RETRO_START_DATE__c = objWrapperAdjust.dRetroStartDate;
+                //do not update the Retro End Date if, 'checkbox from UI is checked for 'Yes Start Date Only'
+                careEnrolledSAObj.RETRO_END_DATE__c = (bRetroStartDateOnly) ? null : objWrapperAdjust.dRetroEndDate;
+                
+                listCareAppAdjustedSAToInsert.add(careEnrolledSAObj);
+            }
         } 
         
         Database.SaveResult[] srList = Database.insert(listCareAppAdjustedSAToInsert, false);

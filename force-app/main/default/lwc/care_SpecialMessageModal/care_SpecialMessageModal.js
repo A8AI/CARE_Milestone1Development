@@ -27,7 +27,10 @@ export default class Care_SpecialMessageModal extends LightningElement {
         if (data) {    
 
                 this.bodyText = data;
-                this.showLoadingSpinner = false;           
+                this.showLoadingSpinner = false;
+                console.log('body text of special message----', this.bodyText);  
+                console.log('sApplicationNo is----', this.sApplicationNo); 
+                console.log('typeNumber is----', this.typeNumber);          
          
         } else if (error) {
             this.error = error;

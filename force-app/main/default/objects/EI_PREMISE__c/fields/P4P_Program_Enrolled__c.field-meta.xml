@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>P4P_Program_Enrolled__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>B1NB; 05/10/2018; Case 37573; P4P Enhancement 2</description>
+    <externalId>false</externalId>
+    <inlineHelpText>To indicate that Premise is enrolled in a P4P program.  Downstream or DI programs cannot submit a rebate for this Premise, when checkbox is checked.</inlineHelpText>
+    <label>P4P Program Enrolled</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

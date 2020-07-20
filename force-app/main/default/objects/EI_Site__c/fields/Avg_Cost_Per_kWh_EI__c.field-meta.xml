@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Avg_Cost_Per_kWh_EI__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Enter avg. cost per kWh (dollars)</inlineHelpText>
+    <label>Avg Cost Per kWh</label>
+    <precision>8</precision>
+    <required>false</required>
+    <scale>4</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Currency</type>
+</CustomField>

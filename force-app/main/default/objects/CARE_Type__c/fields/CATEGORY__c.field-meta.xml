@@ -99,6 +99,126 @@
                 <default>false</default>
                 <label>Valid SA status</label>
             </value>
+            <value>
+                <fullName>Automated Staging Enrollments Priority Order</fullName>
+                <default>false</default>
+                <label>Automated Staging Enrollments Priority Order</label>
+            </value>
+            <value>
+                <fullName>Online Submission</fullName>
+                <default>false</default>
+                <label>Online Submission</label>
+            </value>
+            <value>
+                <fullName>PEV batch ESA status type</fullName>
+                <default>false</default>
+                <label>PEV batch ESA status type</label>
+            </value>
+            <value>
+                <fullName>PEV batch type</fullName>
+                <default>false</default>
+                <label>PEV batch type</label>
+            </value>
+            <value>
+                <fullName>PEV batch upload detail program type</fullName>
+                <default>false</default>
+                <label>PEV batch upload detail program type</label>
+            </value>
+            <value>
+                <fullName>PEV batch upload status code</fullName>
+                <default>false</default>
+                <label>PEV batch upload status code</label>
+            </value>
+            <value>
+                <fullName>PEV batch upload type</fullName>
+                <default>false</default>
+                <label>PEV batch upload type</label>
+            </value>
+            <value>
+                <fullName>PEV batch upload-from source code</fullName>
+                <default>false</default>
+                <label>PEV batch upload-from source code</label>
+            </value>
+            <value>
+                <fullName>PEV CARE CC outbound header batch_type_no</fullName>
+                <default>false</default>
+                <label>PEV CARE CC outbound header batch_type_no</label>
+            </value>
+            <value>
+                <fullName>PEV CARE CC outbound detail status code</fullName>
+                <default>false</default>
+                <label>PEV CARE CC outbound detail status code</label>
+            </value>
+            <value>
+                <fullName>PEV CARE CC outbound header status code</fullName>
+                <default>false</default>
+                <label>PEV CARE CC outbound header status code</label>
+            </value>
+            <value>
+                <fullName>PEV COC list</fullName>
+                <default>false</default>
+                <label>PEV COC list</label>
+            </value>
+            <value>
+                <fullName>PEV customer category type</fullName>
+                <default>false</default>
+                <label>PEV customer category type</label>
+            </value>
+            <value>
+                <fullName>PEV detail item filter reason code</fullName>
+                <default>false</default>
+                <label>PEV detail item filter reason code</label>
+            </value>
+            <value>
+                <fullName>PEV detail status code</fullName>
+                <default>false</default>
+                <label>PEV detail status code</label>
+            </value>
+            <value>
+                <fullName>PEV ESA export status code</fullName>
+                <default>false</default>
+                <label>PEV ESA export status code</label>
+            </value>
+            <value>
+                <fullName>PEV ESA export detail status code</fullName>
+                <default>false</default>
+                <label>PEV ESA export detail status code</label>
+            </value>
+            <value>
+                <fullName>PEV ESA result detail status code</fullName>
+                <default>false</default>
+                <label>PEV ESA result detail status code</label>
+            </value>
+            <value>
+                <fullName>PEV ESA result status code</fullName>
+                <default>false</default>
+                <label>PEV ESA result status code</label>
+            </value>
+            <value>
+                <fullName>PEV ESA result type code</fullName>
+                <default>false</default>
+                <label>PEV ESA result type code</label>
+            </value>
+            <value>
+                <fullName>PEV income pay period</fullName>
+                <default>false</default>
+                <label>PEV income pay period</label>
+            </value>
+            <value>
+                <fullName>PEV Person income income source status</fullName>
+                <default>false</default>
+                <label>PEV Person income income source status</label>
+            </value>
+            <value>
+                <fullName>PEV result status code</fullName>
+                <default>false</default>
+                <label>PEV result status code</label>
+            </value>
+            <value>
+                <fullName>PEV scanned image type</fullName>
+                <default>false</default>
+                <label>PEV scanned image type</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -18,11 +18,13 @@ import CARE_ConfirmationMsg from '@salesforce/label/c.CARE_ConfirmationMsg';
 import CARE_CancelHeader from '@salesforce/label/c.CARE_CancelHeader';
 import CARE_RecordsWithNoDiscNotFound from '@salesforce/label/c.CARE_RecordsWithNoDiscNotFound';
 import CARE_AddElecGasHeader from '@salesforce/label/c.CARE_AddElecGasHeader';
+import CARE_CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
+import CARE_CommentFieldLengthValidationMsg  from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
 
 //#region  Constants
 //column definition of Existing Section
 const columnExisting = [
-    { label: 'Account ID', fieldName: 'sBillingAccountId', type: 'text' },
+    { label: 'Account', fieldName: 'sBillingAccountId', type: 'text' },
     { label: 'Premise ID', fieldName: 'sPremiseId', type: 'text' },
     { label: 'SA ID', fieldName: 'sSAId', type: 'text' },
     { label: 'Svc Type', fieldName: 'sSAType', type: 'text' },
@@ -65,7 +67,9 @@ export default class Care_AddElecGas extends LightningElement {
         CARE_ConfirmationMsg,
         CARE_CancelHeader,
         CARE_RecordsWithNoDiscNotFound,
-        CARE_AddElecGasHeader
+        CARE_AddElecGasHeader,
+        CARE_CommentFieldLengthValidationMsg,
+        CARE_CommentFieldValidationMsg 
      }
 
     showToastMessage(toastTitle, msg, toastVariant) {
@@ -171,13 +175,26 @@ export default class Care_AddElecGas extends LightningElement {
             this.listSelectedRecords = [];
             this.listValidPremise = [];
         }
-        else {
-            this.doSubmit();
+        else if(this.objInputFields.sComment.length > 256) {
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldLengthValidationMsg, 'error');
+            this.listSelectedRecords = [];
+            this.listValidPremise = [];
+        }
+        else if(this.objInputFields.sComment.indexOf(',') !== -1){
+                this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldValidationMsg, 'error');
+                this.listSelectedRecords = [];
+                this.listValidPremise = [];
+        }
+        else{
+            this.doSubmit(); 
         }
     }
 
     //call Apex method for updating Add Elec / Gas Transaction
     doSubmit() {
+        const historyTabRefreshEvent = new CustomEvent("historytabrefreshfromchild", {
+            detail: 'History'   //To refresh History Tab
+        });
         this.bShowLoadingSpinner = true;
 
         //Find the highest end date of the other commodity and pass to the method as a parameter
@@ -206,6 +223,7 @@ export default class Care_AddElecGas extends LightningElement {
                     this.showToastMessage(this.label.CARE_SuccessHeader, this.label.CARE_TransactionSuccessMsg, 'success');
                     this.bFormEdited = false;
                     this.bShowLoadingSpinner = false;
+                    this.dispatchEvent(historyTabRefreshEvent);
                     this.closeModal();
                 }
                 else {

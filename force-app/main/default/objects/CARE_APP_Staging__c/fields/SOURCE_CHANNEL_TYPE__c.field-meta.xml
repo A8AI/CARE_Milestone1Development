@@ -135,6 +135,11 @@
                 <default>false</default>
                 <label>Water Agency/IOU</label>
             </value>
+            <value>
+                <fullName>CARE New_Mover</fullName>
+                <default>false</default>
+                <label>CARE New_Mover</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

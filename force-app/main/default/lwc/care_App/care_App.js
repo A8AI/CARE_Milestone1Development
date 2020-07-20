@@ -6,6 +6,8 @@ import { phoneMask } from 'c/care_Utilities';
 import SearchFieldMissingMsg from '@salesforce/label/c.CARE_SearchFieldMissingMsg';
 import InvalidPersonIdMsg from '@salesforce/label/c.CARE_InvalidPersonIdMsg';
 import CARE_RecordsCustNotFound from '@salesforce/label/c.CARE_RecordsCustNotFound';
+import CARE_NoCitySearchAllowMsg from '@salesforce/label/c.CARE_NoCitySearchAllowMsg';
+import CARE_ValidValuesMsg from '@salesforce/label/c.CARE_ValidValuesMsg';	
 
 // datatable columns
 const columns = [
@@ -70,6 +72,7 @@ export default class Care_App extends LightningElement {
     sSelectedEIAccountId ='';
     sSelectedBillingAccId = '';
     sSelectedCustName = '';
+    sSelectedProbStatus = false;
     @api bCallFromModal = false;
     sortedBy = 'sAccId';
     sortedDirection = 'asc';
@@ -78,6 +81,8 @@ export default class Care_App extends LightningElement {
     label = {
         SearchFieldMissingMsg,
         InvalidPersonIdMsg,
+        CARE_NoCitySearchAllowMsg,
+        CARE_ValidValuesMsg,
         CARE_RecordsCustNotFound
     };
 
@@ -212,16 +217,27 @@ export default class Care_App extends LightningElement {
             //this.showToast("Please enter atleast one field.");
             this.showToast(this.label.SearchFieldMissingMsg);
         }
-        else {
-            //fetch the template input fields to check if all input values are valid
-            const allInputValid = [...this.template.querySelectorAll('lightning-input')]
-                .reduce((validSoFar, inputCmp) => {
-                    inputCmp.reportValidity();
-                    return validSoFar && inputCmp.checkValidity();
-                }, true);
+        else if(this.searchInput.sCity !== '' && (this.searchInput.sAccountID === '' && this.searchInput.sPersonID === '' && this.searchInput.sPremiseID === '' && this.searchInput.sSAID === '' && this.searchInput.sName === ''
+        && this.searchInput.sPhone === '' && this.searchInput.sStreet === '' && this.searchInput.sZip === '' && this.searchInput.sFacilityHousing === '')){
+            this.showToast(this.label.CARE_NoCitySearchAllowMsg);
+            
+        }else {
 
-            //if all inputs are valid, call the search method
-            if (allInputValid) {
+        //This is to check valid values in the Child LWC (Account Id, SAID, PerID, PremID)
+        let childValidFlag = true;
+        this.template.querySelectorAll('c-care_-search-auto-complete').forEach(elem => {
+            elem.handleSubmitFields();
+            if(!elem.checkInpulValidFlag){
+                childValidFlag = false;
+            }
+            
+        });
+
+            //fetch the template input fields to check if all input values are valid
+            const allInputValid = this.assignValidityFields();
+            if(!allInputValid || !childValidFlag){
+                this.showToast(this.label.CARE_ValidValuesMsg);
+            }else{
                 this.showLoadingSpinner = true;
                 console.log('this.searchInput12==>' + JSON.stringify(this.searchInput));
 
@@ -263,6 +279,16 @@ export default class Care_App extends LightningElement {
         }
     }
 
+    assignValidityFields(){
+        const allInputValidForm = [...this.template.querySelectorAll('lightning-input')]
+        .reduce((validSoFar, inputCmp) => {
+            inputCmp.reportValidity();
+            return validSoFar && inputCmp.checkValidity();
+        }, true);
+
+        return allInputValidForm;
+    }
+
     //This method is called when Clear button is clicked
     handleClear() {
         //This is to clear all the input fields (text and checkbox)
@@ -273,14 +299,20 @@ export default class Care_App extends LightningElement {
                 //UI fields
                 elem.value = '';
             }
+            elem.setCustomValidity("");
         });
         //This is to clear all the picklist
         this.template.querySelectorAll('lightning-combobox').forEach(elem => {
             elem.value = null;
         });
+
+        this.assignValidityFields(); 
+
+
         //This is to clear the Child LWC (Account Id, SAID, PerID, PremID)
         this.template.querySelectorAll('c-care_-search-auto-complete').forEach(elem => {
             elem.handleClearFields();
+            
         });
         //Actual fields
         this.searchInput = {
@@ -367,6 +399,7 @@ export default class Care_App extends LightningElement {
             this.sSelectedEIAccountId = selectedRows[0].sEIAccountId;
             this.sSelectedBillingAccId = selectedRows[0].sAccId;
             this.sSelectedCustName = selectedRows[0].sCustName;
+            this.sSelectedProbStatus = (selectedRows[0].sProbation == "Y")?true:false;
         }
         
         this.listSelectedPremId = listPremId.filter((item, i, ar) => ar.indexOf(item) === i);
@@ -376,11 +409,18 @@ export default class Care_App extends LightningElement {
     }
 
     refreshTabData(event) {
-        if(event.target.label == 'History' || event.target.label == 'Enroll'){
+        if(event.target.label == 'History' || event.target.label == 'Enroll' || event.target.label == 'PEV'){
             //this.template.querySelector("c-care_-history").refreshData();
             this.sHistoryRefresh = new Date().toLocaleString();
         }
 
+    }
+
+    historyTabRefreshFromChild(event){
+        if(event.detail == 'History'){
+            this.sHistoryRefresh = new Date().toLocaleString();
+        }
+        
     }
 
 

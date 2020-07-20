@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Usage_Billing_Amount_EI__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Shows total billing amount from usage records.</inlineHelpText>
+    <label>Total Billing Amount (Rollup)</label>
+    <summarizedField>EI_Usage__c.Total_Bill_Amount_EI__c</summarizedField>
+    <summaryForeignKey>EI_Usage__c.Site_EI__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

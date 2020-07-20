@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>EI_Premise__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>The premise object that the site/SA is pointing to.</description>
+    <externalId>false</externalId>
+    <inlineHelpText>The premise object that the site/SA is pointing to.</inlineHelpText>
+    <label>Premise</label>
+    <referenceTo>EI_PREMISE__c</referenceTo>
+    <relationshipLabel>Site/Service Agreements</relationshipLabel>
+    <relationshipName>Site_Service_Agreements</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

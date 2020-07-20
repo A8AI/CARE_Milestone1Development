@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ESA_CARE_PEV_High_Usage28</fullName>
+    <booleanFilter>1 AND 2 AND ((3 or 4) and (5 or 6))</booleanFilter>
+    <columns>NAME</columns>
+    <columns>City_EI__c</columns>
+    <columns>County_EI__c</columns>
+    <columns>Zip_Code_EI__c</columns>
+    <columns>ESA_Last_Treated_EI__c</columns>
+    <columns>CARE_HU_Certification_Date_EI__c</columns>
+    <columns>Care_Start_Date_EI__c</columns>
+    <columns>High_Usage_Gas_EI__c</columns>
+    <columns>High_Usage_Electric_EI__c</columns>
+    <columns>Last_ESA_Enrollment_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Care_Start_Date_EI__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>CARE_HU_Certification_Date_EI__c</field>
+        <operation>notEqual</operation>
+    </filters>
+    <filters>
+        <field>Last_ESA_Enrollment_Date__c</field>
+        <operation>lessOrEqual</operation>
+        <value>N_YEARS_AGO:5</value>
+    </filters>
+    <filters>
+        <field>Last_ESA_Enrollment_Date__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>ESA_Last_Treated_EI__c</field>
+        <operation>equals</operation>
+    </filters>
+    <filters>
+        <field>ESA_Last_Treated_EI__c</field>
+        <operation>lessOrEqual</operation>
+        <value>N_YEARS_AGO:5</value>
+    </filters>
+    <label>ESA CARE PEV High Usage</label>
+    <language>en_US</language>
+    <sharedTo>
+        <group>ESA_Externals_w_o_CBO</group>
+        <group>ESA_Program_Managers</group>
+    </sharedTo>
+</ListView>

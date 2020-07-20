@@ -157,7 +157,7 @@
     <label>CARE CI SA</label>
     <nameField>
         <displayFormat>CICCSA{0000000000}</displayFormat>
-        <label>NAME (Sequence No)</label>
+        <label>Sequence No</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE CI SA</pluralLabel>

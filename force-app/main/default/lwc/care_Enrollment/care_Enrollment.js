@@ -1,4 +1,5 @@
 import { LightningElement, track, api, wire } from 'lwc';
+import { NavigationMixin } from 'lightning/navigation';
 import { getPicklistValues } from 'lightning/uiObjectInfoApi';
 import { updateRecord } from 'lightning/uiRecordApi';
 import determineisNewEnrollment from '@salesforce/apex/CARE_EnrollTabController.determineisNewEnrollment';
@@ -8,9 +9,14 @@ import handleButtonClickOnUI from '@salesforce/apex/CARE_EnrollTabController.
 //import handleAcceptButtonClickOnUI from '@salesforce/apex/CARE_EnrollTabController.handleAcceptButtonClickOnUI';
 import sendReceivedDate from '@salesforce/apex/CARE_EnrollTabController.sendReceivedDate';
 import prePopulatEnrollData from '@salesforce/apex/CARE_EnrollTabController.prePopulatEnrollData';
+import setCancelStatusCareApplication from '@salesforce/apex/CARE_UtilityController.setCancelStatusCareApplication';
+import getSystemInfoCareAppData from '@salesforce/apex/CARE_UtilityController.getSystemInfoCareAppData';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { refreshApex } from '@salesforce/apex';
+import { isBlank, isNotBlank } from 'c/care_Utilities';
 import SOURCE_CHANNEL_TYPE from '@salesforce/schema/CARE_Application__c.SOURCE_CHANNEL_TYPE__c';
+
+//Labels
 import EnrollmentCreateErrorMsg from '@salesforce/label/c.CARE_EnrollmentCreateErrorMsg';
 import EnrollmentDocumentValidationMsg from '@salesforce/label/c.CARE_EnrollmentDocumentValidationMsg';
 import EnrollmentEditErrorMsg from '@salesforce/label/c.CARE_EnrollmentEditErrorMsg';
@@ -22,6 +28,18 @@ import EnrollmentSaveMsg from '@salesforce/label/c.CARE_EnrollmentSaveMsg';
 import EnrollmentProcessingMsg from '@salesforce/label/c.CARE_EnrollmentProcessingMsg';
 import EnrollAcceptMsg from '@salesforce/label/c.CARE_EnrollAcceptMsg';
 import BothRetroDateValidationMsg from '@salesforce/label/c.CARE_BothRetroDateValidationMsg';
+import CommentFieldLengthValidationMsg from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
+import StartDateValidationMsg from '@salesforce/label/c.CARE_StartDateValidationMsg';
+import AdultFieldValidationMsg from '@salesforce/label/c.CARE_AdultFieldValidationMsg';
+import ErrorHeader from '@salesforce/label/c.CARE_ErrorHeader';
+import SuccessHeader from '@salesforce/label/c.CARE_SuccessHeader';
+import RetroStartDateValidationMsg from '@salesforce/label/c.CARE_RetroStartDateValidationMsg';
+import ConfirmationMsg from '@salesforce/label/c.CARE_ConfirmationMsg';
+import CancelHeader from '@salesforce/label/c.CARE_CancelHeader';
+import TransactionSuccessMsg from '@salesforce/label/c.CARE_TransactionSuccessMsg';
+import TransactionErrorMsg from '@salesforce/label/c.CARE_TransactionErrorMsg';
+import ReceiveDateMsg from '@salesforce/label/c.CARE_ReceiveDateMsg';
+
 //import rStartDate from '@salesforce/schema/CARE_App_Enrolled_SA__c.RETRO_START_DATE__c';
 //import rEndDate from '@salesforce/schema/CARE_App_Enrolled_SA__c.RETRO_END_DATE__c';
 
@@ -36,9 +54,9 @@ const columns = [
     
     {label: 'No Date', fieldName: 'noDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
 
-    {label: 'Retro Yes date', fieldName: 'rStartDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
+    {label: 'Retro Start Date', fieldName: 'rStartDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
 
-    {label: 'Retro No Date', fieldName: 'rEndDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
+    {label: 'Retro End Date', fieldName: 'rEndDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
     
     //{label: 'Incentive Amt', fieldName: 'incentiveAmt',type: 'number', cellAttributes: { alignment: 'left' }},
     
@@ -59,9 +77,9 @@ const columnsWithEdit = [
     
     {label: 'No Date', fieldName: 'noDate',type: 'date', typeAttributes:{day:"numeric",month:"numeric",year:"numeric"}},
 
-    {label: 'Retro Yes date', fieldName: 'rStartDate',type: 'date-local', typeAttributes:{day:"2-digit",month:"2-digit"}, editable:true},
+    {label: 'Retro Start Date', fieldName: 'rStartDate',type: 'date-local', typeAttributes:{day:"2-digit",month:"2-digit"}, editable:true},
 
-    {label: 'Retro No Date', fieldName: 'rEndDate',type: 'date-local', typeAttributes:{day:"2-digit",month:"2-digit"}, editable:true},
+    {label: 'Retro End Date', fieldName: 'rEndDate',type: 'date-local', typeAttributes:{day:"2-digit",month:"2-digit"}, editable:true},
     
     //{label: 'Incentive Amt', fieldName: 'incentiveAmt',type: 'number', cellAttributes: { alignment: 'left' }},
     
@@ -72,7 +90,7 @@ const columnsWithEdit = [
 ];
 
 
-export default class lwcCmpName extends LightningElement {
+export default class lwcCmpName extends NavigationMixin(LightningElement) {
 
     @track error;
     careResDesc;
@@ -97,6 +115,7 @@ export default class lwcCmpName extends LightningElement {
     @track enableAppName = true;
     @track isAdjustmentReasonCheck = true;
     @track isDataTableEditable = false;
+    @track bIsDuplicate = false;
     @track receivedDate;
     @track bRecordInputsCheck = true;
     @track enrollRecordInsertResponse = false;
@@ -112,6 +131,8 @@ export default class lwcCmpName extends LightningElement {
     @track saIDRecordForIsAdjust = [];
     sEventNameAction = '';
     sEventVariant = 'info';
+    sRelatedSACall = 'first';
+    bShowConfirmationModal = false;
     @track EnrollObjFields = {
         isCertValueCB: false,
         adultValue: 0,
@@ -145,9 +166,16 @@ export default class lwcCmpName extends LightningElement {
         retroNDateValue: '',
         processNoteValue: '',
         adjustReasonValue: '',
-        noDateValue: '',
+        noDateValue: false,
         ccbCommentValue: '',
-        isDuplicateValue: false
+        isDuplicateValue: false,
+        /** System Information */
+        lastModifiedDate: '',
+        lastModifiedById: '',
+        qualifiedBy:'',
+        accountIDLink:'',
+        applicationStatus:''
+
     };
 
     label = {
@@ -161,7 +189,18 @@ export default class lwcCmpName extends LightningElement {
         EnrollmentSaveMsg,
         EnrollmentProcessingMsg,
         EnrollAcceptMsg,
-        BothRetroDateValidationMsg
+        BothRetroDateValidationMsg,
+        CommentFieldLengthValidationMsg,
+        StartDateValidationMsg,
+        AdultFieldValidationMsg,
+        ErrorHeader,
+        SuccessHeader,
+        ConfirmationMsg,
+        CancelHeader,
+        TransactionSuccessMsg,
+        TransactionErrorMsg,
+        RetroStartDateValidationMsg,
+        ReceiveDateMsg
     };
     
     
@@ -174,13 +213,13 @@ export default class lwcCmpName extends LightningElement {
     })
     wiredPickListValue({ data, error }){
         if(data){
-            console.log(` Picklist values are `, data.values);
+            //console.log(` Picklist values are `, data.values);
             this.channelOptions = data.values;
             this.error = undefined;
-            console.log(` bModalFlag Value is `, this.bModalFlag);
+            //console.log(` bModalFlag Value is `, this.bModalFlag);
         }
         if(error){
-            console.log(` Error while fetching Picklist values  ${error}`);
+            //console.log(` Error while fetching Picklist values  ${error}`);
             this.error = error;
             this.channelOptions = undefined;
         }
@@ -190,7 +229,7 @@ export default class lwcCmpName extends LightningElement {
                 picklistFieldApi: 'SOURCE_CHANNEL_TYPE__c'}) stageNameValues;*/
        
     
-    @wire(getRelatedSA, { selectedAppId: '$careResAppId', sMakeLivecall :'$sLiveAppCall' })
+    @wire(getRelatedSA, { selectedAppId: '$careResAppId', sMakeLivecall :'$sRelatedSACall' })
       wiredsolarProjectRes(resp) {
         this._wiredSolarProjectResult = resp;
         const { data, error } = resp;
@@ -213,57 +252,75 @@ export default class lwcCmpName extends LightningElement {
             this.showLoadingSpinner = false;
         }
 }
+
+/*findRowIndexById(id) {
+    let ret = -1;
+    this.careSAData.some((row, index) => {
+        if (row.Id === id) {
+            ret = index;
+            return ret;
+        }
+    });
+    return ret;
+}*/
+
 handleDataTableSave(event){
     let today = new Date();
     let dateToday = today.getFullYear()+'-'+('0' + (today.getMonth()+1)).slice(-2)+'-'+('0' + today.getDate()).slice(-2);
-    //this.EnrollObjFields.processDateValue = dateToday;
-    /*let fields = {};
-    fields = event.detail.draftValues[0].rStartDate;
-    //fields[FIRSTNAME_FIELD.fieldApiName] = event.detail.draftValues[0].FirstName;
-    console.log(` fields: `, fields);
-    let recordInput = {fields};
-    console.log(` recordInput: `, recordInput);*/
+    
     const recordInputs =  event.detail.draftValues.slice().map(draft => {
         const fields = Object.assign({}, draft);
         console.log(` field draft values: `, fields);
-        //console.log(` field draft values recordInputs: `, recordInputs);
+        
         return { fields };
         
     });
+    console.log(` field draft values recordInputs: `, recordInputs);
     let retroDateValues = [];
+    let ret = -1;
     if(recordInputs){
-        recordInputs.forEach(element => {
+        recordInputs.forEach((element,index) => {
             let retroDates = { ...element};
-            //let d = Date.parse(elementId.fields.rStartDate);
-            //let startDate = new Date(d);
-            if(retroDates.fields.rStartDate > dateToday || retroDates.fields.rEndDate > dateToday || retroDates.fields.rEndDate < retroDates.fields.rStartDate){
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error',
-                        //message: 'Retro Start Date cannot be greater than Retro End Date/Retro Start and End Date cannot be greater than Todays Date. ',
-                        message:this.label.RetroDateValidationMsg,
-                        variant: 'error'
-                    })
-                );  
+            //let careSADataIndex = this.findRowIndexById(retroDates.fields.Id);
+            let careSADataIndex = this.careSAData.findIndex(x => x.Id === retroDates.fields.Id);
+            
+            if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isBlank(this.careSAData[careSADataIndex].rEndDate)){
                 this.bRecordInputsCheck = false;
-                console.log('elementId.fields.rStartDate---->:'+ retroDates.fields.rStartDate); 
-               // return this.bRecordInputs;
-            }else if(((retroDates.fields.rStartDate != '' || retroDates.fields.rStartDate != undefined) && (retroDates.fields.rEndDate === '' || retroDates.fields.rEndDate === undefined)) || ((retroDates.fields.rStartDate === '' || retroDates.fields.rStartDate === undefined) && (retroDates.fields.rEndDate != '' || retroDates.fields.rEndDate != undefined))){
-                this.dispatchEvent(
-                    new ShowToastEvent({
-                        title: 'Error',
-                        //message: 'Retro Start Date cannot be greater than Retro End Date/Retro Start and End Date cannot be greater than Todays Date. ',
-                        message:this.label.BothRetroDateValidationMsg,
-                        variant: 'error'
-                    })
-                );  
-                this.bRecordInputsCheck = false;
+                this.showToastMessage(this.label.ErrorHeader, this.label.StartDateValidationMsg, 'error');  
                 
-
-            }else{
+            }
+            else if(isNotBlank(retroDates.fields.rStartDate) && retroDates.fields.rStartDate >= dateToday){
+                this.bRecordInputsCheck = false;
+                this.showToastMessage(this.label.ErrorHeader, this.label.RetroStartDateValidationMsg, 'error');  
+            }
+            else if(isNotBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate)){
+                if(retroDates.fields.rStartDate > dateToday || retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate < retroDates.fields.rStartDate){
+                    this.bRecordInputsCheck = false;
+                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
+                }else{
+                    this.bRecordInputsCheck = true;
+                }
+            }
+            else if(isBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate)){
+                if(retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate < this.careSAData[careSADataIndex].rStartDate){
+                    this.bRecordInputsCheck = false;
+                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
+                    
+                }else{
+                    this.bRecordInputsCheck = true;
+                }
+            }
+            else if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isNotBlank(this.careSAData[careSADataIndex].rEndDate)){
+                if(retroDates.fields.rStartDate > this.careSAData[careSADataIndex].rEndDate){
+                    this.bRecordInputsCheck = false;
+                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
+                }else{
+                    this.bRecordInputsCheck = true;
+                }
+            }
+            else{
                 this.bRecordInputsCheck = true;
             }
-            //elementId.fields.rStartDate;
                    
         });
     }
@@ -306,18 +363,11 @@ handleDataTableSave(event){
      //return this.returedDataTable;
 }).catch(error => {
     // Handle error
-    this.dispatchEvent(
-        new ShowToastEvent({
-            title: 'Error!!',
-            //message: error.body.message,
-            message:this.label.EnrollmentEditErrorMsg,
-            variant: 'error'
-        })
-    );
+    this.showToastMessage(this.label.ErrorHeader, this.label.EnrollmentEditErrorMsg, 'error');
 });
 }
 
-    @wire(sendReceivedDate)
+    @wire(sendReceivedDate,{sLiveCall: '$sLiveAppCall'})
     wiredUserRoles({ error, data }) {
         if (data) {
             console.log(` data value `, data);
@@ -354,7 +404,16 @@ handleDataTableSave(event){
         this.EnrollObjFields.isSignedValueCB = data[0].IS_SIGNED__c;
         this.EnrollObjFields.requestDropValueCB = data[0].REQUEST_DROP__c;
         this.EnrollObjFields.nncValueCB = data[0].NEED_NAME_CHANGE__c;// === true ? data[0].NEED_NAME_CHANGE__c : false;
-        //this.EnrollObjFields.processDateValue = data[0].PROCESSED_DATE__c;
+        this.EnrollObjFields.accountIDLink = this.sSelectedAcctId;
+        this.EnrollObjFields.applicationStatus = data[0].APPLICATION_STATUS__c;
+        if(this.bModalFlag === true){
+        this.EnrollObjFields.processDateValue = data[0].PROCESSED_DATE__c;
+        this.EnrollObjFields.accountIDLink = data[0].CARE_Account_ID__c;
+        }
+
+        this.EnrollObjFields.qualifiedBy = data[0].QUALIFIED_BY__c;
+        this.EnrollObjFields.lastModifiedById = data[0].LastModifiedBy.LAN_ID_EI__c;
+        this.EnrollObjFields.lastModifiedDate = data[0].LastModifiedDate;
         this.EnrollObjFields.channelTypeValue = data[0].SOURCE_CHANNEL_TYPE__c;
         this.EnrollObjFields.formCodeValue = data[0].FORM_CODE__c;
         this.EnrollObjFields.cocCodeValue = data[0].COC_CODE__c;
@@ -374,6 +433,8 @@ handleDataTableSave(event){
         this.EnrollObjFields.fixedIncValue = data[0].FIXED_INCOME__c;
         this.EnrollObjFields.processNoteValue = data[0].PROCESS_NOTES__c;
         this.EnrollObjFields.applicantNameValue = data[0].APPLICANT_NAME__c;
+        this.EnrollObjFields.isAdjustValue = data[0].IS_ADJUSTMENT__c;
+        this.EnrollObjFields.adjustReasonValue = data[0].REASON_DESC__c;
         this.EnrollObjFields.receiveDateValue = data[0].RECEIVED_DATE__c != null ? data[0].RECEIVED_DATE__c : this.EnrollObjFields.processDateValue;
         this.careResccDesc = data[0].CCB_CONTACT_DESC__c != '' ? data[0].CCB_CONTACT_DESC__c : '';
         this.EnrollObjFields.ccbCommentValue = data[0].CCB_CONTACT_COMMENT__c != '' ? data[0].CCB_CONTACT_COMMENT__c : '';
@@ -404,28 +465,29 @@ handleDataTableSave(event){
         }
     }
 
-    @wire(determineisNewEnrollment, { selectedPerId: '$sSelectedPerId' })
+    @wire(determineisNewEnrollment, { selectedPerId: '$sSelectedPerId', sLiveCall: '$sLiveAppCall' })
     wiredSAmapData({ error, data }) {
         if (data) {
 
-            this.EnrollObjFields.noDateValue = data;
-            /*for(let key in data) {
-                // Preventing unexcepted data
-                if (data.hasOwnProperty(key)) { // Filtering the data in the loop
-                    this.saMapdetails.push({key: key, value: data[key]});
-                    console.log(` saMapdetails: `, this.saMapdetails);                   
-                }
-            }  */         
+            console.log('determine is new enrollment data value' + data);
+
+            this.EnrollObjFields.noDateValue = data.bIsNewCustomer;
+            console.log('determine is new enrollment this.EnrollObjFields.noDateValue' , this.EnrollObjFields.noDateValue);
+
+            if(!this.EnrollObjFields.noDateValue){
+                this.isNewEnrollment = false;
+                this.bIsDuplicate = true;
+                console.log(` isNewEnrollment: `, this.isNewEnrollment); 
+            }else if(this.EnrollObjFields.noDateValue === true){
+                this.isNewEnrollment = true;
+                this.bIsDuplicate = false;
+            }
+  
         }else if (error) {
             this.error = error;
             this.contacts = undefined;
         }
-        if(this.EnrollObjFields.noDateValue != '' || this.EnrollObjFields.noDateValue != null){
-            this.isNewEnrollment = false;
-            console.log(` isNewEnrollment: `, this.isNewEnrollment); 
-        }else{
-            this.isNewEnrollment = true;
-        }
+        
     }
 
     
@@ -573,39 +635,73 @@ handleApplicantNameSet(){
     }
 }
 
+goToAccountRecord(){
+      // Navigate to record page
+   /*   this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: this.EnrollObjFields.accountIDLink,
+            //objectApiName: 'CARE_Application__c',
+            actionName: 'view',
+        },
+    }); */
+
+    this[NavigationMixin.GenerateUrl]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: this.EnrollObjFields.accountIDLink,
+            actionName: 'view',
+        },
+    }).then(url => {
+        window.open(url);
+    });
+}
+
 handleSave(event){
-    this.showLoadingSpinner = true;
     let nameEvent;
     let formValidFlag = true;
-    let ErrorMsg = '';
-    if(this.EnrollObjFields.nncValueCB && (this.EnrollObjFields.applicantNameValue == '' || this.EnrollObjFields.applicantNameValue == undefined)){
-        //ErrorMsg = "Please enter applicant Name";
-        ErrorMsg = this.label.ApplicantNameMsg;
+    //let ErrorMsg = '';
+    if((this.EnrollObjFields.adultValue === '' || this.EnrollObjFields.adultValue === undefined || this.EnrollObjFields.adultValue <= 0) && event.target.name !== 'save'){
         formValidFlag = false;
-    }else if(this.EnrollObjFields.emailValue !='' && this.EnrollObjFields.emailValue != undefined){
-        let allInputValid = [...this.template.querySelectorAll('lightning-input')]
+        this.showToastMessage(this.label.ErrorHeader, this.label.AdultFieldValidationMsg, 'error');
+}
+    else if(this.EnrollObjFields.receiveDateValue === '' || this.EnrollObjFields.receiveDateValue === undefined || this.EnrollObjFields.receiveDateValue === null){
+    formValidFlag = false;
+    this.showToastMessage(this.label.ErrorHeader, this.label.ReceiveDateMsg, 'error');
+}
+   else if(this.EnrollObjFields.nncValueCB && (this.EnrollObjFields.applicantNameValue == '' || this.EnrollObjFields.applicantNameValue == undefined)){
+        formValidFlag = false;
+        this.showToastMessage(this.label.ErrorHeader, this.label.ApplicantNameMsg, 'error');
+        //ErrorMsg = this.label.ApplicantNameMsg;
+        
+    }else if(this.EnrollObjFields.emailValue !=='' && this.EnrollObjFields.emailValue !== undefined){
+        let allInputValid = [...this.template.querySelectorAll('.emailValidCheck')]
         .reduce((validSoFar, inputCmp) => {
             inputCmp.reportValidity();
             return validSoFar && inputCmp.checkValidity();
         }, true);
         formValidFlag = allInputValid;
-        //ErrorMsg = "Please enter valid Email id";
-        ErrorMsg = this.label.EmailIdValidation;
-
-    }else if(this.EnrollObjFields.ccbCommentValue !='' || this.EnrollObjFields.ccbCommentValue != undefined){
-        if(this.EnrollObjFields.ccbCommentValue.indexOf(',') !== -1){
-            ErrorMsg = this.label.CommentFieldValidationMsg;
-            formValidFlag = false;
-        }else{
-            formValidFlag = true;
+        if(!formValidFlag){
+        this.showToastMessage(this.label.ErrorHeader, this.label.EmailIdValidation, 'error');
         }
-        //ErrorMsg = "Please remove comma(,) from comment field in order to proceed";
-        //ErrorMsg = this.label.CommentFieldValidationMsg;
-        //formValidFlag = false;
+        //ErrorMsg = this.label.EmailIdValidation;
+
+    }else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 256){
+        formValidFlag = false;
+        this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldLengthValidationMsg, 'error');
+
     }
+    else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 0){ // !='' && this.EnrollObjFields.ccbCommentValue != undefined){
+        if(this.EnrollObjFields.ccbCommentValue.indexOf(',') !== -1){
+            this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldValidationMsg, 'error');
+            formValidFlag = false;
+        }   
+    }
+       
     console.log(` formValidFlag value `, formValidFlag);
     if(formValidFlag){
-        if(this.EnrollObjFields.adultValue == '' || this.EnrollObjFields.adultValue == undefined){
+        this.showLoadingSpinner = true;
+        if((this.EnrollObjFields.adultValue == '' || this.EnrollObjFields.adultValue == undefined) && (event.target.name !== 'verify' || event.target.name !== 'accept')){
             this.EnrollObjFields.adultValue = 0;
         }
         if(this.EnrollObjFields.childrenValue == '' || this.EnrollObjFields.childrenValue == undefined){
@@ -648,11 +744,19 @@ handleSave(event){
 
             console.log(` Application Status VALUE---->: `, this.sCareAppStatus); 
             
-            if(result.sEventName === 'verify'){
-            this.careResccDesc = result.ccCodeDescription;
-            this.EnrollObjFields.ccbCommentValue = result.careCCLongDescValue;
-            this.sLiveAppCall = new Date().toLocaleString();
+            if(result.sEventName === 'verify' || (result.sEventName === 'accept' && result.bImageCheck === true)){
+                if(this.careResccDesc !== result.ccCodeDescription){ // handle result if cc code changed after accept
+                    this.EnrollObjFields.ccbCommentValue = result.careCCLongDescValue;
+                    this.sRelatedSACall = new Date().toLocaleString();
+                }
+                if(result.sEventName === 'accept'){
+                    this.getSystemInformationAfterAccept();
+                }
+                this.careResccDesc = result.ccCodeDescription;
+
             }
+
+            
             console.log(` careResAppId VALUE---->: `, this.careResAppId); 
             console.log(` result careResccDesc---->: `, this.careResccDesc);
             /*console.log('result ===> '+ JSON.stringify(result));
@@ -700,37 +804,27 @@ handleSave(event){
                     variant: this.sEventVariant
                 }),);
             }else{
-                this.dispatchEvent(new ShowToastEvent({
-                    title: 'Error!!',
-                    //message: 'Please upload atleast one document or Image ID !!',
-                    message:this.label.EnrollmentDocumentValidationMsg,
-                    variant: 'error'
-                }),);
-
+                this.showToastMessage(this.label.ErrorHeader, this.label.EnrollmentDocumentValidationMsg, 'error');
             }
 
         })
         .catch(error => {
             this.error = error.message;
             this.showLoadingSpinner = false;
-            this.dispatchEvent(new ShowToastEvent({
-                title: 'Error!!',
-                //message: 'Error while creating Enrollment record!!',
-                message:this.label.EnrollmentCreateErrorMsg,
-                variant: 'error'
-            }),);
+            this.showToastMessage(this.label.ErrorHeader, this.label.EnrollmentCreateErrorMsg, 'error');
+            
         });
 
-  }else{
+  }/*else{
     this.dispatchEvent(new ShowToastEvent({
         title: 'Error!!',
-        message:ErrorMsg,
+        message:this.label.EnrollmentCreateErrorMsg,
         variant: 'error'
     }),);  
     this.showLoadingSpinner = false;
-  }
-    
+  }*/
 }
+    
 
 handleCancel(){
     this.template.querySelectorAll('lightning-input').forEach(elem => {
@@ -792,9 +886,20 @@ handleCancel(){
         processNoteValue: '',
         adjustReasonValue: '',
         ccbCommentValue: '',
-        isDuplicateValue: false       
+        isDuplicateValue: false,
+        noDateValue: false       
         };
 
+}
+
+showToastMessage(toastTitle, msg, toastVariant) {
+    const evt = new ShowToastEvent({
+        title: toastTitle,
+        message: msg,
+        variant: toastVariant,
+        mode: 'dismissable'
+    });
+    this.dispatchEvent(evt);
 }
 
 /*handleAccept(event){
@@ -811,10 +916,69 @@ handleCancel(){
         return this.careResAppId.length > 0;
     }
     get checkResultDesc() {
-        return (this.careResccDesc =='' || this.careResccDesc == undefined || this.careResccDesc == null || this.sCareAppStatus == "Decision Made");
+        return (this.careResccDesc =='' || this.careResccDesc == undefined || this.careResccDesc == null || this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled");
     }
     get checkAcceptedApplication(){
-        return this.sCareAppStatus == "Decision Made";
+        return this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled" || this.bModalFlag;  // Added Viewonly flag for adjusment check box after accepting application not allow modify adjustment
     }
+
+    get checkAppIdORAccepted(){
+        return this.careResAppId == '' || this.careResAppId == undefined || this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled";
+    }
+
+    //close confirmation modal Popup
+    closeConfirmationModal(event) {
+        this.bShowConfirmationModal = false;
+    }
+
+    //confirmed to cancel the application in between
+    cancelApplication(event) {
+        this.closeConfirmationModal();
+        this.showLoadingSpinner = true;
+        setCancelStatusCareApplication({
+            sSelectedAppId: this.careResAppId
+            })
+            .then(result => {
+                console.log('result setCancelStatusCareApplication call==>' + JSON.stringify(result));
+                this.showLoadingSpinner = false;
+                if (result) {
+                    this.getSystemInformationAfterAccept();
+                    this.sCareAppStatus = "Cancelled";
+                    this.showToastMessage(this.label.SuccessHeader, this.label.TransactionSuccessMsg, 'success');
+                    
+                } else {
+                    this.showToastMessage(this.label.ErrorHeader, this.label.TransactionErrorMsg, 'error');
+                }
+ 
+            })
+            .catch((error) => {
+                this.showToastMessage(this.label.ErrorHeader, error.message, 'error');
+            });
+    }
+
+    showConfirmationModal(){
+        this.bShowConfirmationModal = true;
+    }
+
+    getSystemInformationAfterAccept(){
+        getSystemInfoCareAppData({
+            sSelectedAppId: this.careResAppId
+            })
+            .then(result => {
+                console.log('result getSystemInfoCareAppData call==>' + JSON.stringify(result));
+                if (result) {
+                    this.EnrollObjFields.qualifiedBy = result[0].QUALIFIED_BY__c;
+                    this.EnrollObjFields.lastModifiedById = result[0].LastModifiedBy.LAN_ID_EI__c;
+                    this.EnrollObjFields.lastModifiedDate = result[0].LastModifiedDate;
+                    this.EnrollObjFields.applicationStatus = result[0].APPLICATION_STATUS__c;
+        
+                } 
+ 
+            })
+            .catch((error) => {
+                this.showToastMessage(this.label.ErrorHeader, error.message, 'error');
+            });
+    }
+    
 
 }

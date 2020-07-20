@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>F_Total_Gas_Usage_EI__c</fullName>
+    <description>Copies Total Usage Value (Rollup) IF Service Type Code = G</description>
+    <externalId>false</externalId>
+    <formula>IF( Svc_Type_Code_EI__c =&quot;G&quot;, Total_Usage_Value_Rollup_EI__c ,0)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Total Gas Usage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

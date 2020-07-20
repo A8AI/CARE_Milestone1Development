@@ -6,7 +6,7 @@
     <externalId>true</externalId>
     <label>TYPE NO</label>
     <length>30</length>
-    <required>false</required>
+    <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Text</type>
     <unique>true</unique>

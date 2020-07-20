@@ -156,10 +156,10 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>CARE System Value</label>
     <nameField>
-        <displayFormat>Se{000000}</displayFormat>
-        <label>NAME  (SYSTEM_VALUE_NAME)</label>
+        <encryptionScheme>None</encryptionScheme>
+        <label>NAME</label>
         <trackHistory>false</trackHistory>
-        <type>AutoNumber</type>
+        <type>Text</type>
     </nameField>
     <pluralLabel>CARE System Value</pluralLabel>
     <searchLayouts/>

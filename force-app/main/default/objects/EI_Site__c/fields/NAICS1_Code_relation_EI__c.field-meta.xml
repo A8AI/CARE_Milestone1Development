@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>NAICS1_Code_relation_EI__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>Person NAICS Code 1</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Person NAICS Code 1</inlineHelpText>
+    <label>NAICS 1 Code</label>
+    <referenceTo>EI_NAICS_Code__c</referenceTo>
+    <relationshipLabel>Site/Service Agreements (NAICS 1 Code)</relationshipLabel>
+    <relationshipName>Site_Service_Agreements</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

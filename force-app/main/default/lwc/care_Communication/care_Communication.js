@@ -203,7 +203,7 @@ export default class Care_Communication extends LightningElement {
         //console.log('Save and close method value3:', this.phoneDetails.mobile);
 
         this.showLoadingSpinner = true;
-        savePhoneDetails({ updatePhoneRec: this.phoneDetails, selectedAccountId: this.sSelectedAccId })
+        savePhoneDetails({ updatePhoneRec: this.phoneDetails, perIdValue: this.sSelectedPerId })
             .then(result => {
                 console.log('resultafterApex call==>' + JSON.stringify(result));
 
@@ -233,7 +233,7 @@ export default class Care_Communication extends LightningElement {
     saveCommunicationModal(event) {
         console.log('Selected Communication picklist value: ', this.communication.contactMethod);
         this.showLoadingSpinner = true;
-        saveCommDetails({ updateCommRec: this.communication.contactMethod, selectedAccountId: this.sSelectedAccId })
+        saveCommDetails({ updateCommRec: this.communication.contactMethod, perIdValue: this.sSelectedPerId })
             .then(result => {
                 console.log('resultafterApex call==>' + JSON.stringify(result));
 
@@ -258,7 +258,8 @@ export default class Care_Communication extends LightningElement {
     saveLanguageModal(event) {
         console.log('Selected Language picklist value: ', this.saveLanguage.lang);
         this.showLoadingSpinner = true;
-        saveLangDetails({ updateLangRec: this.saveLanguage.lang, selectedAccountId: this.sSelectedAccId }).then(result => {
+        saveLangDetails({ updateLangRec: this.saveLanguage.lang, perIdValue: this.sSelectedPerId })
+            .then(result => {
             console.log('resultafterApex call==>' + JSON.stringify(result));
 
             if (result) {

@@ -219,6 +219,11 @@
                 <default>false</default>
                 <label>PEV scanned image type</label>
             </value>
+            <value>
+                <fullName>Automated Staging PEV Arrival Notice Priority Order</fullName>
+                <default>false</default>
+                <label>Automated Staging PEV Arrival Notice Priority Order</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

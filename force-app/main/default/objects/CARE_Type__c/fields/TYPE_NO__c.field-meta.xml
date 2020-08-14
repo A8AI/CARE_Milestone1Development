@@ -4,6 +4,7 @@
     <caseSensitive>false</caseSensitive>
     <encryptionScheme>None</encryptionScheme>
     <externalId>true</externalId>
+    <inlineHelpText>Please don&apos;t edit, used for development purpose only.</inlineHelpText>
     <label>TYPE NO</label>
     <length>30</length>
     <required>true</required>

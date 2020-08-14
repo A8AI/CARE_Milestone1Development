@@ -25,15 +25,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>CARE_Customer_Name__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>END_DATE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Preferred_Phone_Number__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -41,71 +33,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>CARE_Street__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Space__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_City__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Zip__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_MFHC__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Enrolled_Tenant_only__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Probation__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Discount__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Rate__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Service_Address__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Number_of_Adults_in_Household__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>CARE_Account_ID__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>CARE_Person_ID__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>CARE_Electric_SA_ID__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Number_of_Children_in_Household__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Public_Assistance_Programs__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Email__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -121,31 +49,19 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>CARE_Space_and_Location__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_ExternalID__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>ACCT_TRANSFER_DATE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>ACCT_TRANSFER_RSN__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>AGREED_TO_ESA__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
-                <field>APPLICANT_NAME__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Edit</behavior>
                 <field>APPLICATION_EXTERNAL_ID__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>APPLICANT_NAME__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -162,10 +78,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>CALWORKS_TANF__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>PARTICIPANT__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -186,6 +98,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>CC_CL_CD__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CCB_Contact_Type_No__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -357,11 +273,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>PEV_FORM__c</field>
+                <field>RESULT_DATE__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RESULT_DATE__c</field>
+                <field>PEV_FORM__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -541,10 +457,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>CUSTOMER_TYPE__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Total_Persons_in_Household__c</field>
             </layoutItems>
             <layoutItems>
@@ -571,6 +483,14 @@
                 <behavior>Edit</behavior>
                 <field>CARE_Alternate_Phone_Type__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>UUID__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Tenant_Space_or_Location__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -590,6 +510,10 @@
         <editHeading>true</editHeading>
         <label>System Information</label>
         <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RecordTypeId</field>
+            </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>CreatedById</field>
@@ -613,10 +537,6 @@
         <layoutColumns/>
         <style>CustomLinks</style>
     </layoutSections>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>CARE_Household_Member__c.CARE_Application__c</relatedList>
-    </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>CARE_Household_Member_Income__c.CARE_Application__c</relatedList>
@@ -654,10 +574,6 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>CARE_CC_Email_Batch_Detail__c.APPLICATION__c</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>CARE_CC_Batch__c.APPLICATION__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

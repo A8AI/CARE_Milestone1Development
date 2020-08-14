@@ -23,6 +23,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>Automated Staging PEV Arrival Notice Priority Order</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>CARE Enrollment Contact Codes</fullName>
             <default>false</default>
         </values>

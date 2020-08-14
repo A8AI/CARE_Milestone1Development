@@ -119,10 +119,12 @@ public with sharing class CARE_ReinstateController {
                  List<CARE_CC_Batch_Detail__c> listCareCCBatchForCust = [select Id, CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c, APPLICATION__c from CARE_CC_Batch_Detail__c
                                               					where PER_ID__c =: sPerID 
                                                                 AND APPLICATION__r.PER_ID__C = : sPerID
+                                                                AND CARE_CI_CC__r.PER_ID__C = : sPerID         
+                                                                AND CARE_App_Enrolled_SA__r.END_DATE__c>:dTodaysDate         
                                                                 AND  ((APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_CARE_DISCOUNT_TYPE AND CARE_CI_CC__r.CC_TYPE_CD__c IN: CARE_Constants.CARE_CC_CODE_CARE)
                                                                           OR (APPLICATION__r.CC_CL_CD__c =:CARE_Constants.CARE_FERA_DISCOUNT_TYPE AND CARE_CI_CC__r.CC_TYPE_CD__c IN: CARE_Constants.CARE_CC_CODE_FERA)
                                                                      ) 
-                                                                ORDER BY CC_DTTM__c DESC];
+                                                                ORDER BY CC_DTTM__c DESC limit 1];
                 if(listCareCCBatchForCust.size()>0){
                     sLatestCareAppID = listCareCCBatchForCust[0].APPLICATION__c;
                     //check if customer is having a previous active enrollent with Valid CC Code & Future End Date            
@@ -209,7 +211,8 @@ public with sharing class CARE_ReinstateController {
             
         }
         catch(Exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_ReinstateController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_ReinstateController','','',sPerId, ex);
         }
         return reinstateResponse ;
     }
@@ -303,7 +306,8 @@ public with sharing class CARE_ReinstateController {
             
         }
         catch(Exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_ReinstateController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_ReinstateController','','',sPerId, ex);
         }
         return bStatus ;
     }

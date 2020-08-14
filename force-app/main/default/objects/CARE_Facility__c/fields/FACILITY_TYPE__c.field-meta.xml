@@ -11,19 +11,19 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>MF</fullName>
+                <fullName>Non-Profit</fullName>
                 <default>false</default>
-                <label>MF</label>
+                <label>Non-Profit</label>
             </value>
             <value>
-                <fullName>AG</fullName>
+                <fullName>Agriculture</fullName>
                 <default>false</default>
-                <label>AG</label>
+                <label>Agriculture</label>
             </value>
             <value>
-                <fullName>NP</fullName>
+                <fullName>MFHC</fullName>
                 <default>false</default>
-                <label>NP</label>
+                <label>MFHC</label>
             </value>
             <value>
                 <fullName>SM</fullName>

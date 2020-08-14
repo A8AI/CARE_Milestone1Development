@@ -1,6 +1,7 @@
 .slds-modal__container {
     max-width: 80rem !important;
     width: 80% !important;
+    
 }
 .modal__containerresize{
     max-width: 50rem !important;

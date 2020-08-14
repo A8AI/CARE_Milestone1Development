@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Flow To log Exception and Send Email Notification</description>
+    <formulas>
+        <description>Stage &amp; Error</description>
+        <name>fxFlowError</name>
+        <dataType>String</dataType>
+        <expression>&apos;Flow Stage: &apos;+{!varStageName_Input}+&apos;###&apos;+{!varErrorAdditionalInfo_Input} +&apos;###&apos;+&apos;Error: &apos;+{!varFlowExceptionMessage_Input}</expression>
+    </formulas>
+    <interviewLabel>CARE Exception Logging Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CARE Exception Logging Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>Create Exception Log</description>
+        <name>Create_Exception_Log</name>
+        <label>Create Exception Log</label>
+        <locationX>412</locationX>
+        <locationY>309</locationY>
+        <inputAssignments>
+            <field>Apex_Class_Name_EI__c</field>
+            <value>
+                <elementReference>varFlowName_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Error_Message_EI__c</field>
+            <value>
+                <elementReference>fxFlowError</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Exception_Type_EI__c</field>
+            <value>
+                <stringValue>Flow Exception</stringValue>
+            </value>
+        </inputAssignments>
+        <object>EI_Exception_Log__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <start>
+        <locationX>286</locationX>
+        <locationY>55</locationY>
+        <connector>
+            <targetReference>Create_Exception_Log</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>Additional Info</description>
+        <name>varErrorAdditionalInfo_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Exception Details</description>
+        <name>varFlowExceptionMessage_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Flow Name</description>
+        <name>varFlowName_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Stage Name</description>
+        <name>varStageName_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

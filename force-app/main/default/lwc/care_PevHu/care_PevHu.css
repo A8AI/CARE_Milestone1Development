@@ -1,0 +1,95 @@
+h1 {
+    color: rgb(0, 112, 210);
+}
+p {
+    font-family: 'Salesforce Sans', Arial, sans-serif;
+    color: rgb(62, 62, 60);
+}
+.app {
+    background-color: #fafaf9;
+    height: 100vh;
+    overflow: scroll;
+}
+.tdr {
+    text-align: left;
+}
+
+.tdl {
+    text-align: left;
+}
+
+td {
+    padding: 3px;
+    height: 15px;
+}
+
+.tbb {
+    border: 1px solid black;
+    width: 250px;
+}
+
+input.threeDigit {
+    width: 30px;
+
+}
+
+
+
+td.header {
+    color: rgb(173, 19, 19);
+    font-weight: bold;
+}
+.c-sectionheader {
+    color: rgb(173, 19, 19);
+    font-weight: bold;
+}
+
+.inputStyle {
+    height: 2000px;
+    color: green;
+    font-size: 15px;
+}
+
+
+.blueText {
+    color: t(--lwc-colorTextBrand);
+}
+.orangeText {
+    color: orange;
+    background-color: orange;
+}
+.greenText {
+    color: green;
+}
+
+.redBgColor { 
+    background-color: red;
+}
+
+.c-hide-NP-Org {
+    display: none;
+    transition-property: display;
+    transition-duration: 2s;
+}
+
+
+.c-show-NP-Org {
+    display: inline;
+    transition-property: display;
+    transition-duration: 2s;
+}
+
+td.c-xs-width {
+    width: 10px;
+}
+
+
+/*.comm {
+    vertical-align:bottom; 
+    float: right; 
+    margin-top: 5px;
+}*/
+
+/*input.commentsFld{
+    height:94px !important;
+}*/

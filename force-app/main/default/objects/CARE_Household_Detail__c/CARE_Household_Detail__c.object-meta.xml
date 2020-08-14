@@ -157,7 +157,7 @@
     <label>CARE Household Detail</label>
     <nameField>
         <displayFormat>CTM{0000000000}</displayFormat>
-        <label>NAME  (Member No)</label>
+        <label>Member No</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE Household Detail</pluralLabel>

@@ -1,0 +1,59 @@
+<template>
+    <div>
+        <div if:true={showLoadingSpinner}>
+            <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-input type="checkbox" label="Is Document Valid?" name="DocValidChecked"
+                    checked={objInputFields.bIsValidDoc} value={objInputFields.bIsValidDoc} onchange={handleChecked}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small slds-text-align_right">Period:<abbr
+                    class="slds-required" title="required">*</abbr></div>
+            <div class="slds-p-left_small slds-size_1-of-5 ">
+                <lightning-combobox name="period" variant="label-hidden" value={objInputFields.sPeriodType}
+                    options={periodOptions} onchange={handleChange} disabled={bViewMode}></lightning-combobox>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Amount 1:</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="amount1TextBox" variant="label-hidden"
+                    value={objInputFields.dAmount1} formatter="currency" step="1" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_3-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Amount 2:</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="amount2TextBox" variant="label-hidden"
+                    value={objInputFields.dAmount2} formatter="currency" step="1" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_3-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">Est.Annual Salary:</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-formatted-number value={objInputFields.dTotalAmount} format-style="currency"
+                    currency-code="USD"></lightning-formatted-number>
+            </div>
+            <div class="slds-p-left_small slds-size_3-of-5 slds-p-top_xx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xx-small"></div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-button label="Save" icon-name="utility:save" onclick={handleSave} disabled={bViewMode}>
+                </lightning-button>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xx-small"></div>
+            <!---->
+            <!--div for increasing height of modal-->
+            <div style="height:8rem"></div>
+        </div>
+    </div>
+</template>

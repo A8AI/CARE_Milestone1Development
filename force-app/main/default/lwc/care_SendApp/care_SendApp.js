@@ -58,7 +58,7 @@ label = {
     handleSendApp() {
             
         
-        getSendAppDetails()
+        getSendAppDetails({ sPersonId: this.sPersonId })
         .then(result => {
             if (result.bSuccess) {
                 //this.objInputParam.sContactCode = result.sContactCode;
@@ -110,6 +110,7 @@ label = {
         })
         .catch(error => {
             this.showToastMessage(this.label.CARE_ErrorHeader, error.message, 'error');
+            this.closeConfirmationModal();
         });
     }
 }

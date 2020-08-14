@@ -1,0 +1,29 @@
+<!--
+  @File Name          : care_LoadUserFile.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 8/12/2020, 1:24:00 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    8/12/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <div>
+        <c-bulkload
+            page-title         = "CARE Data File Upload and Processing"
+            object-api         = "care_batch_staging__c"
+            csv-field-map      = {csvFieldMap}
+            class-name         = ""
+            batch-size         = 2000
+            req-fields         = '["CARE_BILLING_ACCT_ID__c"]'
+            dml-action         = "INSERT"
+            library-name       = ""
+            parm-list          = {parmList}  
+            onbulkloadfinish   = {loadCsvFile}   
+            dynamic-processing
+            hide-instruction >
+        </c-bulkload>
+    </div> 
+</template>

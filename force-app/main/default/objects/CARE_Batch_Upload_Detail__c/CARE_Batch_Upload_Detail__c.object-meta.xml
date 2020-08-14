@@ -157,7 +157,7 @@
     <label>CARE Batch Upload Detail</label>
     <nameField>
         <displayFormat>BATCH{0000000000}</displayFormat>
-        <label>NAME (Detail Seq)</label>
+        <label>Detail Seq</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE Batch Upload Detail</pluralLabel>

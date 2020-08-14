@@ -171,6 +171,22 @@ insert objImage;*/
         cont.EXTERNAL_ID__c = '1234567890';
         cont.START_DT__c = date.today()-3;
         insert cont;
+        
+            //Create System Value Record to Send Email
+        list <CARE_System_Value__c> listCareSystemValue=new list<CARE_System_Value__c>();
+        CARE_System_Value__c objSystemValue=new CARE_System_Value__c();
+        
+        objSystemValue.SYSTEM_VALUE__c='test@yy.com';
+        objSystemValue.SYSTEM_VALUE_CODE__c =500;
+        objSystemValue.Name ='Exception';
+        listCareSystemValue.add(objSystemValue);
+        
+        CARE_System_Value__c objSystemValue2=new CARE_System_Value__c();
+        objSystemValue2.SYSTEM_VALUE__c='test2@yy.com';
+        objSystemValue2.SYSTEM_VALUE_CODE__c =510;
+        objSystemValue2.Name ='Exception';  
+        listCareSystemValue.add(objSystemValue2);        
+        insert listCareSystemValue;  
     }      
     
     @isTest
@@ -178,7 +194,13 @@ insert objImage;*/
         Id userId = UserInfo.getUserId();
         String sSubject = 'Error In CARE Enrollment';
         String sBody = 'For help in the issue please contact Energy Insight SupportTeam';
-        Integer iLineNo = 201;
+        Integer iLineNo = 201; 
+        String sEmail = 'test@yy.com';
+        String sStatus = 'Completed';
+        Datetime CompletedDate = date.today();
+        Integer TotalJobItems = 5;
+        Integer NumberOfErrors = 1;
+        Integer NumberOfSuccess = 4;
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
         Account acc = [SELECT ID,CARE_ON_PROBATION__c,Billing_Person_ID_EI__c,Billing_Account_ID_EI__c,CARE_PROBATION_START_DATE__c,CARE_PROBATION_END_DATE__c FROM ACCOUNT];
         acc.CARE_PROBATION_END_DATE__c = date.today()+3;
@@ -211,9 +233,19 @@ insert objImage;*/
         CARE_UtilityController.checkEmployeeDiscount(lstSite.Person_ID_EI__c);
         CARE_UtilityController.checkEmployeeDiscount(acc.Id);
         CARE_UtilityController.getUserDetails(userId);
-        CARE_UtilityController.sendExceptionEmail('CARE_UtilityControllerTest',sSubject,sBody,iLineNo,careApp[0].PER_ID__c);
+        //CARE_UtilityController.sendExceptionEmail('CARE_UtilityControllerTest',sSubject,sBody,iLineNo,careApp[0].PER_ID__c);
         CARE_UtilityController.getSystemInfoCareAppData(careApp[0].Id);
         CARE_UtilityController.setCancelStatusCareApplication(careApp[0].Id);
+        CARE_UtilityController.sendBatchCompletionEmail(sEmail, sStatus, CompletedDate, TotalJobItems, NumberOfSuccess,NumberOfErrors);
+        try{
+        CARE_App_Enrolled_SA__c objCareAppEnrollSA ;
+        insert objCareAppEnrollSA; 
+        }
+        catch(Exception ex)
+        {
+             CARE_UtilityController.sendExceptionEmail('CARE_UtilityControllerTest',sSubject,sBody,careApp[0].PER_ID__c,ex);
+       
+        }
         Test.stopTest();       
     }
     

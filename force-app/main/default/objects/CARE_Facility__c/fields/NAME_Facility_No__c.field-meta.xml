@@ -3,7 +3,7 @@
     <fullName>NAME_Facility_No__c</fullName>
     <displayFormat>CF{000000000}</displayFormat>
     <externalId>false</externalId>
-    <label>NAME  (Facility No)</label>
+    <label>Facility No</label>
     <trackTrending>false</trackTrending>
     <type>AutoNumber</type>
 </CustomField>

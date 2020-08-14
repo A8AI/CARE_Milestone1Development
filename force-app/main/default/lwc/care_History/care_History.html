@@ -1,3 +1,14 @@
+<!--
+  @File Name          : care_History.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 7/31/2020, 10:06:25 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    7/22/2020   Cognizant Technology Solutions     Initial Version
+-->
 <template>
     <template if:true={bshowHistory}>
         <div style="height: 300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
@@ -38,14 +49,23 @@
                     </button>
 
                     <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate" if:false={isEditForm}>
-                        Enrollment Information</h2>
+                        <div>Transactional Information</div>
+                        
+                    </h2>
                 </header>
                 <!-- modal body -->
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1" if:false={isEditForm}>
-
-                    <c-care_-enrollment s-live-app-call={sLiveCall} s-selected-app-id={selectedRecord}
-                        s-selected-per-id={sSelectedHistoryPerId} list-selected-prem-ids={listSelectedHistoryPremIds}
-                        b-modal-flag={bShowReadonly}></c-care_-enrollment>
+                <div class="slds-modal__content slds-p-around_medium scroll" id="modal-content-id-1" if:false={isEditForm}>
+                        <div if:true={checkPevHuForm}>
+                            <c-care_-pev-hu s-selected-per-id={sSelectedHistoryPerId} 
+                            list-selected-prem-ids={listSelectedHistoryPremIds} s-selected-app-id={selectedRecord} s-live-call={sLiveCall} 
+                            b-modal-flag={bShowReadonly}></c-care_-pev-hu>
+                        </div>
+                        <div if:false={checkPevHuForm}>
+                            <c-care_-enrollment s-live-app-call={sLiveCall} s-selected-app-id={selectedRecord}
+                            s-selected-per-id={sSelectedHistoryPerId} list-selected-prem-ids={listSelectedHistoryPremIds}
+                            b-modal-flag={bShowReadonly}></c-care_-enrollment>
+                        </div>
+                        
                 </div>
 
                 <!-- modal footer start-->

@@ -12,6 +12,8 @@
         <members>CARE_ImageUploadController</members>
         <members>CARE_SendAppController</members>
         <members>CARE_AddElecGasController</members>
+	    <members>CARE_ManualUpload</members>
+        <members>CARE_LoadUserFile</members>
         <members>CARE_CommunicationController</members>
 		<members>CARE_CCBHistoryController</members>
 		<members>CARE_IncomeQualificationController</members>
@@ -32,14 +34,31 @@
 		<members>CARE_ImageUploadControllerTest</members>
 		<members>CARE_IncomeQualificationControllerTest</members>
 		<members>CARE_OnDemandDropControllerTest</members>
-		<!--<members>CARE_OnDemandPEVController</members>
-		<members>CARE_OnDemandPEVControllerTest</members>
-		<members>CARE_PEVHUController</members>-->
 		<members>CARE_ReinstateControllerTest</members>
 		<members>CARE_SearchControllerTest</members>
 		<members>CARE_SendAppControllerTest</members>
 		<members>CARE_TransferControllerTest</members>
 		<members>CARE_UtilityControllerTest</members>
+		<members>CARE_PEVHUController</members>
+		<members>CARE_OnDemandStatusController</members>
+		<members>CARE_OnDemandPEVController</members>
+		<members>CARE_OnDemandStatusControllerTest</members>
+		<members>CARE_OnDemandPEVControllerTest</members>
+		<members>CARE_IncomeInformationController</members>
+		<members>CARE_IncomeInformationControllerTest</members>
+		<members>CARE_PEVHUControllerTest</members>
+		<members>CARE_AutoUtilityController</members>
+		<members>CARE_AutoUtilityControllerTest</members>
+		<members>CARE_HUFortyFiveDayBatch</members>
+		<members>CARE_PEVFortyFiveDayBatch</members>
+		<members>CARE_ESAFortyFiveDayExpireBatch</members>
+		<members>CARE_HUFortyFiveDayBatchTest</members>
+		<members>CARE_PEVFortyFiveDayBatchTest</members>
+		<members>CARE_ESAFortyFiveDayExpireBatchTest</members>
+		<members>CARE_ESAFortyFiveDayBatch</members>
+		<members>CARE_ESAFortyFiveDayBatchTest</members>
+		<members>CARE_BatchEnrollmentDataXportTest</members>
+		<members>CARE_BatchPEVArrivalDataXportTest</members>
         <name>ApexClass</name>
     </types>
 	
@@ -60,7 +79,7 @@
         <members>Account.PREFERRED_PHONE_TYPE__c</members>
         <members>Account.ALTERNATIVE_PHONE_TYPE__c</members>
         <members>CARE_Application__c.ACCT_TRANSFER_DATE__c</members>
-        <members>CARE_Application__c.ACCT_TRANSFER_RSN__c</members>
+        <!--<members>CARE_Application__c.ACCT_TRANSFER_RSN__c</members>-->
         <members>CARE_Application__c.ACCT_ID__c</members>
 		<members>CARE_Application__c.AGREED_TO_ESA__c</members>
 		<members>CARE_Application__c.ANNUAL_HOUSEHOLD_INCOME__c</members>
@@ -73,7 +92,7 @@
         <members>CARE_Application__c.CALFRESH_SNAP__c</members>
         <members>CARE_Application__c.CALWORKS_TANF__c</members>
 		<members>CARE_Application__c.CARE_Alternate_Phone_Type__c</members>
-        <members>CARE_Application__c.PARTICIPANT__c</members>
+        <!--<members>CARE_Application__c.PARTICIPANT__c</members>-->
         <members>CARE_Application__c.CARE1_RECORD_NUMBER__c</members>
         <members>CARE_Application__c.CASH_OTHER_INCOME__c</members>
         <members>CARE_Application__c.CC_BATCH_DATE__c</members>
@@ -94,7 +113,7 @@
         <members>CARE_Application__c.CCB_UNIT_DATE__c</members>
 		<members>CARE_Application__c.COC_CODE__c</members>
 		<!--<members>CARE_Application__c.COMMENTS__c</members>-->
-        <members>CARE_Application__c.CUSTOMER_TYPE__c</members>
+        <!--<members>CARE_Application__c.CUSTOMER_TYPE__c</members>-->
         <members>CARE_Application__c.DATA_ENTRY_COMPLETE__c</members>
         <members>CARE_Application__c.DATA_ENTRY_COMPLETE_DATE__c</members>
         <members>CARE_Application__c.DOC_RECEIVED_DATE__c</members>
@@ -260,7 +279,7 @@
         <members>CARE_CC_Batch__c.SA_SENT_DATE__c</members>
         <members>CARE_CC_Batch__c.UPDATE_DATE_CARE1__c</members>
         <members>CARE_CC_Batch__c.USER_NAME_CARE1__c</members>
-        <members>CARE_CC_Batch__c.APPLICATION__c</members>
+        <!--<members>CARE_CC_Batch__c.APPLICATION__c</members>-->
         <members>CARE_CC_Batch_Detail__c.ACCT_ID__c</members>
         <members>CARE_CC_Batch_Detail__c.APPLICATION__c</members>
         <members>CARE_CC_Batch_Detail__c.CARE_APP_ENROLLED_SA__c</members>
@@ -293,6 +312,7 @@
         <members>CARE_CC_Batch_Detail__c.SOURCE_DETAIL_NO__c</members>
         <members>CARE_CC_Batch_Detail__c.USER_ID_CARE1__c</members>
         <members>CARE_CC_Batch_Detail__c.CARE_BATCH_UPLOAD_DETAIL__c</members>
+		<members>CARE_CC_Batch_Detail__c.Initial_Enrollment__c</members>
         <members>CARE_APP_Image_List__c.Application__c</members>
         <members>CARE_APP_Image_List__c.CASE__c</members>
 		<members>CARE_APP_Image_List__c.COMMENTS__c</members>
@@ -591,9 +611,9 @@
 		<members>CARE_CI_SA__c.PREM_ID__c</members>
 		<members>CARE_CI_SA__c.SA_ID__c</members>
 		<members>CARE_CI_SA__c.SITE__c</members>
-		<members>CARE_Household_Member__c.CARE_Application__c</members>
+		<!--<members>CARE_Household_Member__c.CARE_Application__c</members>-->
         <!--<members>CARE_Household_Member__c.Name</members>-->
-        <members>CARE_Household_Member__c.CARE_Member_Name__c</members>
+        <!--<members>CARE_Household_Member__c.CARE_Member_Name__c</members>-->
         <members>CARE_Household_Member_Income__c.ADJ_1__c</members>
         <members>CARE_Household_Member_Income__c.ADJ_10__c</members>
         <members>CARE_Household_Member_Income__c.ADJ_11__c</members>
@@ -652,7 +672,6 @@
         <members>CARE_Household_Member_Income__c.LINE_2B__c</members>
         <members>CARE_Household_Member_Income__c.LINE_3__c</members>
         <members>CARE_Household_Member_Income__c.LINE_3B__c</members>
-		<members>CARE_Household_Member_Income__c.LINE_4__c</members>
 		<members>CARE_Household_Member_Income__c.LINE_4A__c</members>
 		<members>CARE_Household_Member_Income__c.LINE_5__c</members>
 		<members>CARE_Household_Member_Income__c.LINE_5A__c</members>
@@ -682,8 +701,6 @@
 		<members>CARE_Household_Member_Income__c.Document_Complete__c</members>
 		<members>CARE_Household_Member_Income__c.INCOME_FORM_TYPE__c</members>
 		<members>CARE_Household_Member_Income__c.Adj_2__c</members>
-		<members>CARE_Household_Member_Income__c.Line_2A__c</members>
-		<members>CARE_Household_Member_Income__c.Adj_2A__c</members>
 		<members>CARE_Household_Member_Income__c.Adj_3__c</members>
 		<members>CARE_Household_Member_Income__c.Line_3A__c</members>
 		<members>CARE_Household_Member_Income__c.Adj_3A__c</members>
@@ -691,10 +708,6 @@
 		<members>CARE_Household_Member_Income__c.Adj_4C__c</members>
 		<members>CARE_Household_Member_Income__c.LINE_5__c</members>
 		<members>CARE_Household_Member_Income__c.Adj_5__c</members>
-		<members>CARE_Household_Member_Income__c.Adj_4__c</members>
-		<members>CARE_Household_Member_Income__c.Line_8__c</members>
-		<members>CARE_Household_Member_Income__c.Adj_8__c</members>
-		<members>CARE_Household_Member_Income__c.Line_9__c</members>
 		<members>CARE_Household_Member_Income__c.Adj_9__c</members>
         <members>CARE_Facility_Enrolled_SA__c.ACCT_ID__c</members>
         <members>CARE_Facility_Enrolled_SA__c.CCB_APP_STATUS__c</members>
@@ -704,7 +717,7 @@
         <members>CARE_Facility_Enrolled_SA__c.CURR_FERA__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.CURR_FERA_ELEC__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.DAYS_OCCUPIED__c</members>
-		<members>CARE_Facility_Enrolled_SA__c.EI_Space_Location__c</members>
+		<!--<members>CARE_Facility_Enrolled_SA__c.EI_Space_Location__c</members>-->
 		<members>CARE_Facility_Enrolled_SA__c.END_DATE__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.ENTRY_DATE_CARE1__c</members>
 		<members>CARE_Facility_Enrolled_SA__c.EXTERNAL_ID__c</members>
@@ -899,6 +912,7 @@
 		<members>WAC_RPT_Detail_In__c.SERVICE_SUFFIX__c</members>
 		<members>WAC_RPT_Detail_In__c.SERVICE_ZIP__c</members>
 		<members>WAC_RPT_Detail_In__c.SERVICE_ZIP4__c</members>
+		<members>WAC_RPT_Detail_In__c.WAC_RPT_Header__c</members>
 		<members>WAC_Parse_Addr_Split__c.DETAIL_NO__c</members>
 		<members>WAC_Parse_Addr_Split__c.FIRST_MIDDLE_NAME__c</members>
 		<members>WAC_Parse_Addr_Split__c.LAST_NAME__c</members>
@@ -991,6 +1005,7 @@
 		<!--<members>WAC_RPT_Zip__c.Name</members>-->
 		<members>WAC_RPT_Zip__c.ZIP_CODE__c</members>
         <members>WAC_RPT_Zip__c.EXTERNAL_ID__c</members>
+		<members>EI_PREMISE__c.ESA_Installation_Exception__c</members>
         <name>CustomField</name>
     </types>
 	
@@ -1056,6 +1071,22 @@
 		<members>CARE_ReceiveDateMsg</members>
 		<members>CARE_NoCitySearchAllowMsg</members>
 		<members>CARE_ValidValuesMsg</members>
+		<members>CARE_NoRecordsDoAdjustment</members>
+		<members>CARE_IncomePeopleMismatch</members>
+		<members>CARE_IncomeDocumentInvalid</members>
+		<members>CARE_PEVHUVerificationError</members>
+		<members>CARE_YesNoDateMsg</members>
+		<members>CARE_DiscountTypeMsg</members>
+		<members>CARE_NoDateMsg</members>
+		<members>CARE_SAIDValidationMsg</members>
+		<members>CARE_PEVSuccessMsg</members>
+		<members>CARE_IncomeDocDeleteSuccessMsg</members>
+		<members>CARE_SelectPeriodMsg</members>
+		<members>CARE_RecordSelectMsg</members>
+		<members>CARE_IncomeDocSuccessMsg</members>
+		<members>CARE_COCLengthValidationMsg</members>
+		<members>CARE_ValidValValidationMsg</members>
+		<members>CARE_PersonNameValidationMsg</members>
         <name>CustomLabel</name>
     </types>
 	
@@ -1078,7 +1109,7 @@
 		<members>CARE_BATCH_UPLOAD__c</members>
 		<members>EI_SA_CONTERM__c</members>
 		<members>CARE_CI_SA__c</members>
-		<members>CARE_Household_Member__c</members>
+		<!--<members>CARE_Household_Member__c</members>-->
 		<members>CARE_Facility_Enrolled_SA__c</members>
 		<members>EI_ACCT_ALERT__c</members>
         <members>CARE_Household_Member_Income__c</members>
@@ -1118,6 +1149,7 @@
 		<members>CARE_CI_SA__c</members>
 		<members>EI_SA_CONTERM__c</members>
 		<members>CARE_System_Value__c</members>
+		<members>CARE_On_Demand_Status</members>
         <name>CustomTab</name>
     </types>
 	
@@ -1146,7 +1178,7 @@
 		<members>CARE_CC_Email_Batch_Detail__c-CARE CC Email Batch Detail Layout</members>
 		<members>CARE_Batch_Upload_Detail__c-CARE Batch Upload Detail Layout</members>
 		<members>EI_SA_CONTERM__c-EI SA CONTERM Layout</members>
-		<members>CARE_Household_Member__c-CARE Household Member Layout</members>
+		<!--<members>CARE_Household_Member__c-CARE Household Member Layout</members>-->
 		<members>CARE_CI_SA__c-CARE CI SA Layout</members>
 		<members>CARE_Facility_Enrolled_SA__c-CARE Facility Enrolled SA Layout</members>
         <members>CARE_Household_Member_Income__c-CARE Household Member Income Layout</members>
@@ -1190,10 +1222,24 @@
         <members>care_AddElecGas</members>
         <members>care_CCBHistory</members>
         <members>care_Communication</members>
-		<!--<members>care_OnDemandPEV</members>-->
-		<!--<members>care_PevHu</members>-->
 		<members>care_SpecialMessageModal</members>
 		<members>care_Utilities</members>
+		<members>care_PevHu</members>
+		<members>care_OnDemandStatus</members>
+		<members>care_OnDemandPEV</members>
+        <members>care_LoadUserFile</members>
+		<members>care_IncomeInformation</members>
+		<members>care_IRS1040_2018</members>
+		<members>care_IRS1040_2019</members>
+		<members>care_IRS1040_SR</members>
+		<members>care_IRSTranscriptForm</members>
+		<members>care_MultiPayPeriodsForm</members>
+		<members>care_MultiPayPeriodsTwoForm</members>
+		<members>care_1040_XForm</members>
+		<members>care_1099_Form</members>
+		<members>care_BankStatementForm</members>
+		<members>care_CategoricalFixedForm</members>
+		<members>care_CategoricalForm</members>
 		<name>LightningComponentBundle</name>
     </types>
 	
@@ -1204,6 +1250,7 @@
 		<members>CARE_Type__c.Add_Electric_Gas</members>
 		<members>CARE_Type__c.CC_Code_Maintenance</members>
 		<members>CARE_Type__c.Valid_Rate_Schedule_Maintenance</members>
+		<members>CARE_System_Value__c.Response_Check</members>
 		<name>ListView</name>
 	</types>
 	
@@ -1219,11 +1266,8 @@
 		<members>CARE Partner SM</members>
 		<members>CARE Partner Non-Profit</members>
 		<members>Admin</members>
-		<!--<members>EI Read Only</members>-->
 		<members>Integration User</members>
 		<members>CSR</members>
-		<!--<members>ReadOnly</members>
-		<members>Technology Enablement</members>-->
 		<name>Profile</name>
 	</types>
 	
@@ -1231,7 +1275,7 @@
 		<members>CARE_Application__c.Residential_Customer</members>
 		<members>CARE_Application__c.Agricultural</members>
 		<members>CARE_Application__c.Migrant</members>
-		<members>CARE_Application__c.Non_Profile</members>
+		<members>CARE_Application__c.Non_Profit</members>
 		<members>CARE_Application__c.Sub_Metered</members>
 		<members>CARE_Facility__c.SM</members>
 		<members>CARE_Facility__c.NP</members>
@@ -1241,6 +1285,9 @@
 		<members>Account.CARE_Migrant</members>
 		<members>Account.CARE_Non_Profit</members>
 		<members>Account.CARE_Sub_Metered</members>
+		<members>Account.Residential_Master_Account_EI</members>
+		<members>Account.Residential_Local_Account_EI</members>
+		<members>Account.Residential_Primary_Account_EI</members>
 		<members>CARE_Type__c.Reason_Maintenance</members>
 		<members>CARE_Type__c.CC_Code_Maintenance</members>
 		<members>CARE_Type__c.Misc</members>
@@ -1256,6 +1303,12 @@
         <!--<members>CARE_CheckCustomerDiscountType_Flow</members>-->
 		<members>CARE_CheckCustomer2YearCCCode_Flow</members>
 		<members>CARE_ConvertCommaSeparatedStringToList_Flow</members>
+		<members>CARE_PEV_Verification_Process_Flow</members>
+		<members>CARE_Update_CC_Code_PEV_HU_Flow</members>
+		<members>CARE_Check_Income_Documents_Availability_Flow</members>
+		<members>CARE_Get_Invalid_Docs_Description_Flow</members>
+		<members>CARE_HU_Verification_Process_Flow</members>
+		<members>CARE_Exception_Logging_Flow</members>
         <name>Flow</name>
     </types>
 	
@@ -1266,12 +1319,18 @@
 		<members>Facility_Record_Page</members>
 		<members>CARE_Application_UtilityBar</members>
 		<members>CARE_APP_UtilityBar</members>
+		<members>CARE_On_Demand_Status</members>
 		<name>FlexiPage</name>
 	</types>
 	
 	<types>
 		<members>Energy_Insight_Logo_EI/EnergyInsightCAREAPPLogo.jpg</members>
 		<name>Document</name>
+	</types>
+	
+	<types>
+		<members>CAREAdminUserReport/Site_Person_with_EI_Account_ID</members>
+		<name>Report</name>
 	</types>
 
 	

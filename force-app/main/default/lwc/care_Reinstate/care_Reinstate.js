@@ -204,7 +204,7 @@ handleReinstate() {
                     this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_RetroStartDateValidationMsg, 'error');
                     bValidInput = false;
                     this.listRetroStartEndDate = [];
-                } else if (element.dRetroEndDate < element.dRetroStartDate || element.dRetroEndDate > this.dTodaysDate || element.dRetroEndDate == null) {
+                } else if (element.dRetroEndDate <= element.dRetroStartDate || element.dRetroEndDate > this.dTodaysDate || element.dRetroEndDate == null) {
                     this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_RetroDateValidationMsg, 'error');
                     bValidInput = false;
                     this.listRetroStartEndDate = [];

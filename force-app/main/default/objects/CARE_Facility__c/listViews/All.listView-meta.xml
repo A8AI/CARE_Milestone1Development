@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>FACILITY_TYPE__c</columns>
+    <columns>FACILITY_NAME__c</columns>
+    <columns>OWNER__c</columns>
+    <columns>FACILITY_PHONE__c</columns>
+    <columns>MANAGER_NAME__c</columns>
+    <columns>MAILING_ADDRESS1__c</columns>
+    <columns>MAILING_CITY__c</columns>
+    <columns>MAILING_STATE__c</columns>
+    <columns>MAILING_POSTAL__c</columns>
+    <columns>EXTERNAL_ID__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

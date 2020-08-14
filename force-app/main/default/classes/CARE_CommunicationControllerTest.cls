@@ -55,7 +55,7 @@ public class CARE_CommunicationControllerTest {
         saveResults.home= '8085835332';
         saveResults.work= '9039780462';
         saveResults.mobile= '8109145322'; 
-        CARE_CommunicationController.savePhoneDetails(saveResults, a.Id);
+        CARE_CommunicationController.savePhoneDetails(saveResults, a.Billing_Person_ID_EI__c);
         //System.assertEquals(1, saveResults.size(),'Success');
         
         List<Account> languageDetails = new List<Account>();
@@ -63,7 +63,7 @@ public class CARE_CommunicationControllerTest {
         System.assertEquals(1, languageDetails.size(),'Success');
         
         string language = 'Vietnamese';
-        CARE_CommunicationController.saveLangDetails(language, a.Id);
+        CARE_CommunicationController.saveLangDetails(language, a.Billing_Person_ID_EI__c);
         
         List<Account> commDetails = new List<Account>();
         commDetails = CARE_CommunicationController.getCommDetails(a.Id);
@@ -71,7 +71,7 @@ public class CARE_CommunicationControllerTest {
         
         
         string commPref =  'Email';  
-     	bCommStatus = CARE_CommunicationController.saveCommDetails(commPref, a.Id);
+     	bCommStatus = CARE_CommunicationController.saveCommDetails(commPref, a.Billing_Person_ID_EI__c);
         //System.assertEquals(true, bCommStatus);
         Test.stopTest();
     }

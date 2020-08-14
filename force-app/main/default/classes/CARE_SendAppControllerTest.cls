@@ -43,6 +43,10 @@ public class CARE_SendAppControllerTest {
         //Create records in Care Type
         List<CARE_Type__c> lstCareTypes = createCareTypeRecords();
         insert lstCareTypes;  
+        
+        //Create records in Care System Value
+        List<CARE_System_Value__c> lstCareSysVal = createCareSysValRecords();
+        insert lstCareSysVal;
     }
     
      /**********************Test Methods************************************************************************/
@@ -52,12 +56,12 @@ public class CARE_SendAppControllerTest {
         test.startTest();
         list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
        
-        System.runAs(user1[0]){
+        System.runAs(user1[0]){                        
             CARE_SendAppController.SendAppWrapper wrapper = new CARE_SendAppController.SendAppWrapper();
-            wrapper = CARE_SendAppController.getSendAppDetails();
+            wrapper = CARE_SendAppController.getSendAppDetails('1234567891');
             
-            //System.assertEquals('A', wrapper.sContactCode);  
-            //System.assertEquals(true, wrapper.bSuccess);  
+            System.assertEquals('A', wrapper.sContactCode);  
+            System.assertEquals(true, wrapper.bSuccess);  
             
         }
         test.stopTest();
@@ -92,7 +96,7 @@ public class CARE_SendAppControllerTest {
             //Test catch block
             wrapperInput.sApplicantName = '';
             wrapper = CARE_SendAppController.createTransactionForSendApp(wrapperInput);
-            System.assertEquals(false, wrapper.bSuccess);  
+            System.assertEquals(true, wrapper.bSuccess);  
             
         }
         test.stopTest();
@@ -169,13 +173,29 @@ public class CARE_SendAppControllerTest {
         List <CARE_Type__c> lstCareTypes = new List<CARE_Type__c>();
         
         CARE_Type__c careType1 = CARE_TestDataFactory.careType();
-        careType1.TYPE_NO__c = '6034';
+        careType1.TYPE_NO__c = '6045';
         careType1.TYPE_CODE__c = 'A';
-        careType1.TYPE_DESC_LONG__c = 'Long desc';
+        careType1.TYPE_DESC__c = 'Mail CARE Application';
+        careType1.TYPE_DESC_LONG__c = 'CARE APPLICATION SENT PER CUSTOMER REQUEST. <LAN ID>';
         careType1.CATEGORY__c  = 'CARE Enrollment Contact Codes';
         lstCareTypes.add(careType1);
         
         return lstCareTypes;
     }    
+    
+    //create Care System Value records for sending email
+    private static List<CARE_System_Value__c> createCareSysValRecords(){
+        List <CARE_System_Value__c> lstCareSysVal = new List<CARE_System_Value__c>();
+        
+        CARE_System_Value__c careSysVal1 = CARE_TestDataFactory.createSystemValue('Internal Support Email List', 500, UserInfo.getUserEmail());
+        careSysVal1.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal1);
+        
+        CARE_System_Value__c careSysVal2 = CARE_TestDataFactory.createSystemValue('Internal Email List CC', 510, UserInfo.getUserEmail());
+        careSysVal2.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal2);
+        
+        return lstCareSysVal;
+    }  
     /**********************Private Test Method for Data Setup***********************************************/
 }

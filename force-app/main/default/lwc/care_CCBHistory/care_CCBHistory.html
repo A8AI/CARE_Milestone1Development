@@ -21,9 +21,11 @@
 
                 <!--<template if:true={accList}>-->
                 <template if:true={checkCCBHistoryData}>
-                    <lightning-datatable hide-checkbox-column = true
-                     data={data} columns={columns} key-field="Id">
-                    </lightning-datatable>
+                    <div if:true={checkCCBHistoryData} style="max-height:400px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
+                        <lightning-datatable hide-checkbox-column = true
+                        data={data} columns={columns} key-field="Id">
+                        </lightning-datatable>
+                    </div>
                 </template>
                 <template if:false={checkCCBHistoryData}>
                     <!--<div class="slds-text-heading_large">No Records Found</div>-->

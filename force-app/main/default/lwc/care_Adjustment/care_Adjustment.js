@@ -2,7 +2,7 @@ import { LightningElement, track, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getAdjustmentDetails from '@salesforce/apex/CARE_AdjustmentController.getAdjustmentDetails';
 import createAdjustmentSA from '@salesforce/apex/CARE_AdjustmentController.createAdjustmentSA';
-import { formatString } from 'c/care_Utilities';
+import { formatString, isBlank, isNotBlank } from 'c/care_Utilities';
 
 //Labels
 import CARE_NotModifiedMsg from '@salesforce/label/c.CARE_NotModifiedMsg';
@@ -19,8 +19,9 @@ import CARE_RetroDateValidationMsg from '@salesforce/label/c.CARE_RetroDateValid
 import CARE_NotModifiedRstREndMsg from '@salesforce/label/c.CARE_NotModifiedRstREndMsg';
 import CARE_AdjustmentHeader from '@salesforce/label/c.CARE_AdjustmentHeader';
 import CARE_CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
-import CARE_NotEligibleMsg from '@salesforce/label/c.CARE_NotEligibleMsg';
+import CARE_NotEligiblePersonMsg from '@salesforce/label/c.CARE_NotEligiblePersonMsg';
 import CARE_CommentFieldLengthValidationMsg  from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
+import CARE_StartDateValidationMsg  from '@salesforce/label/c.CARE_StartDateValidationMsg';
 
 
 export default class Care_Adjustment extends LightningElement {
@@ -40,6 +41,7 @@ export default class Care_Adjustment extends LightningElement {
     @track listRetroStartDate = [];
     @track listErrorStartDate = [];
     @track listErrorStartEndDate = [];
+    @track listErrorEndDate = [];
     @track objInputFields = {
         sPerId: '',
         sReason: '',
@@ -63,7 +65,8 @@ export default class Care_Adjustment extends LightningElement {
         CARE_AdjustmentHeader,
         CARE_CommentFieldLengthValidationMsg,
         CARE_CommentFieldValidationMsg,
-        CARE_NotEligibleMsg 
+        CARE_NotEligiblePersonMsg,
+        CARE_StartDateValidationMsg
      }
 
     //Toast Message to show 
@@ -94,7 +97,7 @@ export default class Care_Adjustment extends LightningElement {
                     this.showLoadingSpinner = false;
                 }
                 else {
-                    this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotEligibleMsg, 'error');
+                    this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotEligiblePersonMsg, 'error');
                     this.showLoadingSpinner = false;
                 }
             })
@@ -162,14 +165,14 @@ export default class Care_Adjustment extends LightningElement {
         //Put that value in list, and check the length later on
         if (!this.bAdjustment) { // Check for both Start Date and End Date, put that record containing both values
             this.dataAdjustment.forEach(element => {
-                if (element.dRetroStartDate !== null && element.dRetroStartDate !== undefined && element.dRetroEndDate !== null && element.dRetroEndDate !== undefined) {
+                if (isNotBlank(element.dRetroStartDate) && isNotBlank(element.dRetroEndDate)) {
                     this.listRetroStartEndDate.push(element);
                 }
             });
         }
         else { // Check for only Start Date, put that record containing StarDate
             this.dataAdjustment.forEach(element => {
-                if (element.dRetroStartDate !== null && element.dRetroStartDate !== undefined) {
+                if (isNotBlank(element.dRetroStartDate)) {
                     this.listRetroStartDate.push(element);
                 }
             });
@@ -180,13 +183,21 @@ export default class Care_Adjustment extends LightningElement {
             console.log('element.dRetroStartDate', element.dRetroStartDate);
             console.log('element.dRetroEndDate', element.dRetroEndDate)
             //retro start Date should be less than todays date
-            //Retro end date should be greater than Retro start date and not greater than today’s date
+            //Retro end date should be greater than Retro start date and not greater than yes date
+            //For no 'Yes date only', if retro start date is entered, end date can't be left blank
             //Put that erroneous record in the list
-            if (element.dRetroStartDate >= this.dTodaysDate && element.dRetroStartDate !== null && element.dRetroStartDate !== undefined) {
+            if (element.dRetroStartDate >= this.dTodaysDate && isNotBlank(element.dRetroStartDate)) {
                 this.listErrorStartDate.push(element);
-            } else if (!this.bAdjustment && (element.dRetroEndDate < element.dRetroStartDate || element.dRetroEndDate >= element.dStartDate)
-                && (element.dRetroStartDate !== null && element.dRetroStartDate !== undefined && element.dRetroEndDate !== null && element.dRetroEndDate !== undefined)) {
+            } 
+            else if (!this.bAdjustment && (element.dRetroEndDate <= element.dRetroStartDate || element.dRetroEndDate > element.dStartDate)
+                && (isNotBlank(element.dRetroStartDate) && isNotBlank(element.dRetroEndDate))) {
                 this.listErrorStartEndDate.push(element);
+            }
+            else if (!this.bAdjustment && element.dRetroEndDate > element.dStartDate && isNotBlank(element.dRetroEndDate)) {
+                this.listErrorStartEndDate.push(element);
+            }
+            else if(!this.bAdjustment && (isNotBlank(element.dRetroStartDate) && isBlank(element.dRetroEndDate))){
+                this.listErrorEndDate.push(element);
             }
         });
 
@@ -194,68 +205,49 @@ export default class Care_Adjustment extends LightningElement {
         if (!this.bAdjustment && this.listRetroStartEndDate.length === 0) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotModifiedRstREndMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         else if (this.bAdjustment && this.listRetroStartDate.length === 0) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotModifiedMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         else if (this.listErrorStartDate.length > 0) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_RetroStartDateValidationMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         else if (!this.bAdjustment && this.listErrorStartEndDate.length > 0) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_RetroDateValidationMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
+        }
+        else if (!this.bAdjustment && this.listErrorEndDate.length > 0) {
+            bValidInput = false;
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_StartDateValidationMsg, 'error');
+            this.resetErrorLists();
         }
         //check if Reason is selected
         else if (!this.reasonSelected) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_SelectReasonMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         //check if ReasonComment is selected or not
         else if (this.objInputFields.sComment == null || this.objInputFields.sComment == '' || this.objInputFields.sComment == undefined) {
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_SelectCommentMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         else if(this.objInputFields.sComment.length > 256){
             bValidInput = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldLengthValidationMsg, 'error');
-            this.listRetroStartEndDate = [];
-            this.listRetroStartDate = [];
-            this.listErrorStartDate = [];
-            this.listErrorStartEndDate = [];
+            this.resetErrorLists();
         }
         else if(this.objInputFields.sComment.indexOf(',') !== -1){
                 bValidInput = false;
                 this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_CommentFieldValidationMsg, 'error');
-                this.listRetroStartEndDate = [];
-                this.listRetroStartDate = [];
-                this.listErrorStartDate = [];
-                this.listErrorStartEndDate = [];
+                this.resetErrorLists();
         }
         //validation passed proceed with Apex call
         if (bValidInput) {
@@ -296,10 +288,7 @@ export default class Care_Adjustment extends LightningElement {
                     this.dataReasonOptions = null;
                     this.dataAdjustment = null;
                     this.showLoadingSpinner = false;
-                    this.listRetroStartEndDate = [];
-                    this.listRetroStartDate = [];
-                    this.listErrorStartDate = [];
-                    this.listErrorStartEndDate = [];
+                    this.resetErrorLists();
                 }
             })
             .catch(error => {
@@ -312,10 +301,7 @@ export default class Care_Adjustment extends LightningElement {
                 this.dataReasonOptions = null;
                 this.dataAdjustment = null;
                 this.showLoadingSpinner = false;
-                this.listRetroStartEndDate = [];
-                this.listRetroStartDate = [];
-                this.listErrorStartDate = [];
-                this.listErrorStartEndDate = [];
+                this.resetErrorLists();
             });
 
     }
@@ -367,5 +353,13 @@ export default class Care_Adjustment extends LightningElement {
 
             this.bShowModal = false;
         }
+    }
+
+    resetErrorLists(){
+        this.listRetroStartEndDate = [];
+        this.listRetroStartDate = [];
+        this.listErrorStartDate = [];
+        this.listErrorStartEndDate = [];
+        this.listErrorEndDate = [];
     }
 }

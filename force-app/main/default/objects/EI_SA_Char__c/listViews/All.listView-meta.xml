@@ -15,8 +15,8 @@
     <filterScope>Everything</filterScope>
     <filters>
         <field>CHAR_TYPE_CD__c</field>
-        <operation>equals</operation>
-        <value>CARE-USG</value>
+        <operation>startsWith</operation>
+        <value>CARE-</value>
     </filters>
     <label>All</label>
 </ListView>

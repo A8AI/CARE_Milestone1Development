@@ -5,7 +5,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App if Send App screen is not having Account Id/P</shortDescription>
-        <value>Account Id/Person Id entered is either blank or null!!</value>
+        <value>Account Id/Person Id entered is either incorrect or blank or null!!</value>
     </labels>
     <labels>
         <fullName>CARE_AddElecGasHeader</fullName>
@@ -41,6 +41,13 @@
         <protected>false</protected>
         <shortDescription>Toast message for both retro dates validation</shortDescription>
         <value>If entered, both Retro Start date and Retro End Date must have a value!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_COCLengthValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_COCLengthValidationMsg</shortDescription>
+        <value>Max. allowable characters is 4</value>
     </labels>
     <labels>
         <fullName>CARE_CancelHeader</fullName>
@@ -99,6 +106,13 @@
         <value>Enrollment Record is Deleted!!</value>
     </labels>
     <labels>
+        <fullName>CARE_DiscountTypeMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message for valid discount type</shortDescription>
+        <value>Please enter a valid discount type in order to proceed!!</value>
+    </labels>
+    <labels>
         <fullName>CARE_DropCaseourceValidationMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -152,7 +166,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast message to say that there was error while creating Enrollment Record.</shortDescription>
-        <value>Error while creating Enrollment record!!</value>
+        <value>Error while creating Enrollment record. Please check data entered!!</value>
     </labels>
     <labels>
         <fullName>CARE_EnrollmentDocumentValidationMsg</fullName>
@@ -218,6 +232,34 @@
         <value>Image IDs are saved successfully !!!</value>
     </labels>
     <labels>
+        <fullName>CARE_IncomeDocDeleteSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for Income Document deletion!!</shortDescription>
+        <value>Income Document Record is Deleted!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_IncomeDocSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for Income Document addition Transaction</shortDescription>
+        <value>Income Document added successfully!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_IncomeDocumentInvalid</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_IncomeDocumentInvalid</shortDescription>
+        <value>Every person should have atleast one document (except for joint filing)</value>
+    </labels>
+    <labels>
+        <fullName>CARE_IncomePeopleMismatch</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_IncomePeopleMismatch</shortDescription>
+        <value># With Income in Household Information should be equal to the number of persons added in Income Information.</value>
+    </labels>
+    <labels>
         <fullName>CARE_InvalidPersonIdMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -230,6 +272,20 @@
         <protected>false</protected>
         <shortDescription>Toast Message No City Search Allowed</shortDescription>
         <value>Please provide one or more fields along with city</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NoDateMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>toast message for no date validation</shortDescription>
+        <value>All the No Dates entered must be same!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_NoRecordsDoAdjustment</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>NoRecordsDoAdjustment</shortDescription>
+        <value>There is no SA Record to perform adjustment transaction.</value>
     </labels>
     <labels>
         <fullName>CARE_NotEligibleMsg</fullName>
@@ -295,11 +351,39 @@
         <value>{0} form saved!!</value>
     </labels>
     <labels>
+        <fullName>CARE_PEVHUVerificationError</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PEVHUVerificationError</shortDescription>
+        <value>Error thrown while running Verification process for PEV /  HU</value>
+    </labels>
+    <labels>
+        <fullName>CARE_PEVSuccessMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>toast message for PEV application send</shortDescription>
+        <value>Transaction has been created to send an PEV Application!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_PersonNameValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_PersonNameValidationMsg</shortDescription>
+        <value>Enter Person Name</value>
+    </labels>
+    <labels>
         <fullName>CARE_ReceiveDateMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast message for Receive Date</shortDescription>
         <value>Please select a date in Received Date field !!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_RecordSelectMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App if record is not selected for transaction!!</shortDescription>
+        <value>Please select a Record to proceed further!!</value>
     </labels>
     <labels>
         <fullName>CARE_RecordsCustNotFound</fullName>
@@ -320,7 +404,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App for Retro Date Validation.</shortDescription>
-        <value>Retro End Date should be greater than Retro Start Date and less than Yes Date!!</value>
+        <value>Retro End Date should be greater than Retro Start Date and not greater than Yes Date!!</value>
     </labels>
     <labels>
         <fullName>CARE_RetroStartDateValidationMsg</fullName>
@@ -328,6 +412,13 @@
         <protected>false</protected>
         <shortDescription>CARE_RetroStartDateValidationMsg</shortDescription>
         <value>Retro Start Date should be less than Todays date.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SAIDValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>toast message to validate SAID</shortDescription>
+        <value>SAID entered must be of 10 digits only!!</value>
     </labels>
     <labels>
         <fullName>CARE_SaveSuccessMsg</fullName>
@@ -349,6 +440,13 @@
         <protected>false</protected>
         <shortDescription>Toast Message to show in CARE App for selecting Comment</shortDescription>
         <value>Please enter Comment!!</value>
+    </labels>
+    <labels>
+        <fullName>CARE_SelectPeriodMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast Message to show in CARE App for selecting Period</shortDescription>
+        <value>Please select Period!!</value>
     </labels>
     <labels>
         <fullName>CARE_SelectReasonMsg</fullName>
@@ -383,7 +481,7 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Toast message to show Retro No Date cannot be left blank</shortDescription>
-        <value>Retro End Date cannot be left blank if Retro Start Date is edited for that row!!</value>
+        <value>Retro End Date cannot be left blank if Retro Start Date is entered</value>
     </labels>
     <labels>
         <fullName>CARE_SuccessHeader</fullName>
@@ -421,10 +519,24 @@
         <value>Please select SA from same Premise or select override !!</value>
     </labels>
     <labels>
+        <fullName>CARE_ValidValValidationMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ValidValValidationMsg</shortDescription>
+        <value>Enter valid value</value>
+    </labels>
+    <labels>
         <fullName>CARE_ValidValuesMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>Enter Valid Msg for Search</shortDescription>
         <value>Please enter valid values as highlighted &amp; mentioned over each field.</value>
+    </labels>
+    <labels>
+        <fullName>CARE_YesNoDateMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Toast message to modify yes date and no date</shortDescription>
+        <value>Please modify atleast one record with Yes Date or No Date!!</value>
     </labels>
 </CustomLabels>

@@ -1,0 +1,437 @@
+<template>
+    <div>
+        <div if:true={showLoadingSpinner}>
+            <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+        </div>
+        <div class="slds-grid slds-wrap">
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-input type="checkbox" label="Is Document Valid?" name="DocValidChecked"
+                    checked={objInputFields.bIsValidDoc} value={objInputFields.bIsValidDoc} onchange={handleChecked}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-input type="checkbox" label="Filing Jointly?" name="FillingJointlyChecked"
+                    checked={objInputFields.bIsFillingJointly} value={objInputFields.bIsFillingJointly}
+                    onchange={handleChecked} disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small slds-text-align_right">Period:</div>
+            <div class="slds-p-left_small slds-size_1-of-5">
+                <lightning-combobox name="period" variant="label-hidden" value={objInputFields.sPeriodType}
+                    options={periodOptions} disabled={bPeriodDisabled}></lightning-combobox>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"></div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Entered</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Adjusted</div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 1 (Wages):</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line1AmountTextBox" variant="label-hidden"
+                    value={objInputFields.dLine1} formatter="currency" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line1AmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine1Adjusted} formatter="currency" disabled></lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 2b (Interest):</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line2bAmountTextBox" variant="label-hidden"
+                    value={objInputFields.dLine2b} formatter="currency" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line2bAmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine2bAdjusted} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 3b (Dividends):</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line3bAmountTextBox" variant="label-hidden"
+                    value={objInputFields.dLine3b} formatter="currency" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line3bAmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine3bAdjusted} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 4a (IRA, Pensions,Annuities):
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line4aAmountTextBox" variant="label-hidden"
+                    value={objInputFields.dLine4a} formatter="currency" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line4aAmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine4aAdjusted} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="checkbox" label="IRA Rollover" name="RolloverChecked"
+                    checked={objInputFields.bRollover} value={objInputFields.bRollover} onchange={handleChecked}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 5a (Social Security):</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line5aAmountTextBox" variant="label-hidden"
+                    value={objInputFields.dLine5a} formatter="currency" onchange={handleAmountChange}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line5aAmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine5aAdjusted} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small slds-text-title_bold">Line 6:</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"> </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line6AmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine6Adjusted} formatter="currency" disabled onchange={handleAmountChange}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">Schedule 1:</div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xx-small"></div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-input type="checkbox" label="Schedule1" name="Schedule1Checked"
+                    checked={objInputFields.bIsSchedule1} value={objInputFields.bIsSchedule1} onchange={handleChecked}
+                    disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                <lightning-input type="checkbox" label="Is Document Valid" name="bSchedule1DocChecked"
+                    checked={objInputFields.bSchedule1DocValid} value={objInputFields.bSchedule1DocValid}
+                    onchange={handleChecked} disabled={bViewMode}>
+                </lightning-input>
+            </div>
+            <!---->
+            <!--Schedule 1 section show if Schedule 1 checkbox is checked-->
+            <template if:true={objInputFields.bIsSchedule1}>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">Line 11 (Alimony):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                    <lightning-input type="number" name="line11AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine11} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
+                    <lightning-input type="number" name="line11AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine11Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 12 (Business income):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line12AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine12} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line12AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine12Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-button label="Schedule C" onclick={handleSchedule}></lightning-button>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+
+                    <lightning-input type="checkbox" label="Schedule C Complete" name="bScheduleCDocCompleteChecked"
+                        checked={objInputFields.bScheduleCDocComplete} value={objInputFields.bScheduleCDocComplete}
+                        disabled>
+                    </lightning-input>
+                </div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 13 (Capital gains):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line13AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine13} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line13AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine13Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 14 (Other gains):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line14AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine14} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line14AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine14Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 17 (Rental income):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line17AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine17} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line17AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine17Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 18 (Farm income):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line18AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine18} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line18AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine18Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 19 (Unemployment
+                    compensation):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line19AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine19} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line19AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine19Adjusted} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+                <!---->
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 21 (Other income):</div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line21AmountTextBox" variant="label-hidden"
+                        value={objInputFields.dLine21} formatter="currency" onchange={handleAmountChange}
+                        disabled={bViewMode}>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                    <lightning-input type="number" name="line21AmountAdjusted" variant="label-hidden"
+                        value={objInputFields.dLine21} formatter="currency" disabled>
+                    </lightning-input>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            </template>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small slds-text-title_bold">Line 22:</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"></div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line22AmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dLine22Adjusted} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small slds-text-title_bold">Income
+                Amount:(Line 6 + Line 22):</div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"></div>
+            <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                <lightning-input type="number" name="line22AmountAdjusted" variant="label-hidden"
+                    value={objInputFields.dTotalAmount} formatter="currency" disabled>
+                </lightning-input>
+            </div>
+            <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
+            <!---->
+            <template if:false={bViewMode}>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small"></div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_x-small">
+                    <lightning-button label="Save" icon-name="utility:save" onclick={handleSave} disabled={bViewMode}>
+                    </lightning-button>
+                </div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small"></div>
+            </template>
+            <!---->
+            <!--section for ScheduleC-->
+            <!-- modal start -->
+            <template if:true={bShowScheduleC}>
+                <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+                    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                    <div class="slds-modal__container">
+                        <div if:true={showLoadingSpinner}>
+                            <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                        </div>
+                        <!-- modal header start -->
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                                title="Close" onclick={closeModal}>
+                                <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse"
+                                    size="small">
+                                </lightning-icon>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">
+                                Schedule C Worksheet</h2>
+                        </header>
+                        <!-- modal body start -->
+                        <div class="slds-modal__content slds-p-top_xxx-small" id="modal-content-id-1">
+                            <!-- Income Information section -->
+                            <div class="slds-modal__content slds-p-around_medium slds-scrollable--x"
+                                id="modal-content-id-2">
+                                <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="" scope="col">
+                                                <div class="slds-truncate">ID</div>
+                                            </th>
+                                            <th class="" scope="col" style="width: 200px;">
+                                                <div class="slds-truncate">Line3 (EZ Only)</div>
+                                            </th>
+                                            <th class="" scope="col" style="width: 200px">
+                                                <div class="slds-truncate">Line 29</div>
+                                            </th>
+                                            <th class="" scope="col" style="width: 200px">
+                                                <div class="slds-truncate">Line 31</div>
+                                            </th>
+                                            <template if:false={bViewMode}>
+                                                <th if:false={showViewOnly} class="" scope="col">
+                                                </th>
+                                            </template>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template for:each={scheduleCList} for:item="scheduleCInfo" for:index="index">
+                                            <tr key={scheduleCInfo.iScheduleCIndex}>
+                                                <td title="" class="slds-truncate" style="text-align: center;">
+                                                    <div class="slds-truncate">{scheduleCInfo.sNumber}
+                                                    </div>
+                                                </td>
+                                                <td title="" class="slds-truncate" style="text-align: center;">
+                                                    <div if:true={showViewOnly}>
+                                                        {scheduleCInfo.dLine3}
+                                                    </div>
+                                                    <div if:false={showViewOnly} style="text-align: left;">
+                                                        <lightning-input name='ScheduleCline3' type='number'
+                                                            disabled={bLine3Disabled} variant="label-hidden"
+                                                            value={scheduleCInfo.dLine3}
+                                                            key={scheduleCInfo.iScheduleCIndex}
+                                                            data-id={scheduleCInfo.iScheduleCIndex} data-api="line3"
+                                                            onchange={handleScheduleCAmountChange}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                                <td title="" class="slds-truncate" style="text-align: right;">
+                                                    <div if:true={showViewOnly}>
+                                                        {scheduleCInfo.dLine29}</div>
+                                                    <div if:false={showViewOnly} style="text-align: left;">
+                                                        <lightning-input name='ScheduleCline29' type='number'
+                                                            disabled={bLine29_31Disabled} variant="label-hidden"
+                                                            value={scheduleCInfo.dLine29}
+                                                            key={scheduleCInfo.iScheduleCIndex}
+                                                            data-id={scheduleCInfo.iScheduleCIndex} data-api="line29"
+                                                            onchange={handleScheduleCAmountChange}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                                <td title="" class="slds-truncate" style="text-align: center;">
+                                                    <div if:true={showViewOnly}>{scheduleCInfo.dLine31}
+                                                    </div>
+                                                    <div if:false={showViewOnly} style="text-align: left;">
+                                                        <lightning-input name='ScheduleCline31' type='number'
+                                                            disabled={bLine29_31Disabled} variant="label-hidden"
+                                                            value={scheduleCInfo.dLine31}
+                                                            key={scheduleCInfo.iScheduleCIndex}
+                                                            data-id={scheduleCInfo.iScheduleCIndex} data-api="line31"
+                                                            onchange={handleScheduleCAmountChange}>
+                                                        </lightning-input>
+                                                    </div>
+                                                </td>
+                                                <template if:false={bViewMode}>
+                                                    <td if:false={showViewOnly} title="" class="slds-truncate"
+                                                        style="text-align: center;">
+                                                        <button name="delete" class="slds-button" title="Delete">
+                                                            <span onclick={handleDelete}>
+                                                                <lightning-icon icon-name="action:delete" size="x-small"
+                                                                    data-id={scheduleCInfo.iScheduleCIndex}
+                                                                    data-api={scheduleCInfo.sId}>
+                                                                </lightning-icon>
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </template>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: right; font-weight:bold;">Sub Total</td>
+                                            <td title="" class="slds-truncate" style="text-align: right;">
+                                                <div class="slds-truncate">{label.CARE_CurrencySymbol}
+                                                    {dLine3Total}</div>
+                                            </td>
+                                            <td title="" class="slds-truncate" style="text-align: right;">
+                                                <div class="slds-truncate">{label.CARE_CurrencySymbol}
+                                                    {dLine29Total}</div>
+                                            </td>
+                                            <td title="" class="slds-truncate" style="text-align: right;">
+                                                <div class="slds-truncate">{label.CARE_CurrencySymbol}
+                                                    {dLine31Total}</div>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <div class="slds-p-left_small">
+                                <lightning-button variant="brand-outline" label="Add" onclick={handleAdd}
+                                    disabled={bViewMode} class="slds-m-right_x-small ftrbtnalign"></lightning-button>
+                            </div>
+                        </div>
+                        <!--modal footer start-->
+                        <footer class="slds-modal__footer">
+
+                            <lightning-button variant="brand-outline" label="Close" onclick={closeModal}
+                                class="slds-m-right_x-small ftrbtnalign"></lightning-button>
+                        </footer>
+                    </div>
+                </section>
+
+                <div class="slds-backdrop slds-backdrop_open"></div>
+            </template>
+            <!--Schedule C Section End-->
+
+        </div>
+
+    </div>
+</template>

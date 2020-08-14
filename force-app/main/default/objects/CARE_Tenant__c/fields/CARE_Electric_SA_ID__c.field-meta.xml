@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>CARE_Electric_SA_ID__c</fullName>
-    <encryptionScheme>None</encryptionScheme>
+    <complianceGroup>PII</complianceGroup>
+    <encryptionScheme>CaseSensitiveDeterministicEncryption</encryptionScheme>
     <externalId>false</externalId>
     <label>Electric SA ID</label>
     <length>255</length>

@@ -36,6 +36,9 @@ public static testMethod void TestCCbHistoryMethod() {
         objcareCICC.CC_DTTM__c = system.today();
         objcareCICC.CC_CL_CD__c = 'CARE';
     	objcareCICC.CC_TYPE_CD__c = '1212121212';
+    objcareCICC.PER_ID__C = '4545454545';
+    
+    
     	insert objcareCICC;
         
       ccBatchRecord = new CARE_CC_Batch_Detail__c(ACCT_ID__c = '1212232122', APPLICATION__c = objcareApp.Id, DETAIL_STATUS_CODE__c = 'Validate',

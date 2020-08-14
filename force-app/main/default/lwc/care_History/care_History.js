@@ -4,6 +4,7 @@ import {refreshApex} from '@salesforce/apex';
 
 import getEnrollHistoryData from '@salesforce/apex/CARE_HistoryTabController.getEnrollHistoryData';
 import deleteEnrollmentRecord from '@salesforce/apex/CARE_HistoryTabController.deleteEnrollmentRecord';
+import deletePevHuRecord from '@salesforce/apex/CARE_HistoryTabController.deletePevHuRecord';
 
 import DeleteSuccessMsg from '@salesforce/label/c.CARE_DeleteSuccessMsg';
 import TransactionErrorMsg from '@salesforce/label/c.CARE_TransactionErrorMsg';
@@ -74,6 +75,7 @@ export default class Care_History extends LightningElement {
     @track typeNumber;
     @track bshowHistory = false;
     bNoLoadMoreCall = true;
+    selectedEnrollmentType = '';
     label = {
         DeleteSuccessMsg,
         TransactionErrorMsg,
@@ -207,55 +209,46 @@ export default class Care_History extends LightningElement {
 
     // view the current record details
     viewCurrentRecord(currentRow) {
+        console.log('currentRow-->'+JSON.stringify(currentRow));
         this.bShowModal = true;
         this.isEditForm = false;
         this.selectedRecord = currentRow.sId;
+        this.selectedEnrollmentType = currentRow.sEnrollmentType;
     }
 
     // delete the current record details after user confirmation
     delRec() {
         this.closeModal();
-        deleteEnrollmentRecord({
-                sEnrollmentId: this.selectedRecord
-            })
-
+        if(this.selectedEnrollmentType === 'PEV' || this.selectedEnrollmentType === 'PEV HU'){
+            deletePevHuRecord({ sPevHuId: this.selectedRecord })
             .then(() => {
-                //if(this.bIsLoaded)
                 this.sLiveCall = new Date().toLocaleString();
                 this.showToastMessage('Record Deleted', this.label.DeleteSuccessMsg, 'success');
                 this.bIsLoaded = true;
-                this.bShowDeleteModal = false;
-                /*if(this.bNoLoadMoreCall){
-                    this.refreshData('first');
-                }else{
-                  let deletedIndexList = [];
-                    const tempCurrentData = this.listHistorydata;
-                    for (let cnt = 0; cnt < tempCurrentData.length; cnt++) {
-                        if(tempCurrentData[cnt].sId == this.selectedRecord){
-                            deletedIndexList.push(cnt);
-                        }
-                    }
-                    console.log("deletedIndexList",deletedIndexList);
-                    console.log("deletedInde data before",this.listHistorydata.length);
-                    if(deletedIndexList.length > 0 && this.loadMoreStatus != undefined){
-                        tempCurrentData.splice(deletedIndexList[0], deletedIndexList.length);
-                        this.refreshData(tempCurrentData);
-                        //this.listHistorydata = tempCurrentData;
-                        console.log("deletedInde data after",tempCurrentData.length);
-                    }
-                }
-                */
-            
-                
+                this.bShowDeleteModal = false;  
             })
             .catch((error) => {
                 this.showToastMessage('Application Error', this.label.TransactionErrorMsg, 'error');
             });
+        }   
+        else{
+            deleteEnrollmentRecord({ sEnrollmentId: this.selectedRecord })
+            .then(() => {
+                this.sLiveCall = new Date().toLocaleString();
+                this.showToastMessage('Record Deleted', this.label.DeleteSuccessMsg, 'success');
+                this.bIsLoaded = true;
+                this.bShowDeleteModal = false;  
+            })
+            .catch((error) => {
+                this.showToastMessage('Application Error', this.label.TransactionErrorMsg, 'error');
+            });
+        }     
     }
     // delete the current record details
     deleteCurrentRecord(currentRow) {
         this.bShowDeleteModal = true;
         this.selectedRecord = currentRow.sId;
+        this.selectedEnrollmentType = currentRow.sEnrollmentType;
         console.log('currentRow1---> ' + currentRow.sId);
     }
     //show message based on ApplicationRecord
@@ -293,6 +286,10 @@ export default class Care_History extends LightningElement {
             mode: 'dismissable'
         });
         this.dispatchEvent(evt);
+    }
+
+    get checkPevHuForm(){
+        return this.selectedEnrollmentType === 'PEV' || this.selectedEnrollmentType === 'PEV HU';
     }
 
     /*get checkHistoryData() {

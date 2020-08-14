@@ -73,10 +73,12 @@ export default class Care_App extends LightningElement {
     sSelectedBillingAccId = '';
     sSelectedCustName = '';
     sSelectedProbStatus = false;
+    sSelectedEIAccountEmail ='';
     @api bCallFromModal = false;
     sortedBy = 'sAccId';
     sortedDirection = 'asc';
     @track maskedPhone;
+    @track sPevAppId;  //use this to dynamically set whenever tab is clicked | SKMN
 
     label = {
         SearchFieldMissingMsg,
@@ -203,6 +205,10 @@ export default class Care_App extends LightningElement {
     //This method is called when Search button is clicked
     handleSearch() {
         this.bCustomerDetailFlag = false; //hide customer details section
+        this.listActiveSections = ['SearchForm'];
+        this.searchData = [];
+        this.template.querySelector(".setCustomerListIdClass").style.visibility = "hidden";
+        this.template.querySelector(".setCustomerDetailIdClass").style.visibility = "hidden";
 
         if(this.maskedPhone !== '' && this.maskedPhone !== undefined && this.maskedPhone !== null){
             this.searchInput.sPhone = this.maskedPhone.replace(/\D/g,''); //remove mask
@@ -400,6 +406,7 @@ export default class Care_App extends LightningElement {
             this.sSelectedBillingAccId = selectedRows[0].sAccId;
             this.sSelectedCustName = selectedRows[0].sCustName;
             this.sSelectedProbStatus = (selectedRows[0].sProbation == "Y")?true:false;
+            this.sSelectedEIAccountEmail = selectedRows[0].sEIAccountEmail;
         }
         
         this.listSelectedPremId = listPremId.filter((item, i, ar) => ar.indexOf(item) === i);
@@ -409,9 +416,17 @@ export default class Care_App extends LightningElement {
     }
 
     refreshTabData(event) {
-        if(event.target.label == 'History' || event.target.label == 'Enroll' || event.target.label == 'PEV'){
+        if(event.target.label == 'History' || event.target.label == 'Enroll'){
             //this.template.querySelector("c-care_-history").refreshData();
             this.sHistoryRefresh = new Date().toLocaleString();
+        }
+        //Refresh the sPevAppId to send back to child via s-selected-app-id attribute, whenver PEV tab is clicked, else with blank | SKMN
+        if(event.target.label == 'PEV'){
+            this.sPevAppId = 'tab';
+            this.sHistoryRefresh = new Date().toLocaleString();            
+        }
+        else{
+            this.sPevAppId = '';
         }
 
     }

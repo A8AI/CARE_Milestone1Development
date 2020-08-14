@@ -81,6 +81,7 @@ public inherited sharing class CARE_SearchController {
         @AuraEnabled public String sPremId{get;set;}
         @AuraEnabled public String sEIAccountId{get;set;}
         @AuraEnabled public String sProbation{get;set;}
+        @AuraEnabled public String sEIAccountEmail{get;set;}
     }
     
     
@@ -197,7 +198,7 @@ return lstAccs;
                     List<String> listStatus = CARE_UtilityController.getCareActiveStatusCode();
                     listSiteServAgreement = [SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,
                                              Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,
-                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c
+                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.Email_adr_EI__c
                                              FROM EI_Site__c
                                              WHERE Person_ID_EI__c =:sPerId 
                                              AND Account_EI__r.Id != NULL
@@ -208,7 +209,7 @@ return lstAccs;
                 else{ //Else select All
                     listSiteServAgreement = [SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,
                                              Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,
-                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c
+                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.Email_adr_EI__c
                                              FROM EI_Site__c
                                              WHERE Person_ID_EI__c =:sPerId
                                              AND Account_EI__r.Id != NULL
@@ -225,7 +226,7 @@ return lstAccs;
                        // soqlWhereClause = soqlWhereClause.replaceFirst(' AND', ''); //remove and from beginning commentted due added account id check
                         soqlSearchQuery = 'SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,'
                             + ' Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,'
-                            + ' Person_ID_EI__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.CARE_ON_PROBATION__c, Account_EI__r.Id, Account_EI__r.CARE_PROBATION_START_DATE__c, Account_EI__r.CARE_PROBATION_END_DATE__c'
+                            + ' Person_ID_EI__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.CARE_ON_PROBATION__c, Account_EI__r.Id, Account_EI__r.CARE_PROBATION_START_DATE__c, Account_EI__r.CARE_PROBATION_END_DATE__c, Account_EI__r.Email_adr_EI__c'
                             + ' FROM EI_Site__c WHERE Account_EI__r.Id != NULL ' + soqlWhereClause + ' ORDER BY Person_ID_EI__c, Site_Premise_ID_EI__c, Svc_Type_Code_EI__c LIMIT 10000';
                         
                         System.debug('soqlSearchQuery==>' + soqlSearchQuery );
@@ -429,6 +430,7 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
         custWrapper.sPremId = (listEISite.Site_Premise_ID_EI__c != null) ? listEISite.Site_Premise_ID_EI__c : '';
         custWrapper.sEIAccountId = (listEISite.Account_EI__r.Id != null) ? listEISite.Account_EI__r.Id : ''; 
         custWrapper.sProbation = (listEISite.Account_EI__r.CARE_ON_PROBATION__c) ? 'Y' : 'N'; 
+        custWrapper.sEIAccountEmail = (listEISite.Account_EI__r.Email_adr_EI__c != null) ? listEISite.Account_EI__r.Email_adr_EI__c : '';
         
         
         

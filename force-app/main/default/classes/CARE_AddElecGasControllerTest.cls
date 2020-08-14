@@ -42,7 +42,11 @@ public class CARE_AddElecGasControllerTest {
         
         //Create records in Care Type for stamping as CC code
         List<CARE_Type__c> lstCareTypes = createCareTypeRecords();
-        insert lstCareTypes;    
+        insert lstCareTypes;   
+        
+        //Create records in Care System Value
+        List<CARE_System_Value__c> lstCareSysVal = createCareSysValRecords();
+        insert lstCareSysVal;
     }
     
     /**********************Test Methods************************************************************************/
@@ -340,6 +344,21 @@ public class CARE_AddElecGasControllerTest {
         lstCareTypes.add(careType5);
         
         return lstCareTypes;
-    }    
+    } 
+    
+    //create Care System Value records for sending email
+    private static List<CARE_System_Value__c> createCareSysValRecords(){
+        List <CARE_System_Value__c> lstCareSysVal = new List<CARE_System_Value__c>();
+        
+        CARE_System_Value__c careSysVal1 = CARE_TestDataFactory.createSystemValue('Internal Support Email List', 500, UserInfo.getUserEmail());
+        careSysVal1.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal1);
+        
+        CARE_System_Value__c careSysVal2 = CARE_TestDataFactory.createSystemValue('Internal Email List CC', 510, UserInfo.getUserEmail());
+        careSysVal2.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal2);
+        
+        return lstCareSysVal;
+    }  
     /**********************Private Test Method for Data Setup***********************************************/
 }

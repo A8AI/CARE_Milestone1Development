@@ -11,16 +11,8 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_DocTypeCode__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>CARE_Application__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Household_Member__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -119,7 +111,7 @@
                 <field>AMOUNT2__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>DISCOUNT_LENGTH_IN_DAYS__c</field>
             </layoutItems>
             <layoutItems>
@@ -252,10 +244,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>LINE_4__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>LINE_4A__c</field>
             </layoutItems>
             <layoutItems>
@@ -291,7 +279,7 @@
                 <field>LINE_31__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>NO_MONTHS__c</field>
             </layoutItems>
             <layoutItems>
@@ -356,14 +344,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Line_2A__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Adj_2A__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Adj_3__c</field>
             </layoutItems>
             <layoutItems>
@@ -385,22 +365,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Adj_5__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Adj_4__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Line_8__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Adj_8__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Line_9__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>

@@ -25,6 +25,11 @@
                 <default>false</default>
                 <label>CARE Mgt</label>
             </value>
+            <value>
+                <fullName>SFEI</fullName>
+                <default>false</default>
+                <label>SFEI</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

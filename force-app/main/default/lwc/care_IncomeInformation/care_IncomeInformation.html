@@ -1,0 +1,248 @@
+<template>
+   <!-- modal start -->
+   <template if:true={bShowModal}>
+      <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+         aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+         <div class="slds-modal__container">
+            <div if:true={showLoadingSpinner}>
+               <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+            </div>
+            <!-- modal header start -->
+            <header class="slds-modal__header">
+               <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+                  onclick={closeModal}>
+                  <lightning-icon icon-name="utility:close" alternative-text="close" variant="inverse" size="small">
+                  </lightning-icon>
+                  <span class="slds-assistive-text">Close</span>
+               </button>
+               <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">{sHouseholdMemberName} Income
+                  Information</h2>
+            </header>
+            <!-- modal body start -->
+            <div class="slds-modal__content slds-p-top_xxx-small" id="modal-content-id-1">
+               <!-- Income Information section -->
+               <template if:true={bShowIncomeTable}>
+                  <div class="slds-modal__content slds-p-around_medium slds-scrollable--x" id="modal-content-id-2">
+
+                     <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                        <thead>
+                           <tr class="slds-line-height_reset">
+                              <th class="" scope="col">
+                                 <div class="slds-truncate" title="Income Source">Income Source</div>
+                              </th>
+                              <th class="" scope="col">
+                                 <div class="slds-truncate" title="Document Type ">Document Type</div>
+                              </th>
+                              <th class="" scope="col">
+                                 <div class="slds-truncate" title="Annual Salary">Est. Annual Salary </div>
+                              </th>
+                              <th class="" scope="col">
+                                 <div class="slds-truncate" title="Income Status ">Income Status</div>
+                              </th>
+                              <th class="" scope="col">
+                                 <div class="slds-truncate">
+                                 </div>
+                              </th>
+                              <template if:false={bViewMode}>
+                                 <th class="" scope="col">
+                                    <div class="slds-truncate">
+                                    </div>
+                                 </th>
+                              </template>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <template for:each={dataIncomeInformation} for:item="incomeInfo" for:index="index">
+                              <tr key={incomeInfo.idHouseholdMember}>
+                                 <td>
+                                    <div>{incomeInfo.sIncomeSource}</div>
+                                 </td>
+                                 <td>
+                                    <div>{incomeInfo.sDocumentType}</div>
+                                 </td>
+                                 <td style="text-align: right;">
+                                    <div> {label.CurrencySymbol} {incomeInfo.dEstAnnualSalary}</div>
+                                 </td>
+                                 <td>
+                                    <div>{incomeInfo.sIncomeStatus}</div>
+                                 </td>
+                                 <td>
+                                    <div>
+                                       <button name="previewDoc" class="slds-button" title="View Income Document">
+                                          <span onclick={handleView}>
+                                             <lightning-icon icon-name="action:preview" size="xx-small"
+                                                data-id={incomeInfo.idHouseholdMember}
+                                                data-income-source={incomeInfo.sIncomeSource}
+                                                data-doc-type={incomeInfo.sDocumentType}
+                                                data-discount-length={incomeInfo.dDiscountLength}
+                                                data-form-type={incomeInfo.sFormType}></lightning-icon>
+                                          </span></button></div>
+                                 </td>
+                                 <template if:false={bViewMode}>
+                                    <td>
+                                       <div>
+                                          <button name="deleteDoc" class="slds-button" title="Delete Income Document">
+                                             <span onclick={handleDelete}>
+                                                <lightning-icon icon-name="action:delete" size="xx-small"
+                                                   data-id={incomeInfo.idHouseholdMember}></lightning-icon>
+                                             </span></button></div>
+                                    </td>
+                                 </template>
+                              </tr>
+                           </template>
+                        </tbody>
+                        <tbody>
+                           <tr>
+                              <td></td>
+                              <td style="text-align: right; font-weight:bold;">Total Est. Annual
+                                 Salary</td>
+                              <td style="text-align: right; font-weight:bold;">
+                                 {label.CurrencySymbol} {totalAnnualAmount}
+                              </td>
+                              <td></td>
+                              <td></td>
+                              <template if:false={bViewMode}>
+                                 <td></td>
+                              </template>
+                           </tr>
+                        </tbody>
+
+                     </table>
+                  </div>
+               </template>
+               <!-- Income Source Document section start-->
+               <div class="slds-grid slds-wrap">
+                  <!---->
+                  <div class="slds-p-left_small slds-size_4-of-5 slds-p-top_xxx-small"></div>
+                  <template if:false={bViewMode}>
+                     <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
+                        <lightning-button-group>
+                           <lightning-button label="Add" icon-name="utility:add" onclick={handleAdd}
+                              disabled={bAddDisabled}></lightning-button>
+                           <lightning-button label="Reset" icon-name="utility:redo" onclick={handleReset}
+                              disabled={bResetDisabled}></lightning-button>
+                        </lightning-button-group>
+                     </div>
+                  </template>
+                  <template if:true={bViewMode}>
+                     <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small"></div>
+                  </template>
+                  <!---->
+                  <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small slds-p-bottom_x-small">
+                     <!-- <div style="height:10rem">-->
+                     <lightning-combobox name="incomeSourceCombo" label="Income Source" onchange={handleChange}
+                        placeholder="Select Income Source" options={dataIncomeSourceOptions} value={sIncomeSourceName}
+                        disabled={bIncomeSourceDisabled}></lightning-combobox>
+                     <!--  </div>-->
+                  </div>
+                  <!-- Income Document Type Section start-->
+                  <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small slds-p-bottom_x-small">
+                     <!--<div style="height:10rem">-->
+                     <lightning-combobox name="incomeDocumentCombo" label="Document Type" onchange={handleChange}
+                        placeholder="Select Document Type" options={dataIncomeDocumentOptions} value={sDocName}
+                        disabled={bDisableIncomeDocType}></lightning-combobox>
+                     <!-- </div>-->
+                  </div>
+                  <template if:true={bIncreaseModalHeight}>
+                     <div style="height:20rem"></div>
+
+                  </template>
+               </div>
+               <!--Child Component for showing Income Form Section Start-->
+               <!--child component for Categorical form-->
+               <template if:true={bCategoricalForm}>
+                  <c-care_-categorical-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-categorical-form>
+               </template>
+               <!--child component for Categorical Fixed form-->
+               <template if:true={bCategoricalFixedForm}>
+                  <c-care_-categorical-fixed-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-categorical-fixed-form>
+               </template>
+               <!--child component for Multi Pay Periods Form-->
+               <template if:true={bMultiPayPeriodsForm}>
+                  <c-care_-multi-pay-periods-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-multi-pay-periods-form>
+               </template>
+               <!--child component for Multi Pay Periods Two Form-->
+               <template if:true={bMultiPayPeriodsTwoForm}>
+                  <c-care_-multi-pay-periods-two-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-multi-pay-periods-two-form>
+               </template>
+               <!--child component for 1099 Form-->
+               <template if:true={b1099Form}>
+                  <c-care_-1099_-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-1099_-form>
+               </template>
+               <!--child component for 1040-X Form-->
+               <template if:true={b1040XForm}>
+                  <c-care_-1040_-x-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-1040_-x-form>
+               </template>
+               <!--child component for Bank Statement Form-->
+               <template if:true={bBankStatementForm}>
+                  <c-care_-bank-statement-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-bank-statement-form>
+               </template>
+               <!--child component for Transcript form -->
+               <template if:true={bTranscriptForm}>
+                  <c-care_-i-r-s-transcript-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-transcript-form>
+               </template>
+               <!--child component for IRS 2018 form -->
+               <template if:true={bIRS2018Form}>
+                  <c-care_-i-r-s-1040_2018 id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2018>
+               </template>
+               <!--child component for IRS 2019 form -->
+               <template if:true={bIRS2019Form}>
+                  <c-care_-i-r-s-1040_2019 id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2019>
+               </template>
+               <!--child component for IRS 1040SR form -->
+               <template if:true={bIRS1040SRForm}>
+                  <c-care_-i-r-s-1040_-s-r id-care-app={idCareApp} id-household-member={idHouseholdMember}
+                     s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
+                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_-s-r>
+               </template>
+               <!--Child Component for showing Income Form Section End-->
+            </div>
+            <!-- modal footer start-->
+            <footer class="slds-modal__footer">
+               <lightning-button variant="brand-outline" label="Close" onclick={closeModal}
+                  class="slds-m-right_x-small ftrbtnalign"></lightning-button>
+            </footer>
+         </div>
+      </section>
+
+      <div class="slds-backdrop slds-backdrop_open"></div>
+   </template>
+
+   <!--Confirmation modal start for delete-->
+   <template if:true={bShowDeleteModal}>
+      <c-care_-confirm-modal header-text={label.DeleteMsgHeader} body-text={label.ConfirmationDeleteMsg}
+         footer-yes-text="Yes" footer-no-text="No" onnobuttonevent={closeConfirmationModal}
+         onyesbuttonevent={deleteRec}></c-care_-confirm-modal>
+   </template>
+</template>

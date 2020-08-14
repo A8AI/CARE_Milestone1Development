@@ -49,6 +49,10 @@
                 <behavior>Edit</behavior>
                 <field>DISPLAY_ORDER__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>TYPE_DESC_LONG__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>

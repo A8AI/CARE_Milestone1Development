@@ -22,6 +22,22 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CARE_AutoUtilityController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_AutoUtilityControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_BatchEnrollmentDataXportTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_BatchPEVArrivalDataXportTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CARE_CCBHistoryController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -50,6 +66,22 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CARE_ESAFortyFiveDayBatch</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_ESAFortyFiveDayBatchTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_ESAFortyFiveDayExpireBatch</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_ESAFortyFiveDayExpireBatchTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CARE_EmployeeDiscountController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -63,6 +95,14 @@
     </classAccesses>
     <classAccesses>
         <apexClass>CARE_EnrollTabControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_HUFortyFiveDayBatch</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_HUFortyFiveDayBatchTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -82,6 +122,14 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CARE_IncomeInformationController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_IncomeInformationControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CARE_IncomeQualificationController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -90,11 +138,51 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CARE_LoadUserFile</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_ManualUpload</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CARE_OnDemandDropController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
         <apexClass>CARE_OnDemandDropControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_OnDemandPEVController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_OnDemandPEVControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_OnDemandStatusController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_OnDemandStatusControllerTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_PEVFortyFiveDayBatch</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_PEVFortyFiveDayBatchTest</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_PEVHUController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CARE_PEVHUControllerTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
@@ -783,6 +871,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_App_Enrolled_SA__c.CC_CL_CD__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_App_Enrolled_SA__c.CSR_ADJUSTED__c</field>
         <readable>true</readable>
@@ -813,6 +906,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_App_Enrolled_SA__c.PREM_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_App_Enrolled_SA__c.RETRO_END_DATE__c</field>
         <readable>true</readable>
@@ -820,6 +918,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CARE_App_Enrolled_SA__c.RETRO_START_DATE__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_App_Enrolled_SA__c.RS_CD__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -874,11 +977,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>CARE_Application__c.ACCT_TRANSFER_RSN__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>CARE_Application__c.AGREED_TO_ESA__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -888,8 +986,13 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.APPCODE__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.APPLICANT_NAME__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -938,7 +1041,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.CARE_Alternate_Phone_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -949,107 +1052,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>CARE_Application__c.CARE_City__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Customer_Name__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Electric_SA_ID__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Email__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Enrolled_Tenant_only__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_ExternalID__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_MFHC__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Number_of_Adults_in_Household__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Number_of_Children_in_Household__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Person_ID__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>CARE_Application__c.CARE_Phone_Type__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Application__c.CARE_Preferred_Method_of_Communication__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Preferred_Phone_Number__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Probation__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Public_Assistance_Programs__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Rate__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Service_Address__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Space__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Space_and_Location__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Street__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.CARE_Zip__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1073,7 +1081,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.CCB_CONTACT_COMMENT2__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1138,11 +1146,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Application__c.CUSTOMER_TYPE__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Application__c.DATA_ENTRY_COMPLETE_DATE__c</field>
         <readable>true</readable>
@@ -1165,11 +1168,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Application__c.DROP_SOURCE__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Application__c.Discount__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1283,7 +1281,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.HOME_PHONE_NO__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1408,7 +1406,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.NO_ATTACHMENTS_RECEIVED__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1438,13 +1436,8 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Application__c.On_Probation__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
-        <field>CARE_Application__c.PARTICIPANT__c</field>
+        <field>CARE_Application__c.On_Probation__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1498,7 +1491,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.REASON_DESC__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1583,7 +1576,12 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
+        <field>CARE_Application__c.Tenant_Space_or_Location__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CARE_Application__c.Total_Persons_in_Household__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1601,6 +1599,11 @@
         <editable>false</editable>
         <field>CARE_Application__c.USER_NAME_CARE1__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_Application__c.UUID__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -1633,7 +1636,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_Application__c.WORK_PHONE_NO__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1823,6 +1826,16 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_CC_Batch_Detail__c.APPLICATION__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CC_Batch_Detail__c.Application_Record_Type_Name__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_CC_Batch_Detail__c.CARE_APP_ENROLLED_SA__c</field>
         <readable>true</readable>
@@ -1913,9 +1926,29 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_CC_Batch_Detail__c.ELEC_SA_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_CC_Batch_Detail__c.EXTERNAL_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>CARE_CC_Batch_Detail__c.GAS_SA_ID__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>CARE_CC_Batch_Detail__c.IS_CARE_DELETE__c</field>
         <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CARE_CC_Batch_Detail__c.Initial_Enrollment__c</field>
+        <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -1933,13 +1966,13 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_CC_Batch_Detail__c.SOURCE_DETAIL_NO__c</field>
+        <editable>true</editable>
+        <field>CARE_CC_Batch_Detail__c.SOURCE_CHANNEL_TYPE__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>CARE_CC_Batch__c.APPLICATION__c</field>
+        <field>CARE_CC_Batch_Detail__c.SOURCE_DETAIL_NO__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2144,11 +2177,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CARE_Facility_Enrolled_SA__c.CARE_Space_and_Location__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>CARE_Facility_Enrolled_SA__c.CARE_Total_Unit__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2186,11 +2214,6 @@
         <editable>false</editable>
         <field>CARE_Facility_Enrolled_SA__c.DAYS_OCCUPIED__c</field>
         <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Facility_Enrolled_SA__c.EI_Space_Location__c</field>
-        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
@@ -2604,6 +2627,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CARE_Household_Detail__c.External_Id__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CARE_Household_Detail__c.FIXED_INCOME_ONLY__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2804,11 +2832,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Adj_2A__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>CARE_Household_Member_Income__c.Adj_2__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -2829,17 +2852,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Adj_4__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>CARE_Household_Member_Income__c.Adj_5__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Adj_8__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2883,13 +2896,8 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Household_Member_Income__c.CARE_DocTypeCode__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>CARE_Household_Member_Income__c.CARE_Household_Member__c</field>
+        <editable>true</editable>
+        <field>CARE_Household_Member_Income__c.DISCOUNT_LENGTH_IN_DAYS__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3084,11 +3092,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>CARE_Household_Member_Income__c.LINE_4__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>CARE_Household_Member_Income__c.LINE_5A__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3119,11 +3122,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Line_2A__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
         <field>CARE_Household_Member_Income__c.Line_3A__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3134,12 +3132,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Line_8__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Household_Member_Income__c.Line_9__c</field>
+        <field>CARE_Household_Member_Income__c.NO_MONTHS__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3170,16 +3163,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CARE_Household_Member_Income__c.USER_NAME_CARE1__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Household_Member__c.CARE_Application__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>true</editable>
-        <field>CARE_Household_Member__c.CARE_Member_Name__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3283,7 +3266,7 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
+        <editable>false</editable>
         <field>CARE_System_Value__c.SYSTEM_VALUE__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -3666,6 +3649,11 @@
         <editable>false</editable>
         <field>EI_PREMISE__c.ESA_Hazardous_Location_Comments_EI__c</field>
         <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>EI_PREMISE__c.ESA_Installation_Exception__c</field>
+        <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
@@ -4883,6 +4871,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>true</editable>
+        <field>EI_Site__c.strNAICS_Code_relation_EI__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>false</editable>
         <field>EI_Space_Location__c.Care_Enrolled_EI__c</field>
         <readable>true</readable>
@@ -4915,6 +4908,16 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>EI_Space_Location__c.ExternalID_EI__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>EI_Space_Location__c.Facility_Electric_SA__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>EI_Space_Location__c.Facility_Gas_SA__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -5303,6 +5306,11 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
+        <editable>false</editable>
+        <field>WAC_RPT_Detail_In__c.WAC_RPT_Header__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
         <editable>true</editable>
         <field>WAC_RPT_Detail_Out__c.BILLING_APT__c</field>
         <readable>true</readable>
@@ -5637,7 +5645,7 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>CARE_Application__c-CARE Application Layout</layout>
-        <recordType>CARE_Application__c.Non_Profile</recordType>
+        <recordType>CARE_Application__c.Non_Profit</recordType>
     </layoutAssignments>
     <layoutAssignments>
         <layout>CARE_Application__c-CARE Application Layout</layout>
@@ -5701,9 +5709,6 @@
     </layoutAssignments>
     <layoutAssignments>
         <layout>CARE_Household_Member_Income__c-CARE Household Member Income Layout</layout>
-    </layoutAssignments>
-    <layoutAssignments>
-        <layout>CARE_Household_Member__c-CARE Household Member Layout</layout>
     </layoutAssignments>
     <layoutAssignments>
         <layout>CARE_INCOME_SOURCE_DOC__c-CARE INCOME SOURCE DOC Layout</layout>
@@ -5812,7 +5817,7 @@
         <allowRead>true</allowRead>
         <modifyAllRecords>false</modifyAllRecords>
         <object>CARE_Application__c</object>
-        <viewAllRecords>false</viewAllRecords>
+        <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <objectPermissions>
         <allowCreate>false</allowCreate>
@@ -6016,6 +6021,21 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
+        <recordType>Account.Residential_Local_Account_EI</recordType>
+        <visible>true</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>Account.Residential_Master_Account_EI</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
+        <recordType>Account.Residential_Primary_Account_EI</recordType>
+        <visible>false</visible>
+    </recordTypeVisibilities>
+    <recordTypeVisibilities>
+        <default>false</default>
         <recordType>CARE_Application__c.Agricultural</recordType>
         <visible>false</visible>
     </recordTypeVisibilities>
@@ -6026,7 +6046,7 @@
     </recordTypeVisibilities>
     <recordTypeVisibilities>
         <default>false</default>
-        <recordType>CARE_Application__c.Non_Profile</recordType>
+        <recordType>CARE_Application__c.Non_Profit</recordType>
         <visible>false</visible>
     </recordTypeVisibilities>
     <recordTypeVisibilities>
@@ -6102,8 +6122,12 @@
         <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
+        <tab>CARE_On_Demand_Status</tab>
+        <visibility>DefaultOn</visibility>
+    </tabVisibilities>
+    <tabVisibilities>
         <tab>CARE_System_Value__c</tab>
-        <visibility>Hidden</visibility>
+        <visibility>DefaultOn</visibility>
     </tabVisibilities>
     <tabVisibilities>
         <tab>CARE_Type__c</tab>

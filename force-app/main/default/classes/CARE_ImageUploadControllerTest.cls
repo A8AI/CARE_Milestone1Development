@@ -50,9 +50,17 @@ public class CARE_ImageUploadControllerTest {
         List<CARE_Application__c> lstCareApp = createCareAppRecords(listAccountRecords,lstCareTypes);
         insert lstCareApp;
         
+        //Create Care System Value record
+        List<CARE_System_Value__c> listCareSysVal = createCareSystemValRecords();        
+        insert listCareSysVal;
+        
         //Create Care App Image List record
         List<CARE_APP_Image_List__c> lstcareAppImgList = createCareAppImagesLists(lstCareApp);        
         insert lstcareAppImgList;
+        
+        //Create records in Care System Value
+        List<CARE_System_Value__c> lstCareSysVal = createCareSysValRecords();
+        insert lstCareSysVal;
     }
     
     /**********************Test Methods************************************************************************/
@@ -69,7 +77,7 @@ public class CARE_ImageUploadControllerTest {
         
         System.runAs(user1[0]){            
             wrapperObj = CARE_ImageUploadController.getCareAppImageList(lstCareApp[0].Id);
-            
+            system.debug('wrapperObj'+wrapperObj);
             System.assert(wrapperObj.size() == 2);  
         }
         test.stopTest();
@@ -308,6 +316,35 @@ public class CARE_ImageUploadControllerTest {
         
         return lstcareAppImgList;
     }
+    
+    //create CARE_System_Value__c records for Token and Url of DataXport.      
+    private static List<CARE_System_Value__c> createCareSystemValRecords(){
+        List<CARE_System_Value__c> lstCareSysVal = new List<CARE_System_Value__c>();
+        
+        CARE_System_Value__c careSysVal1 = CARE_TestDataFactory.createSystemValue('DataXport TOKEN', 707, 'aa-aa-aa');
+        lstCareSysVal.add(careSysVal1);
+        
+        String sUrl = 'http://a.net/Service/APIMakeMultiPDF?DBID=PGCA&SHOWANNOS=1&FILTER=BARCODE_NUMBER%20IN(<\'IMAGEID\'>)&sid=<\'TOKEN\'>';
+        CARE_System_Value__c careSysVal2 = CARE_TestDataFactory.createSystemValue('DataXport URL', 740, sUrl);        
+        lstCareSysVal.add(careSysVal2);
+        
+        return lstCareSysVal;
+    } 
+    
+    //create Care System Value records for sending email
+    private static List<CARE_System_Value__c> createCareSysValRecords(){
+        List <CARE_System_Value__c> lstCareSysVal = new List<CARE_System_Value__c>();
+        
+        CARE_System_Value__c careSysVal1 = CARE_TestDataFactory.createSystemValue('Internal Support Email List', 500, UserInfo.getUserEmail());
+        careSysVal1.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal1);
+        
+        CARE_System_Value__c careSysVal2 = CARE_TestDataFactory.createSystemValue('Internal Email List CC', 510, UserInfo.getUserEmail());
+        careSysVal2.SYSTEM_VALUE_TYPE__c = 'EMAIL';
+        lstCareSysVal.add(careSysVal2);
+        
+        return lstCareSysVal;
+    }  
     /**********************Private Test Method for Data Setup***********************************************/
     
 }

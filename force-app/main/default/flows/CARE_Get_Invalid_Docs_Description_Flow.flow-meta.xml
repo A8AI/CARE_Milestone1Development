@@ -1,0 +1,2373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>Add First Record Long Description To Final Description;
+First Invalid Document Type Number will be send back to main flow for setting the CC code.
+Then concatenate description after # for remaining records.</description>
+        <name>Add_First_Record_To_Final_Description</name>
+        <label>Add First Record To Final Description</label>
+        <locationX>1337</locationX>
+        <locationY>3373</locationY>
+        <assignmentItems>
+            <assignToReference>varFinalDescriptionLong</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Each_D_Type_Code.TYPE_DESC_LONG__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varTypeNumberToBeStamped_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Each_D_Type_Code.TYPE_NO__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Each_D_Type_Code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Add Type Number To Unique Collection</description>
+        <name>Add_Type_Number_To_Unique_Collection</name>
+        <label>Add Type Number To Unique Collection</label>
+        <locationX>1582</locationX>
+        <locationY>730</locationY>
+        <assignmentItems>
+            <assignToReference>colUniqueTypeNumber</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varTypeNumber</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_All_Documents</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Add Type Number To Unique Collection</description>
+        <name>Add_TypeNumber_To_Unique_Collection</name>
+        <label>Add Type Number To Unique Collection</label>
+        <locationX>1580</locationX>
+        <locationY>4054</locationY>
+        <assignmentItems>
+            <assignToReference>colUniqueTypeNumber</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>varTypeNumber</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_All_Documents</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Assign Description After # To Final Description</description>
+        <name>Assign_Description_After_To_Final_String</name>
+        <label>Assign Description After # To Final Description</label>
+        <locationX>735</locationX>
+        <locationY>3444</locationY>
+        <assignmentItems>
+            <assignToReference>varFinalDescriptionLong</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <stringValue>;</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varFinalDescriptionLong</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <elementReference>fxRIGHTString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Each_D_Type_Code</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>In case if any of the conditions met(Unknown document type) set invalid type number.It won&apos;t have any impact as type number does not exists in the system</description>
+        <name>Set_Dummy_Type_Number</name>
+        <label>Set Dummy Type Number (Default)</label>
+        <locationX>4388</locationX>
+        <locationY>50</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>000</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>728</locationX>
+        <locationY>1653</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_All_Income_Documents</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element_1</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>1191</locationX>
+        <locationY>1649</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_All_Type_Code_D_Records</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Long Description In a Variable</description>
+        <name>Set_Long_Description_In_a_Variable</name>
+        <label>Set Long Description In a Variable</label>
+        <locationX>977</locationX>
+        <locationY>3699</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Each_D_Type_Code.TYPE_DESC_LONG__c</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Trim_Input_String</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Concatenated Long Description.</description>
+        <name>Set_Output</name>
+        <label>Set Output</label>
+        <locationX>350</locationX>
+        <locationY>3254</locationY>
+        <assignmentItems>
+            <assignToReference>varInvalidDocsLongDescritpion_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>varFinalDescriptionLong</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=147</description>
+        <name>Set_Type_Number_147</name>
+        <label>Set Type Number=147</label>
+        <locationX>2138</locationX>
+        <locationY>1645</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>147</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=150</description>
+        <name>Set_Type_Number_150</name>
+        <label>Set Type Number=150</label>
+        <locationX>2309</locationX>
+        <locationY>1820</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>150</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=151</description>
+        <name>Set_Type_Number_151</name>
+        <label>Set Type Number=151</label>
+        <locationX>2445</locationX>
+        <locationY>1634</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>151</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=152</description>
+        <name>Set_Type_Number_152</name>
+        <label>Set Type Number=152</label>
+        <locationX>2698</locationX>
+        <locationY>1801</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>152</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=153</description>
+        <name>Set_Type_Number_153</name>
+        <label>Set Type Number=153</label>
+        <locationX>2866</locationX>
+        <locationY>1600</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>153</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=154</description>
+        <name>Set_Type_Number_154</name>
+        <label>Set Type Number=154</label>
+        <locationX>3014</locationX>
+        <locationY>1438</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>154</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=155;IRS 1040 2018 (nothing entered)</description>
+        <name>Set_Type_Number_155</name>
+        <label>Set Type Number=155</label>
+        <locationX>1967</locationX>
+        <locationY>2478</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>155</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=156;IRS 1040 2018  (Schedule 1) Invalid</description>
+        <name>Set_Type_Number_156</name>
+        <label>Set Type Number=156</label>
+        <locationX>2443</locationX>
+        <locationY>2652</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>156</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=157</description>
+        <name>Set_Type_Number_157</name>
+        <label>Set Type Number=157</label>
+        <locationX>2695</locationX>
+        <locationY>2633</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>156</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=158;IRS 1040 2019  (Schedule 1)</description>
+        <name>Set_Type_Number_158</name>
+        <label>Set Type Number=158</label>
+        <locationX>2873</locationX>
+        <locationY>2624</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>158</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=159;IRS 1040 SR (nothing entered)</description>
+        <name>Set_Type_Number_159</name>
+        <label>Set Type Number=159</label>
+        <locationX>3307</locationX>
+        <locationY>2539</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>159</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number =160;IRS 1040 SR (Schedule 1)</description>
+        <name>Set_Type_Number_160</name>
+        <label>Set Type Number =160</label>
+        <locationX>3215</locationX>
+        <locationY>2596</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>160</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=161</description>
+        <name>Set_Type_Number_161</name>
+        <label>Set Type Number=161</label>
+        <locationX>3158</locationX>
+        <locationY>1253</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>161</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=162</description>
+        <name>Set_Type_Number_162</name>
+        <label>Set Type Number=162</label>
+        <locationX>3318</locationX>
+        <locationY>1077</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>162</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=163</description>
+        <name>Set_Type_Number_163</name>
+        <label>Set Type Number=163</label>
+        <locationX>3482</locationX>
+        <locationY>931</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>163</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=164</description>
+        <name>Set_Type_Number_164</name>
+        <label>Set Type Number=164</label>
+        <locationX>3623</locationX>
+        <locationY>795</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>164</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=165</description>
+        <name>Set_Type_Number_165</name>
+        <label>Set Type Number=165</label>
+        <locationX>3758</locationX>
+        <locationY>633</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>165</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=166</description>
+        <name>Set_Type_Number_166</name>
+        <label>Set Type Number=166</label>
+        <locationX>3902</locationX>
+        <locationY>491</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>166</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=167</description>
+        <name>Set_Type_Number_167</name>
+        <label>Set Type Number=167</label>
+        <locationX>4056</locationX>
+        <locationY>326</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>167</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=168</description>
+        <name>Set_Type_Number_168</name>
+        <label>Set Type Number=168</label>
+        <locationX>4212</locationX>
+        <locationY>250</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>168</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=169</description>
+        <name>Set_Type_Number_169</name>
+        <label>Set Type Number=169</label>
+        <locationX>4294</locationX>
+        <locationY>175</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>169</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=174 (HU 1099R)</description>
+        <name>Set_Type_Number_174</name>
+        <label>Set Type Number=174</label>
+        <locationX>2223</locationX>
+        <locationY>1715</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>174</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Bank Statement</description>
+        <name>Set_Type_Number_175</name>
+        <label>Set Type Number=175</label>
+        <locationX>2387</locationX>
+        <locationY>1890</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>175</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Check Stub</description>
+        <name>Set_Type_Number_176</name>
+        <label>Set Type Number=176</label>
+        <locationX>2517</locationX>
+        <locationY>1747</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>176</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Check Stub 2</description>
+        <name>Set_Type_Number_177</name>
+        <label>Set Type Number =177</label>
+        <locationX>2618</locationX>
+        <locationY>1872</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>177</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Court Document</description>
+        <name>Set_Type_Number_178</name>
+        <label>Set Type Number=178</label>
+        <locationX>2800</locationX>
+        <locationY>1657</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>178</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Investment Account Statement</description>
+        <name>Set_Type_Number_179</name>
+        <label>Set Type Number=179</label>
+        <locationX>2948</locationX>
+        <locationY>1560</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>179</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 2018 (nothing entered)</description>
+        <name>Set_Type_Number_180</name>
+        <label>Set Type Number=180</label>
+        <locationX>2092</locationX>
+        <locationY>2479</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>180</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 2018  (Schedule 1) invalid</description>
+        <name>Set_Type_Number_181</name>
+        <label>Set Type Number=181</label>
+        <locationX>2320</locationX>
+        <locationY>2649</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>181</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 2019 (nothing entered)</description>
+        <name>Set_Type_Number_182</name>
+        <label>Set Type Number=182</label>
+        <locationX>2595</locationX>
+        <locationY>2632</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>182</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 2019  (Schedule 1)</description>
+        <name>Set_Type_Number_183</name>
+        <label>Set Type Number=183</label>
+        <locationX>2985</locationX>
+        <locationY>2631</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>183</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 SR (nothing entered) - Main Doc Invalid</description>
+        <name>Set_Type_Number_184</name>
+        <label>Set Type Number=184</label>
+        <locationX>3572</locationX>
+        <locationY>2857</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>184</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1040 SR (Schedule 1)</description>
+        <name>Set_Type_Number_185</name>
+        <label>Set Type Number=185</label>
+        <locationX>3698</locationX>
+        <locationY>2788</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>185</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists2</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=186;HU IRS 1040X</description>
+        <name>Set_Type_Number_186</name>
+        <label>Set Type Number=186</label>
+        <locationX>3097</locationX>
+        <locationY>1382</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>186</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS 1099</description>
+        <name>Set_Type_Number_187</name>
+        <label>Set Type Number=187</label>
+        <locationX>3260</locationX>
+        <locationY>1193</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>187</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU IRS Transcript</description>
+        <name>Set_Type_Number_188</name>
+        <label>Set Type Number=188</label>
+        <locationX>3412</locationX>
+        <locationY>1022</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>188</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Others</description>
+        <name>Set_Type_Number_189</name>
+        <label>Set Type Number =189</label>
+        <locationX>3565</locationX>
+        <locationY>890</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>189</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Profit and Loss Statement</description>
+        <name>Set_Type_Number_190</name>
+        <label>Set Type Number=190</label>
+        <locationX>3694</locationX>
+        <locationY>712</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>190</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Type Number=191;HU Settlement Document</description>
+        <name>Set_Type_Number_191</name>
+        <label>Set Type Number=191</label>
+        <locationX>3840</locationX>
+        <locationY>578</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>191</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>HU Signed Letter</description>
+        <name>Set_Type_Number_192</name>
+        <label>Set Type Number=192</label>
+        <locationX>3987</locationX>
+        <locationY>432</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumber</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>192</stringValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Set Type Number Counter</description>
+        <name>Set_TypeNumber_Counter</name>
+        <label>Set Counter</label>
+        <locationX>1132</locationX>
+        <locationY>3442</locationY>
+        <assignmentItems>
+            <assignToReference>varTypeNumberRecordCount</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_First_Record</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Trim Input String</description>
+        <name>Trim_Input_String</name>
+        <label>Trim Input String</label>
+        <locationX>724</locationX>
+        <locationY>3672</locationY>
+        <assignmentItems>
+            <assignToReference>varInputString</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxTrimmedInputString</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Assign_Description_After_To_Final_String</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Check each document Type</description>
+        <name>Check_Document_Type</name>
+        <label>Check Document Type</label>
+        <locationX>2539</locationX>
+        <locationY>2077</locationY>
+        <defaultConnector>
+            <targetReference>Set_Dummy_Type_Number</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>D1099R</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>1099R</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_147</targetReference>
+            </connector>
+            <label>PEV 1099R</label>
+        </rules>
+        <rules>
+            <name>HU_1099R</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>1099R</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_174</targetReference>
+            </connector>
+            <label>HU 1099R</label>
+        </rules>
+        <rules>
+            <name>Bank_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Bank Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_150</targetReference>
+            </connector>
+            <label>PEV Bank Statement</label>
+        </rules>
+        <rules>
+            <name>HU_Bank_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Bank Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_175</targetReference>
+            </connector>
+            <label>HU Bank Statement</label>
+        </rules>
+        <rules>
+            <name>Check_Stub</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Check Stub</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_151</targetReference>
+            </connector>
+            <label>PEV Check Stub</label>
+        </rules>
+        <rules>
+            <name>HU_Check_Stub</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Check Stub</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_176</targetReference>
+            </connector>
+            <label>HU Check Stub</label>
+        </rules>
+        <rules>
+            <name>Check_Stub_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Check Stub 2</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_152</targetReference>
+            </connector>
+            <label>PEV Check Stub 2</label>
+        </rules>
+        <rules>
+            <name>HU_Check_Stub_2</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Check Stub 2</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_177</targetReference>
+            </connector>
+            <label>HU Check Stub 2</label>
+        </rules>
+        <rules>
+            <name>Court_Document</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Court Document</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_153</targetReference>
+            </connector>
+            <label>PEV Court Document</label>
+        </rules>
+        <rules>
+            <name>HU_Court_Document</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Court Document</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_178</targetReference>
+            </connector>
+            <label>HU Court Document</label>
+        </rules>
+        <rules>
+            <name>Investment_Account_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Investment Account Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_154</targetReference>
+            </connector>
+            <label>PEV Investment Account Statement</label>
+        </rules>
+        <rules>
+            <name>HU_Investment_Account_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Investment Account Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_179</targetReference>
+            </connector>
+            <label>HU Investment Account Statement</label>
+        </rules>
+        <rules>
+            <name>IRS_1040_2018</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 2018</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Main_Document_Invalid</targetReference>
+            </connector>
+            <label>PEV IRS 1040 2018</label>
+        </rules>
+        <rules>
+            <name>HU_IRS_1040_2018</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 2018</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Main_Document_Invalid</targetReference>
+            </connector>
+            <label>HU IRS 1040 2018</label>
+        </rules>
+        <rules>
+            <name>IRS_1040_2019</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 2019</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Main_Document_Invalid2</targetReference>
+            </connector>
+            <label>PEV IRS 1040 2019</label>
+        </rules>
+        <rules>
+            <name>HU_IRS_1040_2019</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 2019</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_Main_Document_Invalid2</targetReference>
+            </connector>
+            <label>HU IRS 1040 2019</label>
+        </rules>
+        <rules>
+            <name>IRS_1040_SR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 SR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_IRS1040SR_Invalid</targetReference>
+            </connector>
+            <label>IRS 1040 SR</label>
+        </rules>
+        <rules>
+            <name>HU_IRS_1040_SR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040 SR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_IRS1040SR_Invalid</targetReference>
+            </connector>
+            <label>HU IRS 1040 SR</label>
+        </rules>
+        <rules>
+            <name>IRS_1040X</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_161</targetReference>
+            </connector>
+            <label>PEV IRS 1040X</label>
+        </rules>
+        <rules>
+            <name>HU_IRS_1040x</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1040X</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_186</targetReference>
+            </connector>
+            <label>HU IRS 1040x</label>
+        </rules>
+        <rules>
+            <name>IRS_1099</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1099</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_162</targetReference>
+            </connector>
+            <label>PEV IRS 1099</label>
+        </rules>
+        <rules>
+            <name>HU_IRS1099</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS 1099</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_187</targetReference>
+            </connector>
+            <label>HU IRS1099</label>
+        </rules>
+        <rules>
+            <name>HU_IRS_Transcript</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS Transcript</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_188</targetReference>
+            </connector>
+            <label>HU IRS Transcript</label>
+        </rules>
+        <rules>
+            <name>IRS_Transcript</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IRS Transcript</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_163</targetReference>
+            </connector>
+            <label>PEV IRS Transcript</label>
+        </rules>
+        <rules>
+            <name>Others</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Others</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_164</targetReference>
+            </connector>
+            <label>PEV Others</label>
+        </rules>
+        <rules>
+            <name>HU_Others</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Others</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_189</targetReference>
+            </connector>
+            <label>HU Others</label>
+        </rules>
+        <rules>
+            <name>Profit_and_Loss_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Profit and Loss Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_165</targetReference>
+            </connector>
+            <label>PEV Profit and Loss Statement</label>
+        </rules>
+        <rules>
+            <name>HU_Profit_And_Loss_Statement</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Profit and Loss Statement</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_190</targetReference>
+            </connector>
+            <label>HU Profit And Loss Statement</label>
+        </rules>
+        <rules>
+            <name>Settlement_Document</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Settlement Document</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_166</targetReference>
+            </connector>
+            <label>PEV Settlement Document</label>
+        </rules>
+        <rules>
+            <name>HU_Settlement_Document</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Settlement Document</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_191</targetReference>
+            </connector>
+            <label>HU Settlement Document</label>
+        </rules>
+        <rules>
+            <name>Signed_Letter</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Signed Letter</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_167</targetReference>
+            </connector>
+            <label>PEV Signed Letter</label>
+        </rules>
+        <rules>
+            <name>HU_Signed_Letter</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Signed Letter</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_192</targetReference>
+            </connector>
+            <label>HU Signed Letter</label>
+        </rules>
+        <rules>
+            <name>Signed_Letter_W_O_Amount</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Signed Letter W/O Amount</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_168</targetReference>
+            </connector>
+            <label>PEV Signed Letter W/O Amount</label>
+        </rules>
+        <rules>
+            <name>Verification_of_Non_Filing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.INCOME_DOC_TYPE__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Verification of Non Filing</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_169</targetReference>
+            </connector>
+            <label>PEV Verification of Non Filing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check Type Number Already Exists in the collection?</description>
+        <name>Check_Type_Number_Already_Exists</name>
+        <label>Check Type Number Already Exists?</label>
+        <locationX>2024</locationX>
+        <locationY>547</locationY>
+        <defaultConnector>
+            <targetReference>Add_Type_Number_To_Unique_Collection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_TypeNo_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>colUniqueTypeNumber</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>varTypeNumber</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_All_Documents</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check_Type_Number_Already_Exists (For the ease of readability this step is performing here)</description>
+        <name>Check_Type_Number_Already_Exists2</name>
+        <label>Check_Type_Number_Already_Exists?</label>
+        <locationX>2546</locationX>
+        <locationY>3412</locationY>
+        <defaultConnector>
+            <targetReference>Add_TypeNumber_To_Unique_Collection</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Type_No_Exists</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>colUniqueTypeNumber</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>varTypeNumber</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Loop_All_Documents</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Document InValid?</description>
+        <name>Is_Document_InValid</name>
+        <label>Is Document InValid?</label>
+        <locationX>2025</locationX>
+        <locationY>2157</locationY>
+        <defaultConnector>
+            <targetReference>Loop_All_Documents</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Invalid_Doc</name>
+            <conditionLogic>1 OR (2 AND 3) OR (4 AND 5)</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.SCHEDULE_1__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.SCHEDULE_1_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.SCHEDULE_1__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.Document_Complete__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Document_Type</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check whether it is first record</description>
+        <name>Is_First_Record</name>
+        <label>Is First Record?</label>
+        <locationX>1152</locationX>
+        <locationY>3602</locationY>
+        <defaultConnector>
+            <targetReference>Set_Long_Description_In_a_Variable</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_First_Record</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varTypeNumberRecordCount</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <numberValue>1.0</numberValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_First_Record_To_Final_Description</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Main Document IRS 1040 SR Invalid?</description>
+        <name>Is_IRS1040SR_Invalid</name>
+        <label>Is Main Document Invalid?</label>
+        <locationX>3445</locationX>
+        <locationY>2339</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Invalid_IRS1040SR</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_159</targetReference>
+            </connector>
+            <label>Invalid Main Doc(PEV)</label>
+        </rules>
+        <rules>
+            <name>Invalid_IRS1040SR_HU</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_184</targetReference>
+            </connector>
+            <label>Invalid Main Doc(HU)</label>
+        </rules>
+        <rules>
+            <name>Invalid_Schedule1_IRS1040SR_PEV</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_160</targetReference>
+            </connector>
+            <label>Invalid_Schedule1(PEV)</label>
+        </rules>
+        <rules>
+            <name>Invalid_Schedule1_IRS1040SR_HU</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_185</targetReference>
+            </connector>
+            <label>Invalid_Schedule1 (HU)</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Document Invalid? 
+Note: There are 2 types of invalid docs come inside this loop.
+1.Main doc invalid
+2.Main doc is valid,Schedule is available(TRUE) and Schedule 1 Valid=False.
+Hence if main doc is VALID indicate , Schedule 1 is invalid.</description>
+        <name>Is_Main_Document_Invalid</name>
+        <label>Is Main Document Invalid?</label>
+        <locationX>2392</locationX>
+        <locationY>2406</locationY>
+        <defaultConnectorLabel>Default</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Invalid_IRS10402018</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_155</targetReference>
+            </connector>
+            <label>Yes Invalid Main Doc(PEV)</label>
+        </rules>
+        <rules>
+            <name>Yes_HU_Invalid_IRS10402018</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_180</targetReference>
+            </connector>
+            <label>Yes Invalid Main Doc(HU)</label>
+        </rules>
+        <rules>
+            <name>Invalid_Schedule1_PEV</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_156</targetReference>
+            </connector>
+            <label>Invalid Schedule1 (PEV)</label>
+        </rules>
+        <rules>
+            <name>Invalid_Schedule1_HU</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_181</targetReference>
+            </connector>
+            <label>Invalid Schedule1 (HU)</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Main Document Invalid?</description>
+        <name>Is_Main_Document_Invalid2</name>
+        <label>Is Main Document Invalid?</label>
+        <locationX>2740</locationX>
+        <locationY>2390</locationY>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Invalid_IRS10402019</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_157</targetReference>
+            </connector>
+            <label>Invalid Main Doc(PEV)</label>
+        </rules>
+        <rules>
+            <name>Invalid_HU_IRS10402019</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_182</targetReference>
+            </connector>
+            <label>Invalid Main Doc(HU)</label>
+        </rules>
+        <rules>
+            <name>Invalid_IRS10402019_Schedule1_PEV</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsPEVVerfication_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_158</targetReference>
+            </connector>
+            <label>Invalid Schedule1(PEV)</label>
+        </rules>
+        <rules>
+            <name>Invalid_IRS10402019_Schedule1_HU</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_All_Documents.IS_DOC_VALID__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>varIsHUVerification_Input</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Type_Number_183</targetReference>
+            </connector>
+            <label>Invalid Schedule1(HU)</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Is Type No Present In Unique Invalid Document Type Number Collection</description>
+        <name>Is_Type_No_Present_In_Collection</name>
+        <label>Is Type No Present In Invalid Collection?</label>
+        <locationX>1130</locationX>
+        <locationY>3122</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Each_D_Type_Code</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_TypeNumber_Match</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>colUniqueTypeNumber</leftValueReference>
+                <operator>Contains</operator>
+                <rightValue>
+                    <elementReference>Loop_Each_D_Type_Code.TYPE_NO__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_TypeNumber_Counter</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>CARE Get Invalid Docs Description Flow</description>
+    <formulas>
+        <description>Error Details</description>
+        <name>fxErrorAdditionalInfo</name>
+        <dataType>String</dataType>
+        <expression>&apos;Application Id: &apos;+{!varApplicationId_Input}</expression>
+    </formulas>
+    <formulas>
+        <description>Right String After #</description>
+        <name>fxRIGHTString</name>
+        <dataType>String</dataType>
+        <expression>RIGHT({!varInputString}, LEN({!varInputString}) -{!fxSeparatorLocation}-1+1)</expression>
+    </formulas>
+    <formulas>
+        <description>Separator Location</description>
+        <name>fxSeparatorLocation</name>
+        <dataType>Number</dataType>
+        <expression>FIND(&apos;#&apos;, {!varInputString})</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <description>Trim white spaces</description>
+        <name>fxTrimmedInputString</name>
+        <dataType>String</dataType>
+        <expression>TRIM({!varInputString})</expression>
+    </formulas>
+    <interviewLabel>CARE Get Invalid Docs Description {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CARE Get Invalid Docs Description Flow</label>
+    <loops>
+        <description>Loop through All Income Documents</description>
+        <name>Loop_All_Documents</name>
+        <label>Loop All Income Documents</label>
+        <locationX>1588</locationX>
+        <locationY>2419</locationY>
+        <collectionReference>Get_All_Income_Documents</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Document_InValid</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Get_All_Type_Code_D_Records</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Loop Each D Type Code</description>
+        <name>Loop_Each_D_Type_Code</name>
+        <label>Loop Each D Type Code</label>
+        <locationX>847</locationX>
+        <locationY>3239</locationY>
+        <collectionReference>Get_All_Type_Code_D_Records</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Is_Type_No_Present_In_Collection</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Set_Output</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get All Income Documents</description>
+        <name>Get_All_Income_Documents</name>
+        <label>Get All Income Documents</label>
+        <locationX>680</locationX>
+        <locationY>2342</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_All_Documents</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element</targetReference>
+        </faultConnector>
+        <filters>
+            <field>CARE_Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varApplicationId_Input</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IS_CATEGORICAL_FIXED__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>IS_CATEGORICAL__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>CARE_Household_Member_Income__c</object>
+        <sortField>CARE_Application__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Get  All Type Code D Records</description>
+        <name>Get_All_Type_Code_D_Records</name>
+        <label>Get  All Records Type Code =D</label>
+        <locationX>1203</locationX>
+        <locationY>2765</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_Each_D_Type_Code</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element_1</targetReference>
+        </faultConnector>
+        <filters>
+            <field>TYPE_CODE__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>D</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>false</getFirstRecordOnly>
+        <object>CARE_Type__c</object>
+        <sortField>TYPE_CODE__c</sortField>
+        <sortOrder>Asc</sortOrder>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>92</locationX>
+        <locationY>2327</locationY>
+        <connector>
+            <targetReference>Get_All_Income_Documents</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>Log Exception</description>
+        <name>Log_Exception</name>
+        <label>Log Exception</label>
+        <locationX>947</locationX>
+        <locationY>1043</locationY>
+        <flowName>CARE_Exception_Logging_Flow</flowName>
+        <inputAssignments>
+            <name>varErrorAdditionalInfo_Input</name>
+            <value>
+                <elementReference>fxErrorAdditionalInfo</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowExceptionMessage_Input</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowName_Input</name>
+            <value>
+                <stringValue>CARE Get Invalid Docs Description Flow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varStageName_Input</name>
+            <value>
+                <elementReference>varStageName</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <description>Unique Type Number</description>
+        <name>colUniqueTypeNumber</name>
+        <dataType>String</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Unique Invalid Docs</description>
+        <name>recColUniqueInvalidDocs</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CARE_Household_Member_Income__c</objectType>
+    </variables>
+    <variables>
+        <description>Application Id Passed as input : Flow will return final long description by merging invalid documents comments</description>
+        <name>varApplicationId_Input</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Long Description</description>
+        <name>varFinalDescriptionLong</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Variable to hold the description string to be extracted after #</description>
+        <name>varInputString</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Out put</description>
+        <name>varInvalidDocsLongDescritpion_Output</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+    <variables>
+        <description>Flag=HU Verification</description>
+        <name>varIsHUVerification_Input</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Flag For PEV</description>
+        <name>varIsPEVVerfication_Input</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Error Stage (Element)</description>
+        <name>varStageName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Set Type Number Based on Document Type</description>
+        <name>varTypeNumber</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Record Count to identify the first record</description>
+        <name>varTypeNumberRecordCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Type Number To be stamped in Transaction in case of multiple invalid document.</description>
+        <name>varTypeNumberToBeStamped_Output</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+    </variables>
+</Flow>

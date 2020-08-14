@@ -38,50 +38,50 @@ public class CARE_HistoryTabControllerTest {
         objCareApp.ENROLLMENT_TYPE__c = 'OTHER';
         objCareApp.CC_CL_CD__c = 'C';
         objCareApp.IS_RECERT__c =  true;
-            objCareApp.NO_ADULT__c =  3;
-            objCareApp.NO_CHILD__c =  1;
-            objCareApp.IS_SIGNED__c =  true;
-            objCareApp.REQUEST_DROP__c =  true;
-            objCareApp.NEED_NAME_CHANGE__c =  false;
-            objCareApp.APPLICANT_NAME__c =  'TestAman';
-            objCareApp.RECEIVED_DATE__c =  date.today()-7;
-            objCareApp.PROCESSED_DATE__c =  date.today()-5;
-            objCareApp.SOURCE_CHANNEL_TYPE__c =  'Bill Insert';
-            objCareApp.FORM_CODE__c =  '';
-            objCareApp.COC_CODE__c =  '';
-            objCareApp.APPLICATION_STATUS__c = 'In-Progress';        
-            objCareApp.LIHEAP__c =  false;
-            objCareApp.WIC__c =  false;
-            objCareApp.CALFRESH_SNAP__c =  false;
-            objCareApp.CALWORKS_TANF__c =  false;
-            objCareApp.HEAD_START_INCOME__c =  false;
-            objCareApp.SSI__c =  true;
-            objCareApp.HEALTHY_FAMILIES__c =  false;
-            objCareApp.NSLP__c =  false;
-            objCareApp.BUREAU_INDIAN_AFFAIRS__c =  true;
-            objCareApp.MEDICAID_UNDER65__c =  true;
-            objCareApp.MEDICAID_OVER65__c =  false;
-            objCareApp.EMAIL_ADDRESS__c =  'abc@gmail.com';
-            objCareApp.ANNUAL_HOUSEHOLD_INCOME__c =  1234;
-            objCareApp.FIXED_INCOME__c =  false;
-            objCareApp.ENROLLMENT_TYPE__c = 'ENROLLMENT'; 
-        	objCareApp.CCB_CONTACT_COMMENT__c = 'Not Proper';
-            objCareApp.DROP_SOURCE__c = 'CC&B Case';
-            objCareApp.REASON_DESC__c = 'Testing';
+        objCareApp.NO_ADULT__c =  3;
+        objCareApp.NO_CHILD__c =  1;
+        objCareApp.IS_SIGNED__c =  true;
+        objCareApp.REQUEST_DROP__c =  true;
+        objCareApp.NEED_NAME_CHANGE__c =  false;
+        objCareApp.APPLICANT_NAME__c =  'TestAman';
+        objCareApp.RECEIVED_DATE__c =  date.today()-7;
+        objCareApp.PROCESSED_DATE__c =  date.today()-5;
+        objCareApp.SOURCE_CHANNEL_TYPE__c =  'Bill Insert';
+        objCareApp.FORM_CODE__c =  '';
+        objCareApp.COC_CODE__c =  '';
+        objCareApp.APPLICATION_STATUS__c = 'In-Progress';        
+        objCareApp.LIHEAP__c =  false;
+        objCareApp.WIC__c =  false;
+        objCareApp.CALFRESH_SNAP__c =  false;
+        objCareApp.CALWORKS_TANF__c =  false;
+        objCareApp.HEAD_START_INCOME__c =  false;
+        objCareApp.SSI__c =  true;
+        objCareApp.HEALTHY_FAMILIES__c =  false;
+        objCareApp.NSLP__c =  false;
+        objCareApp.BUREAU_INDIAN_AFFAIRS__c =  true;
+        objCareApp.MEDICAID_UNDER65__c =  true;
+        objCareApp.MEDICAID_OVER65__c =  false;
+        objCareApp.EMAIL_ADDRESS__c =  'abc@gmail.com';
+        objCareApp.ANNUAL_HOUSEHOLD_INCOME__c =  1234;
+        objCareApp.FIXED_INCOME__c =  false;
+        objCareApp.ENROLLMENT_TYPE__c = 'ENROLLMENT'; 
+        objCareApp.CCB_CONTACT_COMMENT__c = 'Not Proper';
+        objCareApp.DROP_SOURCE__c = 'CC&B Case';
+        objCareApp.REASON_DESC__c = 'Testing';
         insert objCareApp;
         List<CARE_Type__c> lstCareTypes = createCareTypeRecords();
         insert lstCareTypes;
         /*Image objImage = CARE_TestDataFactory.objImage();
-        insert objImage;*/
+insert objImage;*/
         CARE_APP_Image_List__c objImgList = CARE_TestDataFactory.careImage(objCareApp, objCase);
         insert objImgList;
     }
-
-     @isTest
+    
+    @isTest
     static void testgetEnrollHistoryData2(){
         date dToday = system.today();
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-    	List<CARE_Application__c> acc = [SELECT Id, Name,PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c,CCB_CONTACT_CODE__c From CARE_Application__c ];    // queried CARE_APPLICATION
+        List<CARE_Application__c> acc = [SELECT Id, Name,PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c,CCB_CONTACT_CODE__c From CARE_Application__c ];    // queried CARE_APPLICATION
         List<CARE_Type__c> careType = [SELECT COMMENTS__c,TYPE_CODE__c,TYPE_NO__c FROM CARE_Type__c];
         System.debug('acc is '+acc);
         acc[0].CCB_CONTACT_CODE__c = careType[0].TYPE_CODE__c;
@@ -137,41 +137,25 @@ public class CARE_HistoryTabControllerTest {
         CARE_HistoryTabController.getSpecialMessage(acc[0].Name,careType[0].TYPE_NO__c);
         CARE_HistoryTabController.getSpecialMessage(acc[0].Name,null);
         Test.stopTest();
-
+        
     }    
     
-     @isTest
+    @isTest
     static void testgetEnrollHistoryData(){
         date dToday = system.today();
         List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-        //List<CARE_Application__c> objCareApp = [SELECT  Id, PER_ID__c, APPLICATION_STATUS__c, CARE_Account_ID__c From CARE_Application__c ];    // queried CARE_APPLICATION
-        //System.debug('acc is '+objCareApp);
         
-       /* CARE_App_Enrolled_SA__c objCareAppEnroll = new CARE_App_Enrolled_SA__c();
-        objCareAppEnroll.APPLICATION__c = objCareApp[0].Id;
-        objCareAppEnroll.SA_ID__c = '1212121212';
-        objCareAppEnroll.PREM_ID__c = '2323232323';
-        objCareAppEnroll.ACCT_ID__c = '123456789';
-        objCareAppEnroll.CC_CL_CD__c = 'CARE';
-        //objCareAppEnroll.Service_Agreement__c = eiSite.Id;
-        objCareAppEnroll.PER_ID__c = '4545454545';
-        objCareAppEnroll.END_DATE__c = dToday;
-        objCareAppEnroll.SERVICE_FULL_ADDRESS__c = 'Test Add';
-        objCareAppEnroll.CC_CL_CD__c = 'C';
-        objCareAppEnroll.CCB_CONTACT_TYPE__c = '6042';
-        objCareAppEnroll.RS_CD__c = '4213122121';
-        insert objCareAppEnroll;*/
         
         Account objAccountRecord = PM_EI_TestDataUtility.createAccount();
-    insert objAccountRecord;
-    
-    CARE_Application__c objcareApp = new CARE_Application__c();
+        insert objAccountRecord;
+        
+        CARE_Application__c objcareApp = new CARE_Application__c();
         objcareApp.CARE_Account_ID__c = objAccountRecord.Id;
         objcareApp.APPLICATION_STATUS__c = 'New';
         objcareApp.APPLICANT_NAME__c = 'Test Care';
         objcareApp.PER_ID__c = 'TestPerId';
-    	objcareApp.ENROLLMENT_TYPE__c = 'OTHER';
-    insert objcareApp;
+        objcareApp.ENROLLMENT_TYPE__c = 'OTHER';
+        insert objcareApp;
         
         EI_Site__c lstSite = [SELECT  Id, Person_ID_EI__c, Care_Stop_Date_EI__c, Imported_Site_Name_EI__c,Rate_Schedule_EI__c,Account_EI__r.Discount__c,Site_Premise_ID_EI__c,Res_Ind_EI__c,SAID_EI__c,Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c From EI_Site__c Limit 1];    // queried lstSite	
         //CARE_App_Enrolled_SA__c objCareAppEnrol = CARE_TestDataFactory.careAppEnrolledSa(objCareApp[0],lstSite);
@@ -183,6 +167,63 @@ public class CARE_HistoryTabControllerTest {
         System.assertNotEquals(null, objCareApp.Id);
         Test.stopTest();
     }
+    
+    @isTest
+    static void testDeleteHistoryPevHuData(){
+        date dToday = system.today();
+        List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
+        
+        Test.startTest();
+        Account objAccountRecord = PM_EI_TestDataUtility.createAccount();
+        insert objAccountRecord;
+        
+        CARE_Application__c objcareApp = new CARE_Application__c();
+        objcareApp.CARE_Account_ID__c = objAccountRecord.Id;
+        objcareApp.APPLICATION_STATUS__c = 'New';
+        objcareApp.APPLICANT_NAME__c = 'Test Care';
+        objcareApp.PER_ID__c = 'TestPerId';
+        objcareApp.ENROLLMENT_TYPE__c = 'PEV';
+        insert objcareApp;
+        
+        CARE_Household_Detail__c objCareHhDet = new CARE_Household_Detail__c();
+        objCareHhDet.APPLICATION__c = objcareApp.Id;
+        objCareHhDet.PERSON_NAME__c = 'Test Person';
+        objCareHhDet.EST_ANNUAL_SALARY__c = 0;
+        objCareHhDet.INCOME_SOURCE_STATUS__c = CARE_Constants.CARE_HH_DET_INC_STS_INVALID;
+       	insert objCareHhDet;
+         
+        CARE_Household_Member_Income__c objCareHhInc = new CARE_Household_Member_Income__c();
+        objCareHhInc.CARE_Application__c = objcareApp.Id;
+        objCareHhInc.HOUSEHOLDDETAIL__c = objCareHhDet.Id;
+        objCareHhInc.DISCOUNT_LENGTH_IN_DAYS__c = 1;
+        objCareHhInc.NO_MONTHS__c = 0;
+        objCareHhInc.PERIOD_TYPE__c = 'Annually';
+        objCareHhInc.INCOME_SOURCE_STATUS__c = 'Valid';
+        objCareHhInc.INCOME_SOURCE_TYPE__c = 'Contract Work';
+        objCareHhInc.INCOME_DOC_TYPE__c = 'IRS 1040 2018';
+        objCareHhInc.INCOME_FORM_TYPE__c = 'IRS 1040 2018';
+        objCareHhInc.SCHEDULE_1__c = true;
+        objCareHhInc.SCHEDULE_1_VALID__c = true;
+        objCareHhInc.Document_Complete__c = true;
+        objCareHhInc.LINE_1__c = 1;
+        objCareHhInc.ADJ_1__c = 1;
+        insert objCareHhInc;
+        
+        CARE_Household_Member_IncomeC__c objCareHhIncC = new CARE_Household_Member_IncomeC__c();
+        objCareHhIncC.Application__c = objcareApp.Id;
+        objCareHhIncC.DETAIL_INCOME__c = objCareHhInc.Id;
+        objCareHhIncC.HOUSEHOLD_DETAIL__c = objCareHhDet.Id;
+        objCareHhIncC.LINE3__c = 2;
+        objCareHhIncC.LINE29__c = 2;
+        objCareHhIncC.LINE31__c = 2;
+        insert objCareHhIncC;
+        
+        CARE_HistoryTabController.deletePevHuRecord(objCareApp.Id);
+        
+        System.assertNotEquals(null, objCareApp.Id);
+        Test.stopTest();
+    }
+    
     private static List<CARE_Type__c> createCareTypeRecords(){
         List<CARE_Type__c> lstCareTypes = new List<CARE_Type__c>();
         
@@ -198,14 +239,14 @@ public class CARE_HistoryTabControllerTest {
         //Create records in Care Type for displaying in Reason dropdown
         CARE_Type__c careType2 = CARE_TestDataFactory.careType();
         careType2.TYPE_NO__c = '6042';
-            careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
+        careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
         careType2.TYPE_DESC__c = 'Covid-19';
         careType2.CATEGORY__c  = 'Adjustment Reason';
         lstCareTypes.add(careType2);
         
         CARE_Type__c careType3 = CARE_TestDataFactory.careType();
         careType3.TYPE_NO__c = '6032';
-            careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
+        careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
         careType3.TYPE_DESC__c = 'Customer Satisfaction';
         careType3.CATEGORY__c  = 'Adjustment Reason';
         lstCareTypes.add(careType3);
@@ -213,7 +254,7 @@ public class CARE_HistoryTabControllerTest {
         //Create records in Care Type for Valid Status and Valid Rate Schedule
         CARE_Type__c careType4 = CARE_TestDataFactory.careType();
         careType4.TYPE_NO__c = '6033';
-            careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
+        careType1.COMMENTS__c = 'Customer has submitted proof of income, however additional proof of income required.';
         careType4.TYPE_CODE__c = 'CARE';
         careType4.TYPE_DESC__c = '10,20';
         careType4.CATEGORY__c  = 'Valid SA status';
@@ -230,7 +271,7 @@ public class CARE_HistoryTabControllerTest {
     }
     private static List<Account> createAccountRecords(){
         List<Account> listAccountRecords = new List<Account>();
-               
+        
         Account objAccountRecord = PM_EI_TestDataUtility.createAccount();
         objAccountRecord.AccountNumber = '1224590384';
         objAccountRecord.CARE_DISCOUNT_TYPE__c = 'CARE';

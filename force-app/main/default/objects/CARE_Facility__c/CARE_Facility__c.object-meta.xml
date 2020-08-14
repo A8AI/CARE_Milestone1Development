@@ -160,7 +160,7 @@
     <label>CARE Facility</label>
     <nameField>
         <displayFormat>CF{000000000}</displayFormat>
-        <label>NAME (Facility No)</label>
+        <label>Facility No</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE Facility</pluralLabel>

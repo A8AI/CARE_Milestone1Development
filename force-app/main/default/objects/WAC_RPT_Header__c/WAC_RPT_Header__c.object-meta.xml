@@ -157,7 +157,7 @@
     <label>WAC RPT Header</label>
     <nameField>
         <displayFormat>WAC{0000000000}</displayFormat>
-        <label>NAME (Report Seq)</label>
+        <label>Report Seq</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>WAC RPT Header</pluralLabel>

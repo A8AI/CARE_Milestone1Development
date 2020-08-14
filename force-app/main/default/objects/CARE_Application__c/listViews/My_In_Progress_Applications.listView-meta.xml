@@ -3,10 +3,5 @@
     <fullName>My_In_Progress_Applications</fullName>
     <columns>NAME</columns>
     <filterScope>Mine</filterScope>
-    <filters>
-        <field>APPLICATION_STATUS__c</field>
-        <operation>equals</operation>
-        <value>In-Progress</value>
-    </filters>
     <label>My In-Progress Applications</label>
 </ListView>

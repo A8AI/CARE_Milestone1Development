@@ -78,7 +78,6 @@ public class CARE_AdjustmentController {
         
         try{
             mapActiveSADiscountEnrollment = CARE_UtilityController.getActiveSADetailsForPersonId(sPerId);
-            system.debug('mapActiveSADiscountEnrollment==>'+mapActiveSADiscountEnrollment);
             
             //check if customer is having an existing discount.
             if(mapActiveSADiscountEnrollment.isEmpty()){
@@ -124,7 +123,8 @@ public class CARE_AdjustmentController {
             
         }
         catch(Exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, '', '', sPerId, ex);
         }
         return adjustmentResponse;
     }
@@ -134,17 +134,19 @@ public class CARE_AdjustmentController {
         String sCareNewAppId = '';
         String sCareEnrollAppId = '';
         Boolean bStatus;
+        String sPersonId = '';
         
-        try{            
+        try{   
+            sPersonId = objAdjustmentInput.sPerId;
+            
             sCareNewAppId = createcareAppRecord(listAdjustmentSA, objAdjustmentInput);
             sCareEnrollAppId = createcareAppEnrolledSaRecord(sCareNewAppId, listAdjustmentSA, objAdjustmentInput, bRetroStartDateOnly);
             
-            bStatus = true;
-            system.debug('bStatus'+bStatus);
-            
+            bStatus = true;            
         }
         catch(Exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, '', '', sPersonId, ex);
         }
         return bStatus ;
     }
@@ -155,6 +157,7 @@ public class CARE_AdjustmentController {
     
     private static string createcareAppRecord(List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput){
         string careNewAppId = '';
+        String sPersonId = '';
         
         List<CARE_Application__c> listCareApp = new List<CARE_Application__c>();
         List<CARE_Type__c> listCareType = new List<CARE_Type__c>();
@@ -164,6 +167,7 @@ public class CARE_AdjustmentController {
         
         Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
         
+        sPersonId = objAdjustmentInput.sPerId;
         //create CARE APP Transaction record
         CARE_Application__c careAppObj = new CARE_Application__c();
         careAppObj.RecordTypeId = careAppRecTypeId;
@@ -194,16 +198,19 @@ public class CARE_AdjustmentController {
         // Iterate through each returned result
         for (Database.SaveResult sr : srList) {
             if (sr.isSuccess()) {
-                System.debug('Successfully inserted careApp after isAdjust clicked--->: ' + sr.getId());
+                //System.debug('Successfully inserted careApp after isAdjust clicked--->: ' + sr.getId());
                 careNewAppId = sr.getId();
-                System.debug('careNewAppId is--->: ' + careNewAppId);
+                //System.debug('careNewAppId is--->: ' + careNewAppId);
             }
             else {
                 // Operation failed, so get all errors               
                 for(Database.Error err : sr.getErrors()) {
-                    System.debug('The following error has occurred.');                   
-                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                    System.debug('Account fields that affected this error: ' + err.getFields());
+                    //System.debug('The following error has occurred.');                   
+                    //System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                    //System.debug('Account fields that affected this error: ' + err.getFields());
+                    
+                    EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, new AuraHandledException(err.getMessage())));
+					CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, '', '', sPersonId, new AuraHandledException(err.getMessage()));
                 }
             }
         }
@@ -212,12 +219,14 @@ public class CARE_AdjustmentController {
     
     private static string createcareAppEnrolledSARecord(String sCareNewAppId, List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput, Boolean bRetroStartDateOnly){
         string careEnrollAppId = '';
+        String sPersonId = '';
         List<CARE_App_Enrolled_SA__c> listCareAppAdjustedSAToInsert = new List<CARE_App_Enrolled_SA__c>();
         
         for (WrapperAdjustment objWrapperAdjust : listAdjustmentSA ){
-            if(objWrapperAdjust.dRetroStartDate != null){
+            if(objWrapperAdjust.dRetroStartDate != null || objWrapperAdjust.dRetroEndDate != null){
                 CARE_App_Enrolled_SA__c careEnrolledSAObj = new CARE_App_Enrolled_SA__c(); 
                 
+                sPersonId = objAdjustmentInput.sPerId;
                 careEnrolledSAObj.ACCT_ID__c = objWrapperAdjust.sBillingAccountId;
                 careEnrolledSAObj.APPLICATION__c = sCareNewAppId;
                 careEnrolledSAObj.CC_CL_CD__c = objWrapperAdjust.sDiscountType; //This will be Account's discount for stamping
@@ -243,16 +252,18 @@ public class CARE_AdjustmentController {
         // Iterate through each returned result
         for (Database.SaveResult sr : srList) {
             if (sr.isSuccess()) {
-                System.debug('Successfully inserted careAppEnrolledSA with retro dates--->: ' + sr.getId());
+                //System.debug('Successfully inserted careAppEnrolledSA with retro dates--->: ' + sr.getId());
                 careEnrollAppId = sr.getId();
-                //careAppId = sr.getId();
             }
             else {
                 // Operation failed, so get all errors               
                 for(Database.Error err : sr.getErrors()) {
-                    System.debug('The following error has occurred.');                   
-                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                    System.debug('Account fields that affected this error: ' + err.getFields());
+                    //System.debug('The following error has occurred.');                   
+                    //System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                    //System.debug('Account fields that affected this error: ' + err.getFields());
+                    
+                    EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, new AuraHandledException(err.getMessage())));
+					CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADJUSTMENT_CONTROLLER, '', '', sPersonId, new AuraHandledException(err.getMessage()));
                 }
             }            
         }        

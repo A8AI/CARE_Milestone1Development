@@ -1,0 +1,195 @@
+<template>
+    <lightning-card  title="On Demand Status">
+
+        <div if:true={showLoadingSpinner}>
+            <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+        </div>
+
+        <div class="slds-grid slds-wrap">
+            <div class="slds-p-left_small slds-size_1-of-4">
+                <lightning-input type="text" label="Account ID" name="acctIdField" value={objInputFields.sBillAcctId} onfocusout={handleChange}></lightning-input>
+            </div>
+            <div class="slds-p-left_large slds-p-top_large">
+                <lightning-button label="Fetch SAIDs" title="Fetch SAIDs" name="FetchSAIDs" onclick={ShowSADetails}>
+                </lightning-button>
+            </div>
+            <!--<div class="slds-p-left_large slds-p-top_large">
+                <lightning-input label="Is Web Service Up" type="checkbox" disabled={bCheckBoxDisable} name="webServiceCheck" onchange={handleChange}>
+                </lightning-input>
+            </div>-->
+        </div>
+    <div if:true={bShowSAList}>
+        <div class="slds-grid slds-wrap">
+            <div class="slds-p-left_small slds-size_1-of-4  slds-p-bottom_small">
+                <lightning-input readonly type="text" label="Probation Status" value={sOnProbation}></lightning-input>
+            </div>
+            <div class="slds-p-left_large slds-p-bottom_small">
+                <lightning-input readonly type="text" label="Person ID" value={objInputFields.sPerId}></lightning-input>
+            </div>
+        </div>
+
+        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+            <thead>
+                <tr class="slds-line-height_reset">
+
+                    <th class="" scope="col">
+                        <!--<div class="slds-truncate" title="Billing Account">Billing Account</div>-->
+                        <div class="slds-truncate" title="SAID">SA ID</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="SA Status">SA Status</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Premise">Premise</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Rate">Rate</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="Yes Date">Yes Date</div>
+                    </th>
+                    <th class="" scope="col">
+                        <div class="slds-truncate" title="No Date">No Date</div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template for:each={saData} for:item="status" for:index="index">
+                    <tr key={status.sExtId}>
+                        <th scope="col">
+                            <div if:true={status.bSF} class="slds-p-top_medium">{status.sSAID}</div>
+                            <div if:true={status.bWS} class="slds-p-top_medium">{status.sSAID}</div>
+                            <div if:true={status.bDM} class="slds-p-top_medium">
+                                <lightning-input type="text" name="saName" value={status.dSaName} data-index={index} 
+                            onfocusout={handleDetailsChange}>
+                        </lightning-input>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div class="slds-p-top_medium">{status.saStatus}</div>
+                        </th>
+                        <th scope="col">
+                            <div if:true={status.bSF} class="slds-p-top_medium">{status.sPremId}</div>
+                            <div if:true={status.bWS} class="slds-p-top_medium">{status.sPremId}</div>
+                            <div if:true={status.bDM} class="slds-p-top_medium">
+                                <lightning-input type="text" name="premName" value={status.dPremName} data-index={index} 
+                            onfocusout={handleDetailsChange}>
+                        </lightning-input>
+                            </div>
+                            <!--<div class="slds-p-top_medium">{status.sPremId}</div>-->
+                        </th>
+                        <th scope="col">
+                            <div if:true={status.bSF} class="slds-p-top_medium">{status.sRate}</div>
+                            <div if:true={status.bWS} class="slds-p-top_medium">{status.sRate}</div>
+                            <div if:true={status.bDM} class="slds-p-top_medium">
+                                <lightning-input type="text" name="rateName" value={status.dRateName} data-index={index} 
+                            onfocusout={handleDetailsChange}>
+                        </lightning-input>
+                            </div>
+                            <!--<div class="slds-p-top_medium">{status.sRate}</div>-->
+                        </th>
+                        <th scope="col">
+                            <div>
+                                <lightning-input type="date" name="yesDate"
+                                value={status.dYesDate} onfocusout={handleDetailsChange}
+                                    data-index={index} date-style="short">
+                                </lightning-input>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div>
+                                <lightning-input type="date" name="noDate"
+                                value={status.dNoDate} onfocusout={handleDetailsChange} data-index={index} date-style="short">
+                                </lightning-input>
+                            </div>
+                        </th>
+                    </tr>
+                    </template>
+            </tbody>
+            
+            <!--<tbody>
+                    <template for:each={addedDynamicArray} for:item="status1" for:index="index">
+                    <tr key={status1.idSARecID}>
+                    <th scope="col">
+                        <div >
+                            <lightning-input type="text" name="saName" value={status1.dSaName} data-index={index} 
+                            onchange={handleDateChange}>
+                        </lightning-input>
+                        </div>
+                    </th>
+                    <th scope="col">
+
+                    </th>
+                    <th scope="col">
+
+                    </th>
+                    <th scope="col">
+
+                    </th>
+                        <th scope="col">
+                            <div>
+                                <lightning-input type="date" name="mYesDate"
+                                value={status1.eYesDate} onchange={handleDateChange}
+                                    data-index={index} date-style="short">
+                                </lightning-input>
+                            </div>
+                        </th>
+                        <th scope="col">
+                            <div>
+                                <lightning-input type="date" name="mNoDate"
+                                value={status1.eNoDate} onchange={handleDateChange} data-index={index} date-style="short">
+                                </lightning-input>
+                            </div>
+                        </th>
+                        
+                    </tr>
+                </template>
+            </tbody>-->
+        
+        </table>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-p-left_small slds-size_1-of-4 slds-p-top_medium">
+                    <lightning-combobox label="Discount Type" name="discountField" placeholder="Select an option" options={discountOptions} onfocusout={handleChange}></lightning-combobox>
+                     
+                </div>
+
+                <div class="slds-p-left_large slds-size_1-of-4 slds-p-top_medium">   
+                    <lightning-combobox name="reasonField" label="Reason" onchange={handleChange}
+                        placeholder="Reason" options={dataReasonOptions} required>
+                    </lightning-combobox>
+                </div>
+
+                <div class="slds-p-left_large slds-size_1-of-4 slds-p-top_medium">
+                    <lightning-textarea name="commentField" value={objInputFields.sComment} label="Comment"
+                        max-length="2000" onchange={handleChange} required>
+                    </lightning-textarea>
+                </div>
+            </div>
+                
+            <div class="slds-grid slds-wrap">
+                    
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"></div>
+                    <div class=" slds-p-left_large slds-p-top_x-medium"> 
+                        <lightning-button label="OnDemandStatus" title="OnDemandStatus" name="OnDemandStatus" onclick={submitOnDemandStatus}>
+                        </lightning-button>
+                    </div>
+            </div> 
+        </div>
+
+    </lightning-card>
+</template>

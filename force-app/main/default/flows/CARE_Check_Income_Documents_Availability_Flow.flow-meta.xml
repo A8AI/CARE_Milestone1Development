@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignments>
+        <description>If joint filing then it can be considered for 2 people</description>
+        <name>Add_2_To_the_Income_Doc_Counter</name>
+        <label>Add 2 To the Income Doc Counter</label>
+        <locationX>7032</locationX>
+        <locationY>997</locationY>
+        <assignmentItems>
+            <assignToReference>varNumberOfIncomeDocs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>2.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_House_Hold</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Get Number of Person Added</description>
+        <name>Assign_Member_Count</name>
+        <label>Assign Member Count</label>
+        <locationX>6141</locationX>
+        <locationY>1082</locationY>
+        <assignmentItems>
+            <assignToReference>varMemberCount</assignToReference>
+            <operator>AssignCount</operator>
+            <value>
+                <elementReference>recColHouseHoldDetails</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Get_All_Income_Documents</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>5702</locationX>
+        <locationY>558</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_No_Of_HH_Added</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element_1</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>5948</locationX>
+        <locationY>572</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_All_Income_Documents</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Income Doc Counter=2</description>
+        <name>Set_Income_Doc_Available</name>
+        <label>Set Income Doc Available =True</label>
+        <locationX>6392</locationX>
+        <locationY>164</locationY>
+        <assignmentItems>
+            <assignToReference>varIsIncomeDocAvailable</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Is_Joint_Filing</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Number of Income Doc count</description>
+        <name>Set_Income_Doc_Count</name>
+        <label>Set Income Doc Counter=1</label>
+        <locationX>6966</locationX>
+        <locationY>794</locationY>
+        <assignmentItems>
+            <assignToReference>varNumberOfIncomeDocs</assignToReference>
+            <operator>Add</operator>
+            <value>
+                <numberValue>1.0</numberValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_House_Hold</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Income Doc Available =False</description>
+        <name>Set_Is_Income_Doc_Available_False</name>
+        <label>Set Is Income Doc Available= False</label>
+        <locationX>6681</locationX>
+        <locationY>760</locationY>
+        <assignmentItems>
+            <assignToReference>varIsIncomeDocAvailable</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varIsJointFiling</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Member_Income</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Set_Joint_Filing_Flag_True</name>
+        <label>Set Joint Filing Flag True</label>
+        <locationX>6781</locationX>
+        <locationY>124</locationY>
+        <assignmentItems>
+            <assignToReference>varIsJointFiling</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Loop_Member_Income</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Output=False</description>
+        <name>Set_Output_False</name>
+        <label>Set Output=False</label>
+        <locationX>7518</locationX>
+        <locationY>1139</locationY>
+        <assignmentItems>
+            <assignToReference>varIsIncomeDocAvailableForAll_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Set Output</description>
+        <name>Set_Output_True</name>
+        <label>Set Output=True</label>
+        <locationX>7289</locationX>
+        <locationY>904</locationY>
+        <assignmentItems>
+            <assignToReference>varIsIncomeDocAvailableForAll_Output</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Check Document Available For Each Person</description>
+        <name>Check_Document_Available_For_Each_Person</name>
+        <label>Check Document Available For Each Person</label>
+        <locationX>6368</locationX>
+        <locationY>478</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Member_Income</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Doc_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Member_Income.HOUSEHOLDDETAIL__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Loop_House_Hold.Id</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Income_Doc_Available</targetReference>
+            </connector>
+            <label>Yes Doc Available</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Income_Doc_Available</name>
+        <label>Check Income Doc Available?</label>
+        <locationX>6903</locationX>
+        <locationY>494</locationY>
+        <defaultConnector>
+            <targetReference>Loop_House_Hold</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Doc_Available_For_HH</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsIncomeDocAvailable</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Is_JointFiling</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Did Income Doc Submitted For All</description>
+        <name>Did_Income_Doc_Submitted_For_All</name>
+        <label>Did Income Doc Submitted For All?</label>
+        <locationX>7264</locationX>
+        <locationY>1170</locationY>
+        <defaultConnector>
+            <targetReference>Set_Output_False</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_IncomeDoc_Available</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varNumberOfIncomeDocs</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>varMemberCount</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Output_True</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check whether it is joint filing</description>
+        <name>Is_Joint_Filing</name>
+        <label>Is Joint Filing?</label>
+        <locationX>6586</locationX>
+        <locationY>125</locationY>
+        <defaultConnector>
+            <targetReference>Loop_Member_Income</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Joint_Filing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Loop_Member_Income.IS_FILING_JOINTLY__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Set_Joint_Filing_Flag_True</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Check is joint filing?</description>
+        <name>Is_JointFiling</name>
+        <label>Is Joint Filing?</label>
+        <locationX>7145</locationX>
+        <locationY>489</locationY>
+        <defaultConnector>
+            <targetReference>Set_Income_Doc_Count</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>No</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Joint</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsJointFiling</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Add_2_To_the_Income_Doc_Counter</targetReference>
+            </connector>
+            <label>Yes</label>
+        </rules>
+    </decisions>
+    <description>Check Income Document Attached for All For PEV Verfiication</description>
+    <formulas>
+        <description>Error Details</description>
+        <name>fxErrorAdditionalInfo</name>
+        <dataType>String</dataType>
+        <expression>&apos;Application Id: &apos;+{!varApplicationId}</expression>
+    </formulas>
+    <interviewLabel>CARE PEV Verification Process Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>CARE Check Income Documents Availability Flow</label>
+    <loops>
+        <description>Loop through each house hold</description>
+        <name>Loop_House_Hold</name>
+        <label>Loop House Hold</label>
+        <locationX>6675</locationX>
+        <locationY>1150</locationY>
+        <collectionReference>recColHouseHoldDetails</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Set_Is_Income_Doc_Available_False</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Did_Income_Doc_Submitted_For_All</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <loops>
+        <description>Loop through Member Income</description>
+        <name>Loop_Member_Income</name>
+        <label>Loop Member Income</label>
+        <locationX>6679</locationX>
+        <locationY>521</locationY>
+        <collectionReference>recColMemberIncome</collectionReference>
+        <iterationOrder>Asc</iterationOrder>
+        <nextValueConnector>
+            <targetReference>Check_Document_Available_For_Each_Person</targetReference>
+        </nextValueConnector>
+        <noMoreValuesConnector>
+            <targetReference>Check_Income_Doc_Available</targetReference>
+        </noMoreValuesConnector>
+    </loops>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Get Income document of Every Person of Application</description>
+        <name>Get_All_Income_Documents</name>
+        <label>Get All Income Documents</label>
+        <locationX>6405</locationX>
+        <locationY>1087</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Loop_House_Hold</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element_1</targetReference>
+        </faultConnector>
+        <filters>
+            <field>CARE_Application__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varApplicationId</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>IS_CATEGORICAL_FIXED__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>IS_CATEGORICAL__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>CARE_Household_Member_Income__c</object>
+        <outputReference>recColMemberIncome</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>INCOME_DOC_TYPE__c</queriedFields>
+        <queriedFields>INCOME_SOURCE_TYPE__c</queriedFields>
+        <queriedFields>IS_CATEGORICAL__c</queriedFields>
+        <queriedFields>IS_CATEGORICAL_FIXED__c</queriedFields>
+        <queriedFields>HOUSEHOLDDETAIL__c</queriedFields>
+        <queriedFields>IS_FILING_JOINTLY__c</queriedFields>
+    </recordLookups>
+    <recordLookups>
+        <description>Get Number of Person Added</description>
+        <name>Get_No_Of_HH_Added</name>
+        <label>Get No Of Person Added</label>
+        <locationX>5817</locationX>
+        <locationY>1074</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Assign_Member_Count</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element</targetReference>
+        </faultConnector>
+        <filters>
+            <field>APPLICATION__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varApplicationId</elementReference>
+            </value>
+        </filters>
+        <object>CARE_Household_Detail__c</object>
+        <outputReference>recColHouseHoldDetails</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>PERSON_NAME__c</queriedFields>
+    </recordLookups>
+    <start>
+        <locationX>5242</locationX>
+        <locationY>1055</locationY>
+        <connector>
+            <targetReference>Get_No_Of_HH_Added</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <subflows>
+        <description>Log Exception</description>
+        <name>Log_Exception</name>
+        <label>Log Exception</label>
+        <locationX>5804</locationX>
+        <locationY>179</locationY>
+        <flowName>CARE_Exception_Logging_Flow</flowName>
+        <inputAssignments>
+            <name>varErrorAdditionalInfo_Input</name>
+            <value>
+                <elementReference>fxErrorAdditionalInfo</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowExceptionMessage_Input</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowName_Input</name>
+            <value>
+                <stringValue>CARE Check Income Documents Availability</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varStageName_Input</name>
+            <value>
+                <elementReference>varStageName</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
+    <variables>
+        <description>House Hold Details of PEV Application (Number of Person Added)</description>
+        <name>recColHouseHoldDetails</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CARE_Household_Detail__c</objectType>
+    </variables>
+    <variables>
+        <description>Record Collection to store each member income</description>
+        <name>recColMemberIncome</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>CARE_Household_Member_Income__c</objectType>
+    </variables>
+    <variables>
+        <description>SA details of Other Discounted Premise (If customer has discount on other premise, Need to drop before giving discount</description>
+        <name>recColSAIdsOfOtherPremiseDiscount</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
+        <description>Record collection variable to store all valid SA of customer on all premises.</description>
+        <name>recColValidSAIdsOfAllPremises</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
+        <description>Record Collection to Store All Valid SA ID Details of Selected Premise</description>
+        <name>recColValidSAIdsOfSelectedPremise</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <objectType>EI_Site__c</objectType>
+    </variables>
+    <variables>
+        <description>Main Application Id Passed From UI</description>
+        <name>varApplicationId</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Accept button click flag</description>
+        <name>varIsApplicationAccepted</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Income Doc Available?</description>
+        <name>varIsIncomeDocAvailable</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Set True if income document available for every person</description>
+        <name>varIsIncomeDocAvailableForAll_Output</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Is Joint Filing?</description>
+        <name>varIsJointFiling</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <booleanValue>false</booleanValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Get Member Count</description>
+        <name>varMemberCount</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Number of Income Docs Attached</description>
+        <name>varNumberOfIncomeDocs</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+        <value>
+            <numberValue>0.0</numberValue>
+        </value>
+    </variables>
+    <variables>
+        <description>Error Stage (Element)</description>
+        <name>varStageName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

@@ -109,7 +109,9 @@ public with sharing class CARE_TransferController {
             listActiveStatusCode = CARE_UtilityController.getCareActiveStatusCode();
             //get the Active enrollment list to be shown in Tranfer From Section              
             Map <String, EI_SITE__C> mapActiveSADiscountEnrollment = new Map <String ,EI_SITE__C >();
-            mapActiveSADiscountEnrollment = CARE_UtilityController.getActiveSADetailsForPersonId(sPerId);            
+            mapActiveSADiscountEnrollment = CARE_UtilityController.getActiveSADetailsForPersonId(sPerId); 
+            
+            if (mapActiveSADiscountEnrollment.size()>0){
             for (EI_SITE__C EISiteActiveRec :mapActiveSADiscountEnrollment.values()){
                 
                 WrapperTransfer objTransferFrom = new WrapperTransfer ();
@@ -153,12 +155,19 @@ public with sharing class CARE_TransferController {
                     objTransferTo.sRateSchedule = EI_Site_Rec.Rate_Schedule_EI__c; 
                     objTransferTo.dSAStartDate = EI_Site_Rec.SA_Start_Date_EI__c;               
                     objTransferTo.bOverRide = false; 
-                    objTransferTo.sSelectedRecord = false;               
-                    if (listActiveStatusCode.contains(EI_Site_Rec.Svc_Status_Code_EI__c))
+                    objTransferTo.sSelectedRecord = false;    
+                    //Set UI Slection enable/Disable
+                    if (listActiveStatusCode.contains(EI_Site_Rec.Svc_Status_Code_EI__c))//check active SA
                     {                       
-                        if(listValidRateSchedule.contains(EI_Site_Rec.Rate_Schedule_EI__c))
+                        if(listValidRateSchedule.contains(EI_Site_Rec.Rate_Schedule_EI__c))//check valid rate Schedule
                         {
-                            objTransferTo.bSelectionDisabled = false;                  
+                            //check if exisitng discount is FERA, then disable the selection for SA  GAS SA Type.
+                           if((transferResponse.listTransferFrom[0].sDiscountType == CARE_Constants.CARE_FERA_DISCOUNT_TYPE) && (objTransferTo.sSAType ==CARE_Constants.CARE_GAS_SA_TYPE)){
+                                objTransferTo.bSelectionDisabled = true;
+                            }
+                            else{
+                                objTransferTo.bSelectionDisabled = false;    
+                            }               
                         }
                         else{
                             objTransferTo.bSelectionDisabled = true;
@@ -166,8 +175,7 @@ public with sharing class CARE_TransferController {
                     }
                     else{                    
                         objTransferTo.bSelectionDisabled = true;
-                    }
-                    
+                    }                    
                     transferResponse.listTransferTo.add(objTransferTo);
                 }
             }
@@ -184,9 +192,11 @@ public with sharing class CARE_TransferController {
             
             transferResponse.sComment = listCareTypeTo[0].TYPE_DESC_LONG__c;
             transferResponse.sContactCode = listCareTypeTo[0].TYPE_CODE__c;
-        }         
+        }     
+        }
         catch (exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());    
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_TransferController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_TransferController','','',sPerId, ex);
         }
         return transferResponse;
     }    
@@ -324,7 +334,8 @@ public with sharing class CARE_TransferController {
             bStatus = true;
         }
         catch (Exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_TransferController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_TransferController','','',objTransferInput.sPerId, ex);
         }
         return bStatus;
         

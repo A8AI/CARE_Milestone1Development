@@ -11,9 +11,11 @@
     <label>CARE APP</label>
     <navType>Standard</navType>
     <tabs>standard-home</tabs>
+    <tabs>CARE_Load_Data</tabs>
     <tabs>CARE_Type__c</tabs>
     <tabs>Search</tabs>
     <tabs>CARE_System_Value__c</tabs>
+    <tabs>CARE_On_Demand_Status</tabs>
     <uiType>Lightning</uiType>
     <utilityBar>CARE_APP_UtilityBar</utilityBar>
 </CustomApplication>

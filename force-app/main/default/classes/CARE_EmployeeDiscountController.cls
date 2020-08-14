@@ -33,8 +33,9 @@ public class CARE_EmployeeDiscountController {
                 bEmpDiscount = false;
             }
         }
-        catch (Exception ex) {
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+        catch (Exception ex) {        
+       EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EmployeeDiscountController',ex));
+       CARE_UtilityController.sendExceptionEmail('CARE_EmployeeDiscountController', '','', sPersId, ex);
         } 
         
         FlowOutputs outPut=new FlowOutputs();

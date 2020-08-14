@@ -156,7 +156,7 @@
     <label>CARE Tenant</label>
     <nameField>
         <displayFormat>CT{000000000}</displayFormat>
-        <label>NAME (Tenant No)</label>
+        <label>Tenant No</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE Tenant</pluralLabel>

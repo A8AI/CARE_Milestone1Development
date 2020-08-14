@@ -157,7 +157,7 @@
     <label>CARE CC Email Batch Detail</label>
     <nameField>
         <displayFormat>CCED{0000000000}</displayFormat>
-        <label>NAME (Email Detail Seq No)</label>
+        <label>Email Detail Seq No</label>
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>CARE CC Email Batch Detail</pluralLabel>

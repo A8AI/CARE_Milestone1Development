@@ -20,6 +20,7 @@ import CARE_RecordsWithNoDiscNotFound from '@salesforce/label/c.CARE_RecordsWith
 import CARE_AddElecGasHeader from '@salesforce/label/c.CARE_AddElecGasHeader';
 import CARE_CommentFieldValidationMsg from '@salesforce/label/c.CARE_CommentFieldValidationMsg';
 import CARE_CommentFieldLengthValidationMsg  from '@salesforce/label/c.CARE_CommentFieldLengthValidationMsg';
+import CARE_NotEligiblePersonMsg  from '@salesforce/label/c.CARE_NotEligiblePersonMsg';
 
 //#region  Constants
 //column definition of Existing Section
@@ -27,7 +28,7 @@ const columnExisting = [
     { label: 'Account', fieldName: 'sBillingAccountId', type: 'text' },
     { label: 'Premise ID', fieldName: 'sPremiseId', type: 'text' },
     { label: 'SA ID', fieldName: 'sSAId', type: 'text' },
-    { label: 'Svc Type', fieldName: 'sSAType', type: 'text' },
+    { label: 'SA Type', fieldName: 'sSAType', type: 'text' },
     { label: 'Discount Type', fieldName: 'sSADiscountType', type: 'text', initialWidth: 201 }
 ];
 //#endregion
@@ -69,7 +70,8 @@ export default class Care_AddElecGas extends LightningElement {
         CARE_RecordsWithNoDiscNotFound,
         CARE_AddElecGasHeader,
         CARE_CommentFieldLengthValidationMsg,
-        CARE_CommentFieldValidationMsg 
+        CARE_CommentFieldValidationMsg,
+        CARE_NotEligiblePersonMsg
      }
 
     showToastMessage(toastTitle, msg, toastVariant) {
@@ -109,13 +111,13 @@ export default class Care_AddElecGas extends LightningElement {
                     this.bShowModal = false;
                     this.bShowLoadingSpinner = false;
                     //Throw error for invalid customer having either FERA discount or NO discount
-                    this.showToastMessage(this.label.CARE_ErrorHeader, result.sErrorMessage, 'error');
+                    this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotEligiblePersonMsg, 'error');
                 }
             }).catch(error => {
                 this.bShowLoadingSpinner = false;
                 this.error = error.message;
                 console.log('error in getting the list', error.message);
-                this.showToastMessage(this.label.CARE_ErrorHeader, error.message, 'error');
+                this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
             });
 
     }

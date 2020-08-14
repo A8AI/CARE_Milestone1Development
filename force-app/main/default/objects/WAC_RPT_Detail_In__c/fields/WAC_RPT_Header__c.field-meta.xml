@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>WAC_RPT_Header__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <externalId>false</externalId>
+    <label>WAC RPT</label>
+    <referenceTo>WAC_RPT_Header__c</referenceTo>
+    <relationshipLabel>WAC RPT Detail In</relationshipLabel>
+    <relationshipName>WAC_RPT_Detail_In</relationshipName>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

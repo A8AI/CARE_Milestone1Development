@@ -122,6 +122,10 @@
                 <behavior>Edit</behavior>
                 <field>RECTYPE__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>WAC_RPT_Header__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

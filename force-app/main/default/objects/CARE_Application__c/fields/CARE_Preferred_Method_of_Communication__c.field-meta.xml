@@ -13,14 +13,14 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Mail (billing address),</fullName>
+                <fullName>Mail</fullName>
                 <default>false</default>
-                <label>Mail (billing address),</label>
+                <label>Mail</label>
             </value>
             <value>
-                <fullName>Email(By entering your email address, you are authorizing PG&amp;E to send you information from time to time regarding your PG&amp;E utility service and PG&amp;E programs and services that may be available to you.)</fullName>
+                <fullName>Email</fullName>
                 <default>false</default>
-                <label>Email(By entering your email address, you are authorizing PG&amp;E to send you information from time to time regarding your PG&amp;E utility service and PG&amp;E programs and services that may be available to you.)</label>
+                <label>Email</label>
             </value>
             <value>
                 <fullName>Phone</fullName>
@@ -28,9 +28,9 @@
                 <label>Phone</label>
             </value>
             <value>
-                <fullName>Text(Note: Message and data rates may apply.)</fullName>
+                <fullName>Text</fullName>
                 <default>false</default>
-                <label>Text(Note: Message and data rates may apply.)</label>
+                <label>Text</label>
             </value>
         </valueSetDefinition>
     </valueSet>

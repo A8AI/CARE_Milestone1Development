@@ -46,6 +46,9 @@ public class CARE_EnrollTabController {
             obj.saID          = pfs.SA_ID__c;
             obj.saType        = pfs.Service_Agreement__r.Svc_Type_Code_EI__c;
             response.listAdjust.add(obj);
+            if(pfs.RETRO_START_DATE__c != null || pfs.RETRO_END_DATE__c != null){
+                response.bHavingRetroDates = true;
+            }
         }
         
         //get the Transfer reason list  
@@ -100,11 +103,13 @@ public class CARE_EnrollTabController {
         public List<AdjustmentWrapper> listAdjust {get;set;}
         @AuraEnabled
         public List<WrapperAdjustReason> listAdjustReason {get;set;}
+        @AuraEnabled 
+        public Boolean bHavingRetroDates {get;set;}
         
     public DataTableWrapper(){
           listAdjust = new List <AdjustmentWrapper>();
           listAdjustReason = new List <WrapperAdjustReason>();
-          //sResult = '';
+          bHavingRetroDates = false;
     }
 
 	}
@@ -122,17 +127,20 @@ public class CARE_EnrollTabController {
     
     @AuraEnabled(Cacheable = true)
     //public static List<CARE_Received_Date_Settings__c> sendReceivedDate(){
-    public static boolean determineisNewEnrollment(String selectedPerId, String sLiveCall){
-        
+    public static Map<String,Boolean> determineisNewEnrollment(String selectedPerId, String sMakeLiveCallDetermine){
+       Map<String,Boolean> listResponse = new Map<String,Boolean>(); 
        boolean bIsNewCustomer = false;
+       boolean bRequestDrop = true;  
         system.debug('selectedPerId for isNewEnrollment---->'+selectedPerId);
         
         Map<String, EI_Site__c> careEISiteMapData = new Map<String, EI_Site__c>();
+        try{
         careEISiteMapData = CARE_UtilityController.getActiveSADetailsForPersonId(selectedPerId);
         system.debug('careEISiteMapData for is new enrollment: '+ careEISiteMapData);
         date noDateValue;
         
         if(careEISiteMapData.size() > 0){
+                bRequestDrop = false;
                 //for(string careEISite : careEISiteMapData.keyset()){ 
                 for(EI_Site__c careEISite : careEISiteMapData.values()){
                     //if(careEISite.get(careEISite).Care_Stop_Date_EI__c != null && careEISite.get(careEISite).Care_Stop_Date_EI__c > today && careEISite.get(careEISite).Care_Stop_Date_EI__c >= dDateAfterNinetyDays){
@@ -150,7 +158,14 @@ public class CARE_EnrollTabController {
         
         /*date noDateValue = [Select END_DATE__c from CARE_App_Enrolled_SA__c
                     where SA_ID__c In: careEISiteMapData.keyset() Order by CreatedDate desc limit 1].END_DATE__c;*/
-        return bIsNewCustomer;
+        listResponse.put('bIsNewCustomer',bIsNewCustomer);
+        listResponse.put('bRequestDrop',bRequestDrop);
+        }catch (Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EnrollTabController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_EnrollTabController','','',selectedPerId, ex);
+    }
+        
+        return listResponse;
         
     }
     
@@ -179,8 +194,9 @@ public class CARE_EnrollTabController {
         System.debug('listCareApp---> '+listCareApp);
        }
         catch (Exception ex){
-            
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EnrollTabController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_EnrollTabController','','',selectPerId, ex);
+            //system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
         }
 
         
@@ -281,6 +297,7 @@ public class CARE_EnrollTabController {
         
         List<Account> accUpdateEmailList  = new List<Account>();
         
+        try{
         if(eventName == 'save'){
             careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID, appIdCareApplication, eIAcctId);
             //sCareAppStatus = [select APPLICATION_STATUS__c from CARE_Application__c where Id =: careAppId].APPLICATION_STATUS__c;
@@ -349,7 +366,12 @@ public class CARE_EnrollTabController {
                 }
             }
             
-        } 
+        }
+        }catch (Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EnrollTabController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_EnrollTabController','','',perID, ex);
+            //system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+        }
         
        return careRes; 
         
@@ -357,7 +379,7 @@ public class CARE_EnrollTabController {
     }
     
     
-    private static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId){
+    public static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId){
         String careAppId;
         
         system.debug('Inside createUpdateCareAppRecord method---->:');
@@ -450,7 +472,7 @@ public class CARE_EnrollTabController {
         return careAppId;
     }
     
-    private static verificationResult GetCCCode(String careAppId, String perID, List<String> premID, string sIsAccepted){
+    public static verificationResult GetCCCode(String careAppId, String perID, List<String> premID, string sIsAccepted){
        
         verificationResult vRes = new verificationResult();
         
@@ -461,6 +483,7 @@ public class CARE_EnrollTabController {
         Map<string,List<string>> mapInputValues=new Map<string,List<string>>();
         List<String> isAcceptedList = new List<String>();
         
+        try{
         isAcceptedList.add(sIsAccepted);
         
         List<string> listApplicationID =new list<string>();
@@ -488,8 +511,12 @@ public class CARE_EnrollTabController {
         
         vRes.ccCodeDescription = ccDescription;
         vRes.ccCodeDescriptionLong = ccDescriptionLong;
-        return vRes;
         
+        }catch (exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EnrollTabController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_EnrollTabController','','',perID, ex);
+        }
+        return vRes;
     }
     
     public static List<Account> updateAccountEmail(CustomerInfoWrapper MassRecordData, String perID){

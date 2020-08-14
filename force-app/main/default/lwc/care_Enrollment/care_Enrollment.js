@@ -39,6 +39,10 @@ import CancelHeader from '@salesforce/label/c.CARE_CancelHeader';
 import TransactionSuccessMsg from '@salesforce/label/c.CARE_TransactionSuccessMsg';
 import TransactionErrorMsg from '@salesforce/label/c.CARE_TransactionErrorMsg';
 import ReceiveDateMsg from '@salesforce/label/c.CARE_ReceiveDateMsg';
+import CARE_NotModifiedRstREndMsg from '@salesforce/label/c.CARE_NotModifiedRstREndMsg';
+import CARE_NoRecordsDoAdjustment from '@salesforce/label/c.CARE_NoRecordsDoAdjustment';
+
+
 
 //import rStartDate from '@salesforce/schema/CARE_App_Enrolled_SA__c.RETRO_START_DATE__c';
 //import rEndDate from '@salesforce/schema/CARE_App_Enrolled_SA__c.RETRO_END_DATE__c';
@@ -133,6 +137,8 @@ export default class lwcCmpName extends NavigationMixin(LightningElement) {
     sEventVariant = 'info';
     sRelatedSACall = 'first';
     bShowConfirmationModal = false;
+    bAdjustmentAtleastOneRowValid = false;
+    bRequestDrop = false;
     @track EnrollObjFields = {
         isCertValueCB: false,
         adultValue: 0,
@@ -200,6 +206,8 @@ export default class lwcCmpName extends NavigationMixin(LightningElement) {
         TransactionSuccessMsg,
         TransactionErrorMsg,
         RetroStartDateValidationMsg,
+        CARE_NotModifiedRstREndMsg,
+        CARE_NoRecordsDoAdjustment,
         ReceiveDateMsg
     };
     
@@ -238,6 +246,7 @@ export default class lwcCmpName extends NavigationMixin(LightningElement) {
             //this.opporunity = data;
             this.careSAData = data.listAdjust;
             this.adjustReasonList = data.listAdjustReason;
+            this.bAdjustmentAtleastOneRowValid = data.bHavingRetroDates;
             console.log(` careSAData: `,  this.careSAData);
             
             //this.error = undefined;
@@ -278,93 +287,80 @@ handleDataTableSave(event){
     console.log(` field draft values recordInputs: `, recordInputs);
     let retroDateValues = [];
     let ret = -1;
+    let sErrorMsgAdjustment = '';
     if(recordInputs){
-        recordInputs.forEach((element,index) => {
-            let retroDates = { ...element};
-            //let careSADataIndex = this.findRowIndexById(retroDates.fields.Id);
-            let careSADataIndex = this.careSAData.findIndex(x => x.Id === retroDates.fields.Id);
-            
-            if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isBlank(this.careSAData[careSADataIndex].rEndDate)){
-                this.bRecordInputsCheck = false;
-                this.showToastMessage(this.label.ErrorHeader, this.label.StartDateValidationMsg, 'error');  
+            this.bRecordInputsCheck = true;
+            recordInputs.forEach((element,index) => {
+                let retroDates = { ...element};
+                //let careSADataIndex = this.findRowIndexById(retroDates.fields.Id);
+                let careSADataIndex = this.careSAData.findIndex(x => x.Id === retroDates.fields.Id);
+                
+                if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isBlank(this.careSAData[careSADataIndex].rEndDate)){
+                    this.bRecordInputsCheck = false;
+                    sErrorMsgAdjustment = this.label.StartDateValidationMsg;
+                }
+                else if(isNotBlank(retroDates.fields.rStartDate) && retroDates.fields.rStartDate >= dateToday){
+                    this.bRecordInputsCheck = false;
+                    sErrorMsgAdjustment = this.label.RetroStartDateValidationMsg;
+                }
+                else if(isNotBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate) && (retroDates.fields.rStartDate > dateToday || retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate <= retroDates.fields.rStartDate)){
+                    this.bRecordInputsCheck = false;
+                    sErrorMsgAdjustment = this.label.RetroDateValidationMsg;
+                }
+                else if(isBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate) && (retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate < this.careSAData[careSADataIndex].rStartDate)){
+                    this.bRecordInputsCheck = false;
+                    sErrorMsgAdjustment = this.label.RetroDateValidationMsg;
+                }
+                else if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isNotBlank(this.careSAData[careSADataIndex].rEndDate) && (retroDates.fields.rStartDate > this.careSAData[careSADataIndex].rEndDate)){
+                    this.bRecordInputsCheck = false;
+                    sErrorMsgAdjustment = this.label.RetroDateValidationMsg;
+                }
+            });
+        
+
+        if(this.bRecordInputsCheck){
+            for(let i =0; i < recordInputs.length; i++ ){
+                if(recordInputs[i].fields.hasOwnProperty('rStartDate') && recordInputs[i].fields.hasOwnProperty('rEndDate')){
+                    retroDateValues.push({'fields':{'RETRO_START_DATE__c':recordInputs[i].fields.rStartDate,'RETRO_END_DATE__c':recordInputs[i].fields.rEndDate,'Id':recordInputs[i].fields.Id}})
+                }else if(recordInputs[i].fields.hasOwnProperty('rStartDate')){
+                    retroDateValues.push({'fields':{'RETRO_START_DATE__c':recordInputs[i].fields.rStartDate,'Id':recordInputs[i].fields.Id}})
+                }else{
+                    retroDateValues.push({'fields':{'RETRO_END_DATE__c':recordInputs[i].fields.rEndDate,'Id':recordInputs[i].fields.Id}})
+                }
                 
             }
-            else if(isNotBlank(retroDates.fields.rStartDate) && retroDates.fields.rStartDate >= dateToday){
-                this.bRecordInputsCheck = false;
-                this.showToastMessage(this.label.ErrorHeader, this.label.RetroStartDateValidationMsg, 'error');  
-            }
-            else if(isNotBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate)){
-                if(retroDates.fields.rStartDate > dateToday || retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate < retroDates.fields.rStartDate){
-                    this.bRecordInputsCheck = false;
-                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
-                }else{
-                    this.bRecordInputsCheck = true;
-                }
-            }
-            else if(isBlank(retroDates.fields.rStartDate) && isNotBlank(retroDates.fields.rEndDate)){
-                if(retroDates.fields.rEndDate > this.careSAData[careSADataIndex].yesDate || retroDates.fields.rEndDate < this.careSAData[careSADataIndex].rStartDate){
-                    this.bRecordInputsCheck = false;
-                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
-                    
-                }else{
-                    this.bRecordInputsCheck = true;
-                }
-            }
-            else if(isNotBlank(retroDates.fields.rStartDate) && isBlank(retroDates.fields.rEndDate) && isNotBlank(this.careSAData[careSADataIndex].rEndDate)){
-                if(retroDates.fields.rStartDate > this.careSAData[careSADataIndex].rEndDate){
-                    this.bRecordInputsCheck = false;
-                    this.showToastMessage(this.label.ErrorHeader, this.label.RetroDateValidationMsg, 'error');
-                }else{
-                    this.bRecordInputsCheck = true;
-                }
-            }
-            else{
-                this.bRecordInputsCheck = true;
-            }
-                   
-        });
-    }
-
-    if(this.bRecordInputsCheck){
-        for(let i =0; i < recordInputs.length; i++ ){
-            if(recordInputs[i].fields.hasOwnProperty('rStartDate') && recordInputs[i].fields.hasOwnProperty('rEndDate')){
-                retroDateValues.push({'fields':{'RETRO_START_DATE__c':recordInputs[i].fields.rStartDate,'RETRO_END_DATE__c':recordInputs[i].fields.rEndDate,'Id':recordInputs[i].fields.Id}})
-            }else if(recordInputs[i].fields.hasOwnProperty('rStartDate')){
-                retroDateValues.push({'fields':{'RETRO_START_DATE__c':recordInputs[i].fields.rStartDate,'Id':recordInputs[i].fields.Id}})
-
-            }else{
-                retroDateValues.push({'fields':{'RETRO_END_DATE__c':recordInputs[i].fields.rEndDate,'Id':recordInputs[i].fields.Id}})
-            }
             
+            //fields[ID_FIELD.fieldApiName] = event.detail.draftValues[0].Id;
+            
+            console.log(` field draft values retroDateValues: `, retroDateValues);
+            const promises = retroDateValues.map(recordInput => updateRecord(recordInput));
+            Promise.all(promises).then(result => {
+                //this.returedDataTable = result;
+                //console.log(` result values: `, result);
+            /*this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Success',
+                    message: 'Contacts updated',
+                    variant: 'success'
+                })
+            );*/
+            // Clear all draft values
+            this.draftValues = [];
+            //this.careSAData = this._wiredSolarProjectResult;
+            // Display fresh data in the datatable
+            //console.log(` _wiredSolarProjectResult value: `, this._wiredSolarProjectResult);
+            //console.log(` care SA Data value: `, this.careSAData);
+            //this._wiredSolarProjectResult
+            return refreshApex(this._wiredSolarProjectResult);
+            //return this.returedDataTable;
+            }).catch(error => {
+                // Handle error
+                this.showToastMessage(this.label.ErrorHeader, this.label.EnrollmentEditErrorMsg, 'error');
+            });
+        }else{
+            this.showToastMessage(this.label.ErrorHeader, sErrorMsgAdjustment, 'error');
         }
-        
-        //fields[ID_FIELD.fieldApiName] = event.detail.draftValues[0].Id;
-    }
-    console.log(` field draft values retroDateValues: `, retroDateValues);
-    const promises = retroDateValues.map(recordInput => updateRecord(recordInput));
-    Promise.all(promises).then(result => {
-        //this.returedDataTable = result;
-        //console.log(` result values: `, result);
-    /*this.dispatchEvent(
-        new ShowToastEvent({
-            title: 'Success',
-            message: 'Contacts updated',
-            variant: 'success'
-        })
-    );*/
-     // Clear all draft values
-     this.draftValues = [];
-     //this.careSAData = this._wiredSolarProjectResult;
-     // Display fresh data in the datatable
-     //console.log(` _wiredSolarProjectResult value: `, this._wiredSolarProjectResult);
-     //console.log(` care SA Data value: `, this.careSAData);
-     //this._wiredSolarProjectResult
-     return refreshApex(this._wiredSolarProjectResult);
-     //return this.returedDataTable;
-}).catch(error => {
-    // Handle error
-    this.showToastMessage(this.label.ErrorHeader, this.label.EnrollmentEditErrorMsg, 'error');
-});
+   }
 }
 
     @wire(sendReceivedDate,{sLiveCall: '$sLiveAppCall'})
@@ -465,13 +461,14 @@ handleDataTableSave(event){
         }
     }
 
-    @wire(determineisNewEnrollment, { selectedPerId: '$sSelectedPerId', sLiveCall: '$sLiveAppCall' })
+    @wire(determineisNewEnrollment, { selectedPerId: '$sSelectedPerId', sMakeLiveCallDetermine: '$sLiveAppCall' })
     wiredSAmapData({ error, data }) {
         if (data) {
 
             console.log('determine is new enrollment data value' + data);
 
             this.EnrollObjFields.noDateValue = data.bIsNewCustomer;
+            this.bRequestDrop = (this.bModalFlag) ? true : data.bRequestDrop;
             console.log('determine is new enrollment this.EnrollObjFields.noDateValue' , this.EnrollObjFields.noDateValue);
 
             if(!this.EnrollObjFields.noDateValue){
@@ -660,20 +657,31 @@ goToAccountRecord(){
 handleSave(event){
     let nameEvent;
     let formValidFlag = true;
-    //let ErrorMsg = '';
+    let sErrorMsgSave = '';
     if((this.EnrollObjFields.adultValue === '' || this.EnrollObjFields.adultValue === undefined || this.EnrollObjFields.adultValue <= 0) && event.target.name !== 'save'){
         formValidFlag = false;
-        this.showToastMessage(this.label.ErrorHeader, this.label.AdultFieldValidationMsg, 'error');
-}
+        sErrorMsgSave = this.label.AdultFieldValidationMsg;
+    }
     else if(this.EnrollObjFields.receiveDateValue === '' || this.EnrollObjFields.receiveDateValue === undefined || this.EnrollObjFields.receiveDateValue === null){
-    formValidFlag = false;
-    this.showToastMessage(this.label.ErrorHeader, this.label.ReceiveDateMsg, 'error');
-}
-   else if(this.EnrollObjFields.nncValueCB && (this.EnrollObjFields.applicantNameValue == '' || this.EnrollObjFields.applicantNameValue == undefined)){
         formValidFlag = false;
-        this.showToastMessage(this.label.ErrorHeader, this.label.ApplicantNameMsg, 'error');
-        //ErrorMsg = this.label.ApplicantNameMsg;
-        
+        sErrorMsgSave = this.label.ReceiveDateMsg;
+    }
+    else if(this.EnrollObjFields.nncValueCB && (this.EnrollObjFields.applicantNameValue == '' || this.EnrollObjFields.applicantNameValue == undefined)){
+        formValidFlag = false;
+        sErrorMsgSave = this.label.ApplicantNameMsg;
+    }else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 256){
+        formValidFlag = false;
+        sErrorMsgSave = this.label.CommentFieldLengthValidationMsg;
+    }
+    else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 0 && (this.EnrollObjFields.ccbCommentValue.indexOf(',') !== -1)){ // !='' && this.EnrollObjFields.ccbCommentValue != undefined){
+        formValidFlag = false;
+        sErrorMsgSave = this.label.CommentFieldValidationMsg;
+    }else if(this.EnrollObjFields.isAdjustValue && (this.careSAData ==undefined || (this.careSAData !=undefined && this.careSAData.length == 0))){
+        formValidFlag = false;
+        sErrorMsgSave = this.label.CARE_NoRecordsDoAdjustment;
+    }else if(this.EnrollObjFields.isAdjustValue && !this.bAdjustmentAtleastOneRowValid){
+        formValidFlag = false;
+        sErrorMsgSave =this.label.CARE_NotModifiedRstREndMsg;
     }else if(this.EnrollObjFields.emailValue !=='' && this.EnrollObjFields.emailValue !== undefined){
         let allInputValid = [...this.template.querySelectorAll('.emailValidCheck')]
         .reduce((validSoFar, inputCmp) => {
@@ -682,21 +690,9 @@ handleSave(event){
         }, true);
         formValidFlag = allInputValid;
         if(!formValidFlag){
-        this.showToastMessage(this.label.ErrorHeader, this.label.EmailIdValidation, 'error');
+            sErrorMsgSave = this.label.EmailIdValidation;
         }
-        //ErrorMsg = this.label.EmailIdValidation;
-
-    }else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 256){
-        formValidFlag = false;
-        this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldLengthValidationMsg, 'error');
-
-    }
-    else if(this.EnrollObjFields.ccbCommentValue !=undefined && this.EnrollObjFields.ccbCommentValue.length > 0){ // !='' && this.EnrollObjFields.ccbCommentValue != undefined){
-        if(this.EnrollObjFields.ccbCommentValue.indexOf(',') !== -1){
-            this.showToastMessage(this.label.ErrorHeader, this.label.CommentFieldValidationMsg, 'error');
-            formValidFlag = false;
-        }   
-    }
+   }
        
     console.log(` formValidFlag value `, formValidFlag);
     if(formValidFlag){
@@ -745,14 +741,14 @@ handleSave(event){
             console.log(` Application Status VALUE---->: `, this.sCareAppStatus); 
             
             if(result.sEventName === 'verify' || (result.sEventName === 'accept' && result.bImageCheck === true)){
-                if(this.careResccDesc !== result.ccCodeDescription){ // handle result if cc code changed after accept
+                if(result.sEventName === 'verify' ){ // Update Comment only in Case Verify
                     this.EnrollObjFields.ccbCommentValue = result.careCCLongDescValue;
-                    this.sRelatedSACall = new Date().toLocaleString();
                 }
                 if(result.sEventName === 'accept'){
                     this.getSystemInformationAfterAccept();
                 }
                 this.careResccDesc = result.ccCodeDescription;
+                this.sRelatedSACall = new Date().toLocaleString();
 
             }
 
@@ -815,14 +811,9 @@ handleSave(event){
             
         });
 
-  }/*else{
-    this.dispatchEvent(new ShowToastEvent({
-        title: 'Error!!',
-        message:this.label.EnrollmentCreateErrorMsg,
-        variant: 'error'
-    }),);  
-    this.showLoadingSpinner = false;
-  }*/
+      }else{
+        this.showToastMessage(this.label.ErrorHeader,sErrorMsgSave, 'error');
+      }
 }
     
 
@@ -919,7 +910,11 @@ showToastMessage(toastTitle, msg, toastVariant) {
         return (this.careResccDesc =='' || this.careResccDesc == undefined || this.careResccDesc == null || this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled");
     }
     get checkAcceptedApplication(){
-        return this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled" || this.bModalFlag;  // Added Viewonly flag for adjusment check box after accepting application not allow modify adjustment
+        return this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled" || this.bModalFlag;  // Added Viewonly flag for adjutsment check box after accepting application not allow modify adjustment
+    }
+
+    get checkDataTableNoEdit(){
+        return this.sCareAppStatus == "Decision Made" || this.sCareAppStatus == "Cancelled" || this.bModalFlag || !this.EnrollObjFields.isAdjustValue;  // Added Viewonly flag for adjutsment check box after accepting application not allow modify adjustment
     }
 
     get checkAppIdORAccepted(){

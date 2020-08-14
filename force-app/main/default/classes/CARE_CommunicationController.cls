@@ -52,11 +52,13 @@ public class CARE_CommunicationController {
     }
     
     @AuraEnabled
-    public static Boolean savePhoneDetails(DataTableWrapper updatePhoneRec, Id selectedAccountId) {
+    public static Boolean savePhoneDetails(DataTableWrapper updatePhoneRec, String perIdValue) {
         // Describe the SObject using its object type.
         Boolean bStatus;
         try{
-        List<Account> saveResList = [select id,Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c from Account where Id =: selectedAccountId];
+        List<Account> saveResList = [select id,Bus_Phone_1_EI__c, Bus_Phone_2_EI__c, Primary_Contact_Mobile_EI__c 
+                                     from Account 
+                                     where Billing_Person_ID_EI__c =: perIdValue];
         for(Account res : saveResList){
             //upRec.home          = res1.Bus_Phone_1_EI__c = ;
             res.Bus_Phone_1_EI__c= updatePhoneRec.home;
@@ -113,11 +115,11 @@ public class CARE_CommunicationController {
     }   
     
     @AuraEnabled
-    public static Boolean saveCommDetails(string updateCommRec, Id selectedAccountId) {
+    public static Boolean saveCommDetails(string updateCommRec, String perIdValue) {
         // Describe the SObject using its object type.
         Boolean bStatus = false; 
         try{ 
-        List<Account> saveResList = [Select Id,PREFERRED_CONTACT_METHOD__c from Account where Id =: selectedAccountId];
+        List<Account> saveResList = [Select Id,PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: perIdValue];
         for(Account res : saveResList){
             //upRec.home          = res1.Bus_Phone_1_EI__c = ;
             res.PREFERRED_CONTACT_METHOD__c = updateCommRec;
@@ -151,7 +153,7 @@ public class CARE_CommunicationController {
     } 
 
     @AuraEnabled
-    public static Boolean saveLangDetails(string updateLangRec, Id selectedAccountId) {
+    public static Boolean saveLangDetails(string updateLangRec, String perIdValue) {
         // Describe the SObject using its object type.
        /* update upRec1;
         System.debug('upRec1---> '+upRec1); */
@@ -159,7 +161,7 @@ public class CARE_CommunicationController {
         Boolean bStatus = false; 
         
         try{
-                List<Account> saveResList = [Select Id,Languages_Other_Than_English_EI__c from Account where Id =: selectedAccountId];
+                List<Account> saveResList = [Select Id,Languages_Other_Than_English_EI__c from Account where Billing_Person_ID_EI__c =: perIdValue];
             for(Account res : saveResList){
                 //upRec.home          = res1.Bus_Phone_1_EI__c = ;
                 res.Languages_Other_Than_English_EI__c = updateLangRec;

@@ -61,6 +61,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
         iImageIndex: 0,
         iNumber: 1,
         sImageId: '',
+        sDataXportUrl: '',
         sId: ''
     }];
     @track recImageList = [];
@@ -69,7 +70,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
     selectedRecords;
     wiredUploadedFileList; // declare this property for holding the provisioned value
     startIdx;
-    sectionName;
+    sectionName;    
     //#endregion
 
     //declare custom label
@@ -222,11 +223,13 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
         this.imageList = [];
         getCareAppImageList({ idApplication: this.recordId })
             .then(result => {
+                console.log('result-->'+JSON.stringify(result));
                 result.forEach((element, idx) => {
                     let imageObj = { ...element };
                     imageObj.sobjectType = 'CARE_APP_Image_List__c';
                     imageObj.sId = imageObj.sId;
                     imageObj.sImageId = String(imageObj.sImageId);
+                    imageObj.sDataXportUrl = imageObj.sDataXportUrl;
                     imageObj.iNumber = idx + 1; // iNumber starts from 1, 2, 3, 4, etc.
                     imageObj.iImageIndex = idx; // id starts from 0, 1, 2, 3 etc.
                     this.imageList.push(imageObj);
@@ -248,7 +251,8 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
             })
             .catch(error => {
                 this.bShowLoadingSpinner = false;
-                this.showToastMessage(this.label.CARE_ErrorHeader, error.body.message, 'error');
+                sytem.debug('error-->'+error.body.message);
+                this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
             });
 
     }
@@ -277,6 +281,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
             iImageIndex: 0,
             iNumber: 1,
             sImageId: '',
+            sDataXportUrl: '',
             sId: ''
         });
         this.imageList.forEach((image, idx) => {
@@ -346,7 +351,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
         const allInputValid = [...this.template.querySelectorAll('lightning-input')]
             .reduce((validSoFar, inputCmp) => {
                 var value = inputCmp.value.trim();
-                if (!(value.length === 8 || value.length === 10 || value.length === 18)) {
+                if (!(value.length === 8 || value.length === 15 || value.length === 18)) {
                     inputCmp.setCustomValidity(this.label.CARE_ImageIdLengthMismatchMsg);
                 }
                 else if (value.length === 8 && !(/^\d+$/.test(value))) {
@@ -367,7 +372,8 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
                     this.getImageIDs();
                 })
                 .catch(error => {
-                    this.showToastMessage(this.label.CARE_ErrorHeader, error.body.message, 'error');
+                    console.log('err-->'+error.body.message);
+                    this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
                 });
             this.recImageList = [];
             this.imageList = [];
@@ -397,15 +403,17 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
         let sImgIDVal = this.imageList[this.startIdx].sImageId;
         if(sImgIDVal.length === 8){ //to redirect to Care_App_Image_List record page
             let sId = event.target.dataset.api;
+            let urlDataExport = '';
             if (sId !== '' && sId !== undefined) {
                 this.sectionName = 'UploadedImageID';
                 this.rowId = sId;
+                urlDataExport = event.target.dataset.url;
             }
     
             // var baseURL = window.location.hostname;
             // baseURL = 'https://' + baseURL + '/lightning/r/Care_App_Image_List__c/' + this.rowId + '/view';
             // window.open(baseURL, '_blank');
-            this[NavigationMixin.GenerateUrl]({
+            /*this[NavigationMixin.GenerateUrl]({
                 type: 'standard__recordPage',
                 attributes: {
                     recordId: this.rowId,
@@ -413,7 +421,9 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
                 },
             }).then(url => {
                 window.open(url);
-            });
+            });*/
+            console.log('urlDataExport-->'+urlDataExport);
+            window.open(urlDataExport, '_blank');
         }
         else{ //to redirect to Case record page because the saved image ID is 15/18 digit Salesforce Case Id
             // var baseURL = window.location.hostname;
@@ -448,7 +458,8 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
                     this.getImageIDs();
                 })
                 .catch(error => {
-                    this.showToastMessage(this.label.CARE_ErrorHeader, error.body.message, 'error');
+                    console.log('err-->'+error.body.message);
+                    this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
                 });
         }
         else if (this.sectionName === 'UploadedFiles') {
@@ -458,6 +469,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
                     this.getFiles();
                 })
                 .catch((error) => {
+                    console.log('err-->'+error.body.message);
                     this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
                 });
         }

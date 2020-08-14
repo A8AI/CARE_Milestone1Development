@@ -17,147 +17,134 @@ Modification Log     :
 
 public class CARE_TransferControllerTest {
    
-         @testSetup
+    static final String CARE_PROCESSOR_USR = 'CareProcessorUser'; 
+    
+    @testSetup
     public static void makeData(){
-        Profile p = [SELECT Id FROM Profile WHERE Name='System Administrator']; 
-        User lstusr = PM_EI_TestDataUtility.createUser(); //called testdatafactory for creation of user
-        System.debug('lstusr is'+lstusr);
-        lstusr.ProfileId = p.Id;
-        insert lstusr;   // inserted user
+        
+        Profile p = [select id from Profile where name =: CARE_Constants.CARE_PROCESSOR_PROFILE LIMIT 1];
+        
+        //Create user record
+        User usr = PM_EI_TestDataUtility.createUser();
+        usr.LastName = CARE_PROCESSOR_USR;
+        usr.profileid = p.Id;
+        insert usr;
+        
+        //Create Account record
+            
         List<Account> listAccountRecords = createAccountRecords();
         insert listAccountRecords;
+        
+        //Create Site record
         List<EI_Site__c> listSiteRecords = createSiteRecords(listAccountRecords);
         insert listSiteRecords;
-        Case objCase = CARE_TestDataFactory.objCase();
-        insert objCase;
-        CARE_Application__c objCareApp = CARE_TestDataFactory.careApplication(listAccountRecords[0]);
-        objCareApp.ENROLLMENT_TYPE__c = 'OTHER';
-        objCareApp.IS_RECERT__c =  true;
-            objCareApp.NO_ADULT__c =  3;
-            objCareApp.NO_CHILD__c =  1;
-            objCareApp.IS_SIGNED__c =  true;
-            objCareApp.REQUEST_DROP__c =  true;
-            objCareApp.NEED_NAME_CHANGE__c =  false;
-            objCareApp.APPLICANT_NAME__c =  'TestAman';
-            objCareApp.RECEIVED_DATE__c =  date.today()-7;
-            objCareApp.PROCESSED_DATE__c =  date.today()-5;
-            objCareApp.SOURCE_CHANNEL_TYPE__c =  'Bill Insert';
-            objCareApp.FORM_CODE__c =  '';
-            objCareApp.COC_CODE__c =  '';
-            objCareApp.APPLICATION_STATUS__c = 'In-Progress';        
-            objCareApp.LIHEAP__c =  false;
-            objCareApp.WIC__c =  false;
-            objCareApp.CALFRESH_SNAP__c =  false;
-            objCareApp.CALWORKS_TANF__c =  false;
-            objCareApp.HEAD_START_INCOME__c =  false;
-            objCareApp.SSI__c =  true;
-            objCareApp.HEALTHY_FAMILIES__c =  false;
-            objCareApp.NSLP__c =  false;
-            objCareApp.BUREAU_INDIAN_AFFAIRS__c =  true;
-            objCareApp.MEDICAID_UNDER65__c =  true;
-            objCareApp.MEDICAID_OVER65__c =  false;
-            objCareApp.EMAIL_ADDRESS__c =  'abc@gmail.com';
-            objCareApp.ANNUAL_HOUSEHOLD_INCOME__c =  1234;
-            objCareApp.FIXED_INCOME__c =  false;
-            objCareApp.ENROLLMENT_TYPE__c = 'ENROLLMENT'; 
-        	objCareApp.CCB_CONTACT_COMMENT__c = 'Not Proper';
-            objCareApp.DROP_SOURCE__c = 'CC&B Case';
-            objCareApp.REASON_DESC__c = 'Testing';
-        insert objCareApp;
-        CARE_App_Enrolled_SA__c objCareAppEnrol = CARE_TestDataFactory.careAppEnrolledSa(objCareApp,listSiteRecords[0]);
-        insert objCareAppEnrol;
+        
+        //Create CareType record
         List<CARE_Type__c> lstCareTypes = createCareTypeRecords();
         insert lstCareTypes;
-        /*Image objImage = CARE_TestDataFactory.objImage();
-        insert objImage;*/
-        CARE_APP_Image_List__c objImgList = CARE_TestDataFactory.careImage(objCareApp, objCase);
-        insert objImgList;
+ 
     }
-
- @isTest
+   
+    @isTest
     static void testGetTranferDetails(){
-        List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-        List<EI_Site__c> acc = [SELECT  Id, Person_ID_EI__c, Care_Stop_Date_EI__c, Imported_Site_Name_EI__c,Rate_Schedule_EI__c,Res_Ind_EI__c,SAID_EI__c,Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c From EI_Site__c];    // queried account
-        List<CARE_Type__c> objCare = [SELECT ID,TYPE_CODE__c, TYPE_DESC__c, TYPE_DESC_LONG__c,CATEGORY__c,TYPE_NO__c, START_DATE__c ,END_DATE__c  FROM CARE_Type__c ];
-        System.debug('acc is '+acc);
         Test.startTest();
-        CARE_TransferController.getTranferDetails(acc[0].Person_ID_EI__c);
+        String sPerId = '0123456003';
+        list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
+        CARE_TransferController.WrapperTranferResponse transferResponse = new CARE_TransferController.WrapperTranferResponse();      
+        System.runAs(user1[0]){  
+            transferResponse =  CARE_TransferController.getTranferDetails(sPerId);
+            system.assertEquals('E', transferResponse.listTransferFrom[0].sSAType);
+        }
+        
         Test.stopTest();
     }
     
- @isTest
-    static void testGetTranferDetails1(){
-        List<User> usr = [SELECT Id, Name From User WHERE isActive = true and Username = 'test@test9845876.com']; //queried user 
-        List<EI_Site__c> acc = [SELECT  Id,Account_EI__r.Discount__c, Person_ID_EI__c, Care_Stop_Date_EI__c,Site_Premise_ID_EI__c,Billing_Account_ID_EI__c,Svc_Type_Code_EI__c, Imported_Site_Name_EI__c,Rate_Schedule_EI__c,Res_Ind_EI__c,SAID_EI__c,Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c From EI_Site__c ];    // queried account
-    	acc[0].Care_Stop_Date_EI__c = date.today();
-        acc[0].Billing_Account_ID_EI__c = '123456789';
-        update acc[0];
-        List<CARE_App_Enrolled_SA__c> listCareAppEnroll = [select  Id, APPLICATION__c,SA_ID__c,PREM_ID__c,ACCT_ID__c,CC_CL_CD__c,Service_Agreement__c,PER_ID__c, END_DATE__c,SERVICE_FULL_ADDRESS__c from CARE_App_Enrolled_SA__c];
-    	List<CARE_Type__c> objCare = [SELECT ID,TYPE_CODE__c, TYPE_DESC__c, TYPE_DESC_LONG__c,CATEGORY__c,TYPE_NO__c, START_DATE__c ,END_DATE__c  FROM CARE_Type__c Limit 1];
-        objCare[0].CATEGORY__c = 'Transfer';
-        objCare[0].START_DATE__c = date.today()-3; 
-        objCare[0].END_DATE__c = date.today()+3;
-        objCare[0].IS_ACTIVE__C = true;
-        update objCare[0];
-        CARE_Application__c carApp = [select Id,APPLICANT_NAME__c,CC_CL_CD__c,PER_ID__c,REASON_DESC__c, CCB_CONTACT_COMMENT__c from CARE_Application__c];
-        CARE_TransferController.WrapperTransfer wrapTransf;
-        String reason = 'Customer Request';
+    @isTest
+    static void testupdateSADetails(){
         Test.startTest();
-        CARE_TransferController.WrapperTransfer Wrap = new CARE_TransferController.WrapperTransfer();
-        Wrap.idSARecID  = acc[0].Id;
-        Wrap.sApplicantName = carApp.APPLICANT_NAME__c;
-       	Wrap.sAccountId  = acc[0].Billing_Account_ID_EI__c;
-        Wrap.sPremiseId  = acc[0].Site_Premise_ID_EI__c; 
-        Wrap.sSAId  = acc[0].SAID_EI__c; 
-        Wrap.sSAType  = acc[0].Svc_Type_Code_EI__c;
-        Wrap.sDiscountType  = acc[0].Account_EI__r.Discount__c;
-        Wrap.sAddress  = acc[0].Svc_Full_Adr_EI__c;
-        Wrap.sSAStatus  = acc[0].Svc_Status_Code_EI__c;
-        Wrap.sRateSchedule  =acc[0].Rate_Schedule_EI__c;
-        Wrap.dEndDate  =acc[0].Care_Stop_Date_EI__c ;
-        Wrap.bOverRide  =false ;
-        Wrap.sSelectedRecord  = false;
-        Wrap.bSelectionDisabled  =true ;
-        CARE_TransferController.WrapperTransferInput wrapInput = new CARE_TransferController.WrapperTransferInput();
-        wrapInput.sPerId = carApp.PER_ID__c;
-        wrapInput.sReason = carApp.REASON_DESC__c;
-        wrapInput.sComment = carApp.CCB_CONTACT_COMMENT__c;
-        List<CARE_TransferController.WrapperTransfer> liWrap= new List<CARE_TransferController.WrapperTransfer>();
-        CARE_TransferController.WrapperTranferResponse liResp;
-        liResp = CARE_TransferController.getTranferDetails(acc[0].Person_ID_EI__c);
-        liWrap= liResp.listTransferTo;
-        for(integer i=0;i<liWrap.size(); i++){
-          liWrap[i].sApplicantName = carApp.APPLICANT_NAME__c;  
-           liWrap[i].sSADiscountType = listCareAppEnroll[0].CC_CL_CD__c; 
-        }        
-        System.debug('liWrap---> '+liWrap);
-        CARE_TransferController.updateSADetails(liWrap,liResp.listTransferTo,  wrapInput);
-        System.debug('listTransferFrom---> '+liResp.listTransferTo);
-        System.debug('listTransferFrom---> '+liResp.listTransferFrom);        
-        Test.stopTest();
+        
+        List<CARE_TransferController.WrapperTransfer> listTranferFrom = new List<CARE_TransferController.WrapperTransfer>();
+        List<CARE_TransferController.WrapperTransfer> listTranferTo= new List<CARE_TransferController.WrapperTransfer>();
+        CARE_TransferController.WrapperTransferInput objTransferInputWrapper = new CARE_TransferController.WrapperTransferInput();
+        list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
+        String sPerId = '0123456003'; 
+        
+        EI_SITE__C EISiteActiveRec = [SELECT ID, SAID_EI__c, Svc_Type_Code_EI__c, Site_Premise_ID_EI__c, Svc_Full_Adr_EI__c,Rate_Schedule_EI__c,Imported_Site_Name_EI__c, SA_Start_Date_EI__c, 
+                                      Care_Start_Date_EI__c, Care_Stop_Date_EI__c, Account_EI__r.CARE_DISCOUNT_TYPE__c, CARE_DISCOUNT_TYPE__c, Billing_Account_ID_EI__c, Account_EI__r.Id
+                                      FROM EI_Site__c WHERE Person_Id_EI__C =:sPerID AND Care_Stop_Date_EI__c >: Date.Today() LIMIT 1];
+        
+        CARE_TransferController.WrapperTransfer objTransferFrom = new CARE_TransferController.WrapperTransfer();
+        
+        objTransferFrom.idSARecID =  EISiteActiveRec.Id;
+        objTransferFrom.sAccountId =  EISiteActiveRec.Billing_Account_ID_EI__c;
+        objTransferFrom.sAccId =  EISiteActiveRec.Account_EI__r.Id;
+        objTransferFrom.sPremiseId =  EISiteActiveRec.Site_Premise_ID_EI__c;
+        objTransferFrom.sSAId =  EISiteActiveRec.SAID_EI__c;
+        objTransferFrom.sSAType =  EISiteActiveRec.Svc_Type_Code_EI__c;
+        objTransferFrom.sDiscountType =  EISiteActiveRec.Account_EI__r.CARE_DISCOUNT_TYPE__c;
+        objTransferFrom.sSADiscountType = EISiteActiveRec.CARE_DISCOUNT_TYPE__c;
+        objTransferFrom.dEndDate = EISiteActiveRec.Care_Stop_Date_EI__c;
+        objTransferFrom.sRateSchedule = EISiteActiveRec.Rate_Schedule_EI__c; 
+        objTransferFrom.dSAStartDate = EISiteActiveRec.SA_Start_Date_EI__c;
+        objTransferFrom.sApplicantName = EISiteActiveRec.Imported_Site_Name_EI__c;
+        
+        listTranferFrom.add(objTransferFrom); 
+        
+        EI_SITE__C EISiteInActiveRec =  [SELECT ID, SAID_EI__c, Svc_Type_Code_EI__c, Site_Premise_ID_EI__c, Svc_Full_Adr_EI__c, Svc_Status_Code_EI__c,Imported_Site_Name_EI__c,SA_Start_Date_EI__c, 
+                                         Care_Start_Date_EI__c, Care_Stop_Date_EI__c, Account_EI__r.CARE_DISCOUNT_TYPE__c, CARE_DISCOUNT_TYPE__c,  Billing_Account_ID_EI__c, Account_EI__r.Id, Rate_Schedule_EI__c  
+                                         FROM EI_Site__c 
+                                         WHERE Person_Id_EI__C =:sPerID And Care_Stop_Date_EI__c <:Date.Today() LIMIT 1];
+        
+        CARE_TransferController.WrapperTransfer objTransferTo = new CARE_TransferController.WrapperTransfer();
+        
+        objTransferTo.idSARecID =  EISiteInActiveRec.Id;
+        objTransferTo.sAccountId =  EISiteInActiveRec.Billing_Account_ID_EI__c;
+        objTransferTo.sAccId =  EISiteInActiveRec.Account_EI__r.Id;
+        objTransferTo.sAddress = EISiteInActiveRec.Svc_Full_Adr_EI__c;
+        objTransferTo.sPremiseId =  EISiteInActiveRec.Site_Premise_ID_EI__c;
+        objTransferTo.sSAId =  EISiteInActiveRec.SAID_EI__c;
+        objTransferTo.sSAType =  EISiteInActiveRec.Svc_Type_Code_EI__c;                  
+        objTransferTo.sSAStatus = EISiteInActiveRec.Svc_Status_Code_EI__c;
+        objTransferTo.sRateSchedule = EISiteInActiveRec.Rate_Schedule_EI__c; 
+        objTransferTo.dSAStartDate = EISiteInActiveRec.SA_Start_Date_EI__c;               
+        objTransferTo.bOverRide = false; 
+        objTransferTo.sSelectedRecord = true;    
+        objTransferTo.bSelectionDisabled = true; 
+        
+        listTranferTo.add(objTransferTo);
+        
+        //Details Selected From UI    
+        CARE_Type__c objCareTpe = [SELECT ID,TYPE_CODE__c, TYPE_DESC__c, TYPE_DESC_LONG__c  FROM CARE_Type__c 
+                                   WHERE TYPE_NO__c ='6037'];
+        objTransferInputWrapper.sComment = objCareTpe.TYPE_DESC_LONG__c ;
+        objTransferInputWrapper.sPerId = sPerId;
+        objTransferInputWrapper.sReason ='Customer Request';
+        
+        System.runAs(user1[0]){  
+            
+            Boolean Result = CARE_TransferController.updateSADetails( listTranferFrom, listTranferTo, objTransferInputWrapper);
+            system.assertEquals(true, Result);
         }
+        Test.stopTest();
+    }
+    
+  
+    
    private static List<CARE_Type__c> createCareTypeRecords(){
         List<CARE_Type__c> lstCareTypes = new List<CARE_Type__c>();
-        
-        CARE_Type__c careType1 = CARE_TestDataFactory.careType();        
-        careType1.TYPE_NO__c = '6034';
-        careType1.TYPE_CODE__c = '7';
-        careType1.TYPE_DESC__c = 'Straight Adjustment';
-        careType1.TYPE_DESC_LONG__c = 'DISCOUNT APPLIED TO ADDITIONAL COMMODITY (GAS AND OR ELECTRIC)';
-        careType1.CATEGORY__c  = 'CARE Enrollment Contact Codes';
-        lstCareTypes.add(careType1);
         
         //Create records in Care Type for displaying in Reason dropdown
         CARE_Type__c careType2 = CARE_TestDataFactory.careType();
         careType2.TYPE_NO__c = '6044';
-        careType2.TYPE_DESC__c = 'Covid-19';
-        careType2.CATEGORY__c  = 'Adjustment Reason';
+        careType2.TYPE_DESC__c = 'Customer Request';
+        careType2.CATEGORY__c  = 'Transfer Reason';
         lstCareTypes.add(careType2);
         
         CARE_Type__c careType3 = CARE_TestDataFactory.careType();
-        careType3.TYPE_NO__c = '6033';
-        careType3.TYPE_DESC__c = 'Customer Satisfaction';
-        careType3.CATEGORY__c  = 'Adjustment Reason';
+        careType3.TYPE_NO__c = '6037';
+        careType3.TYPE_DESC__c = 'DISCOUNT TRANSFER TO DIFFERENT SA <SA ID>';
+         careType3.TYPE_CODE__c = 'TRANSFER';
+        careType3.CATEGORY__c  = 'Account Transfer';
         lstCareTypes.add(careType3);
         
         //Create records in Care Type for Valid Status and Valid Rate Schedule
@@ -196,23 +183,6 @@ public class CARE_TransferControllerTest {
         objAccountRecord.Branch_Code_EI__c = 'Get';
         objAccountRecord.Original_Tree_Level_EI__c = 2.0;
         listAccountRecords.add(objAccountRecord);  
-        
-        Account objAccountRecord1 = PM_EI_TestDataUtility.createAccount();
-        objAccountRecord1.AccountNumber = '1224590385';
-        objAccountRecord1.CARE_DISCOUNT_TYPE__c = 'FERA';
-        objAccountRecord1.Encrypted_Account_Name__c = 'Test Dummy Acct FERA';
-        objAccountRecord1.SAID__c = '8888888888';
-        objAccountRecord1.Phone = '9065231';
-        objAccountRecord1.Discount__c = 'F';
-        objAccountRecord1.Billing_Person_ID_EI__c = '0123456004';
-        objAccountRecord1.Service_Address__c = 'Search1234';
-        objAccountRecord1.SA_Type__c = 'E';
-        objAccountRecord1.Encrypted_Account_Name__c = 'Encrypted';
-        objAccountRecord1.Type = 'Type';
-        objAccountRecord1.Rate__c = 'HAG1A';
-        objAccountRecord1.Branch_Code_EI__c = 'Get';
-        objAccountRecord1.Original_Tree_Level_EI__c = 2.0;
-        listAccountRecords.add(objAccountRecord1);  
         
         return listAccountRecords;
     }
@@ -255,18 +225,17 @@ public class CARE_TransferControllerTest {
         objSite3.Svc_Type_Code_EI__c = 'G';
         listSiteRecords.add(objSite3);    
         
-        //Create record with Invalid status, invalid Rate schedule, Care Stop Date < todays date (for method getAddElecGasForCustomerNoValidDiscountDiscTest)
+        //Create record with valid status, valid Rate schedule, Care Stop Date > todays date
         EI_Site__c objSite4 = CARE_TestDataFactory.createSite(listAccountRecords);
         objSite4.Name='Site4';
-        objSite4.Rate_Schedule_EI__c='EVA';
+        objSite4.Rate_Schedule_EI__c='STANDARD';
         objSite4.Billing_Account_ID_EI__c = '6767676767';
-        objSite4.Imported_Site_Name_EI__c = 'PABLO,JORGE';
-        objSite4.Person_ID_EI__c = '9000000001';
+        objSite4.Imported_Site_Name_EI__c = 'MEDRANO,JOSE';
         objSite4.Site_Premise_ID_EI__c = 'Prem3';
         objSite4.Care_Start_Date_EI__c = date.today()-10;
-        objSite4.Care_Stop_Date_EI__c = date.today()-5;
+        objSite4.Care_Stop_Date_EI__c = date.today()+5;
         objSite4.SAID_EI__c = '6456456456';
-        objSite4.Svc_Status_Code_EI__c = '30';
+        objSite4.Svc_Status_Code_EI__c = 'E';
         listSiteRecords.add(objSite4);
         
         return listSiteRecords;

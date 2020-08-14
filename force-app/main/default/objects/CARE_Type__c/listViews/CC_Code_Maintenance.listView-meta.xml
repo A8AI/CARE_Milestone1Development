@@ -12,9 +12,9 @@
     <columns>IS_ACTIVE__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
-        <field>CATEGORY__c</field>
+        <field>RECORDTYPE</field>
         <operation>equals</operation>
-        <value>CARE Enrollment Contact Codes,CARE Non Profit Contact Codes,CCB Person Level Contact Code and Comments,CCB Person Level Enrollment Contact Codes</value>
+        <value>CARE_Type__c.CC_Code_Maintenance</value>
     </filters>
     <label>CC Code Maintenance</label>
     <sharedTo>

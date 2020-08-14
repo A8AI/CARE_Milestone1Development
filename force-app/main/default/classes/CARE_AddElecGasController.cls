@@ -89,7 +89,6 @@ public class CARE_AddElecGasController {
             
             //Check if the customer is on CARE discount currently or not. If Customer is currently on FERA discount OR no discount, set flag bValidCustomer as false 
             mapActiveSAEnrollment = CARE_UtilityController.getActiveSADetailsForPersonId(sPersonId);
-            system.debug('careEISite.Account_EI__r.CARE_DISCOUNT_TYPE__c ==>'+mapActiveSAEnrollment);
             if(mapActiveSAEnrollment.isEmpty()){
                 bCARECustomerOnly = false;
             }
@@ -182,8 +181,9 @@ public class CARE_AddElecGasController {
             }        
             
         }
-        catch (exception ex){
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());    
+        catch (exception ex){            
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADD_ELECGAS_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADD_ELECGAS_CONTROLLER, '', '', sPersonId, ex);
         }
         return addElecGasWrapperResp;
     }
@@ -194,8 +194,10 @@ public class CARE_AddElecGasController {
         Boolean bStatus;     
         List<CARE_App_Enrolled_SA__c> listCareAppEnrolledSAFrom = new List<CARE_App_Enrolled_SA__c>();
         List<CARE_Type__c> listCareType = new List<CARE_Type__c>();
+        String sPersonId = '';
         
         try{
+            sPersonId = objAddElecGasInput.sPerId;
             
             //get the cc code details for Commodity Addition
             listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_ADD_ELEC_GAS, null, null);
@@ -227,9 +229,7 @@ public class CARE_AddElecGasController {
             careAppObj.CC_CL_CD__c = listAddElecGas[0].sDiscountType; // It will be always 'C', stamp with the Account's discount
             careAppobj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_ADD_ELEC_GAS_SRC;
             
-            Insert careAppObj;            
-            system.debug('careAppObj'+careAppObj);
-            system.debug('listAddElecGas'+listAddElecGas);
+            Insert careAppObj;  
             for (AddElecGasWrapper objAddElecGas : listAddElecGas ){
                 CARE_App_Enrolled_SA__c careEnrolledSAObj = new CARE_App_Enrolled_SA__c(); 
                 
@@ -252,13 +252,14 @@ public class CARE_AddElecGasController {
                 
             }           
             Insert listCareAppEnrolledSAFrom;
-            system.debug('listCareAppEnrolledSAFrom'+listCareAppEnrolledSAFrom);
             bStatus = true;
             
         }
         catch (Exception ex){
-            bStatus = false;
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());     
+            bStatus = false; 
+            
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_ADD_ELECGAS_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_ADD_ELECGAS_CONTROLLER, '', '', sPersonId, ex);
         }
         return bStatus;         
     }

@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 7/10/2020, 1:41:02 PM
+  @Last Modified On   : 8/14/2020, 10:48:36 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
@@ -180,8 +180,9 @@
 
                         <lightning-tab label="PEV" onactive={refreshTabData}>
                             <c-care_-pev-hu s-selected-applicant-name={sSelectedCustName} s-selected-acct-id={sSelectedEIAccountId} 
-                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} 
-                            b-acc-on-probation={sSelectedProbStatus} s-selected-app-id="tab" s-live-call={sHistoryRefresh} view-only="false"></c-care_-pev-hu>
+                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} s-selected-acct-email={sSelectedEIAccountEmail}
+                            b-acc-on-probation={sSelectedProbStatus} s-selected-app-id={sPevAppId} s-live-call={sHistoryRefresh}
+                            b-modal-flag={bCallFromModal}></c-care_-pev-hu>
                         </lightning-tab>
 
 

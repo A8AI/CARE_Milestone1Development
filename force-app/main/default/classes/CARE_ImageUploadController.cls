@@ -9,10 +9,14 @@ Modification Log     :
 *----------------------------------------------------------------------------------------------------------  
 * When                  Who                    Description                                     
 * ---------------------------------------------------------------------------------------------------------  
-* 06/05/2020            SKMN                   Initial Version.
-*                                              CARE Application: 
+* 06/05/2020            SKMN                   Initial Version CARE Application
+* 07/28/2020            SKMN                   1.0: Updated with DataXport URL
 ****************************************************************************************************************************************/
 public class CARE_ImageUploadController {
+    
+    //Constants   
+    private Static final Integer iDataXportTokenCode = 707;
+    private Static final Integer iDataXportUrlCode = 740;
     
     /*********************************WRAPPER CLASS*********************************************************/
     //ContentVersionWrapper
@@ -30,7 +34,8 @@ public class CARE_ImageUploadController {
         @AuraEnabled public String sId{get;set;}
         @AuraEnabled public Integer iImageIndex{get;set;}
         @AuraEnabled public Integer iNumber{get;set;}         
-        @AuraEnabled public String sImageId{get;set;}      
+        @AuraEnabled public String sImageId{get;set;}
+        @AuraEnabled public String sDataXportUrl{get;set;}
     }
     
     /*********************************WRAPPER CLASS*********************************************************/
@@ -55,7 +60,6 @@ public class CARE_ImageUploadController {
                 if(String.isEmpty(imageWrap.sId)){ //For insert
                     careAppImgList.Application__c = idApplication;
                 }
-                //careAppImgList.IMAGE_ID__c = Long.valueOf(imageWrap.sImageId);
                 careAppImgList.EXTERNAL_IMAGE_ID__c = imageWrap.sImageId;
                 
                 listCareAppImgList.add(careAppImgList);
@@ -63,6 +67,9 @@ public class CARE_ImageUploadController {
             
             upsert listCareAppImgList; 
         }catch (Exception ex) {
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         } 
         
@@ -73,25 +80,35 @@ public class CARE_ImageUploadController {
     @AuraEnabled
     public static List<CareAppImageWrapper> getCareAppImageList(Id idApplication){
         List<CareAppImageWrapper> listCareAppImageWrapper =  new List<CareAppImageWrapper>();
+        String sToken = '';
+        String sUrl = '';
         try{            
+            Map<Integer, String> mapDataExportConfig = getDataExportConfig();
+            sToken = mapDataExportConfig.get(iDataXportTokenCode);
+            sUrl = mapDataExportConfig.get(iDataXportUrlCode);            
+            sUrl = sUrl.replace('<\'TOKEN\'>', sToken);
+            
             List<CARE_APP_Image_List__c> listCareAppImgList = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Application__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
                                                                FROM CARE_APP_Image_List__c
                                                                WHERE Application__c =:idApplication
                                                                ORDER by Name];
             for(CARE_APP_Image_List__c careAppImg : listCareAppImgList){
                 CareAppImageWrapper careAppImgWrap =  new CareAppImageWrapper();
-                //careAppImgWrap.sImageId = String.valueOf(careAppImg.IMAGE_ID__c);
                 careAppImgWrap.sImageId = careAppImg.EXTERNAL_IMAGE_ID__c;
                 careAppImgWrap.sId = careAppImg.Id;
+                careAppImgWrap.sDataXportUrl = sUrl.replace('<\'IMAGEID\'>', careAppImg.EXTERNAL_IMAGE_ID__c);
                 
                 listCareAppImageWrapper.add(careAppImgWrap);
                 
-            }
-            return listCareAppImageWrapper;
+            }            
         }
         catch(Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
-        }        
+        }     
+        return listCareAppImageWrapper;
     }
     
     //This method is used to delete the Image ID against the Id of the CARE_APP_Image_List__c
@@ -104,6 +121,9 @@ public class CARE_ImageUploadController {
             
             delete listCareAppImgList;
         } catch(Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         }
     }
@@ -133,8 +153,7 @@ public class CARE_ImageUploadController {
                 createContentDistribution(listConVers);
                 
                 //Create a map to hold the contentversionid and map of the urls
-                Map<String, Map<String, String>> mapConDist = generateMapOfContDist(listConVerIds);            
-                system.debug('mapConDist ==>'+ mapConDist);
+                Map<String, Map<String, String>> mapConDist = generateMapOfContDist(listConVerIds);     
                 
                 for(ContentVersion cv : listConVers){
                     ContentVersionWrapper conVerWrapper = new ContentVersionWrapper();
@@ -146,8 +165,7 @@ public class CARE_ImageUploadController {
                     conVerWrapper.mapContentDocumentUrls = mapConDist.get(cv.Id);
                     
                     listContentVersionWrapper.add(conVerWrapper);
-                }         
-                system.debug('listContentVersionWrapper ==>'+ listContentVersionWrapper);
+                }  
                 return listContentVersionWrapper;
             }
             else {
@@ -155,6 +173,9 @@ public class CARE_ImageUploadController {
             }        
         }
         catch(Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         }        
     }
@@ -168,10 +189,13 @@ public class CARE_ImageUploadController {
             
             delete listContentDoc;
         } catch(Exception ex){
-            //system.debug(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         }
-    }
+    }   
+    
     
     /*********************************PUBLIC METHODS*********************************************************/
     
@@ -222,6 +246,26 @@ public class CARE_ImageUploadController {
             }
         }
         return mapConDist;
+    }
+    
+    //This method is used to return the DataExport Url and Token in a map
+    private static Map<Integer, String> getDataExportConfig(){
+        List<Integer> listSysValCode = new List<Integer>{iDataXportTokenCode, iDataXportUrlCode};
+        Map<Integer, String> mapSysVal = new Map<Integer, String>();
+        try {
+            List<CARE_System_Value__c> listCareSysval = CARE_UtilityController.getCareSystemValue(listSysValCode);
+            
+            for(CARE_System_Value__c sysVal : listCareSysval){
+                mapSysVal.put(Integer.valueOf(sysVal.SYSTEM_VALUE_CODE__c), sysVal.SYSTEM_VALUE__c);
+            }
+            
+        } catch(Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_IMAGE_CONTROLLER, '', '', '', ex);
+            
+            throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
+        }
+        return mapSysVal;
     }
     
     /*********************************PRIVATE METHODS*********************************************************/

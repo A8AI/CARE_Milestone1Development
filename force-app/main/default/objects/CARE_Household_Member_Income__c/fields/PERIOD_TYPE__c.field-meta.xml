@@ -16,9 +16,9 @@
                 <label>Annually</label>
             </value>
             <value>
-                <fullName>BiWeekly</fullName>
+                <fullName>Bi Weekly</fullName>
                 <default>false</default>
-                <label>BiWeekly</label>
+                <label>Bi Weekly</label>
             </value>
             <value>
                 <fullName>Monthly</fullName>
@@ -26,9 +26,9 @@
                 <label>Monthly</label>
             </value>
             <value>
-                <fullName>SemiMonth</fullName>
+                <fullName>Semi Monthly</fullName>
                 <default>false</default>
-                <label>SemiMonth</label>
+                <label>Semi Monthly</label>
             </value>
             <value>
                 <fullName>Weekly</fullName>
@@ -36,9 +36,9 @@
                 <label>Weekly</label>
             </value>
             <value>
-                <fullName>YTD</fullName>
+                <fullName>Year to Date</fullName>
                 <default>false</default>
-                <label>YTD</label>
+                <label>Year to Date</label>
             </value>
             <value>
                 <fullName>Not Applicable</fullName>

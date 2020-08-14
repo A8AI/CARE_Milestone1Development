@@ -17,15 +17,15 @@
     <picklistValues>
         <picklist>FACILITY_TYPE__c</picklist>
         <values>
-            <fullName>AG</fullName>
+            <fullName>Agriculture</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>MF</fullName>
+            <fullName>MFHC</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>NP</fullName>
+            <fullName>Non-Profit</fullName>
             <default>false</default>
         </values>
         <values>

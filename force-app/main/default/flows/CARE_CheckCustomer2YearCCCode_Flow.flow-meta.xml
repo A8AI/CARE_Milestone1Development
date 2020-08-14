@@ -5,7 +5,7 @@
         <name>Set_Cancel_Flag_True</name>
         <label>Set Cancel Flag=True</label>
         <locationX>457</locationX>
-        <locationY>392</locationY>
+        <locationY>1339</locationY>
         <assignmentItems>
             <assignToReference>varIsQualifiedForCancellation_Output</assignToReference>
             <operator>Assign</operator>
@@ -13,13 +13,67 @@
                 <booleanValue>true</booleanValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Loop_CC_Code_After_VH_VHE</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>825</locationX>
+        <locationY>459</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_Customer_CC_Code_After_VH_VHE</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element_1</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>1134</locationX>
+        <locationY>464</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_Customer_CC_Code_After_V_VE_Code</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage(Element)</description>
+        <name>Set_Error_Stage_Element_3</name>
+        <label>Set Error Stage(Element)</label>
+        <locationX>586</locationX>
+        <locationY>463</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Get_Customer_CC_Code_For_Last_2_Years</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <description>Set Out Put Variable =M</description>
         <name>Set_Out_Put_Variable_M</name>
         <label>Set Out Put Variable =M</label>
         <locationX>1461</locationX>
-        <locationY>1245</locationY>
+        <locationY>2192</locationY>
         <assignmentItems>
             <assignToReference>varCustomerHas_M_InLast2Years_Output</assignToReference>
             <operator>Assign</operator>
@@ -36,7 +90,7 @@
         <name>Set_Output_Variable_False</name>
         <label>Set Output Variables=False</label>
         <locationX>1807</locationX>
-        <locationY>1125</locationY>
+        <locationY>2072</locationY>
         <assignmentItems>
             <assignToReference>varCustomerHas_M_InLast2Years_Output</assignToReference>
             <operator>Assign</operator>
@@ -60,7 +114,7 @@
         <name>Set_Output_variable_VH</name>
         <label>Set Output variable =VH</label>
         <locationX>2012</locationX>
-        <locationY>1021</locationY>
+        <locationY>1968</locationY>
         <assignmentItems>
             <assignToReference>varCustomerHas_VH_InLast2Years_Output</assignToReference>
             <operator>Assign</operator>
@@ -78,7 +132,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Set_PEV_Cancel_Flag_True</name>
         <label>Set PEV Cancel Flag=True</label>
         <locationX>1587</locationX>
-        <locationY>278</locationY>
+        <locationY>1225</locationY>
         <assignmentItems>
             <assignToReference>varIsQualifiedForCancellation_Output</assignToReference>
             <operator>Assign</operator>
@@ -95,7 +149,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Set_V_VE_Code_Created_Date</name>
         <label>Set V/VE Code Created Date</label>
         <locationX>1150</locationX>
-        <locationY>1541</locationY>
+        <locationY>2488</locationY>
         <assignmentItems>
             <assignToReference>varVCodeCreatedDate</assignToReference>
             <operator>Assign</operator>
@@ -112,7 +166,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Set_VH_VHE_Code_Created_Date</name>
         <label>Set VH/VHE Code Created Date</label>
         <locationX>2098</locationX>
-        <locationY>1684</locationY>
+        <locationY>2631</locationY>
         <assignmentItems>
             <assignToReference>varVHVHECodeCreatedDate</assignToReference>
             <operator>Assign</operator>
@@ -129,12 +183,12 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Set_VH_VHE_Code_Created_Date2</name>
         <label>Set VH/VHE Code Created Date</label>
         <locationX>922</locationX>
-        <locationY>1696</locationY>
+        <locationY>2643</locationY>
         <assignmentItems>
             <assignToReference>varVHVHECodeCreatedDate</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>Loop_Customer_CC_code.CARE_CI_CC__r.CC_DTTM__c</elementReference>
+                <elementReference>Loop_Customer_CC_code.CC_DTTM__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -145,8 +199,8 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <description>Check if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CERT or a C RANDOM AFTER the V/VE code</description>
         <name>Check_C_AE_CARE_Exists</name>
         <label>Check C AE CARE ,H RAND CERT or RANDOM CERT or a C RANDOM</label>
-        <locationX>1572</locationX>
-        <locationY>50</locationY>
+        <locationX>1574</locationX>
+        <locationY>997</locationY>
         <defaultConnector>
             <targetReference>Loop_CC_Code_After_V_Code</targetReference>
         </defaultConnector>
@@ -207,7 +261,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Check_Customer_CC_code</name>
         <label>Check Customer  CC code</label>
         <locationX>1363</locationX>
-        <locationY>1664</locationY>
+        <locationY>2611</locationY>
         <defaultConnector>
             <targetReference>Set_Output_Variable_False</targetReference>
         </defaultConnector>
@@ -292,7 +346,10 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Check_For_H_RAND_CERT_C_RANDOM</name>
         <label>Check For H RAND CERT /C RANDOM</label>
         <locationX>445</locationX>
-        <locationY>137</locationY>
+        <locationY>1084</locationY>
+        <defaultConnector>
+            <targetReference>Loop_CC_Code_After_VH_VHE</targetReference>
+        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes_HRANDCERT_CRANDOM_Exists</name>
@@ -322,7 +379,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Check_VH_VHE_Code_Exists</name>
         <label>Check VH/VHE Code Exists?</label>
         <locationX>843</locationX>
-        <locationY>666</locationY>
+        <locationY>1613</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_VH_VHE</name>
@@ -345,7 +402,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Is_PEV_Verification</name>
         <label>PEV/HU Verification?</label>
         <locationX>1133</locationX>
-        <locationY>890</locationY>
+        <locationY>1837</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Yes_PEV</name>
@@ -383,7 +440,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Is_V_VE_Code_Exists_In_Last_2_Years</name>
         <label>Is V/VE Code Exists In Last 2 Years?</label>
         <locationX>1135</locationX>
-        <locationY>605</locationY>
+        <locationY>1552</locationY>
         <defaultConnectorLabel>No</defaultConnectorLabel>
         <rules>
             <name>Yes_V_VE_Code_Exists</name>
@@ -403,6 +460,12 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
     </decisions>
     <description>Check Customer 2 Year CC Code and return CC code if customer has DH/DE/VH/CAECARE.</description>
     <formulas>
+        <description>Error Details</description>
+        <name>fxErrorAdditionalInfo</name>
+        <dataType>String</dataType>
+        <expression>&apos;Person Id: &apos;+{!varPersonId_Input}</expression>
+    </formulas>
+    <formulas>
         <description>Date = today - 2 years</description>
         <name>fxTwoYearsBeforeDate</name>
         <dataType>Date</dataType>
@@ -414,8 +477,8 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <description>Loop Customer CC Code After V Code</description>
         <name>Loop_CC_Code_After_V_Code</name>
         <label>Loop Customer CC Code After V Code</label>
-        <locationX>1149</locationX>
-        <locationY>101</locationY>
+        <locationX>1134</locationX>
+        <locationY>1046</locationY>
         <collectionReference>Get_Customer_CC_Code_After_V_VE_Code</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -427,8 +490,8 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Loop_CC_Code_After_VH_VHE</name>
         <label>Loop CC Code After VH/VHE</label>
         <locationX>785</locationX>
-        <locationY>120</locationY>
-        <collectionReference>Get_Customer_CC_Code_After_V_VE_Code</collectionReference>
+        <locationY>1067</locationY>
+        <collectionReference>Get_Customer_CC_Code_After_VH_VHE</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
             <targetReference>Check_For_H_RAND_CERT_C_RANDOM</targetReference>
@@ -439,7 +502,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Loop_Customer_CC_code</name>
         <label>Loop Customer CC code</label>
         <locationX>1148</locationX>
-        <locationY>1117</locationY>
+        <locationY>2064</locationY>
         <collectionReference>Get_Customer_CC_Code_For_Last_2_Years</collectionReference>
         <iterationOrder>Asc</iterationOrder>
         <nextValueConnector>
@@ -466,12 +529,15 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <description>Get Customer CC Code  after V/VE Code in last 2 years</description>
         <name>Get_Customer_CC_Code_After_V_VE_Code</name>
         <label>Get Customer CC Code After V/VE Code</label>
-        <locationX>1143</locationX>
-        <locationY>353</locationY>
+        <locationX>1146</locationX>
+        <locationY>1303</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_CC_Code_After_V_Code</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element_1</targetReference>
+        </faultConnector>
         <filters>
             <field>CC_DTTM__c</field>
             <operator>GreaterThan</operator>
@@ -491,6 +557,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <queriedFields>Id</queriedFields>
         <queriedFields>CARE_CI_CC__c</queriedFields>
         <queriedFields>CC_DTTM__c</queriedFields>
+        <queriedFields>CCB_Contact_Type_No__c</queriedFields>
         <sortField>CC_DTTM__c</sortField>
         <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -500,11 +567,14 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Get_Customer_CC_Code_After_VH_VHE</name>
         <label>Get Customer CC Code After VH/VHE</label>
         <locationX>818</locationX>
-        <locationY>376</locationY>
+        <locationY>1323</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_CC_Code_After_VH_VHE</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element</targetReference>
+        </faultConnector>
         <filters>
             <field>CC_DTTM__c</field>
             <operator>GreaterThan</operator>
@@ -524,6 +594,7 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <queriedFields>Id</queriedFields>
         <queriedFields>CARE_CI_CC__c</queriedFields>
         <queriedFields>CC_DTTM__c</queriedFields>
+        <queriedFields>CCB_Contact_Type_No__c</queriedFields>
         <sortField>CC_DTTM__c</sortField>
         <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -533,11 +604,14 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <name>Get_Customer_CC_Code_For_Last_2_Years</name>
         <label>Get Customer CC Code For Last 2 Years</label>
         <locationX>633</locationX>
-        <locationY>1123</locationY>
+        <locationY>2070</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Loop_Customer_CC_code</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Element_3</targetReference>
+        </faultConnector>
         <filters>
             <field>CC_DTTM__c</field>
             <operator>GreaterThanOrEqualTo</operator>
@@ -557,18 +631,51 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <queriedFields>Id</queriedFields>
         <queriedFields>CARE_CI_CC__c</queriedFields>
         <queriedFields>CC_DTTM__c</queriedFields>
+        <queriedFields>CCB_Contact_Type_No__c</queriedFields>
         <sortField>CC_DTTM__c</sortField>
         <sortOrder>Desc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <start>
-        <locationX>57</locationX>
-        <locationY>1063</locationY>
+        <locationX>7</locationX>
+        <locationY>2040</locationY>
         <connector>
             <targetReference>Get_Customer_CC_Code_For_Last_2_Years</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
+    <subflows>
+        <description>Log Exception</description>
+        <name>Log_Exception</name>
+        <label>Log Exception</label>
+        <locationX>838</locationX>
+        <locationY>50</locationY>
+        <flowName>CARE_Exception_Logging_Flow</flowName>
+        <inputAssignments>
+            <name>varErrorAdditionalInfo_Input</name>
+            <value>
+                <elementReference>fxErrorAdditionalInfo</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowExceptionMessage_Input</name>
+            <value>
+                <elementReference>$Flow.FaultMessage</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varFlowName_Input</name>
+            <value>
+                <stringValue>CARE Check Customer 2 Year CC Code Flow</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <name>varStageName_Input</name>
+            <value>
+                <elementReference>varStageName</elementReference>
+            </value>
+        </inputAssignments>
+    </subflows>
     <variables>
         <description>Is called from HU Verification Process</description>
         <name>IsHUVerification</name>
@@ -630,6 +737,14 @@ if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CE
         <dataType>String</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>Error Stage (Element)</description>
+        <name>varStageName</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
         <isOutput>false</isOutput>
     </variables>
     <variables>

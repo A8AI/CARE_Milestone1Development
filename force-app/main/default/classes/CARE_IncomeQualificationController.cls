@@ -22,6 +22,7 @@ public with sharing class CARE_IncomeQualificationController {
        Integer iNumOfHouseholds=listInputValues[0].iNoOfHouseholds;
        Decimal dTotalIncome= listInputValues[0].dTotalIncome;       
        String sEnrollmentType = CARE_Constants.CARE_INCOME_NOT_QUALIFIED;
+        
        try{
         //Get Input values from Flow
                
@@ -79,8 +80,9 @@ public with sharing class CARE_IncomeQualificationController {
         listResults.add(outPut);       
        
        }
-        catch (Exception ex) {
-            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
+        catch (Exception ex) {         
+       EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_IncomeQualificationController',ex));
+       CARE_UtilityController.sendExceptionEmail('CARE_IncomeQualificationController', '','', '', ex);
         } 
         return listResults;
     } 

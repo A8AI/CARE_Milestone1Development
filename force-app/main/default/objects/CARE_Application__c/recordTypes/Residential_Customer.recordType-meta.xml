@@ -95,11 +95,11 @@
     <picklistValues>
         <picklist>CARE_Preferred_Method_of_Communication__c</picklist>
         <values>
-            <fullName>Email%28By entering your email address%2C you are authorizing PG%26E to send you information from time to time regarding your PG%26E utility service and PG%26E programs and services that may be available to you%2E%29</fullName>
+            <fullName>Email</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>Mail %28billing address%29%2C</fullName>
+            <fullName>Mail</fullName>
             <default>false</default>
         </values>
         <values>
@@ -107,54 +107,7 @@
             <default>false</default>
         </values>
         <values>
-            <fullName>Text%28Note%3A Message and data rates may apply%2E%29</fullName>
-            <default>false</default>
-        </values>
-    </picklistValues>
-    <picklistValues>
-        <picklist>CARE_Public_Assistance_Programs__c</picklist>
-        <values>
-            <fullName>Bureau of Indian Affairs General Assistance</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>CalFresh%2FSNAP%28Food Stamps%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>CalWorks%28TANF%29 or Tribal TANF</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Head Start Income Eligible %28Tribal Only%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Low Income Home Energy Assistance Program %28LIHEAP%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Medi-Cal for Families%28Healthy Families A%26B%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Medicaid%2FMedi-Cal %28age 65 and over%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Medicaid%2FMedi-Cal %28under age 65%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>National School Lunch Program%28NSLP%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Supplemental Security Income%28SSI%29</fullName>
-            <default>false</default>
-        </values>
-        <values>
-            <fullName>Women Infants and Children %28WIC%29</fullName>
+            <fullName>Text</fullName>
             <default>false</default>
         </values>
     </picklistValues>
@@ -205,6 +158,10 @@
         </values>
         <values>
             <fullName>Faxed%2FLetter Mailed - In</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Other</fullName>
             <default>false</default>
         </values>
         <values>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Completed_Force_com_Enrollments</fullName>
+    <columns>NAME</columns>
+    <columns>SOURCE_CHANNEL_TYPE__c</columns>
+    <columns>ENROLLMENT_TYPE__c</columns>
+    <columns>APPLICATION_TYPE__c</columns>
+    <columns>ACCT_ID__c</columns>
+    <columns>ENTRY_DATE_CARE1__c</columns>
+    <columns>PROCESSED_DATE__c</columns>
+    <columns>ENROLLMENT_STATUS__c</columns>
+    <columns>ERROR_CODE__c</columns>
+    <columns>ERROR_MESSAGE__c</columns>
+    <columns>EXTERNAL_ID__c</columns>
+    <columns>FILE_NAME__c</columns>
+    <columns>SCANDATE__c</columns>
+    <columns>DOC_RECEIVED_DATE__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>SOURCE_CHANNEL_TYPE__c</field>
+        <operation>equals</operation>
+        <value>CARE Force.com</value>
+    </filters>
+    <filters>
+        <field>ENROLLMENT_TYPE__c</field>
+        <operation>equals</operation>
+        <value>ENROLLMENT</value>
+    </filters>
+    <filters>
+        <field>ENROLLMENT_STATUS__c</field>
+        <operation>equals</operation>
+        <value>Completed</value>
+    </filters>
+    <label>Completed Force.com Enrollments</label>
+    <language>en_US</language>
+</ListView>

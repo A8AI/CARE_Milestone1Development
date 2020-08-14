@@ -65,7 +65,7 @@ public class CARE_ReinstateControllerTest {
         insert listCCBatch;
         
         //Create CARE CC BATCH DETAIL
-        List<CARE_CC_Batch_Detail__c>listCCBatchDetail = createCARECCBatchDetailRecords(listAccount,listCareApp,listCC,listCCBatch);
+        List<CARE_CC_Batch_Detail__c>listCCBatchDetail = createCARECCBatchDetailRecords(listAccount,listCareApp,listCC,listCCBatch,listCareAppEnrolledSA);
         insert listCCBatchDetail;
     }
     
@@ -271,13 +271,14 @@ public class CARE_ReinstateControllerTest {
     }
     
         //create Care CC Batch detail Records
-    private static List<CARE_CC_Batch_Detail__c> createCARECCBatchDetailRecords( List<Account>listAccountRecords, List<CARE_Application__c>listCareAppRecords , List<CARE_CI_CC__c> listCCRecords, List<CARE_CC_Batch__c> listCCBatch){
+    private static List<CARE_CC_Batch_Detail__c> createCARECCBatchDetailRecords( List<Account>listAccountRecords, List<CARE_Application__c>listCareAppRecords , List<CARE_CI_CC__c> listCCRecords, List<CARE_CC_Batch__c> listCCBatch, List <CARE_App_Enrolled_SA__c> listCareAppEnrolledSARecords){
         List <CARE_CC_Batch_Detail__c> listCareRecords = new List<CARE_CC_Batch_Detail__c>();
         
         CARE_CC_Batch_Detail__c objRecord = new CARE_CC_Batch_Detail__c();
         objRecord.APPLICATION__c = listCareAppRecords[0].Id;
         objRecord.CARE_CI_CC__c = listCCRecords[0].Id;
         objRecord.CARE_CC_Batch__c = listCCBatch[0].Id;
+        objRecord.CARE_App_Enrolled_SA__c = listCareAppEnrolledSARecords[0].Id;
         objRecord.CC_DTTM__c = Date.today();
         objRecord.ACCT_ID__c = '1234567890';
         objRecord.DETAIL_STATUS_CODE__c = 'Validate';
@@ -329,6 +330,20 @@ public class CARE_ReinstateControllerTest {
         objCareTypeForCCWithOutAdjsutment.TYPE_DESC_LONG__c = 'CARE REINSTATED REGULAR CUSTOMER';
         listCareType.add(objCareTypeForCCWithOutAdjsutment);
         
+        CARE_Type__c objCareTypeForCCWithOutAdjustmentESACOMP = CARE_TestDataFactory.careType();
+        objCareTypeForCCWithOutAdjustmentESACOMP.TYPE_NO__c = CARE_Constants.CARE_CC_REINSTATE_NO_ADJUSTMENT_ESA_COMP;
+        objCareTypeForCCWithOutAdjustmentESACOMP.TYPE_CODE__c = '7';
+        objCareTypeForCCWithOutAdjustmentESACOMP.TYPE_DESC__c = 'Reinstatement HU';
+        objCareTypeForCCWithOutAdjustmentESACOMP.TYPE_DESC_LONG__c = 'CARE REINSTATED';
+        listCareType.add(objCareTypeForCCWithOutAdjustmentESACOMP);
+        
+        CARE_Type__c objCareTypeForCCWithAdjustmentESACOMP = CARE_TestDataFactory.careType();
+        objCareTypeForCCWithAdjustmentESACOMP.TYPE_NO__c = CARE_Constants.CARE_CC_REINSTATE_ADJUSTMENT_ESA_COMP;
+        objCareTypeForCCWithAdjustmentESACOMP.TYPE_CODE__c = '7';
+        objCareTypeForCCWithAdjustmentESACOMP.TYPE_DESC__c = 'Reinstatement HU with Adjustment';
+        objCareTypeForCCWithAdjustmentESACOMP.TYPE_DESC_LONG__c = 'CARE REINSTATED AND ADJUSTED.';
+        listCareType.add(objCareTypeForCCWithAdjustmentESACOMP);
+                
         CARE_Type__c objCareTypeForReason = CARE_TestDataFactory.careType();        
         objCareTypeForReason.CATEGORY__c = 'Reinstatement Reason';
         objCareTypeForReason.TYPE_DESC__c = 'Income Proof Provided';

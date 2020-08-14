@@ -23,11 +23,11 @@
             <tr> <td>Need Name Change?&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</td><td><lightning-input disabled={bModalFlag} type="checkbox" data-id="checkboxnncValField" onclick={handleApplicantNameSet} name="nnc" checked={EnrollObjFields.nncValueCB} onfocusout={handleChange}></lightning-input></td></tr>
      
             <!--<lightning-input type="checkbox" label="Is Cert" name="isCert" class="tdl" onblur={handleBlurChange}></lightning-input>-->
-            <tr> <td class="tdr">Is Cert?&nbsp;&nbsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</td><td > <lightning-input disabled={bModalFlag} type="checkbox" data-id="checkboxisCertField" name="isCert" class="tdl" checked={EnrollObjFields.isCertValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td class="tdr">Is Recert?&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;</td><td > <lightning-input disabled={bModalFlag} type="checkbox" data-id="checkboxisCertField" name="isCert" class="tdl" checked={EnrollObjFields.isCertValueCB} onfocusout={handleChange}></lightning-input></td></tr>
             <tr> <td>Adult<abbr class="slds-required" title="required">*</abbr> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; </td><td><lightning-input type="number" disabled={bModalFlag} data-id="textadultField" style="width: 50px" name="adult" class="threeDigit" value={EnrollObjFields.adultValue} onfocusout={handleChange}></lightning-input></td></tr>
             <tr> <td>Children (under 18) &nbsp;&nbsp;</td><td><lightning-input type="number" disabled={bModalFlag} data-id="textChildField" name="children" style="width: 50px" class="threeDigit" value={EnrollObjFields.childrenValue} onfocusout={handleChange}></lightning-input></td></tr>
             <tr> <td>Is Signed?&emsp;&emsp;&emsp;&emsp;&emsp;</td><td> <lightning-input type="checkbox" disabled={bModalFlag} data-id="checkboxisSignField" name="isSigned" checked={EnrollObjFields.isSignedValueCB} onfocusout={handleChange}></lightning-input></td></tr>
-            <tr> <td>Request Drop? &nbsp;&nbsp;&nbsp;&emsp;&emsp;</td><td> <lightning-input type="checkbox" disabled={bModalFlag} data-id="checkboxreqDropField" name="reqDrop" checked={EnrollObjFields.requestDropValueCB} onfocusout={handleChange}></lightning-input></td></tr>
+            <tr> <td>Request Drop? &nbsp;&nbsp;&nbsp;&emsp;&emsp;</td><td> <lightning-input type="checkbox" disabled={bRequestDrop} data-id="checkboxreqDropField" name="reqDrop" checked={EnrollObjFields.requestDropValueCB} onfocusout={handleChange}></lightning-input></td></tr>
             <!--<tr> <td>Guardian/Power Of Attorney? &nbsp;<input type="checkbox" ></input></td></tr>-->
         <!--<template if:true={EnrollObjFields.nncValueCB}>-->
         <!--</template>--> 
@@ -130,7 +130,7 @@
         <table style="width: 365px; border: 1px solid black;">
             <tr> <td class="header">3. Result</td><td></td></tr>
             <tr style="height: 30px"> <td colspan="2" style="padding:5px;"><lightning-textarea disabled={bModalFlag} readonly value={careResccDesc}></lightning-textarea></td></tr>
-            <tr> <td>Is Adjustment?&emsp;<lightning-input type="checkbox" data-id="isAdjustField" checked={EnrollObjFields.isAdjustValue} disabled={checkAcceptedApplication} onfocusout={handleChange}></lightning-input></td><td>Adjustment Reason:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" disabled={isAdjustmentReasonCheck} data-id="textAdjustField" value={EnrollObjFields.adjustReasonValue} placeholder="Select an option" options={adjustReasonList} style="width: 116px" onfocusout={handleChange} ></lightning-combobox></td></tr>
+            <tr> <td>Is Adjustment?&emsp;<lightning-input type="checkbox" data-id="isAdjustField" checked={EnrollObjFields.isAdjustValue} disabled={checkAcceptedApplication} onclick={handleChange}></lightning-input></td><td>Adjustment Reason:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" disabled={isAdjustmentReasonCheck} data-id="textAdjustField" value={EnrollObjFields.adjustReasonValue} placeholder="Select an option" options={adjustReasonList} style="width: 116px" onchange={handleChange} ></lightning-combobox></td></tr>
             <!--<tr> <td>No Date:&emsp;&emsp;<lightning-input type="date" date-style="short" style="width: 130px"></lightning-input></td><td>Retro No Date:&emsp;&emsp;&emsp;<lightning-input type="date" date-style="short" disabled={isAdjustmentCheck} data-id="retroNField" style="width: 130px" onfocusout={handleChange}></lightning-input></td></tr>
             <tr> <td>CC&B SA Start Date:&emsp;&emsp;<lightning-input type="date" date-style="short" variant="label-hidden" style="width: 130px"></lightning-input></td><td>Adjustment Reason:&nbsp;<lightning-combobox label="Channel/Form Type" variant="label-hidden" disabled={isAdjustmentCheck} data-id="textAdjustField" value={value} placeholder="Select an option" options={adjustOptions} style="width: 116px" onfocusout={handleChange} ></lightning-combobox></td></tr>
             <tr> <td>Last Bill Date:&emsp;<lightning-input type="date" date-style="short" style="width: 130px"></lightning-input></td><td>SA ID:&nbsp;<lightning-input type="text" style="width: 130px"></lightning-input></td></td></tr>-->
@@ -148,7 +148,7 @@
     <!--<div class="slds-grid slds-wrap" if:true={careSAData}>-->
     
         <!--SA Related DataTable-->
-        <div if:false={isDataTableEditable}>
+        <div if:true={checkDataTableNoEdit}>
             <template if:true={careResccDesc}>
                 <div class="slds-table slds-table_bordered slds-table_resizable-cols slds-p-top_medium" style="height: 12rem;">
                     <lightning-datatable data={careSAData} columns={columns} key-field="Id"
@@ -159,7 +159,7 @@
             </template>
         </div>
 
-        <div if:true={isDataTableEditable}>
+        <div if:false={checkDataTableNoEdit}>
             <template if:true={careResccDesc}>
                 <div class="slds-table slds-table_bordered slds-table_resizable-cols slds-p-top_medium" style="height: 12rem;">
                     <lightning-datatable data={careSAData} columns={columnsWithEdit} key-field="Id"

@@ -39,13 +39,13 @@ public class CARE_SendAppController {
         @AuraEnabled public String sBillingAccId{get;set;}
         @AuraEnabled public String sApplicantName{get;set;}         
     }   
-      
+    
     /******************************************WRAPPER CLASSES*************************************** */
     
     /******************************************PUBLIC METHODS*************************************** */
     
     @AuraEnabled
-    public static SendAppWrapper getSendAppDetails(){
+    public static SendAppWrapper getSendAppDetails(String sPersonId){
         List<CARE_Type__c> listCareType = new List<CARE_Type__c>();
         SendAppWrapper sendAppWrapper = new SendAppWrapper();
         try{
@@ -59,8 +59,9 @@ public class CARE_SendAppController {
             sendAppWrapper.bSuccess = false;
             sendAppWrapper.sErrorCode = CARE_Constants.CARE_APPLICATION_ERROR;
             sendAppWrapper.sErrorMessage = ex.getMessage();
-            //system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());    
-            //throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());   
+            
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_SEND_APP_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_SEND_APP_CONTROLLER, '', '', sPersonId, ex);
         }
         
         return sendAppWrapper;
@@ -78,15 +79,7 @@ public class CARE_SendAppController {
             User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
             
             Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
-            /* Not required
-//Check if the Person Id has valid SA and the customer is not on CARE/FERA
-mapValidSAForPerId = CARE_UtilityController.getActiveSADetailsForPersonId(sPerId);
-system.debug('mapSAForPerId==>'+ mapValidSAForPerId);
-
-//If the map is empty, then it means the customer has no CARE/FERA enrollment for any of the valid SAs,
-//hence insert a record in Care_Application__c, else return error
-if(mapValidSAForPerId.isEmpty()){
-*/
+            
             //Get the CC Code for 'A' for stamping
             List<CARE_Type__c> listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_SEND_APP, null, null);
             
@@ -105,6 +98,7 @@ if(mapValidSAForPerId.isEmpty()){
             careApp.CCB_CONTACT_DESC__c= listCareType[0].TYPE_DESC__c;
             careApp.CCB_CONTACT_COMMENT__c = listCareType[0].TYPE_DESC_LONG__c.replace(CARE_Constants.CARE_LAN_ID_PLACEHOLDER, (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '');
             careApp.ENROLLMENT_TYPE__c = 'OTHER'; //ENROLLMENT, PEV, PEV NOTICE, OTHER
+            //careApp.ENROLLMENT_TYPE__c = null;
             //careApp.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
             //careApp.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other  
             careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_REGULAR_APP;
@@ -113,20 +107,15 @@ if(mapValidSAForPerId.isEmpty()){
             insert careApp; 
             
             sendAppWrapper.bSuccess = true;
-        }catch (Exception ex) {
-            system.debug('ex==>'+ex);
+        }
+        catch (Exception ex) {
             sendAppWrapper.bSuccess = false;
             sendAppWrapper.sErrorCode = CARE_Constants.CARE_APPLICATION_ERROR;
             sendAppWrapper.sErrorMessage = ex.getMessage();
-            //throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
-        }    
-        /*}
-else{
-//Return error message with code
-sendAppWrapper.bSuccess = false;
-sendAppWrapper.sErrorCode = 'Customer not eligible';
-sendAppWrapper.sErrorMessage = 'Customer already has CARE/FERA discount in any valid SA.';
-}*/
+            
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_SEND_APP_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_SEND_APP_CONTROLLER, '', '', objSendApp.sPerId, ex);            
+        }  
         return sendAppWrapper;
     }
     

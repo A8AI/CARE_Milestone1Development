@@ -9,7 +9,7 @@ import DROP_SOURCE_TYPE from '@salesforce/schema/CARE_Application__c.DROP_SOURCE
 //import custom labels
 import DropCaseourceValidationMsg from '@salesforce/label/c.CARE_DropCaseourceValidationMsg';
 import TransactionSuccessMsg from '@salesforce/label/c.CARE_TransactionSuccessMsg';
-import NotEligibleMsg from '@salesforce/label/c.CARE_NotEligibleMsg';
+import NotEligibleMsg from '@salesforce/label/c.CARE_NotEligiblePersonMsg';
 import DropValidationMsg from '@salesforce/label/c.CARE_DropValidationMsg';
 import DropInvalidCaseIDMsg from '@salesforce/label/c.CARE_DropInvalidCaseIDMsg';
 import DropEmailSourceValidationMsg from '@salesforce/label/c.CARE_DropEmailSourceValidationMsg';

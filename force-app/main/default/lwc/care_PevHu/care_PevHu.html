@@ -1,0 +1,518 @@
+<!--
+  @File Name          : care_PevHu.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 8/10/2020, 4:38:41 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    6/29/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+    <!-- Spinner -->
+    <div if:true={showLoadingSpinner}>
+        <lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+    </div>
+    
+<div style="overflow-x:auto;">
+    <table>
+        <tr>
+            <td>  
+                <table>
+                    <tr style="vertical-align: top;">
+                        <!--Section 1. Household Information-->
+                        <td>
+                            <div class="slds-grid slds-wrap">
+                                <table style="width: 283px; border: 1px solid black;">
+                                    <tr>
+                                        <td class="header" colspan="2">1. Household Information</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Applicant Name:</td>
+                                        <td>{objPEVFields.sApplicantName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adults:<abbr class="slds-required" title="required">*</abbr></td>
+                                        <td>
+                                            <lightning-input disabled={bModalFlag} type="number" data-id="textadultField" style="width: 50px"
+                                                variant="label-hidden" class="threeDigit" value={objPEVFields.iAdultValue}
+                                                min="1" message-when-range-underflow="Enter 1 or more" required
+                                                message-when-value-missing={label.CARE_ValidValValidationMsg}
+                                                message-when-bad-input="Enter numeric value" onfocusout={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Children (Under 18):</td>
+                                        <td>
+                                            <lightning-input disabled={bModalFlag} type="number" data-id="textChildField" style="width: 50px"
+                                                variant="label-hidden" class="threeDigit" value={objPEVFields.iChildrenValue}
+                                                min="0" message-when-range-underflow="Enter 0 or more"
+                                                message-when-bad-input="Enter numeric value" onfocusout={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td># With Income:<abbr class="slds-required" title="required">*</abbr></td>
+                                        <td>
+                                            <lightning-input disabled={bModalFlag} type="number" data-id="textNoIncomeField" style="width: 50px"
+                                                variant="label-hidden" class="threeDigit" value={objPEVFields.iNoWithIncome}
+                                                min="1" message-when-range-underflow="Enter 1 or more" required
+                                                message-when-value-missing={label.CARE_ValidValValidationMsg}
+                                                message-when-bad-input="Enter numeric value" onfocusout={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Requested Drop?</td>
+                                        <td>
+                                            <lightning-input type="checkbox" disabled={bModalFlag} variant="label-hidden"
+                                                data-id="checkboxIsReqDropField" checked={objPEVFields.bRequestedDrop}
+                                                onchange={handleChange}></lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>No Attachment?</td>
+                                        <td>
+                                            <lightning-input type="checkbox" disabled={bModalFlag} variant="label-hidden"
+                                                data-id="checkboxNoAttachField" checked={objPEVFields.bNoAttachment}
+                                                onchange={handleChange}></lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>COC Code:</td>
+                                        <td>
+                                            <lightning-input type="text" disabled={bModalFlag} data-id="textCocField"
+                                                maxlength="4" message-when-too-long={label.CARE_COCLengthValidationMsg} 
+                                                variant="label-hidden" style="width: 144px" value={objPEVFields.sCocCode}
+                                                onfocusout={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td>Phone No.:</td>
+                                        <td>
+                                            <lightning-input type="text" style="width: 144px"
+                                                variant="label-hidden" data-id="textPhoneField" value={maskedPhone}
+                                                placeholder="(###) ###-####" pattern="^\(\d{3}\)\s\d{3}-\d{4}$"
+                                                message-when-pattern-mismatch="Not a valid phone number"
+                                                onchange={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr> -->
+                                    <tr>
+                                        <td>E-Mail:</td>
+                                        <td>
+                                            <lightning-input disabled={bModalFlag} type="email" style="width: 144px"
+                                                variant="label-hidden" data-id="emailField" value={objPEVFields.sEmail}
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" onfocusout={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>On Probation?</td>
+                                        <td>
+                                            <lightning-input type="checkbox" variant="label-hidden" disabled
+                                                checked={objPEVFields.bOnProbation}></lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td if:true={bHU}>HU Form?</td>
+                                        <td if:false={bHU}>PEV Form?</td>
+                                        <td>
+                                            <lightning-input type="checkbox" disabled={bModalFlag} variant="label-hidden"
+                                                data-id="checkboxPEVFormField" checked={objPEVFields.bPevForm}
+                                                onchange={handleChange}></lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Process Date:</td>
+                                        <td>
+                                            <lightning-formatted-date-time value={objPEVFields.sProcessDate} month="2-digit"
+                                                day="2-digit" year="numeric"></lightning-formatted-date-time>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Received Date:<abbr class="slds-required" title="required">*</abbr></td>
+                                        <td>
+                                            <lightning-input disabled={bModalFlag} type="date" date-style="short"
+                                                variant="label-hidden" data-id="dateReceiveField"
+                                                value={objPEVFields.sReceiveDate} style="width: 144px" required
+                                                message-when-value-missing="Select date" onchange={handleChange}>
+                                            </lightning-input>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Annual Income:</td>
+                                        <td>{label.CARE_CurrencySymbol} {objPEVFields.iAnnualInc}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total Persons in Household:</td>
+                                        <td>{objPEVFields.iTotalPersons}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+
+                        <!--Section 2, 3, 4, SA Datatable-->
+                        <td>
+                            <table style="float:left">
+                                <!--Section 2, 3, 4-->
+                                <tr style="vertical-align: top;">
+                                    <!--Section 2. Income Information-->
+                                    <td style="width: 681px;">
+                                        <table style="border: 1px solid black;">
+                                            <!--Section Button groups-->
+                                            <tr>
+                                                <td class="header">
+                                                    <div class="slds-grid">
+                                                        <div if:true={bModalFlag} class="slds-col slds-size_4-of-12">2. Income Information</div>
+                                                        <div if:false={bModalFlag} class="slds-col slds-size_3-of-12">2. Income Information</div>
+                                                        <div if:false={bModalFlag} class="slds-col slds-size_9-of-12">
+                                                                <!-- Button group: simple buttons -->
+                                                                <lightning-button-group>
+                                                                    <lightning-button label="Save" name="save" icon-name="utility:save"
+                                                                        disabled={checkAcceptedApplication} onclick={handleSave}></lightning-button>
+                                                                    <lightning-button if:false={showViewOnly} label="Add" icon-name="utility:add" 
+                                                                    disabled={checkAcceptedApplication} onclick={handleAdd}>
+                                                                    </lightning-button>
+                                                                    <lightning-button label="Verify" name="verify" icon-name="utility:cases"
+                                                                        disabled={checkAcceptedApplication} onclick={handleSave}></lightning-button>
+                                                                    <lightning-button label="Accept" name="accept" icon-name="utility:check" 
+                                                                        disabled={checkResultDesc} onclick={handleSave}></lightning-button>
+                                                                    <lightning-button label="Cancel" icon-name="utility:cancel_file_request"
+                                                                        disabled={checkAppIdORAccepted} onclick={handleCancel}></lightning-button>
+                                                                </lightning-button-group>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <!--Section Income Person table-->
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        <!-- style="height: 200px;"-->
+                                                        <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                                                            <thead>
+                                                                <tr class="slds-line-height_reset">
+                                                                    <th class="" scope="col">
+                                                                        <div class="slds-truncate">Number</div>
+                                                                    </th>
+                                                                    <th class="" scope="col" style="width: 222px;">
+                                                                        <div class="slds-truncate">Person Name<abbr
+                                                                                class="slds-required" title="required">*</abbr>
+                                                                        </div>
+                                                                    </th>
+                                                                    <th class="" scope="col">
+                                                                        <div class="slds-truncate">Annual Income</div>
+                                                                    </th>
+                                                                    <th class="" scope="col">
+                                                                        <div class="slds-truncate">Status</div>
+                                                                    </th>
+                                                                    <th class="" scope="col">
+                                                                        <div class="slds-truncate"># Docs</div>
+                                                                    </th>
+                                                                    <th class="" scope="col">
+                                                                    </th>
+                                                                    <th if:false={showViewOnly} class="" scope="col">
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <template for:each={incomeInfoList} for:item="incomeInfo"
+                                                                    for:index="index">
+                                                                    <tr key={incomeInfo.iIncomeIndex}>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: center;">
+                                                                            <div class="slds-truncate">{incomeInfo.sNumber}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: center;">
+                                                                            <div if:true={showViewOnly}>
+                                                                                <!-- <lightning-input name='personName' type='text' variant="label-hidden"
+                                                                                    value={incomeInfo.sPersonName} key={incomeInfo.iIncomeIndex}
+                                                                                    data-id={incomeInfo.iIncomeIndex} data-api="perName" read-only>
+                                                                                </lightning-input> -->
+                                                                                {incomeInfo.sPersonName}
+                                                                            </div>
+                                                                            <div if:false={showViewOnly}
+                                                                                style="text-align: left;">
+                                                                                <lightning-input name='personName' type='text'
+                                                                                    variant="label-hidden"
+                                                                                    value={incomeInfo.sPersonName}
+                                                                                    key={incomeInfo.iIncomeIndex}
+                                                                                    data-id={incomeInfo.iIncomeIndex}
+                                                                                    data-api="perName" required
+                                                                                    message-when-value-missing={label.CARE_PersonNameValidationMsg}
+                                                                                    autocomplete="off"
+                                                                                    onblur={handlePersonChange}>
+                                                                                </lightning-input>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: right;">
+                                                                            <div class="slds-truncate">
+                                                                                {label.CARE_CurrencySymbol}
+                                                                                {incomeInfo.dEstAnnSal}</div>
+                                                                        </td>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: center;">
+                                                                            <div class="slds-truncate">
+                                                                                {incomeInfo.sIncSrcStatus}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: center;">
+                                                                            <div class="slds-truncate">{incomeInfo.iNoDocs}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td title="" class="slds-truncate"
+                                                                            style="text-align: center;">
+                                                                            <button if:true={incomeInfo.sId} name="uploadDoc" class="slds-button" title={getDocEntryIcon.title}>
+                                                                                <span onclick={handleDocumentEntry}>
+                                                                                    <lightning-icon
+                                                                                        icon-name={getDocEntryIcon.iconName} size="x-small"
+                                                                                        data-id={incomeInfo.iIncomeIndex} data-api={incomeInfo.sId} data-name={incomeInfo.sPersonName}>
+                                                                                    </lightning-icon>
+                                                                                </span>
+                                                                            </button>
+                                                                        </td>
+                                                                        <td if:false={showViewOnly} title=""
+                                                                            class="slds-truncate" style="text-align: center;">
+                                                                            <button name="delete" class="slds-button"
+                                                                                title="Delete">
+                                                                                <span onclick={handleDelete}>
+                                                                                    <lightning-icon icon-name="action:delete"
+                                                                                        size="x-small" data-id={incomeInfo.iIncomeIndex}
+                                                                                        data-api={incomeInfo.sId}>
+                                                                                    </lightning-icon>
+                                                                                </span>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </template>
+                                                            </tbody>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td></td>
+                                                                    <td style="text-align: right; font-weight:bold;">Total
+                                                                        Salary</td>
+                                                                    <td style="text-align: right; font-weight:bold;">
+                                                                        {label.CARE_CurrencySymbol} {objPEVFields.iAnnualInc}
+                                                                    </td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td if:false={showViewOnly}></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                        <div
+                                            class="slds-p-right_x-small slds-grid slds-gutters slds-p-top_medium slds-float_right">
+                                            <table>
+                                                <tr>
+                                                    <td if:false={bModalFlag}>
+                                                        <c-care_-communication s-selected-per-id={sSelectedPerId} s-selected-acc-id={sSelectedAcctId}> </c-care_-communication>
+                                                    </td>
+                                                    <td if:false={checkApplicationId}>
+                                                        <lightning-button label="Image ID" title="Image ID" disabled class="slds-m-left_x-small"></lightning-button>
+                                                    </td>
+                                                    <td if:true={checkApplicationId}>
+                                                        <div if:false={bModalFlag}>
+                                                            <div if:false={checkAcceptedApplication}>
+                                                                <c-care_-image-upload record-id={sGeneratedCareAppId} view-only="false"></c-care_-image-upload>
+                                                            </div>
+                                                            <div if:true={checkAcceptedApplication}>
+                                                                <c-care_-image-upload record-id={sGeneratedCareAppId} view-only="true"></c-care_-image-upload>
+                                                            </div>
+                                                        </div>
+                                                        <div if:true={bModalFlag}>
+                                                            <c-care_-image-upload record-id={sGeneratedCareAppId} view-only="true"></c-care_-image-upload>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <!--Section 3. Result, 4. Comments:-->
+                                    <td>
+                                        <!--Section 3. Result-->
+                                        <table style="border: 1px solid black;width:300px">
+                                            <tr>
+                                                <td style="display: float" colspan="2">
+                                                    <div class='c-sectionheader'>3. Result</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="display: float" colspan="2">
+                                                    <lightning-textarea disabled variant="label-hidden"
+                                                        data-id="textResultField" value={objPEVFields.sCcbContactDesc}>
+                                                    </lightning-textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status:</td>
+                                                <td><b>{objPEVFields.sApplicationStatus}</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Contact Code:</td>
+                                                <td><b>{objPEVFields.sCcbContactCode}</b></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Is Adjustment?</td>
+                                                <td><lightning-input type="checkbox"
+                                                    data-id="checkboxIsAdjustField" checked={objPEVFields.bIsAdjustment}
+                                                    disabled={bModalFlag} onchange={handleChange}></lightning-input>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Adjustment Reason:</td>
+                                                <td><lightning-combobox variant="label-hidden"
+                                                        disabled={isAdjustmentReasonCheck} data-id="textAdjustField"
+                                                        value={objPEVFields.sAdjustReasonValue} placeholder="Select an option" options={adjustReasonList}
+                                                        style="width: 190px" onchange={handleChange}></lightning-combobox>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--Section 4. Comments:-->
+                                        <table style="border: 1px solid black;width:300px;margin-top:4px;">
+                                            <tr>
+                                                <td style="display: float" colspan="2">
+                                                    <div class='c-sectionheader'>4. Comments</div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="display: float" colspan="2"><!--lightning-textarea
+                                                        variant="label-hidden" class="commentBoxHeight" data-id="textCommentsField"
+                                                        value={objPEVFields.sCcbContactComment} disabled={bModalFlag} onfocusout={handleChange}>
+                                                    </lightning-textarea-->
+
+                                                    <div class="slds-form-element">
+                                                        <div class="slds-form-element__control">
+                                                        <textarea data-id="textCommentsField" class="slds-textarea textCommentsField" placeholder="" rows="4" disabled={bModalFlag} onfocusout={handleChange}>{objPEVFields.sCcbContactComment}</textarea>                                                        
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="display: float" colspan="2">Process Notes:<lightning-textarea
+                                                        variant="label-hidden" data-id="textProcessNotesField"
+                                                        value={objPEVFields.sProcessNotes} disabled={bModalFlag} onfocusout={handleChange}>
+                                                    </lightning-textarea>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <!--Section SA Datatable-->
+                                <!-- <tr if:true={objPEVFields.sCcbContactDesc}> -->
+                                    <tr if:true={showSADatatable}>
+                                    <td colspan="2">
+                                        <div if:true={checkDataTableNoEdit} style="height: 120px;">
+                                            <lightning-datatable key-field="Id" data={careSAData} columns={columnsPevSADetails}
+                                                hide-checkbox-column="true">
+                                            </lightning-datatable>
+                                        </div>
+                                        <div if:false={checkDataTableNoEdit} style="height: 150px;">
+                                            <lightning-datatable key-field="Id" data={careSAData}
+                                                columns={columnsPevSADetailsWithEditing} hide-checkbox-column="true"
+                                                onsave={handleDataTableSave} draft-values={draftValues}>
+                                            </lightning-datatable>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <!--Section 5. System Information:-->
+                <table>
+                    <tr>
+                        <td>
+                            <table style="border: 1px solid black">
+                                <tr>
+                                    <td style="display: float" colspan="4">
+                                        <div class='c-sectionheader'>5. System Information</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Last modified
+                                        By:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sLastModifiedById}</b></td>
+                                    <td>Last modified Date:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sLastModifiedDate}
+                                            <!-- <lightning-formatted-date-time value={objPEVFields.sLastModifiedDate}
+                                                month="2-digit" day="2-digit" year="numeric"></lightning-formatted-date-time> -->
+                                        </b></td>
+                                    <td>Qualified by:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sQualifiedBy}</b></td>
+                                    <td>EI Account:&NonBreakingSpace;&NonBreakingSpace;<lightning-formatted-url
+                                            label={objPEVFields.sEIAccountName} value={objPEVFields.sEIAccountId}
+                                            tooltip={objPEVFields.sEIAccountName} target="_blank"></lightning-formatted-url>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+
+    <!--Delete Record Modal-->
+    <!-- modal start -->
+    <template if:true={bShowDeleteModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+            aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container modal__containerresize">
+                <!-- modal header start -->
+                <header class="slds-modal__header confirmHeader">
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Delete the Record</h2>
+                </header>
+                <!-- modal body start -->
+                <div class="slds-modal__content slds-p-around_medium confirmBody" style="text-align:center"
+                    id="modal-content-id-2">
+                    <p>{label.CARE_ConfirmationDeleteMsg}</p>
+                </div>
+                <!-- modal footer start-->
+                <footer class="slds-modal__footer confirmFooter">
+                    <button class="slds-button slds-button_destructive slds-float_left" onclick={delRec}>Yes</button>
+                    <button class="slds-button slds-button_text-destructive" onclick={closeDeleteModal}>No</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- modal end -->
+
+    <!--Confirmation modal start-->
+    <template if:true={bShowConfirmationModal}>
+        <c-care_-confirm-modal header-text={label.CARE_CancelHeader}
+            body-text={label.CARE_ConfirmationMsg} footer-yes-text="Yes" footer-no-text="No"
+            onnobuttonevent={closeConfirmationModal} onyesbuttonevent={cancelApplication}></c-care_-confirm-modal>
+    </template>
+    <!--Confirmation modal end-->
+
+    <!--Income entry document start-->
+    <template if:true={bDocumentEntryModal}>
+        <c-care_-income-information id-care-app={sGeneratedCareAppId} id-household-member={rowId} s-household-member-name={rowPersonName} 
+            s-app-type={sPEVorHU} onpevhuformrefresh={pevHuFormRefresh} b-view-mode={showViewOnly} b-show-modal={bOpenAsModal}></c-care_-income-information>
+    </template>
+    <!--Income entry document end-->
+
+</template>

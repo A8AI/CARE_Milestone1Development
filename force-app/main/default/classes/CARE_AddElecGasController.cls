@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 06/07/2020            SKMN                   Initial Version.
 *                                              CARE Application: 
+* 08/28/2020			SKMN				   Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 public class CARE_AddElecGasController {
     //Constants 
@@ -58,6 +59,8 @@ public class CARE_AddElecGasController {
         @AuraEnabled public Date dEndDate {get; set;}
         @AuraEnabled public Date dSAStartDate {get; set;}
         @AuraEnabled public Boolean sSelectedRecord {get; set;}
+        @AuraEnabled public String sSvcFullAddress {get; set;}
+        @AuraEnabled public String sSvcTypeCode {get; set;}
     }
     
     public class AddElecGasWrapperReason{
@@ -129,7 +132,7 @@ public class CARE_AddElecGasController {
                     objAddElecGasWrapper.sSADiscountType =  careEISite.CARE_DISCOUNT_TYPE__c;//Used for display
                     objAddElecGasWrapper.sRateSchedule = careEISite.Rate_Schedule_EI__c;
                     objAddElecGasWrapper.dEndDate = careEISite.Care_Stop_Date_EI__c;
-                    objAddElecGasWrapper.dSAStartDate = careEISite.SA_Start_Date_EI__c;
+                    objAddElecGasWrapper.dSAStartDate = careEISite.SA_Start_Date_EI__c;                    
                     
                     addElecGasWrapperResp.listAddElecGasExisting.add(objAddElecGasWrapper);
                     
@@ -158,6 +161,8 @@ public class CARE_AddElecGasController {
                         objAddElecGasWrapperNew.dSAStartDate = careEISite.SA_Start_Date_EI__c;
                         objAddElecGasWrapperNew.sRateSchedule = careEISite.Rate_Schedule_EI__c;
                         objAddElecGasWrapperNew.sSelectedRecord = false;
+                        objAddElecGasWrapperNew.sSvcFullAddress = careEISite.Svc_Full_Adr_EI__c;//Extra fields
+                        objAddElecGasWrapperNew.sSvcTypeCode = careEISite.Svc_Type_Code_EI__c;//Extra fields
                         
                         addElecGasWrapperResp.listAddElecGasNew.add(objAddElecGasWrapperNew);
                     }
@@ -199,10 +204,18 @@ public class CARE_AddElecGasController {
         try{
             sPersonId = objAddElecGasInput.sPerId;
             
+            //Fetch the user's LANID to stamp as CommittedBy
+            Id userId = UserInfo.getUserId();            
+            User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];       
+            
             //get the cc code details for Commodity Addition
             listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_ADD_ELEC_GAS, null, null);
             
+            //get the record type Id
             Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
+            
+            //get the Last Bill Date
+            Date dLastBillDate = CARE_UtilityController.getLastBillDate();
             
             //create CARE APP Transaction record
             CARE_Application__c careAppObj = new CARE_Application__c();
@@ -210,8 +223,7 @@ public class CARE_AddElecGasController {
             careAppObj.RecordTypeId = careAppRecTypeId;
             careAppObj.APPLICANT_NAME__c = listAddElecGas[0].sApplicantName;
             careAppObj.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-            careAppObj.ENROLLMENT_TYPE__c = 'OTHER';
-            //careAppObj.RECEIVED_DATE__c = dTodaysDate;
+            careAppObj.ENROLLMENT_TYPE__c = 'OTHER';            
             careAppObj.PROCESSED_DATE__c = dTodaysDate;
             careAppObj.PER_ID__c = objAddElecGasInput.sPerId; 
             careAppObj.CARE_Account_ID__c = listAddElecGas[0].sAccountId;
@@ -228,6 +240,10 @@ public class CARE_AddElecGasController {
             //careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other 
             careAppObj.CC_CL_CD__c = listAddElecGas[0].sDiscountType; // It will be always 'C', stamp with the Account's discount
             careAppobj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_ADD_ELEC_GAS_SRC;
+            careAppobj.HOUSE_QUALIFY__c = true; //Extra fields
+            careAppObj.RECEIVED_DATE__c = dTodaysDate;//Extra fields
+            careAppObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+            careAppObj.RESULT_DATE__c = dTodaysDate;//Extra fields            
             
             Insert careAppObj;  
             for (AddElecGasWrapper objAddElecGas : listAddElecGas ){
@@ -247,6 +263,10 @@ public class CARE_AddElecGasController {
                 careEnrolledSAObj.END_DATE__c = objAddElecGasInput.dHighestDtOfExistingComm;
                 careEnrolledSAObj.Service_Agreement__c = objAddElecGas.idSARecID;
                 careEnrolledSAObj.SA_START_DATE__c = objAddElecGas.dSAStartDate;
+                careEnrolledSAObj.SERVICE_FULL_ADDRESS__c = objAddElecGas.sSvcFullAddress;//Extra fields
+                careEnrolledSAObj.SERVICE_TYPE_CODE__c = objAddElecGas.sSvcTypeCode;//Extra fields
+                careEnrolledSAObj.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dTodaysDate;//Extra fields      
+                careEnrolledSAObj.SA_ENTITY_NAME__c = objAddElecGas.sApplicantName;//Extra fields
                 
                 listCareAppEnrolledSAFrom.add(careEnrolledSAObj);
                 

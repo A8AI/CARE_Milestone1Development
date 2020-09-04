@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 06/08/2020            Cognizant Technology Solutions                     Initial Version.
 *                                                                          CARE Application: 
+* 08/28/2020			SKMN				   							   Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 
 public with sharing class CARE_ReinstateController {
@@ -78,6 +79,10 @@ public with sharing class CARE_ReinstateController {
         public Date dSAStartDate {get; set;}
         @AuraEnabled
         public String sApplicantName {get; set;}
+        @AuraEnabled
+        public String sSvcFullAddress {get; set;}
+        @AuraEnabled
+        public String sSvcTypeCode {get; set;}
     }
     
     public class WrapperReinstateReason{
@@ -132,6 +137,7 @@ public with sharing class CARE_ReinstateController {
                                                                                                            Service_Agreement__r.Svc_Type_Code_EI__c, Service_Agreement__r.CARE_DISCOUNT_TYPE__c,
                                                                                                            Service_Agreement__r.SA_Start_Date_EI__c,
                                                                                                            Service_Agreement__r.Imported_Site_Name_EI__c,
+                                                                                                           Service_Agreement__r.Svc_Full_Adr_EI__c,
                                                                                                            RS_CD__c, APPLICATION__c, ACCT_ID__c,
                                                                                                            PREM_ID__c, CC_CL_CD__c,
                                                                                                            RETRO_START_DATE__c, RETRO_END_DATE__c,APPLICATION__r.Id, 
@@ -163,6 +169,8 @@ public with sharing class CARE_ReinstateController {
                             objRec.sRateSchedule = careAppobj.RS_CD__c; 
                             objRec.dSAStartDate = careAppobj.Service_Agreement__r.SA_Start_Date_EI__c;
                             objRec.sApplicantName = careAppobj.Service_Agreement__r.Imported_Site_Name_EI__c;
+                            objRec.sSvcFullAddress = careAppobj.Service_Agreement__r.Svc_Full_Adr_EI__c; //Extra fields     
+                            objRec.sSvcTypeCode = careAppobj.Service_Agreement__r.Svc_Type_Code_EI__c;//Extra fields
                             
                             reinstateResponse.listReinstate.add(objRec);                        
                             //}
@@ -224,6 +232,11 @@ public with sharing class CARE_ReinstateController {
         try{
             List<CARE_Type__c> listCareType = new List<CARE_Type__c>();
             List<CARE_App_Enrolled_SA__c>listCareAppEnrolledSA = new List<CARE_App_Enrolled_SA__c>();
+            
+            //Fetch the user's LANID to stamp as CommittedBy
+            Id userId = UserInfo.getUserId();            
+            User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+            
             //get the cc code details for Reinstate based on Adjustment value.
             if(bIfAdjustment){
                 //reason selected is ESA COMP
@@ -251,6 +264,9 @@ public with sharing class CARE_ReinstateController {
             //get RecordType id from constant class
              Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
             
+            //get the Last Bill Date
+            Date dLastBillDate = CARE_UtilityController.getLastBillDate();
+            
             //create CARE APP Transaction To record the Resintate transaction         
             CARE_Application__c careAppObj = new CARE_Application__c();
             
@@ -269,7 +285,11 @@ public with sharing class CARE_ReinstateController {
             careAppObj.CARE_Account_ID__c = listReinstateSA[0].idAccountID;//EI Account Id
             careAppObj.ACCT_ID__c = listReinstateSA[0].sBillingAccountId;
             careAppObj.CC_CL_CD__c = listReinstateSA[0].sDiscountType;            
-            careAppobj.IS_ADJUSTMENT__c = bIfAdjustment;
+            careAppobj.IS_ADJUSTMENT__c = bIfAdjustment;            
+            careAppobj.HOUSE_QUALIFY__c = true; //Extra fields
+            careAppobj.RECEIVED_DATE__c  = dTodaysDate; //Extra fields
+            careAppobj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+            careAppobj.RESULT_DATE__c = dTodaysDate;//Extra fields
             
             Insert careAppObj;            
             
@@ -287,11 +307,20 @@ public with sharing class CARE_ReinstateController {
                 careEnrolledSAObj.SA_ID__c = reinstateSAObj.sSAId;    
                 careEnrolledSAObj.END_DATE__c = reinstateSAObj.dEndDate ;
                 careEnrolledSAObj.SA_START_DATE__c = reinstateSAObj.dSAStartDate;
+                careEnrolledSAObj.SERVICE_FULL_ADDRESS__c = reinstateSAObj.sSvcFullAddress;//Extra fields
+                careEnrolledSAObj.SERVICE_TYPE_CODE__c = reinstateSAObj.sSvcTypeCode;//Extra fields
+                careEnrolledSAObj.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dTodaysDate;//Extra fields
+                careEnrolledSAObj.SA_ENTITY_NAME__c = reinstateSAObj.sApplicantName;//Extra fields
                 
                 //If adjustment is Selected record start Date & end Date
                 if(bIfAdjustment){
                     careEnrolledSAObj.RETRO_START_DATE__c = reinstateSAObj.dRetroStartDate;
-                    careEnrolledSAObj.RETRO_END_DATE__c = reinstateSAObj.dRetroEndDate;                    
+                    careEnrolledSAObj.RETRO_END_DATE__c = reinstateSAObj.dRetroEndDate;     
+                    careEnrolledSAObj.ADJUSTED__c = true;//Extra fields
+                    if(userDetails.Profile.Name == CARE_Constants.CSR_PROFILE){
+                        careEnrolledSAObj.CSR_ADJUSTED__c = true;//Extra fields
+                        careEnrolledSAObj.CSR_USER__c = userDetails.Id;//Extra fields
+                    }  
                 }
                 //If Adjustment is not involved record last Billing cycle start date as Yes Date for each SA id ,time being stamp todaysDate
                 else{

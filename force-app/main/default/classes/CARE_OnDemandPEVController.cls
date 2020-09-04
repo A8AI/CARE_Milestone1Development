@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 07/03/2020            CTS                   Initial Version.
 *                                             CARE Application: 
+* 08/28/2020			SKMN				  Updated to stamp extra fields for all applications
 **************************************************************************************************************/
 public with sharing class CARE_OnDemandPEVController {
     
@@ -79,7 +80,7 @@ public with sharing class CARE_OnDemandPEVController {
             dDateBeforeFortyFiveDays = dTodaysDate.addDays(-iSystemValue);
             
         mapValidSAForPerId = CARE_UtilityController.getActiveSADetailsForPersonId(sPersonId);
-        List<CARE_CC_Batch_Detail__c> listCareCCBatchForCust = [select Id, CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c from CARE_CC_Batch_Detail__c
+        List<CARE_CC_Batch_Detail__c> listCareCCBatchForCust = [select Id, CARE_CI_CC__r.CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c from CARE_CC_Batch_Detail__c
                                               					where PER_ID__c =: sPersonId];
         
         
@@ -97,10 +98,10 @@ public with sharing class CARE_OnDemandPEVController {
             }
         }*/
         
-            if(mapValidSAForPerId.size() > 0 && listCareCCBatchForCust.size() > 0){
+            if(mapValidSAForPerId.size() > 0){
           //if(listCareCust.size() > 0){
             for(CARE_CC_Batch_Detail__c carePEV : listCareCCBatchForCust){
-                if((carePEV.CARE_CI_CC__r.CC_TYPE_CD__c == 'V' || carePEV.CARE_CI_CC__r.CC_TYPE_CD__c == 'VH') && carePEV.CC_DTTM__c >= dDateBeforeFortyFiveDays){
+                if((carePEV.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_PEV || carePEV.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HU) && carePEV.CARE_CI_CC__r.CC_DTTM__c >= dDateBeforeFortyFiveDays){
                   OnDemandPEVWrapper.bSuccess = true;
                   break;  
                 }else{
@@ -109,7 +110,8 @@ public with sharing class CARE_OnDemandPEVController {
                 }
             }
         }
-        else if(mapValidSAForPerId.size() <= 0 && listCareCCBatchForCust.size() <= 0){
+        //else if(mapValidSAForPerId.size() <= 0 && listCareCCBatchForCust.size() <= 0){
+         else if(mapValidSAForPerId.size() <= 0){
             	OnDemandPEVWrapper.bSuccess = true;
             	//OnDemandPEVWrapper.sErrorCode = CARE_Constants.CARE_ONDEMANDPEV_ERROR;
         }else{
@@ -125,17 +127,6 @@ public with sharing class CARE_OnDemandPEVController {
    }
         
         
-        /*if(string.isNotBlank(sCustomerOnDiscount)){
-            if(listPEVHU[0].CreatedDate >= dDateBeforeFortyFiveDays){
-                OnDemandPEVWrapper.bSuccess = true;
-            }else{
-                OnDemandPEVWrapper.bSuccess = false;
-                OnDemandPEVWrapper.sErrorCode = CARE_Constants.CARE_ONDEMANDPEV_ERROR;
-            } 
-        }else if(string.isBlank(sCustomerOnDiscount)){
-            OnDemandPEVWrapper.bSuccess = false;
-            OnDemandPEVWrapper.sErrorCode = CARE_Constants.CARE_ONDEMANDPEV_ERROR;
-        }*/
 		system.debug('OnDemandPEVWrapper.bSuccess--->'+ OnDemandPEVWrapper.bSuccess);        
         return OnDemandPEVWrapper;
         
@@ -160,29 +151,36 @@ public with sharing class CARE_OnDemandPEVController {
                                                      where PER_ID__c =: objOnDemandPEV.sPerId];*/
         
         try{
-        List<CARE_CC_Batch_Detail__c> listCCCodeAssign = [select Id, CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c from CARE_CC_Batch_Detail__c
-                                              					where PER_ID__c =: objOnDemandPEV.sPerId];
+        List<CARE_CC_Batch_Detail__c> listCCCodeAssign = [select Id, CARE_CI_CC__r.CC_DTTM__c, CARE_CI_CC__r.CC_TYPE_CD__c, CC_CL_CD__c, APPLICATION__r.CARE_Account_ID__r.CARE_DISCOUNT_TYPE__c
+                                                          from CARE_CC_Batch_Detail__c where PER_ID__c =: objOnDemandPEV.sPerId];
+            
+         List<EI_Site__c> listAcctDiscountType = [select Id, Account_EI__r.CARE_DISCOUNT_TYPE__c
+                                                  from EI_Site__c where Account_EI__c =: objOnDemandPEV.sAccId];   
                
         if(listCCCodeAssign.size() > 0){
             for(CARE_CC_Batch_Detail__c objCare : listCCCodeAssign){
-                if(objCare.CARE_CI_CC__r.CC_TYPE_CD__c == 'VH' && objCare.CC_DTTM__c >= dDateBeforeTwoYears){
+                if(objCare.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HU && objCare.CARE_CI_CC__r.CC_DTTM__c >= dDateBeforeTwoYears){
                   sCCContactCode = listCareTypeVHE[0].TYPE_CODE__c; //'VHE';
                     break;
                 }
             }
         }
-        system.debug('sCCContactCode value----->'+ sCCContactCode);
-        
-        
-          Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME); 
+            system.debug('sCCContactCode value----->'+ sCCContactCode);
+            
+            //Fetch the user's LANID to stamp as CommittedBy
+            Id userId = UserInfo.getUserId();            
+            User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+            
+            Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME); 
             
             //Create record in CARE_Application__c
             CARE_Application__c careApp = new CARE_Application__c();   
             careApp.RecordTypeId = careAppRecTypeId;
             careApp.APPLICANT_NAME__c = objOnDemandPEV.sApplicantName;
             careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-            //careApp.RECEIVED_DATE__c = dTodaysDate;
+            careApp.RECEIVED_DATE__c = dTodaysDate;
             careApp.PROCESSED_DATE__c = dTodaysDate;
+            careApp.CC_CL_CD__c = listAcctDiscountType[0].Account_EI__r.CARE_DISCOUNT_TYPE__c;
             careApp.PER_ID__c = objOnDemandPEV.sPerId;
             careApp.CARE_Account_ID__c = objOnDemandPEV.sAccId;
             careApp.ACCT_ID__c = objOnDemandPEV.sBillingAccId;
@@ -195,7 +193,9 @@ public with sharing class CARE_OnDemandPEVController {
             //careApp.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
             careApp.APPLICATION_TYPE__c = CARE_Constants.CARE_PEV;     //Enrollment,PEV,Notice,Other  
             careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_REGULAR_APP;
-            
+            careApp.HOUSE_QUALIFY__c = false; //Extra fields
+            careApp.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields  
+            careApp.RESULT_DATE__c = dTodaysDate;//Extra fields
             
             listCareApp.add(careApp);
         

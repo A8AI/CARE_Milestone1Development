@@ -50,7 +50,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
     @api recordId;
     @api viewOnly;// = false;
     @track columns = columns;
-    @track fileData;
+    @track fileData = [];
     @track bShowLoadingSpinner = false;
     @track bShowModal = false;
     @track bShowDeleteModal = false;
@@ -101,6 +101,10 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
         //return ['.pdf', '.png', '.jpg', '.jpeg', '.msg'];
     }
 
+    get showUploadedFileDatatable() {
+        return this.fileData != null && this.fileData.length > 0;
+    };
+
     showToastMessage(toastTitle, msg, toastVariant) {
         const evt = new ShowToastEvent({
             title: toastTitle,
@@ -119,6 +123,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
     openModal() {
         this.bShowModal = true;
         this.getImageIDs();
+        this.getFiles();
 
     }
     // to close modal window set 'bShowModal' tarck value as false
@@ -251,7 +256,7 @@ export default class Care_ImageUpload extends NavigationMixin(LightningElement) 
             })
             .catch(error => {
                 this.bShowLoadingSpinner = false;
-                sytem.debug('error-->'+error.body.message);
+                console.log('error-->'+error.body.message);
                 this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
             });
 

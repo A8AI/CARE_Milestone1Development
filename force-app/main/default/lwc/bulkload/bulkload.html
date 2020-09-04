@@ -1,0 +1,65 @@
+<template>
+    <div>
+		
+		<lightning-card title={pageTitle} icon-name="utility:food_and_drink">
+			<div style="font-size: 15px; padding: 17px;">
+				<lightning-file-upload 
+					label="※Click to select a file on your PC to upload"
+					name="fileUploader"
+					accept=".csv" 
+					onuploadfinished={handleUploadFinished} >
+				</lightning-file-upload>
+			</div>
+			<div class="slds-m-around_medium">
+				<template if:true={batchApexJobId}>
+					<div>Bulkload Batch Job ID = {batchApexJobId}</div>
+				</template>
+				<template if:true={errorMsg}>
+					<div>Error message = {errorMsg}></div>
+				</template>
+			</div>
+		</lightning-card>
+		<lightning-card >
+            <h3 slot="title">
+                <lightning-icon icon-name="utility:watchlist" size="small"></lightning-icon>
+                <span style='padding: 5px; font-size: 17px;'>Bulkload History</span>
+                <lightning-button-icon onclick={getBulkloadHistory} class="slds-m-left_xx-small" style="padding: 100px;" icon-name="action:refresh" variant="border-filled" alternative-text="Show Bulkload History"></lightning-button-icon>
+            </h3>
+            <lightning-datatable
+				key-field="id"
+				data={buhList}
+				columns={buhColumns}>
+			</lightning-datatable>
+        </lightning-card>
+	</div>
+	<div if:false={hideInstruction}> 
+		<div class="c-instruction">Instruction for developer:
+			<ol style="color: black; padding: 10px;">
+				<li>1. Open Lightning App Builder</li>
+				<li>2. Create a new App page with One region</li>
+				<li>3. Drag and drop the Builkload LWC to the page</li>
+				<li>4. set up the properties of bulkload LWC in the right window</li>
+				<li>5. To <span style="color: green; font-size: 15px; font-weight: bold;">hide</span>  this Insytuction, add the attribute hide-instruction to LWC c-bulkload</li>
+			</ol> 
+		</div>
+		<div class="c-instruction slds-theme_shade"> Values of JavaScript variables:
+			<table  style="color: black; width: 260px; border: 1px solid black;" >
+				<tr><td>batchApexJobId  </td><td>{batchApexJobId}</td></tr> 
+				<tr><td>errorMsg        </td><td>{errorMsg}</td></tr>       
+				<tr><td>inputString     </td><td>{inputString}</td></tr>    
+				<tr><td>pageTitle       </td><td>{pageTitle}</td></tr>      
+				<tr><td>objectApi       </td><td>{objectApi}</td></tr> 
+				<tr><td>dateFormat      </td><td>{objectApi}</td></tr>
+				<tr><td>hideInstruction </td><td>{hideInstruction}</td></tr>
+				<tr><td>csvFieldMap     </td><td>{csvFieldMap}</td></tr>    
+				<tr><td>batchSize       </td><td>{batchSize}</td></tr>      
+				<tr><td>reqFields       </td><td>{reqFields}</td></tr>      
+				<tr><td>dmlAction       </td><td>{dmlAction}</td></tr>      
+				<tr><td>libraryName     </td><td>{libraryName}</td></tr>    
+				<tr><td>storeSourceFile </td><td>{storeSourceFile}</td></tr>
+				<tr><td>tgtObjectApi    </td><td>{tgtObjectApi}</td></tr>   
+				<tr><td>tgtArg          </td><td>{tgtArg}</td></tr> 
+			</table>
+	    </div>
+	</div>
+</template>

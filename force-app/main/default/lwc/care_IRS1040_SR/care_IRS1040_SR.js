@@ -22,12 +22,14 @@ export default class Care_IRS1040_SR extends LightningElement {
     @api dDiscountLength;
     @api idMemberIncome;
     @api bViewMode;
+    @api sAdultCount;//no:of Adult
 
     @track showLoadingSpinner;
     @track results = [];
     @track error;
     @track periodOptions;
     @track bPeriodDisabled = true;
+    @track bFilingJointlyDisabled = false;
     @track viewOnly;
     @track scheduleCList = [{
         iScheduleCIndex: 0,
@@ -173,9 +175,17 @@ export default class Care_IRS1040_SR extends LightningElement {
             }
             this.updateScheduleCTotalAmount(); //update ScheduleC total amount
             this.handleScheduleCLineEnable(); //handling logic for enabling/disabling the row
+            //disable FilingJointly if no:of Adults is 1 or lesser
+            if (Number(this.sAdultCount) > 1) {
+                this.bFilingJointlyDisabled = false;
+            } else {
+                this.bFilingJointlyDisabled = true;
+                this.objInputFields.bIsFillingJointly = false;
+            }
             if (this.bViewMode) { //disable ScheduleC if opened in view mode
                 this.bLine3Disabled = true;
                 this.bLine29_31Disabled = true;
+                this.bFilingJointlyDisabled = true;
             }
             this.error = undefined;
 
@@ -234,9 +244,8 @@ export default class Care_IRS1040_SR extends LightningElement {
             this.objInputFields.dLine4a = value;
             //check if Rollover checkbox is checked
             if (!this.objInputFields.bRollover) {
-                this.objInputFields.dLine4aAdjusted = value;
+                this.objInputFields.dLine4aAdjusted = this.objInputFields.dLine4a;
             }
-            this.objInputFields.dLine4aAdjusted = this.objInputFields.dLine4a;
         } else if (elemName === "line4cAmountTextBox") {
             this.objInputFields.dLine4c = value;
             this.objInputFields.dLine4cAdjusted = this.objInputFields.dLine4c;
@@ -331,6 +340,7 @@ export default class Care_IRS1040_SR extends LightningElement {
 
     //handle logic for Income caluclation when Schedule 1  is Unchecked
     handleSchedule1Unchecked() {
+        this.objInputFields.bScheduleCDocComplete = false;
         this.objInputFields.dLine11 = null;
         this.objInputFields.dLine11Adjusted = null;
         this.objInputFields.dLine12 = null;

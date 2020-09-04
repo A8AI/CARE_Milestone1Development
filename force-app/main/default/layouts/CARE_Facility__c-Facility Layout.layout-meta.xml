@@ -63,7 +63,7 @@
                 <field>FACILITY_FAX__c</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Required</behavior>
+                <behavior>Edit</behavior>
                 <field>FACILITY_TYPE__c</field>
             </layoutItems>
             <layoutItems>
@@ -234,6 +234,14 @@
                 <behavior>Required</behavior>
                 <field>OWNER__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Required</behavior>
+                <field>FACILITY_CLASSIFICATION__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>IS_OTHER__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns/>
         <style>TwoColumnsTopToBottom</style>
@@ -285,6 +293,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>CARE_Tenant__c.FACILITY__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CARE_APP_Image_List__c.Facility__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

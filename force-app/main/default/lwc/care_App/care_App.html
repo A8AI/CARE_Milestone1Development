@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 8/14/2020, 10:48:36 PM
+  @Last Modified On   : 9/4/2020, 12:01:50 AM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    5/5/2020   Cognizant Technology Solutions     Initial Version
@@ -80,9 +80,23 @@
                             onrecordselect={handleRecordSelection} onhandletyping={handletyping}
                             class="slds-m-bottom_small c-layout__half-width"></c-care_-search-auto-complete>
                     </div>
-                    <div class="slds-p-left_small slds-size_1-of-8 slds-p-top_small">
-                        <lightning-combobox label="Facility/Housing Org" value={value} placeholder="Select an option"
-                            options={roleOptions} data-id="facilityField" onchange={handleChange}></lightning-combobox>
+                    <div class="slds-p-left_small slds-size_4-of-8 slds-p-top_small">
+                        <!-- <lightning-combobox label="Facility/Housing Org" value={value} placeholder="Select an option"
+                                                options={roleOptions} data-id="facilityField" onchange={handleChange}></lightning-combobox> -->
+                        <label class="slds-form-element__label" for="input">Facility/Housing Org</label>
+                        <!-- <div class="slds-form-element__control"> -->
+                        <!-- Spinner -->
+                        <div if:true={showLoadingSpinner}>
+                            <lightning-spinner size="medium" variant="brand" class="spinner"></lightning-spinner>
+                        </div>
+                        <input type="text" id="input" name="input" list="valueList" placeholder="Search an Option" class="slds-input inputFacilityHousingOrg"
+                            onblur={handleSelectFacility}></input>                        
+                        <datalist id="valueList" class="">
+                            <template if:true={facilityHousingValues} for:each={facilityHousingValues} for:item='fh'>
+                                <option key={fh.sId} value={fh.sFacilityName}></option>
+                            </template>
+                        </datalist>
+                        <!-- </div> -->
                     </div>
                 </div>
 
@@ -101,8 +115,20 @@
                             onchange={handleChange}></lightning-input>
                     </div>
                     <div class="slds-p-left_xx-large slds-p-top_medium">
-                        <lightning-input label="MFHC" type="checkbox" data-id="mfhcField" onchange={handleChange}>
-                        </lightning-input>
+                        <lightning-input type="checkbox" label="NP" data-id="checkboxNPField" checked={searchInput.bNPFacilityType}
+                            onchange={handleChangeFacility}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input type="checkbox" label="AGR" data-id="checkboxAGRField" checked={searchInput.bAGRFacilityType}
+                            onchange={handleChangeFacility}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input type="checkbox" label="MFHC" data-id="checkboxMFHCField"
+                            checked={searchInput.bMFHCFacilityType} onchange={handleChangeFacility}></lightning-input>
+                    </div>
+                    <div class="slds-p-left_xx-large slds-p-top_medium">
+                        <lightning-input type="checkbox" label="SM" data-id="checkboxSMField" checked={searchInput.bSMFacilityType}
+                            onchange={handleChangeFacility}></lightning-input>
                     </div>
                 </div>
 
@@ -128,6 +154,9 @@
                 <div if:true={showCustomerList} style="max-height:300px" class="slds-table slds-table_bordered slds-table_resizable-cols scroll">
                     <lightning-datatable  onsort={updateColumnSorting} sorted-by={sortedBy}  sorted-direction={sortedDirection}  data={searchData} columns={columns} key-field="idcustId"
                         selected-rows={selectedRows1} onrowselection={handleRowSelection}></lightning-datatable>
+                        <!--DEL-->
+                    <c-care_-search-custom-datatable  onsort={updateColumnSorting} sorted-by={sortedBy}  sorted-direction={sortedDirection}  data={searchData} columns={columns} key-field="idcustId"
+                        selected-rows={selectedRows1} onrowselection={handleRowSelection}></c-care_-search-custom-datatable>
                </div>
                 <br />
                 <div if:false={showCustomerList}>
@@ -147,7 +176,7 @@
 
 
         </lightning-accordion-section>
-
+        <div if:true={bResCustomerTab} >
         <lightning-accordion-section class="setCustomerDetailIdClass" name="CustomerDetails" label="Customer Details" style="visibility: hidden;">
            <div if:true={bCustomerDetailFlag}>
             <div class="slds-grid slds-gutters">
@@ -179,8 +208,8 @@
                         </lightning-tab>
 
                         <lightning-tab label="PEV" onactive={refreshTabData}>
-                            <c-care_-pev-hu s-selected-applicant-name={sSelectedCustName} s-selected-acct-id={sSelectedEIAccountId} 
-                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} s-selected-acct-email={sSelectedEIAccountEmail}
+                            <c-care_-pev-hu s-selected-applicant-name={sSelectedCustName} s-selected-billing-acct-id={sSelectedBillingAccId}  
+                            s-selected-per-id={sSelectedPersonId} list-selected-prem-ids={listSelectedPremId} s-selected-acct-id={sSelectedEIAccountId} 
                             b-acc-on-probation={sSelectedProbStatus} s-selected-app-id={sPevAppId} s-live-call={sHistoryRefresh}
                             b-modal-flag={bCallFromModal}></c-care_-pev-hu>
                         </lightning-tab>
@@ -199,5 +228,26 @@
             </div>
         </div>
         </lightning-accordion-section>
+        </div>
+        <div if:false={bResCustomerTab} >
+        <lightning-accordion-section  name="CustomerDetails" label="Customer Details">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_3-of-3">                
+                <lightning-tabset>
+                    <lightning-tab label="History" onactive={refreshTabData}>
+                        <c-care_-history-non-res s-live-call={sHistoryRefresh} s-selected-history-facility-id={sSelectedFacilityId} 
+                            list-selected-history-prem-ids={listSelectedPremId} ></c-care_-history-non-res>
+                    </lightning-tab>
+
+                    <lightning-tab label="Housing Org" onactive={refreshTabData}>
+                        <c-care_-housing-org id-care-facility={sSelectedFacilityId}></c-care_-housing-org>
+                    </lightning-tab>
+                </lightning-tabset>
+                </div>
+            </div>
+
+         </lightning-accordion-section>
+         </div>
+
     </lightning-accordion>
 </template>

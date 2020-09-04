@@ -113,6 +113,7 @@ export default class Care_OnDemandStatus extends LightningElement {
                OnDemandStatusRecord.sSAID = element.sSAID;
                OnDemandStatusRecord.saStatus = element.saStatus;
                OnDemandStatusRecord.sRate = element.sRate;
+               OnDemandStatusRecord.sSvcType = element.sSvcType;
                OnDemandStatusRecord.sSiteName = element.sSiteName;
                OnDemandStatusRecord.bSF = (element.sType === 'SF') ? true : false ;
                OnDemandStatusRecord.bWS = (element.sType === 'WS') ? true : false ;
@@ -188,12 +189,17 @@ export default class Care_OnDemandStatus extends LightningElement {
             this.saIDLength = this.saData[index].dSaName.length;
         }
         else if (elemName === "premName") {
-            this.saData[index].dPremName = selectedValue;
+            this.saData[index].dPremId = selectedValue;
             //this.bSAidEntered = true;
             //this.saIDLength = this.saData[index].dSaName.length;
         }
         else if (elemName === "rateName") {
             this.saData[index].dRateName = selectedValue;
+            //this.bSAidEntered = true;
+            //this.saIDLength = this.saData[index].dSaName.length;
+        }
+        else if (elemName === "svcTypName") {
+            this.saData[index].dSvcTypName = selectedValue;
             //this.bSAidEntered = true;
             //this.saIDLength = this.saData[index].dSaName.length;
         }
@@ -214,11 +220,14 @@ export default class Care_OnDemandStatus extends LightningElement {
         console.log('this.objInputFields.sComment', this.objInputFields.sComment);
 
         if(this.bSAidEntered){
-            if(this.saIDLength !== 10){
+            if(this.saIDLength < 10 && this.saIDLength > 0){
                 this.bSAidIncorrect = true;
-            }else if(this.saIDLength === 10){
+            }else if(this.saIDLength === 10 || this.saIDLength === 0){
                 this.bSAidIncorrect = false;
             }
+        }else{
+            this.bSAidEntered = false;
+            this.bSAidIncorrect = false; 
         }
         
     }
@@ -231,7 +240,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         this.listYesNoDate = [];
         //check if atleast one Yes Date or No Date is Edited or Inserted
         this.saData.forEach(element => {
-            if ((element.dYesDate !== null && element.dYesDate !== undefined && element.dYesDate !== '') || (element.dNoDate !== null && element.dNoDate !== undefined && element.dNoDate !== '') || (element.dSaName !== '' && element.dSaName !== undefined) || (element.dPremName !== '' && element.dPremName !== undefined) || (element.rateName !== '' && element.rateName !== undefined)) {
+            if ((element.dYesDate !== null && element.dYesDate !== undefined && element.dYesDate !== '') || (element.dNoDate !== null && element.dNoDate !== undefined && element.dNoDate !== '') || (element.dSaName !== '' && element.dSaName !== undefined) || (element.dPremId !== '' && element.dPremId !== undefined) || (element.dRateName !== '' && element.dRateName !== undefined) || (element.dSvcTypName !== '' && element.dSvcTypName !== undefined)) {
                 this.listYesNoDate.push(element);  
                 this.listDuplicateNoDate.push(element.dNoDate);             
             }
@@ -272,6 +281,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         if (this.listYesNoDate.length === 0) {
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.YesNoDateMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -280,6 +290,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if(!this.reasonSelected){
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.SelectReasonMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -288,6 +299,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if (this.objInputFields.sComment === '' || this.objInputFields.sComment === undefined) {
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.SelectCommentMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -296,6 +308,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if (!this.bDiscountSelected) {
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.DiscountTypeMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -303,7 +316,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         }
         else if(isDuplicate === true){
             bValidInput = false;
-            //
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.NoDateMsg, 'error');
             this.listYesNoDate = [];
             isDuplicate = false;
@@ -313,6 +326,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if(this.bSAidIncorrect === true){
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.SAIDValidationMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -321,6 +335,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if(this.objInputFields.sComment.length > 256){
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.CommentFieldLengthValidationMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];
@@ -329,6 +344,7 @@ export default class Care_OnDemandStatus extends LightningElement {
         else if(this.objInputFields.sComment.indexOf(',') !== -1){
             bValidInput = false;
             isDuplicate = false;
+            this.bSAidIncorrect = false;
             this.showToastMessage('Error!!', this.label.CommentFieldValidationMsg, 'error');
             this.listYesNoDate = [];
             this.listDuplicateNoDate = [];

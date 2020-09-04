@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 8/10/2020, 4:38:41 PM
+  @Last Modified On   : 8/27/2020, 1:11:52 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    6/29/2020   Cognizant Technology Solutions     Initial Version
@@ -147,7 +147,7 @@
                                     </tr>
                                     <tr>
                                         <td>Annual Income:</td>
-                                        <td>{label.CARE_CurrencySymbol} {objPEVFields.iAnnualInc}</td>
+                                        <td><lightning-formatted-number value={objPEVFields.iAnnualInc} format-style="currency" currency-code="USD" maximum-fraction-digits="0" minimum-fraction-digits="0"></lightning-formatted-number></td>
                                     </tr>
                                     <tr>
                                         <td>Total Persons in Household:</td>
@@ -257,8 +257,8 @@
                                                                         <td title="" class="slds-truncate"
                                                                             style="text-align: right;">
                                                                             <div class="slds-truncate">
-                                                                                {label.CARE_CurrencySymbol}
-                                                                                {incomeInfo.dEstAnnSal}</div>
+                                                                                <lightning-formatted-number value={incomeInfo.dEstAnnSal} format-style="currency" currency-code="USD" maximum-fraction-digits="0" minimum-fraction-digits="0"></lightning-formatted-number>
+                                                                            </div>
                                                                         </td>
                                                                         <td title="" class="slds-truncate"
                                                                             style="text-align: center;">
@@ -303,7 +303,7 @@
                                                                     <td style="text-align: right; font-weight:bold;">Total
                                                                         Salary</td>
                                                                     <td style="text-align: right; font-weight:bold;">
-                                                                        {label.CARE_CurrencySymbol} {objPEVFields.iAnnualInc}
+                                                                        <lightning-formatted-number value={objPEVFields.iAnnualInc} format-style="currency" currency-code="USD" maximum-fraction-digits="0" minimum-fraction-digits="0"></lightning-formatted-number>
                                                                     </td>
                                                                     <td></td>
                                                                     <td></td>
@@ -446,17 +446,20 @@
                         <td>
                             <table style="border: 1px solid black">
                                 <tr>
-                                    <td style="display: float" colspan="4">
+                                    <td style="display: float" colspan="5">
                                         <div class='c-sectionheader'>5. System Information</div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Last modified
-                                        By:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sLastModifiedById}</b></td>
+                                    <td>Last modified By:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sLastModifiedById}</b>
+                                    </td>
                                     <td>Last modified Date:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sLastModifiedDate}
                                             <!-- <lightning-formatted-date-time value={objPEVFields.sLastModifiedDate}
                                                 month="2-digit" day="2-digit" year="numeric"></lightning-formatted-date-time> -->
-                                        </b></td>
+                                        </b>
+                                    </td>
+                                    <td>Assigned To:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sAssignedTo}</b>
+                                    </td>
                                     <td>Qualified by:&NonBreakingSpace;&NonBreakingSpace;<b>{objPEVFields.sQualifiedBy}</b></td>
                                     <td>EI Account:&NonBreakingSpace;&NonBreakingSpace;<lightning-formatted-url
                                             label={objPEVFields.sEIAccountName} value={objPEVFields.sEIAccountId}
@@ -511,7 +514,7 @@
     <!--Income entry document start-->
     <template if:true={bDocumentEntryModal}>
         <c-care_-income-information id-care-app={sGeneratedCareAppId} id-household-member={rowId} s-household-member-name={rowPersonName} 
-            s-app-type={sPEVorHU} onpevhuformrefresh={pevHuFormRefresh} b-view-mode={showViewOnly} b-show-modal={bOpenAsModal}></c-care_-income-information>
+            s-app-type={sPEVorHU} onpevhuformrefresh={pevHuFormRefresh} b-view-mode={showViewOnly} b-show-modal={bOpenAsModal} s-adult-count={objPEVFields.iNoWithIncome}></c-care_-income-information>
     </template>
     <!--Income entry document end-->
 

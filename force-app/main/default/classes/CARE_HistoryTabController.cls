@@ -57,6 +57,8 @@ public with sharing class CARE_HistoryTabController {
         public String sApplicationStatus {get;set;}
         @AuraEnabled
         public String sEnrollmentType {get;set;}
+        @AuraEnabled
+        public String customCssClass{get;set;}
 
     }
     public class TotalHistoryWrapper{
@@ -131,17 +133,20 @@ public with sharing class CARE_HistoryTabController {
                         //format text based on the created date
                         objRec.sFormatText = listcareAppRecords.CreatedDate >= dDateBeforeTwoYears ? 'slds-text-title_bold':'slds-text-color_weak';
                         //set view button visiblity --Commented code as per Demo1 feedback
-                        objRec.sViewButton = 'slds-show';
+                        objRec.sViewButton = 'slds-show'; // For View button CSS
                         // --Commented code as per Demo1 feedback
                         //objRec.sViewButton = listcareAppRecords.SOURCE_CHANNEL_TYPE__c != 'Batch'?'slds-show':'slds-hide';
                         if(listcareAppRecords.APPLICATION_STATUS__c == 'Staged for CC&B' || listcareAppRecords.APPLICATION_STATUS__c == 'Sent to CC&B' ||
                            listcareAppRecords.APPLICATION_STATUS__c == 'Reconciled' || listcareAppRecords.APPLICATION_STATUS__c == 'Completed')
                         {
                             objRec.bDeleteButton = true;
+                            objRec.customCssClass = 'classCSSDisabledDelete'; // For Delete button CSS
                         }
                         else{
                             objRec.bDeleteButton = false;
-                        }                                               
+                            objRec.customCssClass = 'classCSSDelete'; // For Delete button CSS
+                        }    
+                        //objRec.customCssClass = 'classCSSDelete'; // For Delete button CSS
                         listHistoryRecords.add(objRec);
                         cnt++;
                     }
@@ -163,15 +168,20 @@ public with sharing class CARE_HistoryTabController {
                     //format text based on the created date
                     objRec.sFormatText = listcareAppRecords.CreatedDate >= dDateBeforeTwoYears ? 'slds-text-title_bold':'slds-text-color_weak';
                     //set view button visiblity
-                    objRec.sViewButton = 'slds-show';
+                    objRec.sViewButton = 'slds-show'; // For View button CSS
                     // --Commented code as per Demo1 feedback
                     // objRec.sViewButton = listcareAppRecords.SOURCE_CHANNEL_TYPE__c != 'Batch'?'slds-show':'slds-hide';
                     if(listcareAppRecords.APPLICATION_STATUS__c == 'Staged for CC&B' || listcareAppRecords.APPLICATION_STATUS__c == 'Sent to CC&B' ||
                        listcareAppRecords.APPLICATION_STATUS__c == 'Reconciled' || listcareAppRecords.APPLICATION_STATUS__c == 'Completed')
                     {
                         objRec.bDeleteButton = true;
+                        objRec.customCssClass = 'classCSSDisabledDelete'; // For Delete button CSS
                     }
-                    else{objRec.bDeleteButton = false;}
+                    else{
+                        objRec.bDeleteButton = false;
+                        objRec.customCssClass = 'classCSSDelete'; // For Delete button CSS
+                    }
+                    //objRec.customCssClass = 'classCSSDelete'; // For Delete button CSS
                     listHistoryRecords.add(objRec);     
                     
                 }
@@ -197,10 +207,38 @@ public with sharing class CARE_HistoryTabController {
             //Delete the images uploaded in ContentDocument as it has no master-detail relationship between Care_Application and ContentDocument
             //Hence explicitly delete the ContentDocument
             //For Care_App_Image_List, this will get automatically deleted when Care_Application gets deleted
-            Boolean bDeletedSuccess = CARE_UtilityController.deleteUploadedContents(sEnrollmentId);
+             
+            List<String> listCareAppId = new List<String>();
+            String ParentCareAppId = [SELECT Parent_Application__c from CARE_Application__c
+                                      WHERE Id =: sEnrollmentId].Parent_Application__c;
+            Boolean bNotPerformPevDelete = true;
             
-            if(bDeletedSuccess){
-                CARE_Application__c[] rec = [SELECT Id FROM CARE_Application__c where Id =: sEnrollmentId];          
+            if(string.isNotBlank(ParentCareAppId)){
+                String sEnrollmentType = [SELECT ENROLLMENT_TYPE__c from CARE_Application__c
+                                      WHERE Id =: ParentCareAppId].ENROLLMENT_TYPE__c;
+                if(sEnrollmentType == CARE_Constants.CARE_PEV || sEnrollmentType == CARE_Constants.CARE_PEV_HU){
+                    bNotPerformPevDelete = false;
+                    deletePevHuRecord(ParentCareAppId); // To delete all income records 
+                }else{
+                    for(CARE_Application__c appRec : [SELECT Id FROM CARE_Application__c WHERE Parent_Application__c =: ParentCareAppId]){
+                        listCareAppId.add(appRec.Id); // Pushing All Child App Id
+                    }
+                    listCareAppId.add(ParentCareAppId);
+                }
+                
+            }else{
+                ParentCareAppId = sEnrollmentId;
+                listCareAppId.add(sEnrollmentId); // its a Parent App Id
+            }
+          
+            //Boolean bDeletedSuccess = CARE_UtilityController.deleteUploadedContents(sEnrollmentId);
+            Boolean bDeletedSuccess = CARE_UtilityController.deleteUploadedContents(ParentCareAppId);
+            
+            if(bDeletedSuccess && bNotPerformPevDelete){
+                CARE_APP_Image_List__c[] imageRec = [SELECT Id FROM CARE_APP_Image_List__c where Application__c IN: listCareAppId];          
+                delete imageRec; 
+                
+                CARE_Application__c[] rec = [SELECT Id FROM CARE_Application__c where Id IN: listCareAppId OR Parent_Application__c IN: listCareAppId];          
                 delete rec;   
             }            
         }
@@ -218,21 +256,41 @@ public with sharing class CARE_HistoryTabController {
             //Delete the images uploaded in ContentDocument as it has no master-detail relationship between Care_Application and ContentDocument
             //Hence explicitly delete the ContentDocument
             //For Care_App_Image_List, this will get automatically deleted when Care_Application gets deleted
+            /*List<CARE_Application__c> listParentCareAppId = [SELECT Parent_Application__c from CARE_Application__c
+                                                             WHERE Id =: sPevHuId];*/
+            List<String> listCareAppId = new List<String>();
+            String ParentCareAppId = [SELECT Parent_Application__c from CARE_Application__c
+                                      WHERE Id =: sPevHuId].Parent_Application__c;
+            
+            if(string.isNotBlank(ParentCareAppId)){
+                for(CARE_Application__c appRec : [SELECT Id FROM CARE_Application__c WHERE Parent_Application__c =: ParentCareAppId]){
+                    listCareAppId.add(appRec.Id); // Pushing All Child App Id
+                }
+                listCareAppId.add(ParentCareAppId);
+                sPevHuId = ParentCareAppId;
+            }
+            listCareAppId.add(sPevHuId); // its a Parent App Id
+            
             Boolean bDeletedSuccess = CARE_UtilityController.deleteUploadedContents(sPevHuId);
             
             if(bDeletedSuccess){
                 List<CARE_Application__c> listCareApp = [SELECT Id,
+                                                 (SELECT Id FROM CARE_APP_Image_List__r),        
                                                  (SELECT Id FROM CARE_Household_Detail__r),
                                                  (SELECT Id FROM CARE_Household_Member_Income__r),
                                                  (SELECT Id FROM CARE_Household_Member_IncomeC__r)
                                                  FROM CARE_Application__c 
-                                                 WHERE Id =: sPevHuId];   
+                                                 WHERE Id IN: listCareAppId OR Parent_Application__c IN: listCareAppId];   
                 
+                List<CARE_APP_Image_List__c> listCareAppImage = new List<CARE_APP_Image_List__c>();
                 List<CARE_Household_Detail__c> listCareHhDet = new List<CARE_Household_Detail__c>();
                 List<CARE_Household_Member_Income__c> listCareHhInc = new List<CARE_Household_Member_Income__c>();
                 List<CARE_Household_Member_IncomeC__c> listCareHhIncC = new List<CARE_Household_Member_IncomeC__c>();
                 
                 for(CARE_Application__c ca : listCareApp){
+                    if(!ca.CARE_APP_Image_List__r.isEmpty()){
+                        listCareAppImage.addAll(ca.CARE_APP_Image_List__r);
+                    } 
                     if(!ca.CARE_Household_Detail__r.isEmpty()){
                         listCareHhDet.addAll(ca.CARE_Household_Detail__r);
                     }
@@ -241,13 +299,14 @@ public with sharing class CARE_HistoryTabController {
                     }
                     if(!ca.CARE_Household_Member_IncomeC__r.isEmpty()){
                         listCareHhIncC.addAll(ca.CARE_Household_Member_IncomeC__r);
-                    }                    
+                    }                     
                 }
                 
                 //Delete child objects in order
                 deleteList(listCareHhIncC);
                 deleteList(listCareHhInc);
                 deleteList(listCareHhDet);
+                deleteList(listCareAppImage);
                 deleteList(listCareApp);
             }            
         }

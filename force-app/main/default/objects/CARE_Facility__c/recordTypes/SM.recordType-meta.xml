@@ -15,7 +15,18 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>FACILITY_TYPE__c</picklist>
+        <picklist>CARE_Status__c</picklist>
+        <values>
+            <fullName>Active</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inactive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_CLASSIFICATION__c</picklist>
         <values>
             <fullName>Agriculture</fullName>
             <default>false</default>
@@ -28,6 +39,13 @@
             <fullName>Non-Profit</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>SM</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_TYPE__c</picklist>
         <values>
             <fullName>SM</fullName>
             <default>false</default>

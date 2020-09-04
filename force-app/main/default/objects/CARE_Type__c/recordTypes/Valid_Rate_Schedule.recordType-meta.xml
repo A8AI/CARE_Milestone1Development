@@ -83,4 +83,23 @@
             <default>false</default>
         </values>
     </picklistValues>
+    <picklistValues>
+        <picklist>MULTIPLE_PLACE_HOLDER__c</picklist>
+        <values>
+            <fullName>Bullet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certified Report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Drop Report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failure Report</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
 </RecordType>

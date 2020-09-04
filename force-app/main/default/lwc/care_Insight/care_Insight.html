@@ -1,0 +1,25 @@
+<!--
+  @File Name          : care_Insight.html
+  @Description        : 
+  @Author             : Cognizant Technology Solutions
+  @Group              : 
+  @Last Modified By   : Cognizant Technology Solutions
+  @Last Modified On   : 8/12/2020, 1:24:00 PM
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    8/12/2020   Cognizant Technology Solutions     Initial Version
+-->
+<template>
+        
+            <lightning-tabset>
+                <lightning-tab label="Residential" onactive={setResidentialTabFlag} >
+                    <c-care_-app class="resTab" b-res-customer-tab = {bRes}></c-care_-app>
+                </lightning-tab>
+
+                <lightning-tab label="Non Residential" onactive={setResidentialTabFlag} >
+                    <c-care_-app class="nonResTab" b-res-customer-tab = {bRes}></c-care_-app>
+                </lightning-tab>
+                
+            </lightning-tabset>                
+  
+</template>

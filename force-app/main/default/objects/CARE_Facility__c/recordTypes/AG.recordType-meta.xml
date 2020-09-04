@@ -15,7 +15,18 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>FACILITY_TYPE__c</picklist>
+        <picklist>CARE_Status__c</picklist>
+        <values>
+            <fullName>Active</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inactive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_CLASSIFICATION__c</picklist>
         <values>
             <fullName>Agriculture</fullName>
             <default>false</default>
@@ -26,6 +37,25 @@
         </values>
         <values>
             <fullName>Non-Profit</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SM</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_TYPE__c</picklist>
+        <values>
+            <fullName>Employee Housing</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Housing for Agricultural Employees</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No facility type checked</fullName>
             <default>false</default>
         </values>
         <values>

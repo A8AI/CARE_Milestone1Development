@@ -288,6 +288,10 @@
             <default>false</default>
         </values>
         <values>
+            <fullName>CARE IVR</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>CARE MyEnergy</fullName>
             <default>false</default>
         </values>
@@ -317,6 +321,14 @@
         </values>
         <values>
             <fullName>DAC GT Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DataXport Enrollment</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>DataXport PEV Notice</fullName>
             <default>false</default>
         </values>
         <values>
@@ -371,15 +383,15 @@
     <picklistValues>
         <picklist>TRANS_TYPE__c</picklist>
         <values>
-            <fullName>NE</fullName>
+            <fullName>New</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>RC</fullName>
+            <fullName>Recert</fullName>
             <default>false</default>
         </values>
         <values>
-            <fullName>RQ</fullName>
+            <fullName>Request</fullName>
             <default>false</default>
         </values>
     </picklistValues>

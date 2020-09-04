@@ -16,7 +16,7 @@
     <filters>
         <field>CHAR_TYPE_CD__c</field>
         <operation>startsWith</operation>
-        <value>CARE-</value>
+        <value>MED</value>
     </filters>
     <label>All</label>
 </ListView>

@@ -46,21 +46,27 @@ public class CARE_ImageUploadControllerTest {
         List<CARE_Type__c> lstCareTypes = createCareTypeRecords();
         insert lstCareTypes;  
         
-        //Create Care Application record
-        List<CARE_Application__c> lstCareApp = createCareAppRecords(listAccountRecords,lstCareTypes);
-        insert lstCareApp;
-        
         //Create Care System Value record
         List<CARE_System_Value__c> listCareSysVal = createCareSystemValRecords();        
         insert listCareSysVal;
         
-        //Create Care App Image List record
-        List<CARE_APP_Image_List__c> lstcareAppImgList = createCareAppImagesLists(lstCareApp);        
-        insert lstcareAppImgList;
-        
         //Create records in Care System Value
         List<CARE_System_Value__c> lstCareSysVal = createCareSysValRecords();
         insert lstCareSysVal;
+        
+        System.runAs(usr){
+            //Create Care Application record
+            List<CARE_Application__c> lstCareApp = createCareAppRecords(listAccountRecords,lstCareTypes);
+            insert lstCareApp;      
+            
+            //Create Care Application record
+            List<CARE_Facility__c> lstCareFacility = createCareFacilityRecords(listAccountRecords,lstCareTypes);
+            insert lstCareFacility;  
+            
+            //Create Care App Image List record
+            List<CARE_APP_Image_List__c> lstcareAppImgList = createCareAppImagesLists(lstCareApp, lstCareFacility);        
+            insert lstcareAppImgList;
+        }
     }
     
     /**********************Test Methods************************************************************************/
@@ -102,8 +108,8 @@ public class CARE_ImageUploadControllerTest {
             wrapperObj1.sId = ci.Id;
             wrapperObj1.iImageIndex = 0;
             wrapperObj1.iNumber = 1;
-			//wrapperObj1.sImageId = String.valueOf(ci.IMAGE_ID__c);
-			wrapperObj1.sImageId = ci.EXTERNAL_IMAGE_ID__c;
+            //wrapperObj1.sImageId = String.valueOf(ci.IMAGE_ID__c);
+            wrapperObj1.sImageId = ci.EXTERNAL_IMAGE_ID__c;
             lstWrapperObj.add(wrapperObj1);
         }
         //Add extra value //insert
@@ -210,6 +216,75 @@ public class CARE_ImageUploadControllerTest {
         }  
     }
     
+    /***************ImageUploadFacility******************/
+    //Fetch CARE_APP_Image_List__c for Facility
+    @isTest
+    static void getCareFacilityImageListTest(){
+        List<CARE_ImageUploadController.CareAppImageWrapper> wrapperObj = new List<CARE_ImageUploadController.CareAppImageWrapper>();
+        
+        test.startTest();
+        list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
+        
+        List<CARE_Facility__c> lstCareFac = [SELECT Id FROM CARE_Facility__c WHERE FACILITY_NAME__c = 'abcd'];
+        
+        System.runAs(user1[0]){            
+            wrapperObj = CARE_ImageUploadController.getCareAppImageListFacility(lstCareFac[0].Id);
+            system.debug('wrapperObj'+wrapperObj);
+            System.assert(wrapperObj.size() == 1);  
+        }
+        test.stopTest();
+    }
+    
+    //Insert and update CARE_APP_Image_List__c for Facility
+    @isTest
+    static void createCareFacilityImageListInsertUpdateTest(){
+        List<CARE_ImageUploadController.CareAppImageWrapper> lstWrapperObj = new List<CARE_ImageUploadController.CareAppImageWrapper>();
+        
+        test.startTest();
+        list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
+        List<CARE_Facility__c> lstCareFac = [SELECT Id FROM CARE_Facility__c WHERE FACILITY_NAME__c = 'abcd'];
+        
+        //Select the existing
+        List<CARE_APP_Image_List__c> lstExisting = [SELECT Id, Name, IMAGE_ID__c, EXTERNAL_IMAGE_ID__c, Facility__c, IMAGE_TYPE__c, SOURCE_SYSTEM__c 
+                                                    FROM CARE_APP_Image_List__c
+                                                    WHERE Facility__c =:lstCareFac[0].Id
+                                                    ORDER by Name];
+        for(CARE_APP_Image_List__c ci : lstExisting){ //update
+            CARE_ImageUploadController.CareAppImageWrapper wrapperObj1 = new CARE_ImageUploadController.CareAppImageWrapper();
+            wrapperObj1.sId = ci.Id;
+            wrapperObj1.iImageIndex = 0;
+            wrapperObj1.iNumber = 1;
+            wrapperObj1.sImageId = ci.EXTERNAL_IMAGE_ID__c;
+            wrapperObj1.sReceivedDate = Date.today()-2;
+            wrapperObj1.sDocTitle = 'Doc Title updated';
+            lstWrapperObj.add(wrapperObj1);
+        }
+        //Add extra value //insert
+        CARE_ImageUploadController.CareAppImageWrapper wrapperObj2 = new CARE_ImageUploadController.CareAppImageWrapper();
+        wrapperObj2.iImageIndex = 1;
+        wrapperObj2.iNumber = 2;
+        wrapperObj2.sImageId = '99999999';
+        wrapperObj2.sReceivedDate = Date.today()-2;
+        wrapperObj2.sDocTitle = 'Doc Title updated';
+        lstWrapperObj.add(wrapperObj2);
+        CARE_ImageUploadController.CareAppImageWrapper wrapperObj3 = new CARE_ImageUploadController.CareAppImageWrapper();
+        wrapperObj3.iImageIndex = 2;
+        wrapperObj3.iNumber = 3;
+        wrapperObj3.sImageId = '99999994';
+        wrapperObj3.sReceivedDate = Date.today()-2;
+        wrapperObj3.sDocTitle = 'Doc Title updated';
+        lstWrapperObj.add(wrapperObj3);
+        
+        System.runAs(user1[0]){            
+            List<CARE_APP_Image_List__c> lstCareAppImageList = CARE_ImageUploadController.createCareAppImageListFacility(lstWrapperObj, lstCareFac[0].Id);
+            
+            System.assert(lstCareAppImageList.size() == 3);  
+        }
+        test.stopTest();
+    }
+    
+    /***************ImageUploadFacility******************/
+    
     /**********************Test Methods************************************************************************/
     
     /**********************Private Test Method for Data Setup***********************************************/
@@ -299,8 +374,19 @@ public class CARE_ImageUploadControllerTest {
         return listCareAppRecords;
     }
     
+    //create Care App Records
+    private static List<CARE_Facility__c> createCareFacilityRecords( List<Account>listAccountRecords , List<CARE_Type__c> lstCareTypes){
+        
+        List<CARE_Facility__c> listCareFacilityRecords = new List<CARE_Facility__c>();
+        CARE_Facility__c careFacility = CARE_TestDataFactory.careFacility(listAccountRecords[0]);
+        
+        listCareFacilityRecords.add(careFacility);   
+        
+        return listCareFacilityRecords;
+    }
+    
     //create Care App Image List Records
-    private static List<CARE_APP_Image_List__c> createCareAppImagesLists(List<CARE_Application__c> lstCareApp){
+    private static List<CARE_APP_Image_List__c> createCareAppImagesLists(List<CARE_Application__c> lstCareApp, List<CARE_Facility__c> lstCareFacility){
         List<CARE_APP_Image_List__c> lstcareAppImgList = new List<CARE_APP_Image_List__c>();
         CARE_APP_Image_List__c careAppImgList1 = CARE_TestDataFactory.careImage(lstCareApp[0]);
         //careAppImgList1.IMAGE_ID__c = Long.valueOf('88888888'); //8 digit - DATAXPORT
@@ -313,6 +399,13 @@ public class CARE_ImageUploadControllerTest {
         careAppImgList2.EXTERNAL_IMAGE_ID__c = '5555555555'; //10 digit - DOCUMENTUM
         careAppImgList2.SOURCE_SYSTEM__c = 'DOCUMENTUM';
         lstcareAppImgList.add(careAppImgList2);
+        
+        CARE_APP_Image_List__c careAppImgList3 = CARE_TestDataFactory.careImageFacility(lstCareFacility[0]);
+        careAppImgList3.EXTERNAL_IMAGE_ID__c = '99999999'; //8 digit - DATAXPORT
+        careAppImgList3.SOURCE_SYSTEM__c = 'DATAXPORT';
+        careAppImgList3.COMMENTS__c = 'Doc comments';
+        careAppImgList3.ENTRY_DATE_CARE1__c = Date.today();
+        lstcareAppImgList.add(careAppImgList3);
         
         return lstcareAppImgList;
     }

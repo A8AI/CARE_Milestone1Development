@@ -148,6 +148,13 @@
                 <elementReference>Get_CC_Code_and_Description.TYPE_DESC_LONG__c</elementReference>
             </value>
         </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varProcessedDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Get_Main_Application_Details.PROCESSED_DATE__c</elementReference>
+            </value>
+        </assignmentItems>
         <connector>
             <targetReference>Is_ApplicationAccepted</targetReference>
         </connector>
@@ -235,7 +242,7 @@
             <assignToReference>recVarCareAppEnrollingSA.CCB_CONTACT_TYPE__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>6034</stringValue>
+                <elementReference>Get_CC_Code_Details_For_Adjustment.TYPE_NO__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -271,6 +278,13 @@
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Existing_Enrolled_SAs.SA_START_DATE__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Existing_Enrolled_SAs.SERVICE_FULL_ADDRESS__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -353,7 +367,7 @@
             <assignToReference>recVarCareAppEnrollingSA.CCB_CONTACT_TYPE__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>6042</stringValue>
+                <elementReference>Get_CC_Code_Details_For_Transfer.TYPE_NO__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -380,6 +394,13 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA_Selected_Premise.Svc_Full_Adr_EI__c</elementReference>
+            </value>
         </assignmentItems>
         <connector>
             <targetReference>Assign_SA_Details_To_List</targetReference>
@@ -444,7 +465,7 @@
             <assignToReference>recVarCareAppEnrollingSA.CCB_CONTACT_TYPE__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>6042</stringValue>
+                <elementReference>Get_CC_Code_Details_For_Discount_Drop.TYPE_NO__c</elementReference>
             </value>
         </assignmentItems>
         <assignmentItems>
@@ -471,6 +492,13 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA_Other_Premise.Svc_Full_Adr_EI__c</elementReference>
+            </value>
         </assignmentItems>
         <connector>
             <targetReference>Assign_SA_Record_To_Collection</targetReference>
@@ -555,6 +583,13 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA_OtherPremise.Svc_Full_Adr_EI__c</elementReference>
+            </value>
         </assignmentItems>
         <connector>
             <targetReference>Add_Record_To_Collection</targetReference>
@@ -789,6 +824,13 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Discounted_SA_SelectedPremise.Svc_Full_Adr_EI__c</elementReference>
+            </value>
         </assignmentItems>
         <connector>
             <targetReference>Assign_SA_To_Collection</targetReference>
@@ -1135,10 +1177,11 @@
         </connector>
     </assignments>
     <assignments>
-        <description>Set Long Description To Be Updated - Use Existing  modified Comment in DB</description>
+        <description>Set Long Description To Be Updated - Use Existing  modified Comment in DB.
+Set Process date =Process date stamped from UI.</description>
         <name>Set_Existing_Long_Description</name>
         <label>Set Existing Long Description</label>
-        <locationX>1631</locationX>
+        <locationX>1625</locationX>
         <locationY>2320</locationY>
         <assignmentItems>
             <assignToReference>varFinalLongDescriptionToBeUpdated</assignToReference>
@@ -1170,7 +1213,8 @@
     </assignments>
     <assignments>
         <description>Set New Long Description .
-Note: ACCEPT verification process, received different CC Code.</description>
+Note: On ACCEPT verification process, received different CC Code.
+Set Process date =Today ,if it is invoked from batch. Else already stamped process date from UI.</description>
         <name>Set_New_Long_Description</name>
         <label>Set New Long Description</label>
         <locationX>1793</locationX>
@@ -1180,6 +1224,13 @@ Note: ACCEPT verification process, received different CC Code.</description>
             <operator>Assign</operator>
             <value>
                 <elementReference>fxUpdatedCCCodeLongDescription</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>varProcessedDate</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>fxTodaysDate</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -1340,6 +1391,13 @@ Note: ACCEPT verification process, received different CC Code.</description>
             <operator>Assign</operator>
             <value>
                 <elementReference>Loop_Valid_SA.SA_Start_Date_EI__c</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>recVarCareAppEnrollingSA.SERVICE_FULL_ADDRESS__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Loop_Valid_SA.Svc_Full_Adr_EI__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -1924,7 +1982,7 @@ Note: ACCEPT verification process, received different CC Code.</description>
                 <leftValueReference>varIsCAREDiscount_Input</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <elementReference>Yes_Accepted_True</elementReference>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <conditions>
@@ -2205,8 +2263,7 @@ IF(NOT(ISBLANK({!Get_Main_Application_Details.DOC_RECEIVED_DATE__c})),{!Get_Main
         </noMoreValuesConnector>
     </loops>
     <loops>
-        <description>Loop Through existing enrolled SAs and add it to Newly Enrollling SA Variable.
-For Adjustment Scenario, Main application will remain as Adjustment Transaction.A new transaction and enrolled SA(without Retro Dates) will be created for Main Transaction.</description>
+        <description>Loop Through existing enrolled SAs and add it to Newly Enrollling SA Variable for adjustment (only retro date is not blank)</description>
         <name>Loop_Existing_Enrolled_SAs</name>
         <label>Loop Existing Enrolled SAs</label>
         <locationX>2428</locationX>
@@ -2419,6 +2476,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>CCB_Contact_Type_No__c</field>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Adjustment.TYPE_NO__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>COC_CODE__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.COC_CODE__c</elementReference>
@@ -2529,13 +2592,19 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <inputAssignments>
             <field>PROCESSED_DATE__c</field>
             <value>
-                <elementReference>Get_Main_Application_Details.PROCESSED_DATE__c</elementReference>
+                <elementReference>varProcessedDate</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
             <field>PROCESS_NOTES__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.PROCESS_NOTES__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2680,6 +2749,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>CCB_Contact_Type_No__c</field>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Discount_Drop.TYPE_NO__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>CC_CL_CD__c</field>
             <value>
                 <elementReference>varExistingDiscountType_Input</elementReference>
@@ -2778,7 +2853,13 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <inputAssignments>
             <field>PROCESSED_DATE__c</field>
             <value>
-                <elementReference>Get_Main_Application_Details.PROCESSED_DATE__c</elementReference>
+                <elementReference>varProcessedDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2791,6 +2872,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             <field>REQUEST_DROP__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.REQUEST_DROP__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RESULT_DATE__c</field>
+            <value>
+                <elementReference>fxTodaysDate</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -2890,6 +2977,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             <field>CCB_CONTACT_DESC__c</field>
             <value>
                 <elementReference>Get_CC_Code_Details_For_Transfer.TYPE_DESC__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>CCB_Contact_Type_No__c</field>
+            <value>
+                <elementReference>Get_CC_Code_Details_For_Transfer.TYPE_NO__c</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -3015,7 +3108,13 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <inputAssignments>
             <field>PROCESSED_DATE__c</field>
             <value>
-                <elementReference>Get_Main_Application_Details.PROCESSED_DATE__c</elementReference>
+                <elementReference>varProcessedDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -3028,6 +3127,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             <field>REQUEST_DROP__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.REQUEST_DROP__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RESULT_DATE__c</field>
+            <value>
+                <elementReference>fxTodaysDate</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -3054,8 +3159,8 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <description>Delete Existing Enrolled SA of the application id (If any)</description>
         <name>Delete_Existing_Enrolled_SA</name>
         <label>Delete Existing Enrolled SA</label>
-        <locationX>3506</locationX>
-        <locationY>2426</locationY>
+        <locationX>3518</locationX>
+        <locationY>2445</locationY>
         <connector>
             <targetReference>Is_CARE_App_SA_Required</targetReference>
         </connector>
@@ -3153,6 +3258,7 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <queriedFields>TYPE_DESC__c</queriedFields>
         <queriedFields>TYPE_DESC_LONG__c</queriedFields>
         <queriedFields>TYPE_CODE__c</queriedFields>
+        <queriedFields>TYPE_NO__c</queriedFields>
         <sortField>TYPE_NO__c</sortField>
         <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -3183,6 +3289,7 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <queriedFields>TYPE_CODE__c</queriedFields>
         <queriedFields>TYPE_DESC_LONG__c</queriedFields>
         <queriedFields>TYPE_DESC__c</queriedFields>
+        <queriedFields>TYPE_NO__c</queriedFields>
         <sortField>TYPE_NO__c</sortField>
         <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -3213,6 +3320,7 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <queriedFields>TYPE_DESC__c</queriedFields>
         <queriedFields>TYPE_DESC_LONG__c</queriedFields>
         <queriedFields>TYPE_CODE__c</queriedFields>
+        <queriedFields>TYPE_NO__c</queriedFields>
         <sortField>TYPE_NO__c</sortField>
         <sortOrder>Asc</sortOrder>
         <storeOutputAutomatically>true</storeOutputAutomatically>
@@ -3254,6 +3362,7 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <queriedFields>RS_CD__c</queriedFields>
         <queriedFields>CCB_CONTACT_TYPE__c</queriedFields>
         <queriedFields>SA_ID__c</queriedFields>
+        <queriedFields>SERVICE_FULL_ADDRESS__c</queriedFields>
     </recordLookups>
     <recordLookups>
         <description>Get Main Application Details based on Current application id</description>
@@ -3336,6 +3445,24 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
                 <elementReference>varCCCLCD</elementReference>
             </value>
         </inputAssignments>
+        <inputAssignments>
+            <field>PROCESSED_DATE__c</field>
+            <value>
+                <elementReference>varProcessedDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>RESULT_DATE__c</field>
+            <value>
+                <elementReference>fxTodaysDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>USER_NAME_CARE1__c</field>
+            <value>
+                <elementReference>fxLANID</elementReference>
+            </value>
+        </inputAssignments>
         <object>CARE_Application__c</object>
     </recordUpdates>
     <recordUpdates>
@@ -3394,7 +3521,8 @@ Note: Since it got updated from UI before Accepting</description>
         <object>CARE_App_Enrolled_SA__c</object>
     </recordUpdates>
     <recordUpdates>
-        <description>Update Transaction Qualified By - Income/Categorical</description>
+        <description>Update Transaction Qualified By - Income/Categorical
+Update House Qualify =True</description>
         <name>Update_Transaction_Qualified_By</name>
         <label>Update Transaction Qualified By</label>
         <locationX>2116</locationX>
@@ -3412,6 +3540,12 @@ Note: Since it got updated from UI before Accepting</description>
                 <elementReference>varCareApplicationId_Input</elementReference>
             </value>
         </filters>
+        <inputAssignments>
+            <field>HOUSE_QUALIFY__c</field>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputAssignments>
         <inputAssignments>
             <field>QUALIFIED_BY__c</field>
             <value>
@@ -3795,6 +3929,14 @@ Note: In case of Accept , We need to stamp the modified comment from UI (if ther
         <value>
             <numberValue>0.0</numberValue>
         </value>
+    </variables>
+    <variables>
+        <description>Date of Processing : Date of running the Full Qualification.</description>
+        <name>varProcessedDate</name>
+        <dataType>Date</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
     </variables>
     <variables>
         <description>Categorical/Income/Not Qualified/None</description>

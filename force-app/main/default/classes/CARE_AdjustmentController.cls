@@ -11,6 +11,7 @@ Modification Log                 :
 * ---------------------------------------------------------------------------------------------------------  
 * 06/04/2020           Cognizant Technology Solutions                       Initial Version.
 *                                                                           CARE Application: 
+* 08/28/2020			SKMN				   							    Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 
 
@@ -52,6 +53,8 @@ public class CARE_AdjustmentController {
         @AuraEnabled public Date dSAStartDate {get; set;}
         @AuraEnabled public Date dRetroStartDate {get; set;}
         @AuraEnabled public Date dRetroEndDate {get; set;}
+        @AuraEnabled public String sSvcFullAddress {get; set;}
+        @AuraEnabled public String sSvcTypeCode {get; set;}
     }
     
     public class WrapperAdjustmentReason{
@@ -100,6 +103,8 @@ public class CARE_AdjustmentController {
                     objWrapperAdj.dStartDate = careEISite.Care_Start_Date_EI__c;
                     objWrapperAdj.dEndDate = careEISite.Care_Stop_Date_EI__c;
                     objWrapperAdj.dSAStartDate = careEISite.SA_Start_Date_EI__c;
+                    objWrapperAdj.sSvcFullAddress = careEISite.Svc_Full_Adr_EI__c;//Extra fields
+                    objWrapperAdj.sSvcTypeCode = careEISite.Svc_Type_Code_EI__c;//Extra fields
                     
                     adjustmentResponse.listAdjustment.add(objWrapperAdj);                    
                 }
@@ -139,8 +144,12 @@ public class CARE_AdjustmentController {
         try{   
             sPersonId = objAdjustmentInput.sPerId;
             
-            sCareNewAppId = createcareAppRecord(listAdjustmentSA, objAdjustmentInput);
-            sCareEnrollAppId = createcareAppEnrolledSaRecord(sCareNewAppId, listAdjustmentSA, objAdjustmentInput, bRetroStartDateOnly);
+            //Fetch the user's LANID to stamp as CommittedBy
+            Id userId = UserInfo.getUserId();            
+            User userDetails = [SELECT Id, Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+            
+            sCareNewAppId = createcareAppRecord(listAdjustmentSA, objAdjustmentInput, userDetails);
+            sCareEnrollAppId = createcareAppEnrolledSARecord(sCareNewAppId, listAdjustmentSA, objAdjustmentInput, bRetroStartDateOnly, userDetails);
             
             bStatus = true;            
         }
@@ -155,12 +164,13 @@ public class CARE_AdjustmentController {
     
     /******************************************PRIVATE METHODS*************************************** */ 
     
-    private static string createcareAppRecord(List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput){
+    private static string createcareAppRecord(List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput, User userDetails){
         string careNewAppId = '';
         String sPersonId = '';
         
         List<CARE_Application__c> listCareApp = new List<CARE_Application__c>();
         List<CARE_Type__c> listCareType = new List<CARE_Type__c>();
+               
         
         //get the cc code details for Adjustment
         listCareType = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_ADJUSTMENT, null, null);
@@ -173,8 +183,7 @@ public class CARE_AdjustmentController {
         careAppObj.RecordTypeId = careAppRecTypeId;
         careAppObj.APPLICANT_NAME__c = listAdjustmentSA[0].sApplicantName;
         careAppObj.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-        careAppObj.ENROLLMENT_TYPE__c = 'OTHER';
-        //careAppObj.RECEIVED_DATE__c = dTodaysDate;
+        careAppObj.ENROLLMENT_TYPE__c = 'OTHER';        
         careAppObj.PROCESSED_DATE__c = dTodaysDate;
         careAppObj.PER_ID__c = objAdjustmentInput.sPerId; 
         careAppObj.CARE_Account_ID__c = listAdjustmentSA[0].idAccountID;
@@ -190,6 +199,10 @@ public class CARE_AdjustmentController {
         //careAppObj.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other //Not required, for migration only
         careAppObj.CC_CL_CD__c = listAdjustmentSA[0].sDiscountType;//This will be Account's discount for stamping
         careAppObj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_ADJUSTMENT_SRC;
+        careAppobj.HOUSE_QUALIFY__c = false; //Extra fields
+        careAppObj.RECEIVED_DATE__c = dTodaysDate;//Extra fields
+        careAppObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+        careAppObj.RESULT_DATE__c = dTodaysDate;//Extra fields
         
         listCareApp.add(careAppObj);
         
@@ -217,10 +230,13 @@ public class CARE_AdjustmentController {
         return careNewAppId;
     }
     
-    private static string createcareAppEnrolledSARecord(String sCareNewAppId, List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput, Boolean bRetroStartDateOnly){
+    private static string createcareAppEnrolledSARecord(String sCareNewAppId, List<WrapperAdjustment> listAdjustmentSA, AdjustmentInputWrapper objAdjustmentInput, Boolean bRetroStartDateOnly, User userDetails){
         string careEnrollAppId = '';
         String sPersonId = '';
         List<CARE_App_Enrolled_SA__c> listCareAppAdjustedSAToInsert = new List<CARE_App_Enrolled_SA__c>();
+        
+        //get the Last Bill Date
+        Date dLastBillDate = CARE_UtilityController.getLastBillDate();
         
         for (WrapperAdjustment objWrapperAdjust : listAdjustmentSA ){
             if(objWrapperAdjust.dRetroStartDate != null || objWrapperAdjust.dRetroEndDate != null){
@@ -242,6 +258,15 @@ public class CARE_AdjustmentController {
                 careEnrolledSAObj.RETRO_START_DATE__c = objWrapperAdjust.dRetroStartDate;
                 //do not update the Retro End Date if, 'checkbox from UI is checked for 'Yes Start Date Only'
                 careEnrolledSAObj.RETRO_END_DATE__c = (bRetroStartDateOnly) ? null : objWrapperAdjust.dRetroEndDate;
+                careEnrolledSAObj.ADJUSTED__c = true;//Extra fields
+                if(userDetails.Profile.Name == CARE_Constants.CSR_PROFILE){
+                    careEnrolledSAObj.CSR_ADJUSTED__c = true;//Extra fields
+                	careEnrolledSAObj.CSR_USER__c = userDetails.Id;//Extra fields
+                }   
+                careEnrolledSAObj.SERVICE_FULL_ADDRESS__c = objWrapperAdjust.sSvcFullAddress;//Extra fields
+                careEnrolledSAObj.SERVICE_TYPE_CODE__c = objWrapperAdjust.sSvcTypeCode;//Extra fields
+                careEnrolledSAObj.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dTodaysDate;//Extra fields
+                careEnrolledSAObj.SA_ENTITY_NAME__c = objWrapperAdjust.sApplicantName;//Extra fields
                 
                 listCareAppAdjustedSAToInsert.add(careEnrolledSAObj);
             }

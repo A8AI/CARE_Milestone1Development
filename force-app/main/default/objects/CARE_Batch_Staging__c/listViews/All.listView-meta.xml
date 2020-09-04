@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>Source_Channel_Type__c</columns>
+    <columns>PER_ID__c</columns>
+    <columns>ELEC_SA_ID__c</columns>
+    <columns>GAS_SA_ID__c</columns>
+    <columns>DISCOUNT_Type__c</columns>
+    <columns>Contact_Code__c</columns>
+    <columns>SMS_App_Source_Code__c</columns>
+    <columns>Flag__c</columns>
+    <columns>Territory__c</columns>
+    <columns>End_Use__c</columns>
+    <filterScope>Everything</filterScope>
+    <label>All Records</label>
+</ListView>

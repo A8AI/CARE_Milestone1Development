@@ -12,8 +12,6 @@
         <members>CARE_ImageUploadController</members>
         <members>CARE_SendAppController</members>
         <members>CARE_AddElecGasController</members>
-	    <members>CARE_ManualUpload</members>
-        <members>CARE_LoadUserFile</members>
         <members>CARE_CommunicationController</members>
 		<members>CARE_CCBHistoryController</members>
 		<members>CARE_IncomeQualificationController</members>
@@ -59,6 +57,25 @@
 		<members>CARE_ESAFortyFiveDayBatchTest</members>
 		<members>CARE_BatchEnrollmentDataXportTest</members>
 		<members>CARE_BatchPEVArrivalDataXportTest</members>
+		<members>CARE_ThresholdCheckBatch</members>
+		<members>CARE_ThresholdCheckBatchTest</members>
+		<members>CARE_PEVFortyFiveDayBatchScheduler</members>
+		<members>CARE_HUFortyFiveDayBatchScheduler</members>
+		<members>CARE_ESAFortyFiveDayBatchScheduler</members>
+		<members>CARE_ESAFortyFiveDayExpireBatchScheduler</members>
+		<members>CARE_ThresholdCheckBatchScheduler</members>
+		<members>CARE_ManualUpload</members>
+		<members>CARE_ManualUploadTest</members>
+		<members>EI_BulkLoad</members>
+		<members>DynamicApex</members>
+		<members>CARE_LoadUserFile</members>
+		<members>CARE_LoadUserFileTest</members>
+		<members>Care_VerifyEnrollmentBatchTest</members>
+		<members>JSONLib</members>
+		<members>JSONLibTest</members>
+		<members>DynamicApexTest</members>
+		<members>EI_BulkloadTest</members>
+		<members>CARE_BatchEnrollmentDataXportScheduler</members>
         <name>ApexClass</name>
     </types>
 	
@@ -1006,6 +1023,42 @@
 		<members>WAC_RPT_Zip__c.ZIP_CODE__c</members>
         <members>WAC_RPT_Zip__c.EXTERNAL_ID__c</members>
 		<members>EI_PREMISE__c.ESA_Installation_Exception__c</members>
+		<members>CARE_Application__c.Parent_Application__c</members>
+		<members>CARE_APP_Staging__c.Processing_Status__c</members>
+        <members>CARE_APP_Staging__c.Processing_Message__c</members>
+		<members>CARE_APP_Staging__c.Bulk_Upload_History__c</members>
+		<members>CARE_APP_Staging__c.JOB_NO__c</members>
+		<members>CARE_APP_Image_List__c.Facility__c</members>
+		<members>CARE_Application__c.IS_NEW_ENROLLMENT__c</members>
+		<members>CARE_Application__c.Owner_LAN_ID__c</members>
+		<members>CARE_Application__c.TOTAL_ELEC_UNITS__c</members>
+		<members>CARE_Application__c.TOTAL_GAS_UNITS__c</members>
+		<!--<members>CARE_APP_Image_List__c.OwnerId</members>-->
+		<members>CARE_Batch_Staging__c.APPLICANT_NAME__c</members>
+		<members>CARE_Batch_Staging__c.CARE_BILLING_ACCT_ID__c</members>
+		<members>CARE_Batch_Staging__c.Bulk_Upload_History__c</members>
+		<members>CARE_Batch_Staging__c.Contact_Code__c</members>
+		<members>CARE_Batch_Staging__c.DISCOUNT_Type__c</members>
+		<members>CARE_Batch_Staging__c.EI_ACCOUNT__c</members>
+		<members>CARE_Batch_Staging__c.ELEC_SA_ID__c</members>
+		<members>CARE_Batch_Staging__c.End_Use__c</members>
+		<members>CARE_Batch_Staging__c.Flag__c</members>
+		<members>CARE_Batch_Staging__c.GAS_SA_ID__c</members>
+		<members>CARE_Batch_Staging__c.JOB_NO__c</members>
+		<members>CARE_Batch_Staging__c.PER_ID__c</members>
+		<members>CARE_Batch_Staging__c.Processing_Message__c</members>
+		<members>CARE_Batch_Staging__c.Processing_Status__c</members>
+		<members>CARE_Batch_Staging__c.SMS_App_Source_Code__c</members>
+		<members>CARE_Batch_Staging__c.Source_Channel_Type__c</members>
+		<members>CARE_Batch_Staging__c.Territory__c</members>
+		<members>EI_ApexClassCatelog__c.ApexClassName__c</members>
+		<members>EI_ApexClassCatelog__c.Category__c</members>
+		<members>EI_ApexClassCatelog__c.Description__c</members>
+		<members>EI_ApexClassCatelog__c.FileNameRegex__c</members>
+		<members>EI_ApexClassCatelog__c.RequestType__c</members>
+		<members>EI_ApexParameter__c.Description__c</members>
+		<members>EI_ApexParameter__c.EI_ApexClassCatelog__c</members>
+		<members>EI_ApexParameter__c.Value__c</members>
         <name>CustomField</name>
     </types>
 	
@@ -1087,6 +1140,8 @@
 		<members>CARE_COCLengthValidationMsg</members>
 		<members>CARE_ValidValValidationMsg</members>
 		<members>CARE_PersonNameValidationMsg</members>
+		<members>CARE_IncomeInfoDeleteMsg</members>
+		<members>CARE_ApplicationCancelledMsg</members>
         <name>CustomLabel</name>
     </types>
 	
@@ -1134,9 +1189,12 @@
 		<members>WAC_RPT_Detail_Out__c</members>
 		<members>WAC_RPT_Header__c</members>
 		<members>WAC_RPT_Zip__c</members>
-		<members>EI_Site__c</members>
+		<members>CARE_Batch_Staging__c</members>
+		<members>EI_ApexClassCatelog__c</members>
+		<members>EI_ApexParameter__c</members>
+		<!--<members>EI_Site__c</members>
 		<members>EI_PREMISE__c</members>
-		<members>EI_Space_Location__c</members>
+		<members>EI_Space_Location__c</members>-->
         <name>CustomObject</name>
     </types>
 	
@@ -1150,6 +1208,8 @@
 		<members>EI_SA_CONTERM__c</members>
 		<members>CARE_System_Value__c</members>
 		<members>CARE_On_Demand_Status</members>
+		<members>CARE_Load_Data</members>
+		<!--<members>EI_Usage_Staging__c</members>-->
         <name>CustomTab</name>
     </types>
 	
@@ -1168,7 +1228,7 @@
 		<members>CARE_Type__c-Admin Valid Rate Schedule CARE Type Layout</members>
 		<members>CARE_CC_Batch__c-CARE CC Batch Layout</members>
         <members>CARE_CC_Batch_Detail__c-CARE CC Batch Detail Layout</members>
-		<members>CARE_APP_Image_List__c-CARE APP Image List Layout</members>
+		<!--<members>CARE_APP_Image_List__c-CARE APP Image List Layout</members>-->
 		<members>CARE_Tenant__c-CARE Tenant Layout</members>
 		<members>CARE_Facility__c-Facility Layout</members>
 		<members>CARE_PROGRAM__c-CARE PROGRAM Layout</members>
@@ -1204,6 +1264,8 @@
         <members>WAC_RPT_Detail_Out__c-WAC RPT Detail Out Layout</members>
 		<members>WAC_RPT_Header__c-WAC RPT Header Layout</members>
 		<members>WAC_RPT_Zip__c-WAC RPT Zip Layout</members>
+		<members>CARE_APP_Image_List__c-CARE APP Image List Application Layout</members>
+		<members>CARE_APP_Image_List__c-CARE APP Image List Facility Layout</members>
         <name>Layout</name>
     </types>
 	
@@ -1227,7 +1289,6 @@
 		<members>care_PevHu</members>
 		<members>care_OnDemandStatus</members>
 		<members>care_OnDemandPEV</members>
-        <members>care_LoadUserFile</members>
 		<members>care_IncomeInformation</members>
 		<members>care_IRS1040_2018</members>
 		<members>care_IRS1040_2019</members>
@@ -1240,6 +1301,9 @@
 		<members>care_BankStatementForm</members>
 		<members>care_CategoricalFixedForm</members>
 		<members>care_CategoricalForm</members>
+		<members>care_LoadUserFile</members>
+		<members>bulkload</members>
+		<members>care_Insight</members>
 		<name>LightningComponentBundle</name>
     </types>
 	
@@ -1265,26 +1329,26 @@
 		<members>CARE Base Profile</members>
 		<members>CARE Partner SM</members>
 		<members>CARE Partner Non-Profit</members>
-		<members>Admin</members>
+		<!--<members>Admin</members>
 		<members>Integration User</members>
-		<members>CSR</members>
+		<members>CSR</members>-->
 		<name>Profile</name>
 	</types>
 	
 	 <types>
 		<members>CARE_Application__c.Residential_Customer</members>
-		<members>CARE_Application__c.Agricultural</members>
-		<members>CARE_Application__c.Migrant</members>
-		<members>CARE_Application__c.Non_Profit</members>
-		<members>CARE_Application__c.Sub_Metered</members>
+		<members>CARE_Application__c.AG</members>
+		<members>CARE_Application__c.MF</members>
+		<members>CARE_Application__c.NP</members>
+		<members>CARE_Application__c.SM</members>
 		<members>CARE_Facility__c.SM</members>
 		<members>CARE_Facility__c.NP</members>
 		<members>CARE_Facility__c.MF</members>
 		<members>CARE_Facility__c.AG</members>
-		<members>Account.CARE_Agricultural</members>
-		<members>Account.CARE_Migrant</members>
-		<members>Account.CARE_Non_Profit</members>
-		<members>Account.CARE_Sub_Metered</members>
+		<members>Account.AG</members>
+		<members>Account.MF</members>
+		<members>Account.NP</members>
+		<members>Account.SM</members>
 		<members>Account.Residential_Master_Account_EI</members>
 		<members>Account.Residential_Local_Account_EI</members>
 		<members>Account.Residential_Primary_Account_EI</members>
@@ -1292,6 +1356,8 @@
 		<members>CARE_Type__c.CC_Code_Maintenance</members>
 		<members>CARE_Type__c.Misc</members>
 		<members>CARE_Type__c.Valid_Rate_Schedule</members>
+		<members>CARE_APP_Image_List__c.Residential</members>
+		<members>CARE_APP_Image_List__c.Non_Residential</members>
 		<name>RecordType</name>
 	</types>
 	
@@ -1320,6 +1386,7 @@
 		<members>CARE_Application_UtilityBar</members>
 		<members>CARE_APP_UtilityBar</members>
 		<members>CARE_On_Demand_Status</members>
+		<members>CARE_Load_Data</members> 
 		<name>FlexiPage</name>
 	</types>
 	
@@ -1332,7 +1399,6 @@
 		<members>CAREAdminUserReport/Site_Person_with_EI_Account_ID</members>
 		<name>Report</name>
 	</types>
-
 	
 	
 

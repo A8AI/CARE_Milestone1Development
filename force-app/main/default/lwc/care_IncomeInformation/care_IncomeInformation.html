@@ -61,9 +61,12 @@
                                     <div>{incomeInfo.sDocumentType}</div>
                                  </td>
                                  <td style="text-align: right;">
-                                    <div> {label.CurrencySymbol} {incomeInfo.dEstAnnualSalary}</div>
+                                    <div>
+                                       <lightning-formatted-number value={incomeInfo.dEstAnnualSalary} format-style="currency"
+                                       currency-code="USD" maximum-fraction-digits="0" minimum-fraction-digits="0"></lightning-formatted-number>
+                                    </div>
                                  </td>
-                                 <td>
+                                 <td> 
                                     <div>{incomeInfo.sIncomeStatus}</div>
                                  </td>
                                  <td>
@@ -97,7 +100,9 @@
                               <td style="text-align: right; font-weight:bold;">Total Est. Annual
                                  Salary</td>
                               <td style="text-align: right; font-weight:bold;">
-                                 {label.CurrencySymbol} {totalAnnualAmount}
+                                 <!--{label.CurrencySymbol} {totalAnnualAmount} -->
+                                 <lightning-formatted-number value={totalAnnualAmount} format-style="currency"
+                                 currency-code="USD" maximum-fraction-digits="0" minimum-fraction-digits="0"></lightning-formatted-number>
                               </td>
                               <td></td>
                               <td></td>
@@ -202,29 +207,29 @@
                <template if:true={bTranscriptForm}>
                   <c-care_-i-r-s-transcript-form id-care-app={idCareApp} id-household-member={idHouseholdMember}
                      s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
-                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
-                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-transcript-form>
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} s-adult-count={sAdultCount} 
+                     b-view-mode={bViewMode} onrefreshincomeinfo={refreshData}></c-care_-i-r-s-transcript-form>
                </template>
                <!--child component for IRS 2018 form -->
                <template if:true={bIRS2018Form}>
                   <c-care_-i-r-s-1040_2018 id-care-app={idCareApp} id-household-member={idHouseholdMember}
                      s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
-                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
-                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2018>
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} s-adult-count={sAdultCount}
+                     b-view-mode={bViewMode} onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2018>
                </template>
                <!--child component for IRS 2019 form -->
                <template if:true={bIRS2019Form}>
                   <c-care_-i-r-s-1040_2019 id-care-app={idCareApp} id-household-member={idHouseholdMember}
                      s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
-                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
-                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2019>
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} s-adult-count={sAdultCount}                    
+                     b-view-mode={bViewMode} onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_2019>
                </template>
                <!--child component for IRS 1040SR form -->
                <template if:true={bIRS1040SRForm}>
                   <c-care_-i-r-s-1040_-s-r id-care-app={idCareApp} id-household-member={idHouseholdMember}
                      s-income-source={sIncomeSourceName} s-document-type={sDocName} s-form-type={sFormName}
-                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} b-view-mode={bViewMode}
-                     onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_-s-r>
+                     d-discount-length={dDiscountLength} id-member-income={idSelectedRecord} s-adult-count={sAdultCount}
+                     b-view-mode={bViewMode} onrefreshincomeinfo={refreshData}></c-care_-i-r-s-1040_-s-r>
                </template>
                <!--Child Component for showing Income Form Section End-->
             </div>

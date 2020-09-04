@@ -3,7 +3,7 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
-                <componentName>care_App</componentName>
+                <componentName>care_Insight</componentName>
             </componentInstance>
         </itemInstances>
         <name>main</name>

@@ -143,6 +143,7 @@ class CARE_BatchEnrollmentDataXportTest {
             EI_Site__c SARec1 = new EI_Site__c ();
             SARec1.Billing_Account_ID_EI__c = billAccId;
             SARec1.Account_EI__c = accList[i].Id;
+            SARec1.Person_ID_EI__c = accList[i].Billing_Person_ID_EI__c;
             SARec1.Name = 'SA' + i;
             SARec1.Rate_Schedule_EI__c = rateSchedule;
             SARec1.Imported_Site_Name_EI__c = 'Customer SA ' + i;
@@ -157,6 +158,7 @@ class CARE_BatchEnrollmentDataXportTest {
             EI_Site__c SARec2 = new EI_Site__c ();
             SARec2.Billing_Account_ID_EI__c = billAccId;
             SARec2.Account_EI__c = accList[i].Id;
+            SARec2.Person_ID_EI__c = accList[i].Billing_Person_ID_EI__c;
             SARec2.Name = 'SA' + i;
             SARec2.Rate_Schedule_EI__c = rateSchedule;
             SARec2.Imported_Site_Name_EI__c = 'Customer SA ' + i;
@@ -171,6 +173,7 @@ class CARE_BatchEnrollmentDataXportTest {
             EI_Site__c SARec3 = new EI_Site__c ();
             SARec3.Billing_Account_ID_EI__c = billAccId;
             SARec3.Account_EI__c = accList[i].Id;
+            SARec3.Person_ID_EI__c = accList[i].Billing_Person_ID_EI__c;
             SARec3.Name = 'SA' + i;
             SARec3.Rate_Schedule_EI__c = rateSchedule;
             SARec3.Imported_Site_Name_EI__c = 'Customer SA ' + i;
@@ -191,50 +194,101 @@ class CARE_BatchEnrollmentDataXportTest {
     {
         List<CARE_APP_STAGING__c> stgRecsList = new List<CARE_APP_STAGING__c> ();
         
+        // Create Staging records with Bad Account Id for DataXport source channel
+        CARE_APP_STAGING__c stgRec01 = new CARE_APP_STAGING__c ();
+        stgRec01.ACCT_ID__c = '12345678';
+        stgRec01.APPLICATION_TYPE__c = 'RESIDENTIAL';
+        stgRec01.ENROLLMENT_STATUS__c = 'Pending';
+        stgRec01.ENROLLMENT_TYPE__c = 'ENROLLMENT';
+        stgRec01.SOURCE_CHANNEL_TYPE__c = 'DataXport Enrollment';
+        stgRecsList.add(stgRec01);
+        
+        // Create Staging records with Bad Account Id for Force.com source channel
+        CARE_APP_STAGING__c stgRec02 = stgRec01.clone(false, false, false, false);
+        stgRec02.SOURCE_CHANNEL_TYPE__c = 'CARE Force.com';
+        stgRecsList.add(stgRec02);
+        
+        // Create Staging records with Bad Account Id for SMS source channel
+        CARE_APP_STAGING__c stgRec03 = stgRec01.clone(false, false, false, false);
+        stgRec03.SOURCE_CHANNEL_TYPE__c = 'CARE SMS';
+        stgRecsList.add(stgRec03);
+        
+        
+        // Create Staging records with Dupliates for DataXport source channel
+        CARE_APP_STAGING__c stgRec11 = new CARE_APP_STAGING__c ();
+        stgRec11.ACCT_ID__c = '1111122222';
+        stgRec11.APPLICATION_TYPE__c = 'RESIDENTIAL';
+        stgRec11.ENROLLMENT_STATUS__c = 'Pending';
+        stgRec11.ENROLLMENT_TYPE__c = 'ENROLLMENT';
+        stgRec11.SOURCE_CHANNEL_TYPE__c = 'DataXport Enrollment';
+        stgRecsList.add(stgRec11);
+        
+        // Create Staging records with Duplicates for Force.com source channel
+        CARE_APP_STAGING__c stgRec12 = stgRec11.clone(false, false, false, false);
+        stgRec12.SOURCE_CHANNEL_TYPE__c = 'CARE Force.com';
+        stgRecsList.add(stgRec12);
+        
+        // Create Staging records with Duplicates for SMS source channel
+        CARE_APP_STAGING__c stgRec13 = stgRec11.clone(false, false, false, false);
+        stgRec13.SOURCE_CHANNEL_TYPE__c = 'CARE SMS';
+        stgRecsList.add(stgRec13);
+        
+        
         for (String billAccId :billAccIdList) {
-            CARE_APP_STAGING__c stgRec = new CARE_APP_STAGING__c ();
-            stgRec.ACCT_ID__c = billAccId;
-            stgRec.APPLICATION_TYPE__c = 'RESIDENTIAL';
-            stgRec.ENROLLMENT_STATUS__c = 'Pending';
-            stgRec.ENROLLMENT_TYPE__c = 'ENROLLMENT';
-            stgRec.SOURCE_CHANNEL_TYPE__c = 'DataXport Enrollment';
-            stgRec.REQUEST_DROP__c = 'N';
-            stgRec.EMAIL_ADDRESS__c = 'testEmailAddr@gmail.com';
-            stgRec.PHONE__c = '1234567890';
-            stgRec.PHONE_TYPE__c = 'Mobile';
-            stgRec.ALT_PHONE__c = '2345678901';
-            stgRec.ALT_PHONE_TYPE__c = 'Home';
-            stgRec.LANGUAGE_PREFERENCE__c = '1';
-            stgRec.MAIL_PREFERRED__c = 'Y';
-            stgRec.EMAIL_PREFERRED__c = 'N';
-            stgRec.PHONE_PREFERRED__c = 'N';
-            stgRec.TEXT_PREFERRED__c = 'N';
-            stgRec.NO_ADULT__c = 2;
-            stgRec.NO_CHILD__c = 1;
-            stgRec.LIHEAP__c = 'Y';
-            stgRec.WIC__c = 'N';
-            stgRec.CALFRESH_SNAP__c = 'N';
-            stgRec.CALWORKS_TANF__c = 'N';
-            stgRec.HEAD_START_INCOME__c = 'N';
-            stgRec.SSI__c = 'N';
-            stgRec.HEALTHY_FAMILIES__c = 'N';
-            stgRec.NSLP__c = 'N';
-            stgRec.BUREAU_INDIAN_AFFAIRS__c = 'N';
-            stgRec.MEDICAID_UNDER65__c = 'N';
-            stgRec.MEDICAID_OVER65__c = 'N';
-            stgRec.IS_FIXED_INCOME__c = 'N';
-            stgRec.ANNUAL_INCOME__c = 33820;
-            stgRec.IS_SIGNED__c = 'Y';
-            stgRec.DOC_RECEIVED_DATE__c = System.Today();
-            stgRec.APPCODE__c = '1234';
-            stgRec.IMAGE_ID__c = '1234567890';
-            stgRec.EXTERNAL_ID__c = 'RESDX_06/20/2020_EN_3787591698';
-            stgRec.APPLICANT_NAME__c = 'Customer Name';
-            stgRec.NO_PAGE__c = 0;
-            stgRec.COC_CODE__c = 'BILL';
-            stgRec.IS_RECERT__c = 'N';
+            // Create Staging record for DataXport source channel
+            CARE_APP_STAGING__c stgRec1 = new CARE_APP_STAGING__c ();
+            stgRec1.ACCT_ID__c = billAccId;
+            stgRec1.APPLICATION_TYPE__c = 'RESIDENTIAL';
+            stgRec1.ENROLLMENT_STATUS__c = 'Pending';
+            stgRec1.ENROLLMENT_TYPE__c = 'ENROLLMENT';
+            stgRec1.SOURCE_CHANNEL_TYPE__c = 'DataXport Enrollment';
+            stgRec1.REQUEST_DROP__c = 'N';
+            stgRec1.EMAIL_ADDRESS__c = 'testEmailAddr@gmail.com';
+            stgRec1.PHONE__c = '1234567890';
+            stgRec1.PHONE_TYPE__c = 'Mobile';
+            stgRec1.ALT_PHONE__c = '2345678901';
+            stgRec1.ALT_PHONE_TYPE__c = 'Home';
+            stgRec1.LANGUAGE_PREFERENCE__c = '1';
+            stgRec1.MAIL_PREFERRED__c = 'Y';
+            stgRec1.EMAIL_PREFERRED__c = 'N';
+            stgRec1.PHONE_PREFERRED__c = 'N';
+            stgRec1.TEXT_PREFERRED__c = 'N';
+            stgRec1.NO_ADULT__c = 2;
+            stgRec1.NO_CHILD__c = 1;
+            stgRec1.LIHEAP__c = 'Y';
+            stgRec1.WIC__c = 'N';
+            stgRec1.CALFRESH_SNAP__c = 'N';
+            stgRec1.CALWORKS_TANF__c = 'N';
+            stgRec1.HEAD_START_INCOME__c = 'N';
+            stgRec1.SSI__c = 'N';
+            stgRec1.HEALTHY_FAMILIES__c = 'N';
+            stgRec1.NSLP__c = 'N';
+            stgRec1.BUREAU_INDIAN_AFFAIRS__c = 'N';
+            stgRec1.MEDICAID_UNDER65__c = 'N';
+            stgRec1.MEDICAID_OVER65__c = 'N';
+            stgRec1.IS_FIXED_INCOME__c = 'N';
+            stgRec1.ANNUAL_INCOME__c = 33820;
+            stgRec1.IS_SIGNED__c = 'Y';
+            stgRec1.DOC_RECEIVED_DATE__c = System.Today();
+            stgRec1.APPCODE__c = '1234';
+            stgRec1.IMAGE_ID__c = '1234567890';
+            stgRec1.EXTERNAL_ID__c = 'RESDX_06/20/2020_EN_3787591698';
+            stgRec1.APPLICANT_NAME__c = 'Customer Name';
+            stgRec1.NO_PAGE__c = 0;
+            stgRec1.COC_CODE__c = 'BILL';
+            stgRec1.IS_RECERT__c = 'N';
             
-            stgRecsList.add(stgRec);
+            stgRecsList.add(stgRec1);
+            
+            // Create Staging record for Force.com source channel
+            CARE_APP_STAGING__c stgRec2 = stgRec1.clone(false, false, false, false);
+            stgRec2.SOURCE_CHANNEL_TYPE__c = 'CARE Force.com';
+            stgRecsList.add(stgRec2);
+            
+            // Create Staging record for SMS source channel
+            CARE_APP_STAGING__c stgRec3 = stgRec1.clone(false, false, false, false);
+            stgRec3.SOURCE_CHANNEL_TYPE__c = 'CARE SMS';
+            stgRecsList.add(stgRec3);
         }
         System.Debug('stgRecsList = ' + stgRecsList);
         
@@ -342,6 +396,58 @@ class CARE_BatchEnrollmentDataXportTest {
         
         Test.startTest();
         CARE_BatchEnrollmentDataXport dxBatch4 = new CARE_BatchEnrollmentDataXport('DataXport Enrollment', true);
+        // Execute the batch job
+        Id batchJobId = Database.executeBatch(dxBatch4);
+        Test.stopTest();
+    }
+    
+    public static TestMethod void CARE_BatchEnrollmentDataXport5() {
+        List<EI_Site__c> SAList = new List<EI_Site__c> ();
+        
+        for (EI_Site__c SARec :[SELECT Id,Care_Start_Date_EI__c,Care_Stop_Date_EI__c FROM EI_Site__c]) {
+            SARec.Care_Start_Date_EI__c = null;
+            SARec.Care_Stop_Date_EI__c = null;
+            SAList.add(SARec);
+        }
+        System.Debug('SAList = ' + SAList);
+        
+        if (SAList != null && !SAList.isEmpty()) {
+            update SAList;
+        }
+        
+        // Retain only 'CARE Force.com' Staging record and Delete all other Staging records
+        List<CARE_APP_STAGING__c> stgRecsList = [SELECT Id FROM CARE_APP_STAGING__c WHERE Source_Channel_Type__c != 'CARE Force.com'];
+        System.Debug('stgRecsList = ' + stgRecsList);
+        delete stgRecsList;
+        
+        Test.startTest();
+        CARE_BatchEnrollmentDataXport dxBatch4 = new CARE_BatchEnrollmentDataXport('CARE Force.com', true);
+        // Execute the batch job
+        Id batchJobId = Database.executeBatch(dxBatch4);
+        Test.stopTest();
+    }
+    
+    public static TestMethod void CARE_BatchEnrollmentDataXport6() {
+        List<EI_Site__c> SAList = new List<EI_Site__c> ();
+        
+        for (EI_Site__c SARec :[SELECT Id,Care_Start_Date_EI__c,Care_Stop_Date_EI__c FROM EI_Site__c]) {
+            SARec.Care_Start_Date_EI__c = null;
+            SARec.Care_Stop_Date_EI__c = null;
+            SAList.add(SARec);
+        }
+        System.Debug('SAList = ' + SAList);
+        
+        if (SAList != null && !SAList.isEmpty()) {
+            update SAList;
+        }
+        
+        // Retain only 'CARE SMS' Staging record and Delete all other Staging records
+        List<CARE_APP_STAGING__c> stgRecsList = [SELECT Id FROM CARE_APP_STAGING__c WHERE Source_Channel_Type__c != 'CARE SMS'];
+        System.Debug('stgRecsList = ' + stgRecsList);
+        delete stgRecsList;
+        
+        Test.startTest();
+        CARE_BatchEnrollmentDataXport dxBatch4 = new CARE_BatchEnrollmentDataXport('CARE SMS', true);
         // Execute the batch job
         Id batchJobId = Database.executeBatch(dxBatch4);
         Test.stopTest();

@@ -22,7 +22,7 @@ public with sharing class CARE_IncomeInformationController {
         @AuraEnabled
         public List<WrapperHouseholdIncome>listHouseholdIncome {get;set;}
         @AuraEnabled
-        Public Integer dMemberAnnualSalary {get;set;} 
+        Public Decimal dMemberAnnualSalary {get;set;} 
         @AuraEnabled
         public List<WrapperIncomeSource> listIncomeSource {get;set;} 
         
@@ -211,7 +211,8 @@ public with sharing class CARE_IncomeInformationController {
                 
                 //get the total income
                 incomeInformationResponse.dMemberAnnualSalary = (listHouseholdMemberIncome[0].HOUSEHOLDDETAIL__r.EST_ANNUAL_SALARY__c != null) ? 
-                    Integer.valueOf(listHouseholdMemberIncome[0].HOUSEHOLDDETAIL__r.EST_ANNUAL_SALARY__c) : 0;
+                    //Integer.valueOf(listHouseholdMemberIncome[0].HOUSEHOLDDETAIL__r.EST_ANNUAL_SALARY__c) : 0;
+                     listHouseholdMemberIncome[0].HOUSEHOLDDETAIL__r.EST_ANNUAL_SALARY__c : 0;
             }
             //get the income source details
             List<CARE_Income_Sources__c>listCareIncomeSource = new List<CARE_Income_Sources__c>();
@@ -559,7 +560,6 @@ public with sharing class CARE_IncomeInformationController {
                 Set<String>listHouseholdIncomeCId = new Set<String>();
                 
                 if(listHouseholdIncomeCRec != null && listHouseholdIncomeCRec.size() > 0){
-                    system.debug('listHouseholdIncomeCRec'+listHouseholdIncomeCRec);
                     for(CARE_Household_Member_IncomeC__c incomeCRecObj:listHouseholdIncomeCRec )
                     {
                         sId = String.valueOf(incomeCRecObj.ID);
@@ -659,6 +659,7 @@ public with sharing class CARE_IncomeInformationController {
     private static Boolean updateAnnualIncomeAndDocValidity(Id idCareApp, Id idCareHouseholdDetail ){
         
         Boolean bStatus;
+        Boolean bInvalid = false;
         Decimal dTotalSalaryForMember = 0;
         Decimal dTotalSalaryForPerson = 0;
         try{
@@ -670,8 +671,8 @@ public with sharing class CARE_IncomeInformationController {
                                                                       WHERE HOUSEHOLDDETAIL__c= :idCareHouseholdDetail]){                  
                                                                           if(careHouseholdIncome.EST_SALARY__c==null){
                                                                               careHouseholdIncome.EST_SALARY__c=0;
-                                                                          }
-                                                                          dTotalSalaryForMember += careHouseholdIncome.EST_SALARY__c;                                                                               
+                                                                          }															
+                                                                          dTotalSalaryForMember += careHouseholdIncome.EST_SALARY__c;                                                                           
                                                                       }
             careHouseholdDetailObj.EST_ANNUAL_SALARY__c = dTotalSalaryForMember;
             
@@ -698,12 +699,32 @@ public with sharing class CARE_IncomeInformationController {
             
             List<CARE_Household_Member_Income__c> listHouseholdIncomeDoc = [SELECT ID,INCOME_SOURCE_STATUS__c
                                                                             FROM CARE_Household_Member_Income__c 
-                                                                            WHERE HOUSEHOLDDETAIL__c =:idCareHouseholdDetail
-                                                                            AND INCOME_SOURCE_STATUS__c = 'Invalid'];
-            if(listHouseholdIncomeDoc != null && listHouseholdIncomeDoc.size() > 0){
+                                                                            WHERE HOUSEHOLDDETAIL__c =:idCareHouseholdDetail];
+                                                                            //AND INCOME_SOURCE_STATUS__c = 'Invalid'
+            /*if(listHouseholdIncomeDoc != null && listHouseholdIncomeDoc.size() > 0){
+                
                 careHouseholdDetailObj.INCOME_SOURCE_STATUS__c = 'Invalid';
             }
             else {
+                careHouseholdDetailObj.INCOME_SOURCE_STATUS__c = 'Valid';
+            }*/
+            //check if Income record is valid/Invalid
+            if(listHouseholdIncomeDoc != null && listHouseholdIncomeDoc.size() > 0){
+                
+                for(CARE_Household_Member_Income__c incomeCObj :listHouseholdIncomeDoc){                    
+                    if(incomeCObj.INCOME_SOURCE_STATUS__c =='Invalid'){
+                        bInvalid = true;
+                    }
+                }
+            }
+            //there is not record available default the validity of record to 'Invalid'
+            else {
+                bInvalid = true;
+            }
+            if(bInvalid){
+                careHouseholdDetailObj.INCOME_SOURCE_STATUS__c = 'Invalid';
+            }
+            else{
                 careHouseholdDetailObj.INCOME_SOURCE_STATUS__c = 'Valid';
             }
             update careHouseholdDetailObj;

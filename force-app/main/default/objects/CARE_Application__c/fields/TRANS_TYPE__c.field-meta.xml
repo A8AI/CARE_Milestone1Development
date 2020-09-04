@@ -12,19 +12,24 @@
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>NE</fullName>
+                <fullName>New</fullName>
                 <default>false</default>
-                <label>NE</label>
+                <label>New</label>
             </value>
             <value>
-                <fullName>RQ</fullName>
+                <fullName>Recert</fullName>
                 <default>false</default>
-                <label>RQ</label>
+                <label>Recert</label>
             </value>
             <value>
-                <fullName>RC</fullName>
+                <fullName>Request</fullName>
                 <default>false</default>
-                <label>RC</label>
+                <label>Request</label>
+            </value>
+            <value>
+                <fullName>Drop all</fullName>
+                <default>false</default>
+                <label>Drop all</label>
             </value>
         </valueSetDefinition>
     </valueSet>

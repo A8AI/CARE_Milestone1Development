@@ -33,7 +33,7 @@ export default class Care_IncomeInformation extends LightningElement {
     @api sHouseholdMemberName; ///Individual House hold member Name
     @api sAppType; //Type of Application PEV /HU
     @api bViewMode;
-
+    @api sAdultCount;//no:of Adult 
 
     @api bShowModal;
     @track showLoadingSpinner = false;
@@ -94,7 +94,7 @@ export default class Care_IncomeInformation extends LightningElement {
             error
         } = value;
         if (data) {
-
+            console.log('Apex call is refreshed for showing in the Parent' + JSON.stringify(data));
             this.dataIncomeInformation = data.listHouseholdIncome;
             this.totalAnnualAmount = data.dMemberAnnualSalary;
             this.dataIncomeSourceOptions = data.listIncomeSource;

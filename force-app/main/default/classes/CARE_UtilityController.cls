@@ -5,7 +5,8 @@ Created Date         :  05/28/2020
 Function             :  This is the Utiltity Class for re-usable components in CARE Application.
 Story                :                                                                               
 Work Task            :                                                                               
-Modification Log     :                                                                               
+Modification Log     :
+
 *----------------------------------------------------------------------------------------------------------  
 * When                  Who                                                 Description                                     
 * ---------------------------------------------------------------------------------------------------------  
@@ -314,7 +315,7 @@ WHERE TYPE_CODE__C = :sTypeCode AND CATEGORY__c = :sCategory AND START_DATE__c <
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         }        
     }
-    
+          
     //This method is used to check if uploaded image exists in ContentVersion for the application id
     @AuraEnabled
     public static Boolean checkIfUploadedImageExists(Id idApplication){
@@ -350,6 +351,7 @@ WHERE TYPE_CODE__C = :sTypeCode AND CATEGORY__c = :sCategory AND START_DATE__c <
     //This method is used to delete all the records of ContentDocument and related object records against the application Id
     @AuraEnabled
     public static Boolean deleteUploadedContents(Id idApplication){
+    //public static Boolean deleteUploadedContents(List<String> listCareAppId){
         Boolean bDeleteSuccess = true;
         List<Id> listConDocIds = new List<Id>();
         List<Id> listConVerIds = new List<Id>();
@@ -398,6 +400,21 @@ WHERE TYPE_CODE__C = :sTypeCode AND CATEGORY__c = :sCategory AND START_DATE__c <
         return Schema.SObjectType.CARE_Application__c.getRecordTypeInfosByDeveloperName().get(sRecordTypeDevName).getRecordTypeId();
     }
     
+    //This method returns EI Account RecordTypeId
+    public static Id getAccountRecordTypeId(String sRecordTypeDevName){
+        return Schema.SObjectType.Account.getRecordTypeInfosByDeveloperName().get(sRecordTypeDevName).getRecordTypeId();
+    }
+    
+   //This method returns Care Facility RecordTypeId
+    public static Id getFacilityRecordTypeId(String sRecordTypeDevName){
+        return Schema.SObjectType.CARE_Facility__c.getRecordTypeInfosByDeveloperName().get(sRecordTypeDevName).getRecordTypeId();
+    }
+    
+    //This method returns Care App Image List RecordTypeId
+    public static Id getCareAppImgListRecordTypeId(String sRecordTypeDevName){
+        return Schema.SObjectType.CARE_APP_Image_List__c.getRecordTypeInfosByDeveloperName().get(sRecordTypeDevName).getRecordTypeId();
+    }
+    
     //This method returns the Lan Id and Profile name for logged in User
     @AuraEnabled
     public static List<User> getUserDetails(Id userId){
@@ -407,14 +424,14 @@ WHERE TYPE_CODE__C = :sTypeCode AND CATEGORY__c = :sCategory AND START_DATE__c <
         
         try{
             if(string.isNotBlank(sUserId)){
-                listUserDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId limit 1];
+                listUserDetails = [SELECT Id, Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId limit 1];
                 
                 system.debug('listUserDetails with string Id--->'+ listUserDetails);
             }
             else if(string.isBlank(sUserId)){
                 
                 Id loggedUserId = UserInfo.getUserId();
-                listUserDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :loggedUserId limit 1]; 
+                listUserDetails = [SELECT Id, Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :loggedUserId limit 1]; 
                 
                 system.debug('listUserDetails without string Id--->'+ listUserDetails);
             }   
@@ -656,16 +673,84 @@ return status;
         mail.setToAddresses(toAddresses);
         mail.setSubject('CARE PEV/HU/ESA Response Check Daily Batch Processing Status: ' + sStatus );
         mail.setPlainTextBody
-            ('Dear User,' + '<br/><br>' +
+            ('Dear User,' +
              ' The batch job was finished on ' + CompletedDate + ' and processed ' + TotalJobItems +
-             ' batches with '+ NumberOfSuccess + ' success records and '+ NumberOfErrors + 'failures.' + '<br/><br>' +
-             ' For help with the issue please contact Energy Insight Support team.' + '<br/><br>' +
-             '<br></br><br></br>' + 'Regards, <br></br> Energy Insight Support team');
+             ' batches with '+ NumberOfSuccess + ' success records and '+ NumberOfErrors + ' failures.' +
+             ' For help with the issue please contact Energy Insight Support team.');
         
-        // send email             
-        if (!Test.isRunningTest()) {
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });  
-        }
+        // send email 
+        Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });            
+        /*if (!Test.isRunningTest()) {
+              
+        }*/
     }
     
+    //method to call webservice and return Last Bill Date
+    @AuraEnabled(Cacheable = true)
+    public static Date getLastBillDate (){
+        Date dTodaysDate = Date.today();
+        try{
+            dTodaysDate = dTodaysDate;
+        }
+        catch (Exception ex){
+            system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString()); 
+        }
+        return dTodaysDate;
+    }
+    
+     public static void sendExceptionErrorEmail(String sClassname, String sSubject, String sBody,String sPerId,Exception ex,List<Integer> listCareEmailSystemCode){
+        String sErrorMessage=ex.getMessage().length() > 32768? ex.getMessage().substring(0, 32767) : ex.getMessage();
+        String emailBody;      
+        List<CARE_System_Value__c> listSystemValues=getCareSystemValue(listCareEmailSystemCode);
+        List<CARE_System_Value__c> listEmailFlag = getCareSystemValue(CARE_Constants.CARE_SUPPORT_TEAM_EMAIL_FLAG_CODE);
+        List<String> listEmailToAddress=new List<String>{};   
+        if(listEmailFlag.size() > 0 && listEmailFlag[0].SYSTEM_VALUE__c == 'Y'){
+            if(listSystemValues.size()>0){           
+                for(CARE_System_Value__c objSystemValue: listSystemValues)
+                {
+                    listEmailToAddress.add(objSystemValue.SYSTEM_VALUE__c);
+                }
+                
+                // Create an email message object and send email to the currently logged user!
+                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();       
+                mail.setToAddresses(listEmailToAddress);       
+                if(String.isBlank(sSubject))
+                {
+                    mail.setSubject('Error in CARE Transaction');  
+                }
+                else
+                {
+                    mail.setSubject(sSubject);  
+                }
+                string queryPersonID;
+                if(String.isBlank(sPerId))
+                {
+                    queryPersonID='';
+                }
+                else
+                {
+                    queryPersonID='Person ID :'+  sPerId+'<br/><br>';
+                }
+                if(String.isBlank(sBody))
+                {
+                    emailBody = ('Dear User,' + '<br/><br>' +
+                                 'There was an error while processing CARE Transaction<br></br> ' + queryPersonID + 
+                                 'Class Name : ' + sClassname +'<br/><br> Exception Type : ' + ex.getTypeName() + '<br/><br>' +
+                                 'Exception occured at line No ' + ex.getLineNumber() + ', with error message as : ' + sErrorMessage + '<br/><br>'+ 
+                                 'For help with the issue please contact Energy Insight Support team.' + '<br/><br>' +
+                                 + '<br></br><br></br>' + 'Regards, <br></br> Energy Insight Support team');        
+                }
+                else
+                {
+                    emailBody=sBody;   
+                }
+                mail.setHTMLBody(emailBody);
+                // Pass this email message to the built-in sendEmail method
+                // of the Messaging class        
+                Messaging.SendEmailResult[] results = Messaging.sendEmail(
+                new Messaging.SingleEmailMessage[] { mail });
+                
+            }
+        }     
+    }
 }

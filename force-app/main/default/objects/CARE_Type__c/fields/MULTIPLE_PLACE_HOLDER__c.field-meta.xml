@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MULTIPLE_PLACE_HOLDER__c</fullName>
+    <externalId>false</externalId>
+    <label>MULTIPLE PLACE HOLDER</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bullet</fullName>
+                <default>false</default>
+                <label>Bullet</label>
+            </value>
+            <value>
+                <fullName>Certified Report</fullName>
+                <default>false</default>
+                <label>Certified Report</label>
+            </value>
+            <value>
+                <fullName>Failure Report</fullName>
+                <default>false</default>
+                <label>Failure Report</label>
+            </value>
+            <value>
+                <fullName>Drop Report</fullName>
+                <default>false</default>
+                <label>Drop Report</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

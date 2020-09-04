@@ -117,11 +117,12 @@ public class CARE_PEVHUControllerTest {
     static void getPevHuDataTest(){
         CARE_PEVHUController.PEVHUWrapper wrapperObj = new CARE_PEVHUController.PEVHUWrapper();
         CARE_PEVHUController.DataTableWrapper dataTableWrapperObj = new CARE_PEVHUController.DataTableWrapper();
+        CARE_PEVHUController.AccountWrapper accWrapperObj = new CARE_PEVHUController.AccountWrapper();
         
         test.startTest();
         list<User> user1 = [select id from user where lastname = :CARE_PROCESSOR_USR];
         
-        List<EI_Site__c> eiObj = [SELECT ID, Person_Id_EI__C, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, Account_EI__r.Id 
+        List<EI_Site__c> eiObj = [SELECT ID, Person_Id_EI__C, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, Account_EI__r.Id, Account_EI__r.Email_adr_EI__c
                                   FROM EI_Site__c WHERE Person_ID_EI__c = '0123456003'];
         
         System.runAs(user1[0]){            
@@ -135,6 +136,9 @@ public class CARE_PEVHUControllerTest {
             System.assert(dataTableWrapperObj.listSA.size() == 1);  
             System.assertEquals(true, dataTableWrapperObj.listAdjustReason.size() > 0);  
             System.assert(dataTableWrapperObj.bHavingRetroDates == true);  
+            
+            accWrapperObj = CARE_PEVHUController.getAccountDetails(eiObj[0].Account_EI__r.Id);
+            System.assert(accWrapperObj.sAccountEmail == 'abcd@gmail.com');
             
         }
         test.stopTest();
@@ -177,7 +181,10 @@ public class CARE_PEVHUControllerTest {
             objPevHuWrapper.iAnnualInc = 5;
             objPevHuWrapper.iTotalPersons = 2;
             objPevHuWrapper.bOnProbation = true;
-            objPevHuWrapper.bPevForm = true;
+            objPevHuWrapper.bPevForm = true;            
+            objPevHuWrapper.bRequestedDrop = false;
+            objPevHuWrapper.bNoAttachment = false;
+            objPevHuWrapper.bIsAdjustment = false;
             
             //Create param List care household detail wrapper
             objCareHhWrapper.sPersonName = 'Person 1';
@@ -191,16 +198,16 @@ public class CARE_PEVHUControllerTest {
             listCareHhWrapper.add(objCareHhWrapper1);
             
             objPevHuWrapper.listCareHhDetailWrapper = listCareHhWrapper;
-            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'save', careApp[0].Id, careApp[0].CARE_Account_ID__c, false );            
+            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'save', careApp[0].Id, careApp[0].CARE_Account_ID__c, careApp[0].ACCT_ID__c, false );            
             System.assert(objResultResp.applicationId == careApp[0].Id);
             
-            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'verify', careApp[0].Id, careApp[0].CARE_Account_ID__c, false );            
+            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'verify', careApp[0].Id, careApp[0].CARE_Account_ID__c, careApp[0].ACCT_ID__c, false );            
             //System.assert(objResultResp.applicationId == careApp[0].Id);
             //System.assert(objResultResp.ccCode != null);
             //System.assert(objResultResp.ccCode == ct.TYPE_CODE__c);
             //System.assert(objResultResp.ccCodeDescription == ct.TYPE_DESC__c);            
             
-            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'accept', careApp[0].Id, careApp[0].CARE_Account_ID__c, false );            
+            objResultResp = CARE_PEVHUController.submitPEVForm(objPevHuWrapper,listCareHhWrapper , eiObj[0].Person_Id_EI__c, lstPremId, 'accept', objResultResp.applicationId, careApp[0].CARE_Account_ID__c, careApp[0].ACCT_ID__c, false );            
             //System.assert(objResultResp.applicationId == careApp[0].Id);
             //System.assert(objResultResp.ccCode != null);
         }
@@ -306,6 +313,7 @@ public class CARE_PEVHUControllerTest {
         objAccountRecord.Bus_Phone_1_EI__c = '1111111111';
         objAccountRecord.Bus_Phone_2_EI__c = '3333333333';
         objAccountRecord.Primary_Contact_Mobile_EI__c = '5555555555';
+        objAccountRecord.Email_adr_EI__c = 'abcd@gmail.com';
         listAccountRecords.add(objAccountRecord);  
         
         return listAccountRecords;
@@ -414,7 +422,7 @@ public class CARE_PEVHUControllerTest {
         objcareApp.APPLICATION_STATUS__c = 'In-Progress';
         objCareApp.CCB_CONTACT_CODE__c = 'D';
         objCareApp.PER_ID__c = listAccountRecords[0].Billing_Person_ID_EI__c;
-        objCareApp.PEV_FORM__c = false;
+        objCareApp.PEV_FORM__c = true;
         objCareApp.ENROLLMENT_TYPE__c = 'PEV';
         objCareApp.ANNUAL_HOUSEHOLD_INCOME__c = 5;
         listCareAppRecords.add(objCareApp);

@@ -8,7 +8,7 @@
     <formFactors>Large</formFactors>
     <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
     <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
-    <label>CARE APP</label>
+    <label>CARE Insight</label>
     <navType>Standard</navType>
     <tabs>standard-home</tabs>
     <tabs>CARE_Load_Data</tabs>

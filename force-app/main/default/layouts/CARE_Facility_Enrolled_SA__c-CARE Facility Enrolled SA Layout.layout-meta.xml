@@ -11,10 +11,6 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>CARE_Total_Unit__c</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>CARE_Facility_Name__c</field>
             </layoutItems>
@@ -153,6 +149,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>USER_NAME_CARE1__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Facility_Name__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns/>

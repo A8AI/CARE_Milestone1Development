@@ -340,6 +340,23 @@
     </assignments>
     <assignments>
         <description>Set Error Stage Name</description>
+        <name>Set_Error_Stage_Name_3_0</name>
+        <label>Set Error Stage Name</label>
+        <locationX>3457</locationX>
+        <locationY>799</locationY>
+        <assignmentItems>
+            <assignToReference>varStageName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Update_Care_Application_Comments</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Log_Exception</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Set Error Stage Name</description>
         <name>Set_Error_Stage_Name_4</name>
         <label>Set Error Stage Name</label>
         <locationX>3297</locationX>
@@ -529,8 +546,8 @@
         <description>Set out put</description>
         <name>Set_Output_Variable</name>
         <label>Set Output Variable</label>
-        <locationX>4378</locationX>
-        <locationY>50</locationY>
+        <locationX>4083</locationX>
+        <locationY>15</locationY>
         <assignmentItems>
             <assignToReference>varCCCode_Output</assignToReference>
             <operator>Assign</operator>
@@ -549,7 +566,7 @@
             <assignToReference>varCCCodeLongDescription_Output</assignToReference>
             <operator>Assign</operator>
             <value>
-                <stringValue>Cancelled</stringValue>
+                <stringValue>Application Cancelled</stringValue>
             </value>
         </assignmentItems>
     </assignments>
@@ -659,6 +676,32 @@
             <targetReference>Loop_Valid_FERA_RS</targetReference>
         </connector>
     </assignments>
+    <decisions>
+        <description>Check Is Accepted?</description>
+        <name>Check</name>
+        <label>Check Is Accepted?</label>
+        <locationX>4449</locationX>
+        <locationY>1191</locationY>
+        <defaultConnector>
+            <targetReference>Update_Care_Application_Comments</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Yes_Accepted</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>varIsApplicationAccepted</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Application_Status_Cancelled</targetReference>
+            </connector>
+            <label>Yes Accepted</label>
+        </rules>
+    </decisions>
     <decisions>
         <description>Check Any One Submitted Category Doc</description>
         <name>Check_Any_One_Submitted_Category_Doc</name>
@@ -1002,8 +1045,8 @@
         <description>Check Care App Enrolled SA Exists</description>
         <name>Is_Care_App_Enrolled_SA_Exists</name>
         <label>Is Care App Enrolled SA Exists?</label>
-        <locationX>4343</locationX>
-        <locationY>437</locationY>
+        <locationX>4501</locationX>
+        <locationY>362</locationY>
         <defaultConnector>
             <targetReference>Set_Output_Variable</targetReference>
         </defaultConnector>
@@ -1255,7 +1298,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Application_Status_Cancelled</targetReference>
+                <targetReference>Check</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -1264,8 +1307,8 @@
         <description>if customer has a C AE CARE (ESA, LIHEAP, REACH) or a H RAND CERT or a RANDOM CERT or a C RANDOM AFTER the V/VE code (in the last two years). If so terminate the transaction with Status=Cancelled.</description>
         <name>Is_Qualified_For_Cancel_Application</name>
         <label>Is Qualified For Cancellation?</label>
-        <locationX>6924</locationX>
-        <locationY>569</locationY>
+        <locationX>6719</locationX>
+        <locationY>384</locationY>
         <defaultConnector>
             <targetReference>Get_Invalid_Doc_Custom_Description</targetReference>
         </defaultConnector>
@@ -1281,7 +1324,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Application_Status_Cancelled</targetReference>
+                <targetReference>Check</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -1307,7 +1350,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Update_Application_Status_Cancelled</targetReference>
+                <targetReference>Check</targetReference>
             </connector>
             <label>Yes</label>
         </rules>
@@ -1733,8 +1776,8 @@
         <description>Delete Care App Enrolled SA</description>
         <name>Delete_Care_App_Enrolled_SA</name>
         <label>Delete Care App Enrolled SA</label>
-        <locationX>4549</locationX>
-        <locationY>328</locationY>
+        <locationX>4747</locationX>
+        <locationY>236</locationY>
         <connector>
             <targetReference>Set_Output_Variable</targetReference>
         </connector>
@@ -2153,6 +2196,33 @@
         </inputAssignments>
         <inputAssignments>
             <field>CCB_CONTACT_DESC__c</field>
+        </inputAssignments>
+        <object>CARE_Application__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Care Application Comments = Application Cancelled</description>
+        <name>Update_Care_Application_Comments</name>
+        <label>Update Care Application Comments</label>
+        <locationX>4432</locationX>
+        <locationY>802</locationY>
+        <connector>
+            <targetReference>Set_Output_Variable</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Set_Error_Stage_Name_3_0</targetReference>
+        </faultConnector>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>varCareApplicationId</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>CCB_CONTACT_COMMENT__c</field>
+            <value>
+                <stringValue>Application Cancelled</stringValue>
+            </value>
         </inputAssignments>
         <object>CARE_Application__c</object>
     </recordUpdates>
@@ -2636,7 +2706,7 @@
         <name>Update_CC_Code_D_148_149</name>
         <label>Update CC Code=D(148/149)</label>
         <locationX>6407</locationX>
-        <locationY>778</locationY>
+        <locationY>776</locationY>
         <flowName>CARE_Update_CC_Code_PEV_HU_Flow</flowName>
         <inputAssignments>
             <name>varCareApplicationId_Input</name>

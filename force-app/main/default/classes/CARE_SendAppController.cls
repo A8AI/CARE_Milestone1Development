@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 06/06/2020            SKMN                   Initial Version.
 *                                              CARE Application: 
+* 08/28/2020			SKMN				   Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 public class CARE_SendAppController {
     
@@ -87,8 +88,7 @@ public class CARE_SendAppController {
             CARE_Application__c careApp = new CARE_Application__c();   
             careApp.RecordTypeId = careAppRecTypeId;
             careApp.APPLICANT_NAME__c = objSendApp.sApplicantName;
-            careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-            //careApp.RECEIVED_DATE__c = dTodaysDate;
+            careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;            
             careApp.PROCESSED_DATE__c = dTodaysDate;
             careApp.PER_ID__c = objSendApp.sPerId;
             careApp.CARE_Account_ID__c = objSendApp.sAccId;
@@ -102,7 +102,9 @@ public class CARE_SendAppController {
             //careApp.APPLICATION_EXTERNAL_ID__c = 'EN'; //EN or PE or BA
             //careApp.APPLICATION_TYPE__c = 'Enrollment';     //Enrollment,PEV,Notice,Other  
             careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_REGULAR_APP;
-            
+            careApp.RECEIVED_DATE__c = dTodaysDate;//Extra fields    
+            careApp.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+            careApp.RESULT_DATE__c = dTodaysDate;//Extra fields
             
             insert careApp; 
             

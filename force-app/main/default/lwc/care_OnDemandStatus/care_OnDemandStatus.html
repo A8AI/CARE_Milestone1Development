@@ -10,7 +10,7 @@
                 <lightning-input type="text" label="Account ID" name="acctIdField" value={objInputFields.sBillAcctId} onfocusout={handleChange}></lightning-input>
             </div>
             <div class="slds-p-left_large slds-p-top_large">
-                <lightning-button label="Fetch SAIDs" title="Fetch SAIDs" name="FetchSAIDs" onclick={ShowSADetails}>
+                <lightning-button label="Fetch SA IDs" title="Fetch SA IDs" name="FetchSAIDs" onclick={ShowSADetails}>
                 </lightning-button>
             </div>
             <!--<div class="slds-p-left_large slds-p-top_large">
@@ -46,6 +46,9 @@
                         <div class="slds-truncate" title="Rate">Rate</div>
                     </th>
                     <th class="" scope="col">
+                        <div class="slds-truncate" title="Rate">Service Type</div>
+                    </th>
+                    <th class="" scope="col">
                         <div class="slds-truncate" title="Yes Date">Yes Date</div>
                     </th>
                     <th class="" scope="col">
@@ -59,9 +62,9 @@
                         <th scope="col">
                             <div if:true={status.bSF} class="slds-p-top_medium">{status.sSAID}</div>
                             <div if:true={status.bWS} class="slds-p-top_medium">{status.sSAID}</div>
-                            <div if:true={status.bDM} class="slds-p-top_medium">
+                            <div if:true={status.bDM} class="slds-p-bottom_small">
                                 <lightning-input type="text" name="saName" value={status.dSaName} data-index={index} 
-                            onfocusout={handleDetailsChange}>
+                                pattern="^([^a-z][^A-Z]*)$" message-when-pattern-mismatch="Max 10 Characters numeric allowed" onfocusout={handleDetailsChange}>
                         </lightning-input>
                             </div>
                         </th>
@@ -71,8 +74,8 @@
                         <th scope="col">
                             <div if:true={status.bSF} class="slds-p-top_medium">{status.sPremId}</div>
                             <div if:true={status.bWS} class="slds-p-top_medium">{status.sPremId}</div>
-                            <div if:true={status.bDM} class="slds-p-top_medium">
-                                <lightning-input type="text" name="premName" value={status.dPremName} data-index={index} 
+                            <div if:true={status.bDM} class="slds-p-bottom_small">
+                                <lightning-input type="text" name="premName" value={status.dPremId} data-index={index} 
                             onfocusout={handleDetailsChange}>
                         </lightning-input>
                             </div>
@@ -81,7 +84,7 @@
                         <th scope="col">
                             <div if:true={status.bSF} class="slds-p-top_medium">{status.sRate}</div>
                             <div if:true={status.bWS} class="slds-p-top_medium">{status.sRate}</div>
-                            <div if:true={status.bDM} class="slds-p-top_medium">
+                            <div if:true={status.bDM} class="slds-p-bottom_small">
                                 <lightning-input type="text" name="rateName" value={status.dRateName} data-index={index} 
                             onfocusout={handleDetailsChange}>
                         </lightning-input>
@@ -89,7 +92,17 @@
                             <!--<div class="slds-p-top_medium">{status.sRate}</div>-->
                         </th>
                         <th scope="col">
-                            <div>
+                            <div if:true={status.bSF} class="slds-p-top_medium">{status.sSvcType}</div>
+                            <div if:true={status.bWS} class="slds-p-top_medium">{status.sSvcType}</div>
+                            <div if:true={status.bDM} class="slds-p-bottom_small">
+                                <lightning-input type="text" name="svcTypName" value={status.dSvcTypName} data-index={index} 
+                            onfocusout={handleDetailsChange}>
+                        </lightning-input>
+                            </div>
+                            <!--<div class="slds-p-top_medium">{status.sRate}</div>-->
+                        </th>
+                        <th scope="col">
+                            <div class="slds-p-bottom_small">
                                 <lightning-input type="date" name="yesDate"
                                 value={status.dYesDate} onfocusout={handleDetailsChange}
                                     data-index={index} date-style="short">
@@ -97,7 +110,7 @@
                             </div>
                         </th>
                         <th scope="col">
-                            <div>
+                            <div class="slds-p-bottom_small">
                                 <lightning-input type="date" name="noDate"
                                 value={status.dNoDate} onfocusout={handleDetailsChange} data-index={index} date-style="short">
                                 </lightning-input>
@@ -149,7 +162,7 @@
         </table>
             <div class="slds-grid slds-wrap">
                 <div class="slds-p-left_small slds-size_1-of-4 slds-p-top_medium">
-                    <lightning-combobox label="Discount Type" name="discountField" placeholder="Select an option" options={discountOptions} onfocusout={handleChange}></lightning-combobox>
+                    <lightning-combobox label="Discount Type" name="discountField" placeholder="Select an option" options={discountOptions} onfocusout={handleChange} required></lightning-combobox>
                      
                 </div>
 
@@ -185,7 +198,7 @@
                     <div class=" slds-p-left_large slds-p-top_x-medium"></div>
                     <div class=" slds-p-left_large slds-p-top_x-medium"></div>
                     <div class=" slds-p-left_large slds-p-top_x-medium"> 
-                        <lightning-button label="OnDemandStatus" title="OnDemandStatus" name="OnDemandStatus" onclick={submitOnDemandStatus}>
+                        <lightning-button label="On Demand Status" title="OnDemandStatus" name="OnDemandStatus" onclick={submitOnDemandStatus}>
                         </lightning-button>
                     </div>
             </div> 

@@ -14,13 +14,41 @@ Modification Log     :
 ****************************************************************************************************************************************/
 public class CARE_Constants {
 
-    //Record types of Care_Application
+    //Record types of Care_Application/Account/Care_Facility
     public final static String RES_CUST_DEVELOPER_NAME = 'Residential_Customer';
+    public final static String NON_PROFIT_DEVELOPER_NAME = 'NP';//'Non_Profit'
+    public final static String SUB_METERED_DEVELOPER_NAME = 'SM';//'Sub_Metered'
+    public final static String AGRICULTURAL_DEVELOPER_NAME = 'AG';//'Agricultural'
+    public final static String MIGRANT_DEVELOPER_NAME = 'MF';//'Migrant'
     
+    //Record types of Care_App_Image_List
+    public final static String CARE_APP_IMG_RES_DEVELOPER_NAME = 'Residential';
+    public final static String CARE_APP_IMG_NON_RES_DEVELOPER_NAME = 'Non_Residential';
+    
+    /*
+    //Record types of Account
+    public final static String Account_NON_PROFIT_DEVELOPER_NAME = 'CARE_Non_Profit';
+    public final static String Account_SUB_METERED_DEVELOPER_NAME = 'CARE_Sub_Metered';
+    public final static String Account_AGRICULTURAL_DEVELOPER_NAME = 'CARE_Agricultural';
+    public final static String Account_MIGRANT_DEVELOPER_NAME = 'CARE_Migrant';
+    
+    //Record types of Care_Facility
+    public final static String Facility_NON_PROFIT_DEVELOPER_NAME = 'NP';
+    public final static String Facility_SUB_METERED_DEVELOPER_NAME = 'SM';
+    public final static String Facility_AGRICULTURAL_DEVELOPER_NAME = 'AG';
+    public final static String Facility_MIGRANT_DEVELOPER_NAME = 'MF';
+    
+    */
+    //Classification Type for HousingOrg
+    public final static String NON_PROFIT_CLASSIFICATION_TYPE = 'Non-Profit';
+    public final static String AGRICULTURAL_CLASSIFICATION_TYPE = 'Agriculture';
+    public final static String MIGRANT_CLASSIFICATION_TYPE = 'MFHC';
+    public final static String SUB_METERED_CLASSIFICATION_TYPE = 'SM';
     //Profiles
     public final static String SYS_ADMIN_PROFILE = 'System Administration';
     public final static String CARE_PROCESSOR_PROFILE = 'CARE Base Profile';
     public final static String CARE_PROCESSOR_ADMIN_PROFILE = '';
+    public final static String CSR_PROFILE = 'CSR';
     
     //Variables
     
@@ -40,6 +68,7 @@ public class CARE_Constants {
     //Integer Variables
     public final static Integer CARE_BeforeTwoYears = 2;
     public final static Integer CARE_FortyFiveDay = 45;
+    public final static Integer CARE_NinetyDay = 90;
     public final static Integer CARE_BeforeTenYears = 10;
     public final static Integer CARE_BeforeSixMonths = 180;
     public final static Integer CARE_BeforeTwoYearsInDays = 730;
@@ -47,6 +76,7 @@ public class CARE_Constants {
     public final static Integer CARE_PEV_SystemValueCode = 810;
     public final static Integer CARE_HU_SystemValueCode = 820;
     public final static Integer CARE_ESA_SystemValueCode = 830;
+    public final static Integer CARE_ThresholdCheckCode = 840;
     
     //Reason Category
     public final static String CARE_ADD_ELEC_GAS_RSN_CAT = 'Add Electric Gas Reason';
@@ -115,11 +145,16 @@ public class CARE_Constants {
     public final static String CARE_CC_PEVDROP_NO = '101';
     public final static String CARE_CC_ESA_ENROLLMENTCHECK = 'H RAND CERT';
     public final static String CARE_CC_CRANDOM = 'C RANDOM';
+    public final static String CARE_CC_ESACOMP = 'ESA COMP';
     public final static String CARE_CC_ESA_ENROLLED = '127';
     public final static String CARE_CC_HU_DROP = '128';
     public final static String CARE_CC_ESA_EXPIRE = '132';
     public final static String CARE_CC_VH_HU = '124';
     public final static String CARE_CC_V_HU = '116';
+    public final static String CARE_CC_NP_CARE_APPLICATION = '7001';
+    public final static String CARE_CC_NP_CARE_DENIED = '7007';
+    public final static String CARE_CC_NP_CARE_DROPPED = '7004';
+    public final static String CARE_CC_NP_CARE_RECERT = '7013';
     
     //Probation logic CC Codes
     public final static Set<String> CARE_CC_CODE_PROBATION_ONE =  new Set<string>{'N','3','J'};
@@ -131,6 +166,8 @@ public class CARE_Constants {
     public final static Set<String> CARE_CC_CODE_NOT_PROBATION_TYPENO =  new Set<string>{'6036','6041','6046'};
     public final static Set<String> CARE_CC_CODE_NOT_PROBATION_TYPENO_ESACOMP =  new Set<string>{'6036','6041'};
     public final static Set<String> CARE_CC_CODE_PROBATION =  new Set<string>{'NH','DE','DH','N','3','J'};
+    public final static Set<String> CARE_FACILITY_DENIED_TYPENO =  new Set<string>{'7009','7008','7007'};
+    public final static Set<String> CARE_CC_CAECARE_TYPENO =  new Set<string>{'120','121'};
     
     //Messages
     public final static String CARE_INVALID_CUST_CODE = 'Customer not Eligible!!!';
@@ -143,6 +180,8 @@ public class CARE_Constants {
     public final static String CARE_PEV_VH_HU = 'PEV Sent High Usage';
     public final static String CARE_VCODE_VALIDATIONFAIL = 'V Code Loading Validation Check Failed';
     public final static String CARE_VHCODE_VALIDATIONFAIL = 'VH Code Loading Validation Check Failed';
+    public final static String CARE_VCODE_SUCCESSMSG = 'V Code Applied Successfully';
+    public final static String CARE_VHCODE_SUCCESSMSG = 'VH Code Applied Successfully';
     public final static String CARE_PROCESSING_ERROR = 'Error';
     public final static String CARE_PROCESSING_SUCCESS = 'Processed';
     public final static String CARE_PROCESSING_LOADED = 'Loaded';
@@ -223,5 +262,27 @@ public class CARE_Constants {
     public final static String CLASS_NAME_CARE_SEND_APP_CONTROLLER = 'CARE_SendAppController';
     public final static String CLASS_NAME_CARE_IMAGE_CONTROLLER = 'CARE_ImageUploadController';
     public final static String CLASS_NAME_CARE_ADD_ELECGAS_CONTROLLER = 'CARE_AddElecGasController';
+    
+    //IVR 
+    public final static String LANGUAGE_SOURCE_CATEGORY = 'Language Source';   
+    public final static Integer CARE_SYSTEM_CODE = 522;
+    public final static Integer STATUS_CODE_200 = 200;
+    public final static Integer STATUS_CODE_400 = 400;
+    public final static Integer STATUS_CODE_500 = 500;
+    public final static Integer STATUS_CODE_404 = 404;
+    public final static String  REQUEST_PROCESSED_SUCCESSFULLY_MSG = 'Request processed successfully.';
+    public final static String  NO_DATA_FOUND_ERROR = 'EI API runtime error - No Data Found.';
+    public final static String  API_RUNTIME_ERROR_MSG = 'EI API runtime error.';
+    public final static String  CLASS_CARE = 'CARE';
+    public final static String  NO_VALID_RATE_SCHEDULE_FOUND_MSG = 'No valid rate schedule found';
+    public final static String NO_DATA_FOUND_JSON_ERROR = 'JSON No Contents';
+    public final static String CARE_PHONE_ENROLLMENT = 'Phone Enrollment';
+    public final static String STG_YES = 'Y';
+    public final static String STG_1 = '1';
+    public final static String RESEDENTIAL_APP_TYPE = 'RESIDENTIAL';
+    public final static String RECORD_CREATED_MSG = 'Record Created';
+    public final static String RECORD_NOT_CREATED_MSG = 'Record Not Created';
+    
+    public final static String ACC_PREFERRED_CONTACT_DEFAULT = 'Not Specified';
     
 }

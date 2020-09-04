@@ -104,9 +104,23 @@ global class CARE_HUFortyFiveDayBatch implements Database.Batchable<sObject>,Dat
     **/
     global void finish(Database.BatchableContext BC) {
         
-        /*AsyncApexJob job = [SELECT Id, Status, NumberOfErrors, 
-                            JobItemsProcessed, TotalJobItems, CreatedBy.Email
-                            FROM AsyncApexJob WHERE Id =: BC.getJobId()];*/
+        string sEmail = '';
+        
+        // get email address for this job from CARE_System__c object.  If not value, use "mdsscareonesupport@pge.com"
+        List<CARE_System_Value__c> systemValLst = [Select Name,SYSTEM_VALUE__c,SYSTEM_VALUE_TYPE__c from CARE_System_Value__c where Name ='Internal Support Email List' and SYSTEM_VALUE_TYPE__c = 'EMAIL' LIMIT 1];
+        if(systemValLst.size() > 0 && systemValLst[0].SYSTEM_VALUE__c != null){
+            sEmail = systemValLst[0].SYSTEM_VALUE__c;
+        }
+        else{
+            sEmail = 'mdsscareonesupport@pge.com';
+        }
+        
+        // get job status
+        AsyncApexJob a = 
+            [SELECT Id, CompletedDate, Status, NumberOfErrors, JobItemsProcessed,TotalJobItems, CreatedBy.Email
+             FROM AsyncApexJob WHERE Id = :BC.getJobId()];
+        
+        CARE_UtilityController.sendBatchCompletionEmail(sEmail, a.Status, a.CompletedDate, a.TotalJobItems, careAppHUSet.size(), errorIdSetHU.size());
         
         system.debug('All fail Ids===' +errorIdSetHU);
         system.debug('All failed per Id===' +errorPerIdSet);

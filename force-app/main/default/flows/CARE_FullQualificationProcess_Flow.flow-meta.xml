@@ -1128,6 +1128,7 @@ Note: Input to the flow is list of strings and  &apos;Yes&apos;  is passed from 
         <queriedFields>Billing_Account_ID_EI__c</queriedFields>
         <queriedFields>SA_Start_Date_EI__c</queriedFields>
         <queriedFields>Person_ID_EI__c</queriedFields>
+        <queriedFields>Svc_Full_Adr_EI__c</queriedFields>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <recordLookups>

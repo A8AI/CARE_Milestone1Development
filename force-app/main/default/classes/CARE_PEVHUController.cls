@@ -11,11 +11,13 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 06/24/2020            SKMN                   Initial Version.
 *                                              CARE Application: 
+* 08/28/2020			SKMN				   Updated to stamp extra fields for all applications
+* 09/03/2020			SKMN				   Updated Account.PREFERRED_CONTACT_METHOD__c for existing records
 ****************************************************************************************************************************************/
 public class CARE_PEVHUController {
     
     //Constants   
-    private Static final Date dTodaysDate = Date.today();
+    private Static final Date dTodaysDate = Date.today();    
     public static Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
     
     /******************************************WRAPPER CLASSES*************************************** */
@@ -50,7 +52,7 @@ public class CARE_PEVHUController {
         @AuraEnabled public String sFormCode{get;set;}
         @AuraEnabled public String sCocCode{get;set;}
         @AuraEnabled public String sEmail{get;set;}         
-        @AuraEnabled public Integer iAnnualInc{get;set;}
+        @AuraEnabled public Decimal iAnnualInc{get;set;}
         @AuraEnabled public Integer iTotalPersons{get;set;}
         @AuraEnabled public Boolean bOnProbation{get;set;}
         @AuraEnabled public Boolean bPevForm{get;set;}
@@ -70,6 +72,7 @@ public class CARE_PEVHUController {
         @AuraEnabled public String sQualifiedBy{get;set;}
         @AuraEnabled public String sEIAccountName{get;set;}
         @AuraEnabled public String sEIAccountId{get;set;} 
+        @AuraEnabled public String sAssignedTo{get;set;}
         /*Phone Info*/
         @AuraEnabled public String sHomePhone{get;set;}
         @AuraEnabled public String sWorkPhone{get;set;}
@@ -91,6 +94,10 @@ public class CARE_PEVHUController {
         @AuraEnabled public Integer iIncomeIndex{get;set;}
         @AuraEnabled public String sNumber{get;set;}
         @AuraEnabled public String sPersonName{get;set;}
+        
+        
+        
+        
         @AuraEnabled public Decimal dEstAnnSal{get;set;}
         @AuraEnabled public String sIncSrcStatus{get;set;}
         @AuraEnabled public Integer iNoDocs{get;set;}
@@ -157,10 +164,25 @@ public class CARE_PEVHUController {
         @AuraEnabled public String sHomePhone {get;set;}
         @AuraEnabled public String sWorkPhone {get;set;}
         @AuraEnabled public String sMobilePhone {get;set;}
+        @AuraEnabled public String sAccountEmail {get;set;}
     }
     /******************************************WRAPPER CLASSES*************************************** */
     
     /******************************************PUBLIC METHODS*************************************** */    
+    
+    //This method returns the account email against the account Id
+    @AuraEnabled(Cacheable = true)
+    public static AccountWrapper getAccountDetails(Id idAcc){   
+        List<Account> listAccDet = [SELECT Email_adr_EI__c
+                                    FROM Account
+                                    WHERE Id =:idAcc];
+        
+        AccountWrapper accWrapper = new AccountWrapper();
+        if(!listAccDet.isEmpty() && listAccDet.size() > 0){
+            accWrapper.sAccountEmail = listAccDet[0].Email_adr_EI__c;
+        }   
+        return accWrapper;
+    }
     
     //This method used to return the In-Progress Care application record, or the Care Application record based on Id
     @AuraEnabled(Cacheable = true)
@@ -186,7 +208,7 @@ public class CARE_PEVHUController {
                 + ' SOURCE_CHANNEL_TYPE__c, FORM_CODE__c, COC_CODE__c, EMAIL_ADDRESS__c,'
                 + ' PHONE_NO__c, ANNUAL_HOUSEHOLD_INCOME__c, Total_Persons_in_Household__c, PEV_FORM__c,'
                 + ' APPLICATION_STATUS__c, ENROLLMENT_TYPE__c, ACCT_ID__c, APPLICATION_TYPE__c, On_Probation__c,'
-                + ' LastModifiedBy.LAN_ID_EI__c, LastModifiedDate, QUALIFIED_BY__c, CARE_Account_ID__c, CARE_Account_ID__r.Name,'
+                + ' LastModifiedBy.LAN_ID_EI__c, LastModifiedDate, QUALIFIED_BY__c, Owner_LAN_ID__c, CARE_Account_ID__c, CARE_Account_ID__r.Name,'
                 + ' CCB_CONTACT_CODE__c, CCB_CONTACT_DESC__c, CCB_CONTACT_COMMENT__c, REASON_DESC__c, PROCESS_NOTES__c, START_DATE__c, END_DATE__c, IS_ADJUSTMENT__c'
                 + ' FROM CARE_Application__c WHERE ' + soqlWhereClause;
             
@@ -252,7 +274,7 @@ public class CARE_PEVHUController {
                 wrapperPEVHU.sFormCode = (listCareApp[0].FORM_CODE__c != null) ? listCareApp[0].FORM_CODE__c : '';
                 wrapperPEVHU.sCocCode = (listCareApp[0].COC_CODE__c != null) ? listCareApp[0].COC_CODE__c : '';
                 wrapperPEVHU.sEmail = (listCareApp[0].EMAIL_ADDRESS__c != null) ? listCareApp[0].EMAIL_ADDRESS__c : '';
-                wrapperPEVHU.iAnnualInc = (listCareApp[0].ANNUAL_HOUSEHOLD_INCOME__c != null) ? Integer.valueOf(listCareApp[0].ANNUAL_HOUSEHOLD_INCOME__c) : 0;
+                wrapperPEVHU.iAnnualInc = (listCareApp[0].ANNUAL_HOUSEHOLD_INCOME__c != null) ? listCareApp[0].ANNUAL_HOUSEHOLD_INCOME__c : 0;
                 wrapperPEVHU.iTotalPersons = (listCareApp[0].Total_Persons_in_Household__c != null) ? Integer.valueOf(listCareApp[0].Total_Persons_in_Household__c) : 0;
                 //For viewing from History, retrieve Care_Application.On_Probation, else populate from Care_Application.Account.CARE_ON_PROBATION__c (passed from parent lwc)
                 //Handled in lwc
@@ -274,7 +296,8 @@ public class CARE_PEVHUController {
                 //wrapperPEVHU.sLastModifiedDate = (listCareApp[0].LastModifiedDate != null) ? listCareApp[0].LastModifiedDate.format('yyyy-MM-dd\'T\'hh:mm:ss\'Z\'') : '';//this gives  07/27/2020 11:20:45 AM (not sure about the timezone)
                 wrapperPEVHU.sQualifiedBy = (listCareApp[0].QUALIFIED_BY__c != null) ? listCareApp[0].QUALIFIED_BY__c : '';
                 wrapperPEVHU.sEIAccountName = (listCareApp[0].CARE_Account_ID__r.Name != null) ? listCareApp[0].CARE_Account_ID__r.Name : '';
-                wrapperPEVHU.sEIAccountId = (listCareApp[0].CARE_Account_ID__r.Name != null) ? '/' + listCareApp[0].CARE_Account_ID__c : '';                
+                wrapperPEVHU.sEIAccountId = (listCareApp[0].CARE_Account_ID__r.Name != null) ? '/' + listCareApp[0].CARE_Account_ID__c : ''; 
+                wrapperPEVHU.sAssignedTo = (listCareApp[0].Owner_LAN_ID__c != null) ? listCareApp[0].Owner_LAN_ID__c : '';
                 
                 wrapperPEVHU.bIsSuccess = true;
                 
@@ -299,7 +322,7 @@ public class CARE_PEVHUController {
     
     //Method is used to Save/Verify/Accept the PEV or HU record, call the verification flow on verify and accept
     @AuraEnabled
-    public static ResultResp submitPEVForm(PEVHUWrapper wrapperObj, List<CareHouseholdDetailWrapper> listCareHhWrapper, String sPersonId, List<String> listPremId, String sActionName, String sCareAppId, string eIAcctId, Boolean bIsHUForm){
+    public static ResultResp submitPEVForm(PEVHUWrapper wrapperObj, List<CareHouseholdDetailWrapper> listCareHhWrapper, String sPersonId, List<String> listPremId, String sActionName, String sCareAppId, string eIAcctId, String billingAccId, Boolean bIsHUForm){
         String sCareAppIdRes = '';
         String sIsAccepted = 'No';
         ResultResp careRes = new ResultResp();
@@ -315,7 +338,7 @@ public class CARE_PEVHUController {
         vRes.ccCodeDescriptionLong = '';
         try{
             if(sActionName == 'save'){
-                sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, bIsHUForm);
+                sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, billingAccId, bIsHUForm, sActionName);
                 
                 List<CARE_Household_Detail__c> listCareHouseholdDet = createUpdateCareHouseholdDet(listCareHhWrapper, sCareAppIdRes, sPersonId);
                 
@@ -327,10 +350,10 @@ public class CARE_PEVHUController {
             }
             else if(sActionName == 'verify'){
                 sIsAccepted = 'No';
-                sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, bIsHUForm); 
+                sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, billingAccId, bIsHUForm, sActionName); 
                 List<CARE_Household_Detail__c> listCareHouseholdDet = createUpdateCareHouseholdDet(listCareHhWrapper, sCareAppIdRes, sPersonId);
                 if(String.isNotBlank(sCareAppIdRes)){
-                    if(checkIfIncomeDocumentAvailable(sCareAppIdRes)){
+                    if(checkIfIncomeDocumentAvailable(wrapperObj, sCareAppIdRes)){
                         vRes = runPevHuVerification(sCareAppIdRes, sPersonId,  listPremId, sIsAccepted, bIsHUForm); 
                         
                         careRes.applicationId = sCareAppIdRes;
@@ -349,7 +372,7 @@ public class CARE_PEVHUController {
                 sIsAccepted = 'Yes';
                 if(String.isNotBlank(sCareAppId)){
                     if(CARE_UtilityController.checkIfImageIDExists(sCareAppId) || CARE_UtilityController.checkIfUploadedImageExists(sCareAppId) ){
-                        if(checkIfIncomeDocumentAvailable(sCareAppId)){
+                        if(checkIfIncomeDocumentAvailable(wrapperObj, sCareAppId)){
                             //Fetch the phone numbers from Account and update Care Application
                             AccountWrapper accPhoneDetails = getPhoneDetails(eIAcctId);
                             wrapperObj.sHomePhone = accPhoneDetails.sHomePhone;
@@ -357,7 +380,7 @@ public class CARE_PEVHUController {
                             wrapperObj.sMobilePhone = accPhoneDetails.sMobilePhone;                        
                             
                             //Update Care Application
-                            sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, bIsHUForm);  
+                            sCareAppIdRes = createUpdateCareAppRecord(wrapperObj, sPersonId, listPremId, sCareAppId, eIAcctId, billingAccId, bIsHUForm, sActionName);  
                             //Update Care Household Detail
                             List<CARE_Household_Detail__c> listCareHouseholdDet = createUpdateCareHouseholdDet(listCareHhWrapper, sCareAppIdRes, sPersonId);
                             
@@ -534,53 +557,61 @@ public class CARE_PEVHUController {
     }
     
     //Check if every person should have at least one document (if joint filing is selected for one, this restriction is removed for one person)
-    private static Boolean checkIfIncomeDocumentAvailable(Id idCareApplication){
+    private static Boolean checkIfIncomeDocumentAvailable(PEVHUWrapper wrapperObj, Id idCareApplication){
         List<CareHouseholdDetailWrapper> listCareHouseholdDetailWrapper =  new List<CareHouseholdDetailWrapper>();
         Map<CARE_Household_Detail__c, List<CARE_Household_Member_Income__c>> mapPerWithDoc = new Map<CARE_Household_Detail__c, List<CARE_Household_Member_Income__c>>();
         Map<CARE_Household_Detail__c, List<CARE_Household_Member_Income__c>> mapPerWithNoDoc = new Map<CARE_Household_Detail__c, List<CARE_Household_Member_Income__c>>();
         List<String> listPerWithJointFiling = new List<String>();
-        try{            
-            List<CARE_Household_Detail__c> listCareHouseholdDetail = [SELECT Id, Name, PERSON_NAME__c, APPLICATION__c, EST_ANNUAL_SALARY__c, INCOME_SOURCE_STATUS__c, 
-                                                                      (SELECT Id, Name, IS_FILING_JOINTLY__c FROM CARE_Household_Member_Income__r)
-                                                                      FROM CARE_Household_Detail__c
-                                                                      WHERE APPLICATION__c =:idCareApplication
-                                                                      ORDER by Name];
-            for(CARE_Household_Detail__c careHouseholdDetail : listCareHouseholdDetail){
-                Integer iNoOfDocs = 0;                
-                List<CARE_Household_Member_Income__c> listDocuments = careHouseholdDetail.CARE_Household_Member_Income__r;
-                iNoOfDocs =  (listDocuments != null && !listDocuments.isEmpty()) ? listDocuments.size() : 0;
+        Boolean bIncomeDocAvailable = true;
+        try{      
+            //The validations on Income documents should be applied only if Requested drop not true, no attachments not true and PEV form true
+            if(!wrapperObj.bRequestedDrop && !wrapperObj.bNoAttachment && wrapperObj.bPevForm){
                 
-                //Populate a map with persons having documents
-                if(iNoOfDocs > 0){
-                    mapPerWithDoc.put(careHouseholdDetail, listDocuments);
+                List<CARE_Household_Detail__c> listCareHouseholdDetail = [SELECT Id, Name, PERSON_NAME__c, APPLICATION__c, EST_ANNUAL_SALARY__c, INCOME_SOURCE_STATUS__c, 
+                                                                          (SELECT Id, Name, IS_FILING_JOINTLY__c FROM CARE_Household_Member_Income__r)
+                                                                          FROM CARE_Household_Detail__c
+                                                                          WHERE APPLICATION__c =:idCareApplication
+                                                                          ORDER by Name];
+                for(CARE_Household_Detail__c careHouseholdDetail : listCareHouseholdDetail){
+                    Integer iNoOfDocs = 0;                
+                    List<CARE_Household_Member_Income__c> listDocuments = careHouseholdDetail.CARE_Household_Member_Income__r;
+                    iNoOfDocs =  (listDocuments != null && !listDocuments.isEmpty()) ? listDocuments.size() : 0;
+                    
+                    //Populate a map with persons having documents
+                    if(iNoOfDocs > 0){
+                        mapPerWithDoc.put(careHouseholdDetail, listDocuments);
+                    }
+                    else{
+                        //Populate a map with persons having no documents
+                        mapPerWithNoDoc.put(careHouseholdDetail, listDocuments);
+                    }           
+                }            
+                //Loop over map values for map with person having document, and check which person has atleast one record with joint filing checked
+                for(List<CARE_Household_Member_Income__c> lst: mapPerWithDoc.values()){
+                    for(CARE_Household_Member_Income__c inc : lst){
+                        if(inc.IS_FILING_JOINTLY__c){
+                            listPerWithJointFiling.add(inc.Name);
+                            break;
+                        }                    
+                    }
+                }
+                //If any person has no document and that is equal to the no. of person having if filing checked true, then success
+                if(mapPerWithNoDoc != null && (mapPerWithNoDoc.keyset().size() > 0) && (mapPerWithNoDoc.keyset().size() > listPerWithJointFiling.size())){
+                    bIncomeDocAvailable = false;
+                    //return false;
                 }
                 else{
-                    //Populate a map with persons having no documents
-                    mapPerWithNoDoc.put(careHouseholdDetail, listDocuments);
-                }           
-            }            
-            //Loop over map values for map with person having document, and check which person has atleast one record with joint filing checked
-            for(List<CARE_Household_Member_Income__c> lst: mapPerWithDoc.values()){
-                for(CARE_Household_Member_Income__c inc : lst){
-                    if(inc.IS_FILING_JOINTLY__c){
-                        listPerWithJointFiling.add(inc.Name);
-                        break;
-                    }                    
-                }
+                    bIncomeDocAvailable = true;
+                    //return true;
+                }   
             }
-            //If any person has no document and that is equal to the no. of person having if filing checked true, then success
-            if(mapPerWithNoDoc != null && (mapPerWithNoDoc.keyset().size() > 0) && (mapPerWithNoDoc.keyset().size() > listPerWithJointFiling.size())){
-                return false;
-            }
-            else{
-                return true;
-            }                      
         }
         catch(Exception ex){
             EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, ex));
             CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, '', '', '', ex);
             throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
         } 
+        return bIncomeDocAvailable;
     }
     
     //This method returns the list of HouseholdDetail against the Care application Id
@@ -615,11 +646,19 @@ public class CARE_PEVHUController {
     }
     
     //This method is used to save the Care application
-    private static string createUpdateCareAppRecord(PEVHUWrapper wrapperObj, String sPersonId, List<String> listPremId, string sCareAppId, string eIAcctId, Boolean bIsHUForm){
+    private static string createUpdateCareAppRecord(PEVHUWrapper wrapperObj, String sPersonId, List<String> listPremId, string sCareAppId, string eIAcctId, String billingAccId, Boolean bIsHUForm, String sActionName){
         String careAppIdResp;
-        
         CARE_Application__c caObj = new CARE_Application__c();
         List<CARE_Application__c> caRecList = new List<CARE_Application__c>();
+        
+        //Fetch the user's LANID to stamp as CommittedBy
+        Id userId = UserInfo.getUserId();            
+        User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];       
+        
+        
+        //Check for IsNewEnrollemnt
+        Map<String, Boolean> mapIsNewEnrollment = determineisNewEnrollment(sPersonId, '');
+        Boolean bIsNewEnrollment = mapIsNewEnrollment.get('bIsNewCustomer') ? true : false;
         
         if(wrapperObj != null){
             caObj.RecordTypeId = careAppRecTypeId;
@@ -648,10 +687,17 @@ public class CARE_PEVHUController {
             caObj.PROCESS_NOTES__c = wrapperObj.sProcessNotes != null ? wrapperObj.sProcessNotes : wrapperObj.sAdjustReasonValue;
             caObj.CCB_CONTACT_COMMENT__c = wrapperObj.sCcbContactComment;
             caObj.APPLICATION_STATUS__c = CARE_Constants.CARE_STG_ENR_STATUS_IN_PROGRESS;  
+            caObj.IS_NEW_ENROLLMENT__c = bIsNewEnrollment;
+            caObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';
             //For insert (sCareAppId is blank), use 'Regular App', else for update don't do anything
             if(String.isBlank(sCareAppId)){
                 caObj.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_REGULAR_APP;
+                //caObj.DOC_RECEIVED_DATE__c = dTodaysDate; //Extra fields:Created Date of application that is, stamp with today's date while insert, else don't do anything leave as-is
+            }  
+            if(sActionName == 'accept'){
+                caObj.RESULT_DATE__c = dTodaysDate;//Extra fields       
             }   
+            caObj.ACCT_ID__c = billingAccId != '' ? billingAccId : '';//Extra fields
             
             if(wrapperObj.sReceiveDate != null){
                 Cache.SessionPartition sessionPart = Cache.Session.getPartition('local.CareSessionCache');
@@ -660,12 +706,25 @@ public class CARE_PEVHUController {
             if(string.isNotBlank(sCareAppId)){
                 caObj.Id = sCareAppId;
             }
+            
             caRecList.add(caObj);
         }
         if(string.isNotBlank(sCareAppId)){
             //update caRecList;
             Database.SaveResult[] srList = Database.update(caRecList, false);
             careAppIdResp = sCareAppId;
+            for (Database.SaveResult sr : srList){
+                if (sr.isSuccess()){
+                    
+                }
+                else{
+                    for(Database.Error err : sr.getErrors()){
+                        //System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                        EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, new AuraHandledException(err.getMessage())));
+                        CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, '', '', sPersonId, new AuraHandledException(err.getMessage()));
+                    }
+                }                
+            }
         }
         else{
             Database.SaveResult[] srList = Database.insert(caRecList, false);
@@ -783,12 +842,15 @@ public class CARE_PEVHUController {
     private static void updateAccountEmail(PEVHUWrapper wrapperObj, String sPersonId){
         List<Account> listAccUpdate = new List<Account>();
         
-        List<Account> listAccount = [Select Id, Imported_Email_EI__c, Email_adr_EI__c from Account where Billing_Person_ID_EI__c =: sPersonId];
+        List<Account> listAccount = [Select Id, Imported_Email_EI__c, Email_adr_EI__c, PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: sPersonId];
         system.debug('wrapperObj.sEmail2-->'+wrapperObj.sEmail);
         if(string.isNotBlank(wrapperObj.sEmail)){
             for(Account acc : listAccount){
                 system.debug('wrapperObj.sEmail3-->'+wrapperObj.sEmail);
                 acc.Email_adr_EI__c = wrapperObj.sEmail;
+                if(string.isBlank(acc.PREFERRED_CONTACT_METHOD__c)){ //This field is a required field, hence update the existing record having blank value
+                    acc.PREFERRED_CONTACT_METHOD__c = CARE_Constants.ACC_PREFERRED_CONTACT_DEFAULT;
+                }
                 listAccUpdate.add(acc);
             }
         }
@@ -819,5 +881,37 @@ public class CARE_PEVHUController {
         } 
     }
     
+    private static Map<String,Boolean> determineisNewEnrollment(String selectedPerId, String sMakeLiveCallDetermine){
+        Map<String,Boolean> listResponse = new Map<String,Boolean>(); 
+        boolean bIsNewCustomer = false;
+        boolean bRequestDrop = true;  
+        Date dDateAfterNinetyDays = dTodaysDate.addDays(+90);
+        
+        Map<String, EI_Site__c> careEISiteMapData = new Map<String, EI_Site__c>();
+        try{
+            careEISiteMapData = CARE_UtilityController.getActiveSADetailsForPersonId(selectedPerId);
+            
+            if(careEISiteMapData.size() > 0){
+                bRequestDrop = false;
+                for(EI_Site__c careEISite : careEISiteMapData.values()){                    
+                    if(careEISite.Care_Stop_Date_EI__c != null && careEISite.Care_Stop_Date_EI__c > dTodaysDate && careEISite.Care_Stop_Date_EI__c >= dDateAfterNinetyDays){   
+                        bIsNewCustomer = false;
+                        break; 
+                    }
+                }
+            }            
+            else{
+                bIsNewCustomer = true;
+            }
+            
+            listResponse.put('bIsNewCustomer',bIsNewCustomer);
+            listResponse.put('bRequestDrop',bRequestDrop);
+        }
+        catch (Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_EnrollTabController',ex));
+            CARE_UtilityController.sendExceptionEmail('CARE_EnrollTabController','','',selectedPerId, ex);
+        }        
+        return listResponse;        
+    }
     /******************************************PRIVATE METHODS*************************************** */    
 }

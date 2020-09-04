@@ -4,7 +4,7 @@
   @Author             : Cognizant Technology Solutions
   @Group              : 
   @Last Modified By   : Cognizant Technology Solutions
-  @Last Modified On   : 7/28/2020, 12:43:01 PM
+  @Last Modified On   : 8/24/2020, 1:50:23 PM
   @Modification Log   : 
   Ver       Date            Author      		    Modification
   1.0    5/29/2020   Cognizant Technology Solutions     Initial Version
@@ -134,7 +134,7 @@
                             class="slds-card_boundary slds-p-around_medium slds-card__body--inner"
                             style="display: block;;">
                             <div style="overflow-x: auto; width: auto;">
-                                <template if:true={fileData}>
+                                <template if:true={showUploadedFileDatatable}>
                                     <lightning-datatable data={fileData} columns={columns} key-field="sId"
                                         hide-checkbox-column style="height: 30% !important;display: block;"
                                         onrowaction={handleRowAction}>

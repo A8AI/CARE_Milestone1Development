@@ -18,13 +18,13 @@ const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date'
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'Transaction Number', fieldName: 'sApplicationName',type: 'text', initialWidth: 140,
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
-                {label: 'Contact',fieldName: 'sContact',type: 'text',
+                {label: 'Contact',fieldName: 'sContact',type: 'text', initialWidth:150,
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'Discount Type',fieldName: 'sDiscountType',type: 'text',
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'Status',fieldName: 'sApplicationStatus',type: 'text',
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
-                {label: 'SA ID', fieldName: 'sSAID', type: 'text',
+                {label: 'SA ID', fieldName: 'sSAID', type: 'text', initialWidth:130,
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
                 {label: 'SA Type',fieldName: 'sSAType',type: 'text',
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
@@ -37,7 +37,7 @@ const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date'
                //{ label: 'CC&B Comment', fieldName: 'sCCBComment', type: 'text', cellAttributes: { class: { fieldName: 'sFormatText' }}},
                 {label: 'App Source', fieldName: 'sAppSource', type: 'text', 
                         cellAttributes: {class: {fieldName: 'sFormatText'}}},
-                {type: "button", 
+                /*{type: "button", 
                         typeAttributes: {label: 'View', name: 'View', title: 'View',
                                         disabled: false, value: 'view', iconPosition: 'left',
                         class: {fieldName: 'sViewButton'}}},
@@ -46,7 +46,33 @@ const columns = [{label: 'Send/Rcv Date',fieldName: 'dReceiveDate', type: 'date'
                                         disabled: false, value: 'Msg', iconPosition: 'left',}},
                 {type: "button",
                         typeAttributes: {label: 'Delete', name: 'Delete', title: 'Delete',
-                                        disabled: {fieldName: 'bDeleteButton'},value: 'Delete',iconPosition: 'left'}}
+                                        disabled: {fieldName: 'bDeleteButton'},value: 'Delete',iconPosition: 'left'}}*/
+                {
+                    type: "button-icon",
+                    initialWidth: 20,
+                    typeAttributes: {
+                        label: '', name: 'View', title: 'View',
+                        disabled: false, value: 'view', iconPosition: 'center', iconName: 'action:preview', variant: 'brand', size: 'large',
+                        class: { fieldName: 'sViewButton' }
+                    }
+                },
+                {
+                    type: "button-icon",
+                    initialWidth: 20,
+                    typeAttributes: {
+                        label: '', name: 'Msg', title: 'Msg',
+                        disabled: false, value: 'Msg', iconPosition: 'center', iconName: 'action:info', variant: 'brand', size: 'large',
+                    }
+                },
+                {
+                    type: "button-icon",
+                    initialWidth: 80,
+                    typeAttributes: {
+                        label: '', name: 'Delete', title: 'Delete',
+                        disabled: { fieldName: 'bDeleteButton' }, value: 'Delete', iconPosition: 'center', iconName: 'action:delete', variant: 'destructive', size: 'large',
+                        class: { fieldName: 'customCssClass' }
+                    }
+                }
                 ];
 
 export default class Care_History extends LightningElement {
@@ -103,9 +129,11 @@ export default class Care_History extends LightningElement {
         if (data) {
             console.log('data value ------->'+ JSON.stringify(data));
             console.log('Console log 1');
+
             this.listHistorydata = data.listHistoryWrapper;
             this.totalCount = data.iTotalRecCount;
             this.idRecLast = data.idLastRec;
+
             if(this.listHistorydata != undefined && this.listHistorydata != ''){
                 this.bshowHistory = true;
             }else{
@@ -119,6 +147,18 @@ export default class Care_History extends LightningElement {
                 this.showLoadingSpinner = false;
             }
 
+        // **** Add custom CSS style code on page(document) for dataTable for Delete button, since variant: desctructive is not working****  
+        let dataTableGlobalStyle = document.createElement('style');
+        //If you want you can add class .classCSSDelete{background-color:red !important;} but this will not cover-up the full box
+        dataTableGlobalStyle.innerHTML = `                                        
+                                        .classCSSDelete svg{                                            
+                                            fill:red !important;
+                                        } 
+                                        .classCSSDisabledDelete svg{
+                                            fill:rgb(221, 219, 218) !important;
+                                        } 
+                                        `;
+        document.head.appendChild(dataTableGlobalStyle);        
         } else if (error) {
             this.error = error;
             this.listHistorydata = undefined;

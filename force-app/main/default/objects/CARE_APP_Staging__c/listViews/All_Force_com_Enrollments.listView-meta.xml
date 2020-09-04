@@ -2,6 +2,7 @@
 <ListView xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>All_Force_com_Enrollments</fullName>
     <columns>NAME</columns>
+    <columns>CREATED_DATE</columns>
     <columns>SOURCE_CHANNEL_TYPE__c</columns>
     <columns>ENROLLMENT_TYPE__c</columns>
     <columns>APPLICATION_TYPE__c</columns>
@@ -13,8 +14,6 @@
     <columns>ERROR_MESSAGE__c</columns>
     <columns>EXTERNAL_ID__c</columns>
     <columns>FILE_NAME__c</columns>
-    <columns>SCANDATE__c</columns>
-    <columns>DOC_RECEIVED_DATE__c</columns>
     <filterScope>Everything</filterScope>
     <filters>
         <field>SOURCE_CHANNEL_TYPE__c</field>
@@ -24,7 +23,7 @@
     <filters>
         <field>ENROLLMENT_TYPE__c</field>
         <operation>equals</operation>
-        <value>ENROLLMENT</value>
+        <value>ENROLLMENT,PEV,PEV Receipt</value>
     </filters>
     <label>All Force.com Enrollments</label>
     <language>en_US</language>

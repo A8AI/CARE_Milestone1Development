@@ -15,7 +15,18 @@
         </values>
     </picklistValues>
     <picklistValues>
-        <picklist>FACILITY_TYPE__c</picklist>
+        <picklist>CARE_Status__c</picklist>
+        <values>
+            <fullName>Active</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Inactive</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_CLASSIFICATION__c</picklist>
         <values>
             <fullName>Agriculture</fullName>
             <default>false</default>
@@ -30,6 +41,33 @@
         </values>
         <values>
             <fullName>SM</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>FACILITY_TYPE__c</picklist>
+        <values>
+            <fullName>Group Living Facility</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Homeless Shelter</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Hospice</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>No facility type checked</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>SM</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Women%E2%80%99s Shelter</fullName>
             <default>false</default>
         </values>
     </picklistValues>

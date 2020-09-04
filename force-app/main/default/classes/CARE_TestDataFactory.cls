@@ -102,19 +102,48 @@ return(lstSite);
     }
     
     public static CARE_APP_Image_List__c careImage(CARE_Application__c careAppObj,case objCase){
+        Id careAppImgResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_RES_DEVELOPER_NAME);
+        
         CARE_APP_Image_List__c careImg = new CARE_APP_Image_List__c();
         careImg.SOURCE_SYSTEM__c = 'DOCUMENTUM';
         careImg.Application__c = careAppObj.Id;
         careImg.CASE__c = objCase.Id;
         careImg.IMAGE_ID__c = Long.valueOf('178953235');
+        careImg.RecordTypeId = careAppImgResRecTypeId;
         return careImg;
     }
     
     public static CARE_APP_Image_List__c careImage(CARE_Application__c careAppObj){
+        Id careAppImgResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_RES_DEVELOPER_NAME);
+        
         CARE_APP_Image_List__c careImg = new CARE_APP_Image_List__c();
         careImg.SOURCE_SYSTEM__c = 'DOCUMENTUM';
         careImg.Application__c = careAppObj.Id;
         careImg.IMAGE_ID__c = Long.valueOf('1234567890');
+        careImg.RecordTypeId = careAppImgResRecTypeId;
+        return careImg;
+    }
+    
+    public static CARE_APP_Image_List__c careImageFacility(CARE_Facility__c careFacilityObj,case objCase){
+        Id careAppImgNonResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_NON_RES_DEVELOPER_NAME);
+        
+        CARE_APP_Image_List__c careImg = new CARE_APP_Image_List__c();
+        careImg.SOURCE_SYSTEM__c = 'DOCUMENTUM';
+        careImg.Facility__c = careFacilityObj.Id;
+        careImg.CASE__c = objCase.Id;
+        careImg.IMAGE_ID__c = Long.valueOf('178953235');
+        careImg.RecordTypeId = careAppImgNonResRecTypeId;
+        return careImg;
+    }
+    
+    public static CARE_APP_Image_List__c careImageFacility(CARE_Facility__c careFacilityObj){
+        Id careAppImgNonResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_NON_RES_DEVELOPER_NAME);
+        
+        CARE_APP_Image_List__c careImg = new CARE_APP_Image_List__c();
+        careImg.SOURCE_SYSTEM__c = 'DOCUMENTUM';
+        careImg.Facility__c = careFacilityObj.Id;
+        careImg.IMAGE_ID__c = Long.valueOf('1234567890');
+        careImg.RecordTypeId = careAppImgNonResRecTypeId;
         return careImg;
     }
     
@@ -183,7 +212,7 @@ return(lstSite);
         obCont.SA_ID__c = appEnrol.SA_ID__c;
         return obCont;
     }
-/***************************** Milestone 2***********************/    
+    /***************************** Milestone 2***********************/    
     public static CARE_Household_Detail__c  createHouseholdDetail(CARE_Application__c careAppObj){
         CARE_Household_Detail__c objHouseholdDetail = new CARE_Household_Detail__c();
         objHouseholdDetail.APPLICATION__c = careAppObj.Id;
@@ -206,12 +235,12 @@ return(lstSite);
         return objHouseholdMemberIncome ;
     }
     
-        public static CARE_Household_Member_IncomeC__c  createHouseholdMemberIncomeC(CARE_Household_Member_Income__c careHouseholdMemberIncomeObj){
+    public static CARE_Household_Member_IncomeC__c  createHouseholdMemberIncomeC(CARE_Household_Member_Income__c careHouseholdMemberIncomeObj){
         CARE_Household_Member_IncomeC__c objHouseholdMemberIncomeC = new CARE_Household_Member_IncomeC__c();
         objHouseholdMemberIncomeC.Application__c = careHouseholdMemberIncomeObj.CARE_Application__c;
         objHouseholdMemberIncomeC.DETAIL_INCOME__c = careHouseholdMemberIncomeObj.Id;
         objHouseholdMemberIncomeC.HOUSEHOLD_DETAIL__c = careHouseholdMemberIncomeObj.HOUSEHOLDDETAIL__c; 
-       
+        
         return objHouseholdMemberIncomeC ;
     }
     
@@ -251,7 +280,7 @@ return(lstSite);
     }
     
     // Insert all the necessary pre-requisite custom setttings which is being used in the WebService test Apex Callout Requests
-/*      public static void setup(){
+    /*      public static void setup(){
 
 List<CARE_End_Point_URL__c> EndPointURLs = New List<CARE_End_Point_URL__c>();
 
@@ -325,5 +354,16 @@ insert EndPointURLs;
         
         return careSysList;
     }
-/***************************** Milestone 2 End***********************/ 
+    /***************************** Milestone 2 End***********************/ 
+    
+    /***************************** Milestone 3 Start***********************/ 
+    public static CARE_Facility__c  careFacility(Account acc){
+        CARE_Facility__c careFacilityObj = new CARE_Facility__c();
+        careFacilityObj.OWNER__c = acc.Id;
+        careFacilityObj.FACILITY_NAME__c = 'abcd';
+        careFacilityObj.FACILITY_CLASSIFICATION__c = 'Non-Profit';
+        return careFacilityObj ;
+    }
+    
+    /***************************** Milestone 3 End***********************/ 
 }

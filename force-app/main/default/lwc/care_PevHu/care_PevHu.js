@@ -2,6 +2,7 @@ import { LightningElement, track, wire, api } from 'lwc';
 import submitPEVForm from '@salesforce/apex/CARE_PEVHUController.submitPEVForm';
 import getPevHuData from '@salesforce/apex/CARE_PEVHUController.getPevHuData';
 import getRelatedSA from '@salesforce/apex/CARE_PEVHUController.getRelatedSA';
+import getAccountDetails from '@salesforce/apex/CARE_PEVHUController.getAccountDetails';
 import deleteCareHouseholdDet from '@salesforce/apex/CARE_PEVHUController.deleteCareHouseholdDet';
 import setCancelStatusCareApplication from '@salesforce/apex/CARE_UtilityController.setCancelStatusCareApplication';
 import { refreshApex } from '@salesforce/apex';
@@ -39,6 +40,7 @@ import CARE_COCLengthValidationMsg from '@salesforce/label/c.CARE_COCLengthValid
 import CARE_ValidValValidationMsg from '@salesforce/label/c.CARE_ValidValValidationMsg';
 import CARE_PersonNameValidationMsg from '@salesforce/label/c.CARE_PersonNameValidationMsg';
 import CARE_IncomeInfoDeleteMsg from '@salesforce/label/c.CARE_IncomeInfoDeleteMsg';
+import CARE_ApplicationCancelledMsg from '@salesforce/label/c.CARE_ApplicationCancelledMsg';
 
 
 const columnsPevSADetails = [
@@ -71,9 +73,10 @@ export default class Care_PevHu extends LightningElement {
     @api sSelectedAppId;
     @api bAccOnProbation;
     @api sSelectedAcctId;
-    @api sSelectedAcctEmail;
+    @api sSelectedBillingAcctId;
     @api bModalFlag;
     @api sLiveCall;
+    @track sAccLiveCall;
     @track showLoadingSpinner = true;
     @track bPEV = false;
     @track bHU = false;
@@ -106,6 +109,7 @@ export default class Care_PevHu extends LightningElement {
         sQualifiedBy: '',
         sEIAccountName: '',
         sEIAccountId: '',
+        sAssignedTo: '',
         bIsSuccess: false
     };
     @track incomeInfoList = [{
@@ -139,6 +143,7 @@ export default class Care_PevHu extends LightningElement {
     rowPersonName;
     bAdjustmentAtleastOneRowValid = false;
     _wiredRelatedSA;
+    _wiredAccountDet;
     _wiredPEVData;
 
     label = {
@@ -170,7 +175,8 @@ export default class Care_PevHu extends LightningElement {
         CARE_COCLengthValidationMsg,
         CARE_ValidValValidationMsg,
         CARE_PersonNameValidationMsg,
-        CARE_IncomeInfoDeleteMsg
+        CARE_IncomeInfoDeleteMsg,
+        CARE_ApplicationCancelledMsg
     }
 
     showToastMessage(toastTitle, msg, toastVariant) {
@@ -210,19 +216,19 @@ export default class Care_PevHu extends LightningElement {
         return isNotBlank(this.sGeneratedCareAppId) && this.sGeneratedCareAppId.length > 0;
     }
     get checkResultDesc() {
-        return (isBlank(this.objPEVFields.sCcbContactDesc) || this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus == "Cancelled");
+        return ((isBlank(this.objPEVFields.sCcbContactDesc) || this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus === "Cancelled") && this.objPEVFields.sCcbContactComment !== this.label.CARE_ApplicationCancelledMsg);
     }
     get checkAcceptedApplication() {
-        return this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus == "Cancelled" || this.bModalFlag;  // Added Viewonly flag for adjustment check box after accepting application not allow modify adjustment
+        return this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus === "Cancelled" || this.bModalFlag;  // Added Viewonly flag for adjustment check box after accepting application not allow modify adjustment
     }
     get checkAppIdORAccepted() {
-        return isBlank(this.sGeneratedCareAppId) || this.objPEVFields.sApplicationStatus == "Decision Made" || this.objPEVFields.sApplicationStatus == "Cancelled";
+        return isBlank(this.sGeneratedCareAppId) || this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus === "Cancelled";
     }
     get showSADatatable() {
         return isNotBlank(this.objPEVFields.sCcbContactDesc) && (this.careSAData !== null && this.careSAData !== undefined && this.careSAData.length > 0);
     }
     get checkDataTableNoEdit() {
-        return this.objPEVFields.sApplicationStatus == "Decision Made" || this.objPEVFields.sApplicationStatus == "Cancelled" || this.bModalFlag || !this.objPEVFields.bIsAdjustment;  // Added Viewonly flag for adjutsment check box after accepting application not allow modify adjustment
+        return this.objPEVFields.sApplicationStatus === "Decision Made" || this.objPEVFields.sApplicationStatus === "Cancelled" || this.bModalFlag || !this.objPEVFields.bIsAdjustment;  // Added Viewonly flag for adjutsment check box after accepting application not allow modify adjustment
     }
     
     //Wired method to populate PEV HU form with existing In-Progress record or blank form
@@ -241,7 +247,6 @@ export default class Care_PevHu extends LightningElement {
             if (this.sSelectedAppId === 'tab') {
                 this.objPEVFields.bOnProbation = this.bAccOnProbation;
                 this.objPEVFields.sApplicantName = this.sSelectedApplicantName;
-                this.objPEVFields.sEmail = this.sSelectedAcctEmail;
             }
             //End: Populate the Household Information
 
@@ -303,7 +308,6 @@ export default class Care_PevHu extends LightningElement {
             if (this.sSelectedAppId === 'tab') {
                 this.objPEVFields.bOnProbation = this.bAccOnProbation;
                 this.objPEVFields.sApplicantName = this.sSelectedApplicantName;
-                this.objPEVFields.sEmail = this.sSelectedAcctEmail;
             }
             this.sPEVorHU = data.sPevOrHu;
             if (this.sPEVorHU === 'PEV') {
@@ -314,6 +318,7 @@ export default class Care_PevHu extends LightningElement {
                 this.bPEV = false;
                 this.bHU = true;
             }
+            this.sAccLiveCall = new Date().toLocaleString(); // if false returned from Account (by calling the wired method again)
             this.sGeneratedCareAppId = '';
             this.objPEVFields.sApplicationStatus = '';
             this.objPEVFields.sCcbContactDesc = '';
@@ -343,6 +348,24 @@ export default class Care_PevHu extends LightningElement {
             this.adjustReasonList = data.listAdjustReason;
             this.bAdjustmentAtleastOneRowValid = data.bHavingRetroDates;
             console.log(` careSAData: `, this.careSAData);
+            this.showLoadingSpinner = false;
+        } else if (error) {
+            this.error = error;
+            this.data = undefined;
+            this.showLoadingSpinner = false;
+            console.log('this.error-->' + this.error)
+            this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
+        }
+    }
+
+    //Wired method to fetch SA details data
+    @wire(getAccountDetails, { idAcc: '$sSelectedAcctId', sLiveCall: '$sAccLiveCall' })
+    wiredAccountDet(resp) {
+        this._wiredAccountDet = resp;
+        const { data, error } = resp;
+
+        if (data) {
+            this.objPEVFields.sEmail = data.sAccountEmail; // set the value in track variable
             this.showLoadingSpinner = false;
         } else if (error) {
             this.error = error;
@@ -468,7 +491,9 @@ export default class Care_PevHu extends LightningElement {
             formValidFlag = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_NotModifiedRstREndMsg, 'error');
         }
-        else if ((nameEvent === 'verify' || nameEvent === 'accept') && (isNotBlank(this.objPEVFields.iNoWithIncome) && this.incomeInfoList !== null && (Number(this.objPEVFields.iNoWithIncome) !== this.incomeInfoList.length))) {
+        else if ((nameEvent === 'verify' || nameEvent === 'accept') 
+        && (!this.objPEVFields.bRequestedDrop && !this.objPEVFields.bNoAttachment && this.objPEVFields.bPevForm)
+        && (isNotBlank(this.objPEVFields.iNoWithIncome) && this.incomeInfoList !== null && (Number(this.objPEVFields.iNoWithIncome) !== this.incomeInfoList.length))) {
             formValidFlag = false;
             this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_IncomePeopleMismatch, 'error');
         }
@@ -510,6 +535,7 @@ export default class Care_PevHu extends LightningElement {
                 sActionName: nameEvent,
                 sCareAppId: this.sGeneratedCareAppId,
                 eIAcctId: this.sSelectedAcctId,
+                billingAccId: this.sSelectedBillingAcctId,
                 bIsHUForm: this.bHU
             })
                 .then(result => {
@@ -788,6 +814,7 @@ export default class Care_PevHu extends LightningElement {
             sQualifiedBy: '',
             sEIAccountName: '',
             sEIAccountId: '',
+            sAssignedTo: '',
             bIsSuccess: false
         };
         this.populateCommentsTextArea('');

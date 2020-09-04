@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 05/27/2020            Cognizant Technology Solutions                     Initial Version.
 *                                                                          CARE Application: 
+* 08/28/2020			SKMN				   Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 
 public with sharing class CARE_TransferController {
@@ -73,6 +74,10 @@ public with sharing class CARE_TransferController {
         public Boolean bSelectionDisabled {get; set;}
         @AuraEnabled
         public String sApplicantName {get; set;}
+        @AuraEnabled
+        public String sSvcFullAddress {get; set;}
+        @AuraEnabled
+        public String sSvcTypeCode {get; set;}
     }
     
     public class WrapperTransferReason{
@@ -129,6 +134,8 @@ public with sharing class CARE_TransferController {
                 objTransferFrom.sRateSchedule = EISiteActiveRec.Rate_Schedule_EI__c; 
                 objTransferFrom.dSAStartDate = EISiteActiveRec.SA_Start_Date_EI__c;
                 objTransferFrom.sApplicantName = EISiteActiveRec.Imported_Site_Name_EI__c;
+                objTransferFrom.sSvcFullAddress = EISiteActiveRec.Svc_Full_Adr_EI__c; //Extra field 
+                objTransferFrom.sSvcTypeCode = EISiteActiveRec.Svc_Type_Code_EI__c;//Extra fields
                 
                 transferResponse.listTransferFrom.add(objTransferFrom); 
             }
@@ -156,6 +163,9 @@ public with sharing class CARE_TransferController {
                     objTransferTo.dSAStartDate = EI_Site_Rec.SA_Start_Date_EI__c;               
                     objTransferTo.bOverRide = false; 
                     objTransferTo.sSelectedRecord = false;    
+                    objTransferTo.sSvcFullAddress = EI_Site_Rec.Svc_Full_Adr_EI__c; //Extra field
+                    objTransferTo.sSvcTypeCode = EI_Site_Rec.Svc_Type_Code_EI__c;//Extra fields
+                    objTransferTo.sApplicantName = EI_Site_Rec.Imported_Site_Name_EI__c;//Extra fields
                     //Set UI Slection enable/Disable
                     if (listActiveStatusCode.contains(EI_Site_Rec.Svc_Status_Code_EI__c))//check active SA
                     {                       
@@ -218,6 +228,10 @@ public with sharing class CARE_TransferController {
             String[] sSAListFrom = new String[0];
             String[] sSAListTo = new String[0];
             
+            //Fetch the user's LANID to stamp as CommittedBy
+            Id userId = UserInfo.getUserId();            
+            User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
+            
             //get the cc code details for Transfer Drop FrOm
             listCareTypeFrom = CARE_UtilityController.getCCCode(sTransferFromCCCode,null,null);
             String sContactComment = listCareTypeFrom[0].TYPE_DESC_LONG__c;
@@ -231,6 +245,9 @@ public with sharing class CARE_TransferController {
             
             //get RecordType id from constant class
             Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
+            
+            //get the Last Bill Date
+            Date dLastBillDate = CARE_UtilityController.getLastBillDate();
             
             //create CARE APP Transaction To end the discounts for the ‘From’ Premise/Premises             
             CARE_Application__c careAppFromObj = new CARE_Application__c();
@@ -250,6 +267,10 @@ public with sharing class CARE_TransferController {
             careAppFromObj.CARE_Account_ID__c = listTranferFrom[0].sAccId;//EI Account Id
             careAppFromObj.ACCT_ID__c = listTranferFrom[0].sAccountId;//Billing Account 
             careAppFromObj.CC_CL_CD__c = listTranferFrom[0].sDiscountType;
+            careAppFromObj.HOUSE_QUALIFY__c = true; //Extra fields
+            careAppFromObj.RECEIVED_DATE__c  = dTodaysDate; //Extra fields
+            careAppFromObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+            careAppFromObj.RESULT_DATE__c = dTodaysDate;//Extra fields            
             
             Insert careAppFromObj;            
             
@@ -268,6 +289,10 @@ public with sharing class CARE_TransferController {
                 careEnrolledSAObj.END_DATE__c = dTodaysDate;
                 careEnrolledSAObj.SA_START_DATE__c = TranferFromObj.dSAStartDate;                
                 careEnrolledSAObj.OVERRIDE_IND__c = listTranferTo[0].bOverRide;
+                careEnrolledSAObj.SERVICE_FULL_ADDRESS__c = TranferFromObj.sSvcFullAddress;//Extra fields
+                careEnrolledSAObj.SERVICE_TYPE_CODE__c = TranferFromObj.sSvcTypeCode;//Extra fields
+                careEnrolledSAObj.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dTodaysDate;//Extra fields
+                careEnrolledSAObj.SA_ENTITY_NAME__c = TranferFromObj.sApplicantName;//Extra fields
                 
                 listCareAppEnrolledSAFrom.add(careEnrolledSAObj);
                 //add endDates from active SA 
@@ -307,6 +332,11 @@ public with sharing class CARE_TransferController {
             careAppToObj.CARE_Account_ID__c = listTranferTo[0].sAccId;//EI Account Id
             careAppToObj.ACCT_ID__c = listTranferTo[0].sAccountId;//Billing Account 
             careAppToObj.CC_CL_CD__c = listTranferFrom[0].sDiscountType;//Discount from Transfer From Section
+            careAppToObj.Parent_Application__c =careAppFromObj.Id;
+            careAppToObj.HOUSE_QUALIFY__c = true; //Extra fields
+            careAppToObj.RECEIVED_DATE__c  = dTodaysDate; //Extra fields
+            careAppToObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';//Extra fields
+            careAppToObj.RESULT_DATE__c = dTodaysDate;//Extra fields
             
             Insert careAppToObj;
             
@@ -326,6 +356,10 @@ public with sharing class CARE_TransferController {
                 careEnrolledSAToObj.END_DATE__c = dHighestEndDate;
                 careEnrolledSAToObj.SA_START_DATE__c = TranferToObj.dSAStartDate;    
                 careEnrolledSAToObj.OVERRIDE_IND__c = listTranferTo[0].bOverRide;
+                careEnrolledSAToObj.SERVICE_FULL_ADDRESS__c = TranferToObj.sSvcFullAddress;//Extra fields
+                careEnrolledSAToObj.SERVICE_TYPE_CODE__c = TranferToObj.sSvcTypeCode;//Extra fields
+                careEnrolledSAToObj.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dTodaysDate;//Extra fields
+                careEnrolledSAToObj.SA_ENTITY_NAME__c = TranferToObj.sApplicantName;//Extra fields
                 
                 listCareAppEnrolledSATo.add(careEnrolledSAToObj);
             }            

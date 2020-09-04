@@ -3,33 +3,106 @@
     <fullName>FACILITY_TYPE__c</fullName>
     <externalId>false</externalId>
     <label>FACILITY TYPE</label>
-    <required>true</required>
+    <required>false</required>
     <trackTrending>false</trackTrending>
     <type>Picklist</type>
     <valueSet>
+        <controllingField>FACILITY_CLASSIFICATION__c</controllingField>
         <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
-            <value>
-                <fullName>Non-Profit</fullName>
-                <default>false</default>
-                <label>Non-Profit</label>
-            </value>
-            <value>
-                <fullName>Agriculture</fullName>
-                <default>false</default>
-                <label>Agriculture</label>
-            </value>
-            <value>
-                <fullName>MFHC</fullName>
-                <default>false</default>
-                <label>MFHC</label>
-            </value>
             <value>
                 <fullName>SM</fullName>
                 <default>false</default>
                 <label>SM</label>
             </value>
+            <value>
+                <fullName>Group Living Facility</fullName>
+                <default>false</default>
+                <label>Group Living Facility</label>
+            </value>
+            <value>
+                <fullName>Homeless Shelter</fullName>
+                <default>false</default>
+                <label>Homeless Shelter</label>
+            </value>
+            <value>
+                <fullName>Hospice</fullName>
+                <default>false</default>
+                <label>Hospice</label>
+            </value>
+            <value>
+                <fullName>Women’s Shelter</fullName>
+                <default>false</default>
+                <label>Women’s Shelter</label>
+            </value>
+            <value>
+                <fullName>No facility type checked</fullName>
+                <default>false</default>
+                <label>No facility type checked</label>
+            </value>
+            <value>
+                <fullName>Employee Housing</fullName>
+                <default>false</default>
+                <label>Employee Housing</label>
+            </value>
+            <value>
+                <fullName>Housing for Agricultural Employees</fullName>
+                <default>false</default>
+                <label>Housing for Agricultural Employees</label>
+            </value>
+            <value>
+                <fullName>MFHC Operated by Migrant Services Office</fullName>
+                <default>false</default>
+                <label>MFHC Operated by Migrant Services Office</label>
+            </value>
+            <value>
+                <fullName>MFHC Operated by a non-profit entity</fullName>
+                <default>false</default>
+                <label>MFHC Operated by a non-profit entity</label>
+            </value>
         </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>Non-Profit</controllingFieldValue>
+            <valueName>Group Living Facility</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-Profit</controllingFieldValue>
+            <valueName>Homeless Shelter</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-Profit</controllingFieldValue>
+            <valueName>Hospice</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-Profit</controllingFieldValue>
+            <valueName>Women’s Shelter</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Non-Profit</controllingFieldValue>
+            <controllingFieldValue>Agriculture</controllingFieldValue>
+            <controllingFieldValue>MFHC</controllingFieldValue>
+            <valueName>No facility type checked</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agriculture</controllingFieldValue>
+            <valueName>Employee Housing</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Agriculture</controllingFieldValue>
+            <valueName>Housing for Agricultural Employees</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MFHC</controllingFieldValue>
+            <valueName>MFHC Operated by Migrant Services Office</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>MFHC</controllingFieldValue>
+            <valueName>MFHC Operated by a non-profit entity</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>SM</controllingFieldValue>
+            <valueName>SM</valueName>
+        </valueSettings>
     </valueSet>
 </CustomField>

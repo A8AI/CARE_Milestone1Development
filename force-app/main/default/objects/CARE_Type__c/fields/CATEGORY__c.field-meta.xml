@@ -224,6 +224,11 @@
                 <default>false</default>
                 <label>Automated Staging PEV Arrival Notice Priority Order</label>
             </value>
+            <value>
+                <fullName>Facility Email Template</fullName>
+                <default>false</default>
+                <label>Facility Email Template</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -23,9 +23,6 @@ global class CARE_ESAFortyFiveDayBatch implements Database.Batchable<sObject>,Da
     global Set<Id> setCareAppESA = new Set<Id>();
     global Set<Id> setErrorIdESA = new Set<Id>();
     global Set<String> setErrorPerIdESA = new Set<String>();
-    global Set<Id> setCareAppIdThreshold = new Set<Id>();
-    global Set<Id> setErrorIdThreshold = new Set<Id>();
-    global Set<String> setErrorPerIdThreshold = new Set<String>();
     global String sESACode = CARE_Constants.CARE_CC_ESA_ENROLLMENTCHECK;
     //global Date dDateTwoYearsBefore;
     
@@ -72,7 +69,7 @@ global class CARE_ESAFortyFiveDayBatch implements Database.Batchable<sObject>,Da
         
         system.debug('inside execute method----->');
         
-        recordsProcessed+=scope.size();
+        recordsProcessed = scope.size();
         List<CARE_CC_Batch_Detail__c> listHRandCert = (List<CARE_CC_Batch_Detail__c>)scope;
         CARE_AutoUtilityController.ESAThresholdCheckWrapper eSAWrapper = new CARE_AutoUtilityController.ESAThresholdCheckWrapper();
         
@@ -95,7 +92,7 @@ global class CARE_ESAFortyFiveDayBatch implements Database.Batchable<sObject>,Da
                     setErrorPerIdESA.add(perId); 
                 }
             }
-            if(eSAWrapper.setThresholdAppId.size() > 0){
+           /* if(eSAWrapper.setThresholdAppId.size() > 0){
                 for(Id recId : eSAWrapper.setThresholdAppId){
                     setCareAppIdThreshold.add(recId); 
                 }
@@ -109,7 +106,7 @@ global class CARE_ESAFortyFiveDayBatch implements Database.Batchable<sObject>,Da
                 for(String perId : eSAWrapper.setThresholdErrPerId){
                     setErrorPerIdThreshold.add(perId); 
                 }
-            }
+            }*/
         }
     }
     
@@ -121,13 +118,28 @@ global class CARE_ESAFortyFiveDayBatch implements Database.Batchable<sObject>,Da
     **/
     global void finish(Database.BatchableContext BC) {
         
+        string sEmail = '';
+        
+        // get email address for this job from CARE_System__c object.  If not value, use "mdsscareonesupport@pge.com"
+        List<CARE_System_Value__c> systemValLst = [Select Name,SYSTEM_VALUE__c,SYSTEM_VALUE_TYPE__c from CARE_System_Value__c where Name ='Internal Support Email List' and SYSTEM_VALUE_TYPE__c = 'EMAIL' LIMIT 1];
+        if(systemValLst.size() > 0 && systemValLst[0].SYSTEM_VALUE__c != null){
+            sEmail = systemValLst[0].SYSTEM_VALUE__c;
+        }
+        else{
+            sEmail = 'mdsscareonesupport@pge.com';
+        }
+        
+        // get job status
+        AsyncApexJob a = 
+            [SELECT Id, CompletedDate, Status, NumberOfErrors, JobItemsProcessed,TotalJobItems, CreatedBy.Email
+             FROM AsyncApexJob WHERE Id = :BC.getJobId()];
+        
+        CARE_UtilityController.sendBatchCompletionEmail(sEmail, a.Status, a.CompletedDate, a.TotalJobItems, setCareAppESA.size(), setErrorIdESA.size());
+        
         system.debug('All fail ESA Ids===' +setErrorIdESA);
         system.debug('All failed ESA per Id===' +setErrorPerIdESA);
         system.debug('All success ESA Id---' +setCareAppESA);
         
-        system.debug('All fail Threshold Ids===' +setErrorIdThreshold);
-        system.debug('All failed Threshold per Id===' +setErrorPerIdThreshold);
-        system.debug('All success ESA Id---' +setCareAppIdThreshold);
         system.debug('Total number of records processed' +recordsProcessed);
         
     }

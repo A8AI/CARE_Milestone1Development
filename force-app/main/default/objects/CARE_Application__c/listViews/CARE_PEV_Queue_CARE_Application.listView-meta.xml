@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CARE_PEV_Queue_CARE_Application</fullName>
+    <columns>NAME</columns>
+    <columns>ACCT_ID__c</columns>
+    <columns>APPLICANT_NAME__c</columns>
+    <columns>APPLICATION_STATUS__c</columns>
+    <filterScope>Queue</filterScope>
+    <label>CARE_PEV_Queue</label>
+    <queue>CARE_PEV_Queue</queue>
+    <sharedTo>
+        <allInternalUsers/>
+    </sharedTo>
+</ListView>

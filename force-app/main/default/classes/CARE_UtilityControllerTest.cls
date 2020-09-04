@@ -301,8 +301,11 @@ insert objImage;*/
         
         System.runAs(user1[0]){ 
             /*********************Test data setup************************/
+            List<String> ParentAppList = new List<String>();
             List<CARE_Application__c> lstCareApp = [SELECT Id FROM CARE_Application__c WHERE APPLICANT_NAME__c = 'TestAman'];
-            
+            for(CARE_Application__c appRec : lstCareApp){
+                ParentAppList.add(appRec.Id);
+            }
             //Create ContentVersion
             List<ContentVersion> lstContVer = new List<ContentVersion>();
             ContentVersion contentVersionInsert1 = CARE_TestDataFactory.createContentVersion();

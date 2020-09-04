@@ -33,12 +33,14 @@ export default class Care_IRSTranscriptForm extends LightningElement {
     @api dDiscountLength;
     @api idMemberIncome;
     @api bViewMode;
+    @api sAdultCount;//no:of Adult
 
     @track showLoadingSpinner;
     @track results = [];
     @track error;
     @track periodOptions;
     @track bPeriodDisabled = true;
+    @track bFilingJointlyDisabled = false;
     @track objInputFields = {
         idCareApp: '',
         idCareHouseholdDetail: '',
@@ -123,6 +125,17 @@ export default class Care_IRSTranscriptForm extends LightningElement {
             this.objInputFields.dAmount8 = data.dAmount8;
             this.objInputFields.dAmount9 = data.dAmount9;
             this.objInputFields.dTotalAmount = data.dTotalAmount;
+            //disable FilingJointly if no:of Adults is 1 or lesser
+            if(Number(this.sAdultCount)>1){
+                this.bFilingJointlyDisabled = false;
+            }      
+            else{
+                this.bFilingJointlyDisabled = true;
+                this.objInputFields.bIsFillingJointly = false;
+            }   
+            if (this.bViewMode) { //disable ScheduleC if opened in view mode
+                this.bFilingJointlyDisabled = true;
+            }
             this.error = undefined;
 
         } else if (error) {

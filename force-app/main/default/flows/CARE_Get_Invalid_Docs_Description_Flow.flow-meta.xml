@@ -680,8 +680,8 @@ Then concatenate description after # for remaining records.</description>
         <description>HU IRS 1040 2019  (Schedule 1)</description>
         <name>Set_Type_Number_183</name>
         <label>Set Type Number=183</label>
-        <locationX>2985</locationX>
-        <locationY>2631</locationY>
+        <locationX>2981</locationX>
+        <locationY>2629</locationY>
         <assignmentItems>
             <assignToReference>varTypeNumber</assignToReference>
             <operator>Assign</operator>
@@ -842,6 +842,9 @@ Then concatenate description after # for remaining records.</description>
                 <stringValue>192</stringValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>Check_Type_Number_Already_Exists</targetReference>
+        </connector>
     </assignments>
     <assignments>
         <description>Set Type Number Counter</description>

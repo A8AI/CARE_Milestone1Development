@@ -113,7 +113,7 @@ public with sharing class CARE_AutoUtilityController {
     /************************************Public Methods****************************************************/
     
     // This method is used to determine person Id's eligible for probation
-  /*  public static List<String> determineProbationStatusForAccount( List<String> perIdList){
+    public static List<String> determineProbationStatusForAccount( List<String> perIdList){
         
         Date dTodaysDate = Date.today();
         Date dDateBeforeTwoYears = dTodaysDate.addYears(-CARE_Constants.CARE_BeforeTwoYears);
@@ -148,7 +148,8 @@ public with sharing class CARE_AutoUtilityController {
                 for(CARE_CC_Batch_Detail__c probCheck : probationCheckList){
                     if(CARE_Constants.CARE_CC_CODE_NOT_PROBATION_ONE.contains(probCheck.CARE_CI_CC__r.CC_TYPE_CD__c) || CARE_Constants.CARE_CC_CODE_PROBATION_ONE.contains(probCheck.CARE_CI_CC__r.CC_TYPE_CD__c) ||
                        CARE_Constants.CARE_CC_CODE_PROBATION_TWO.contains(probCheck.CARE_CI_CC__r.CC_TYPE_CD__c) || CARE_Constants.CARE_CC_CODE_NOT_PROBATION_THREE.contains(probCheck.CARE_CI_CC__r.CC_TYPE_CD__c) ||
-                       (probCheck.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HUAPPEAL && probCheck.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_HUAPPEAL_NO) || (probCheck.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_REINSTATEHU && CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO_ESACOMP.contains(probCheck.CCB_Contact_Type_No__c))){               
+                       (probCheck.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HUAPPEAL && probCheck.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_HUAPPEAL_NO) || (probCheck.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_REINSTATEHU && CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO_ESACOMP.contains(probCheck.CCB_Contact_Type_No__c)) ||
+                      probCheck.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && CARE_Constants.CARE_CC_CAECARE_TYPENO.contains(probCheck.CCB_Contact_Type_No__c)){               
                            
                            if(!mapOfProbationRecord.containskey(probCheck.PER_ID__c)){
                                mapOfProbationRecord.put(probCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{probCheck});
@@ -197,8 +198,8 @@ public with sharing class CARE_AutoUtilityController {
                             sMapCCVal2 = ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c;
                             sMaptypeNoVal2 = ccBatch.CCB_Contact_Type_No__c;
                             
-                            if(((CARE_Constants.CARE_CC_CODE_NOT_PROBATION_ONE.contains(sMapCCVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_ONE.contains(sMapCCVal2))) ||
-                               ((CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TWO.contains(sMapCCVal1) || CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_TWO.contains(sMapCCVal2)))){
+                            if(((CARE_Constants.CARE_CC_CODE_NOT_PROBATION_ONE.contains(sMapCCVal1) || CARE_Constants.CARE_CC_CAECARE_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_ONE.contains(sMapCCVal2))) ||
+                               ((CARE_Constants.CARE_CC_CODE_NOT_PROBATION_THREE.contains(sMapCCVal1) || CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_TWO.contains(sMapCCVal2)))){
                                    bIsOnProbation = false;
                                }
                             else if(CARE_Constants.CARE_CC_CODE_PROBATION.contains(sMapCCVal1)){                            
@@ -206,8 +207,8 @@ public with sharing class CARE_AutoUtilityController {
                                 bIsOnProbation = true;
                                 personIdList.add(perIdKey);                             
                             }
-                            else if(((!CARE_Constants.CARE_CC_CODE_NOT_PROBATION_ONE.contains(sMapCCVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_ONE.contains(sMapCCVal2))) ||
-                                    ((!CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TWO.contains(sMapCCVal1) || !CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_TWO.contains(sMapCCVal2)))){
+                            else if(((!CARE_Constants.CARE_CC_CODE_NOT_PROBATION_ONE.contains(sMapCCVal1) || !CARE_Constants.CARE_CC_CAECARE_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_ONE.contains(sMapCCVal2))) ||
+                                    ((!CARE_Constants.CARE_CC_CODE_NOT_PROBATION_THREE.contains(sMapCCVal1) || !CARE_Constants.CARE_CC_CODE_NOT_PROBATION_TYPENO.contains(sMaptypeNoVal1)) && (CARE_Constants.CARE_CC_CODE_PROBATION_TWO.contains(sMapCCVal2)))){
                                         system.debug('inside 2nd else if---->');
                                         bIsOnProbation = true;
                                         personIdList.add(perIdKey);
@@ -284,7 +285,7 @@ public with sharing class CARE_AutoUtilityController {
         }catch(exception ex){
             system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());    
         }
-    }*/
+    }
     
     // This method is invoked from CARE_StampVCodeBatch used to determine person Id's eligible 
     // for V Code stamping in CARE Application
@@ -319,153 +320,165 @@ public with sharing class CARE_AutoUtilityController {
         List<EI_Site__c> activeSiteList = new List<EI_Site__c>();
         List<CARE_Application__c> careAppList = new List<CARE_Application__c>();
         List<CARE_Type__c> listCareTypeDesc = new List<CARE_Type__c>();
-        Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
         
         try{
+            listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_V_HU,null,null);
+            Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
+            
             if(listOfVCodeRecords.size() > 0){
-            for(CARE_Batch_Staging__c careUploadRec : listOfVCodeRecords){
-                if(careUploadRec.PER_ID__c != null){
-                    setPerIdFromCBS.add(careUploadRec.PER_ID__c); 
-                } 
-            }
-            
-            List<CARE_CC_Batch_Detail__c> CheckListForVCode = [select Id, PER_ID__c, CCB_Contact_Type_No__c, CARE_CI_CC__r.CC_TYPE_CD__c, CARE_CI_CC__r.CC_DTTM__c
-                                                               from CARE_CC_Batch_Detail__c 
-                                                               where PER_ID__c IN: setPerIdFromCBS AND CARE_CI_CC__r.CC_DTTM__c >=: dDateBeforeTwoYears
-                                                               order by CARE_CI_CC__r.CC_DTTM__c DESC];
-            
-            
-            if(CheckListForVCode.size() > 0){
-                for(CARE_CC_Batch_Detail__c batchCheck : CheckListForVCode){
-                    setPerId.add(batchCheck.PER_ID__c); 
-                    if(mapOfVCodeRecord.get(batchCheck.PER_ID__c) == null){
-                        mapOfVCodeRecord.put(batchCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{batchCheck});
-                    }else{
-                        mapOfVCodeRecord.get(batchCheck.PER_ID__c).add(batchCheck);                       
-                    }                
+                for(CARE_Batch_Staging__c careUploadRec : listOfVCodeRecords){
+                    if(careUploadRec.PER_ID__c != null){
+                        setPerIdFromCBS.add(careUploadRec.PER_ID__c); 
+                    } 
                 }
-            
-            system.debug('mapOfVCodeRecord value for criteria check--->'+mapOfVCodeRecord);
-            for(String perIdKey : mapOfVCodeRecord.keyset()){
-                for(CARE_CC_Batch_Detail__c ccBatch : mapOfVCodeRecord.get(perIdKey)){
-                    system.debug('CCB_Contact_Type_No__c---->'+ ccBatch.CCB_Contact_Type_No__c);
-                    system.debug('CARE_CI_CC__r.CC_TYPE_CD__c---->'+ ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c);
-                    system.debug('CARE_CI_CC__r.CC_DTTM__c---->'+ ccBatch.CARE_CI_CC__r.CC_DTTM__c);
-                    
-                    if(ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HU && ccBatch.CARE_CI_CC__r.CC_DTTM__c >=  dDateBeforeSixMonths){
-                        system.debug('inside 1st if block--->');
-                        personIdSet.add(perIdKey);
-                        //mapOfErrorRecordReason.put(perIdKey, 'PEV Customer Filter Reason - Already V wi 45 days');
-                        break;
-                    }
-                    else if(CARE_Constants.CARE_CC_CODE_VSTAMP.contains(ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c) || //ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'RANDOM CERT' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'H RAND CERT' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C RANDOM' ||
-                            (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_REACH) || (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_LIHEAP) || (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_ESA)){
-                                system.debug('inside 1st else if block--->');
-                                personIdSet.add(perIdKey);
-                                //mapOfErrorRecordReason.put(perIdKey, 'PEV Customer Filter Reason - In LiHeap, EPO, REACH');
-                                break;  
-                            }
                 
-                }
-            }
-         }
-            //personIdSet.addAll(perIdFinalSetFromSite);
-            system.debug('personIdSet----->'+ personIdSet);
-            
-            if(personIdSet.size() > 0){    
-                for(CARE_Batch_Staging__c cb : listOfVCodeRecords){
-                    
-                    if(!personIdSet.contains(cb.PER_ID__c)){
-                        finalListPerId.add(cb.PER_ID__c);
-                        finalList.add(cb);
-                    }else {
-                        cb.Processing_Message__c = CARE_Constants.CARE_VCODE_VALIDATIONFAIL;
-                        cb.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
-                        dropListCBS.add(cb);
-                    }
-                }
-            }else{
-                finalListPerId = setPerId;
-            }
-            system.debug('finalListPerId----->'+finalListPerId);
+                List<CARE_CC_Batch_Detail__c> CheckListForVCode = [select Id, PER_ID__c, CCB_Contact_Type_No__c, CARE_CI_CC__r.CC_TYPE_CD__c, CARE_CI_CC__r.CC_DTTM__c
+                                                                   from CARE_CC_Batch_Detail__c 
+                                                                   where PER_ID__c IN: setPerIdFromCBS AND CARE_CI_CC__r.CC_DTTM__c >=: dDateBeforeTwoYears
+                                                                   order by CARE_CI_CC__r.CC_DTTM__c DESC];
                 
-            if(finalListPerId.size() > 0){
-            List<EI_Site__c> perIdListSite = [select Person_ID_EI__c from EI_Site__c where Care_Stop_Date_EI__c >: dDateAfterSixMonths AND Person_ID_EI__c IN: finalListPerId];
-                        
-                for(EI_Site__c objSite : perIdListSite){
-                    perIdSet.add(objSite.Person_ID_EI__c); 
-                }
-            }
-            
-            if(finalList.size() > 0){    
-                for(CARE_Batch_Staging__c cbRec : finalList){
-                    
-                    if(!perIdSet.contains(cbRec.PER_ID__c)){
-                        VCodeFinalList.add(cbRec); 
-                    }
-                    else{
-                        cbRec.Processing_Message__c = CARE_Constants.CARE_VCODE_VALIDATIONFAIL;
-                        cbRec.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
-                        dropListCBS.add(cbRec);
-                    }
-                }
-            }else{
-                VCodeFinalList = finalList;
-            }
-              
-			listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_V_HU,null,null);
                 
-             if(VCodeFinalList.size() > 0){
-                      for(CARE_Batch_Staging__c objSite : VCodeFinalList){
-                       CARE_Application__c careApp = new CARE_Application__c();
-                        careApp.RecordTypeId = careAppRecTypeId;
-                        careApp.APPLICANT_NAME__c = objSite.APPLICANT_NAME__c;
-                        careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-                        careApp.ENROLLMENT_TYPE__c = CARE_Constants.CARE_ENROLLMENT_OTHER;
-                        careApp.RECEIVED_DATE__c = dTodaysDate; 
-                        careApp.PROCESSED_DATE__c = dTodaysDate;
-                        careApp.PER_ID__c = objSite.PER_ID__c;
-                        careApp.CARE_Account_ID__c = objSite.EI_ACCOUNT__c;
-                        careApp.ACCT_ID__c = objSite.CARE_BILLING_ACCT_ID__c;
-                        careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
-                        careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
-                        careApp.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
-                        careApp.CCB_CONTACT_COMMENT__c = listCareTypeDesc[0].TYPE_DESC_LONG__c;
-                        careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_BATCH;
-                        careAppList.add(careApp);
-                          
-                        //updating processing status and processing message for success records
-                        objSite.Processing_Status__c = CARE_Constants.CARE_PROCESSING_SUCCESS;
-                        listOfSuccessCBS.add(objSite);
-                        
-                        system.debug('careAppList--->'+careAppList); 
-                    }
-                }
-                Database.SaveResult[] srList = Database.insert(careAppList, false);
-                    
-                    for(Integer i =0; i < srList.size(); i++) {
-                        if(srList.get(i).isSuccess()){
-                            setId.add(srList.get(i).Id);
+                if(CheckListForVCode.size() > 0){
+                        for(CARE_CC_Batch_Detail__c batchCheck : CheckListForVCode){
+                            setPerId.add(batchCheck.PER_ID__c); 
+                            if(mapOfVCodeRecord.get(batchCheck.PER_ID__c) == null){
+                                mapOfVCodeRecord.put(batchCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{batchCheck});
+                            }else{
+                                mapOfVCodeRecord.get(batchCheck.PER_ID__c).add(batchCheck);                       
+                            }                
                         }
-                        else if(!srList.get(i).isSuccess()){
-                            Database.Error errors =  srList.get(i).getErrors().get(0);
-                            errorIdSet.add(srList.get(i).Id);
-                            errorPerIdSet.add(careAppList[i].PER_ID__c); 
-                            sysAdminError += srList.get(i).Id+'-'+errors.getMessage()+'\n';
+                    
+                    system.debug('mapOfVCodeRecord value for criteria check--->'+mapOfVCodeRecord);
+                    for(String perIdKey : mapOfVCodeRecord.keyset()){
+                        for(CARE_CC_Batch_Detail__c ccBatch : mapOfVCodeRecord.get(perIdKey)){
+                            system.debug('CCB_Contact_Type_No__c---->'+ ccBatch.CCB_Contact_Type_No__c);
+                            system.debug('CARE_CI_CC__r.CC_TYPE_CD__c---->'+ ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c);
+                            system.debug('CARE_CI_CC__r.CC_DTTM__c---->'+ ccBatch.CARE_CI_CC__r.CC_DTTM__c);
                             
+                            if(ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == CARE_Constants.CARE_CC_HU && ccBatch.CARE_CI_CC__r.CC_DTTM__c >=  dDateBeforeSixMonths){
+                                system.debug('inside 1st if block--->');
+                                personIdSet.add(perIdKey);
+                                //mapOfErrorRecordReason.put(perIdKey, 'PEV Customer Filter Reason - Already V wi 45 days');
+                                break;
+                            }
+                            else if(CARE_Constants.CARE_CC_CODE_VSTAMP.contains(ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c) || //ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'RANDOM CERT' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'H RAND CERT' || ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C RANDOM' ||
+                                    (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_REACH) || (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_LIHEAP) || (ccBatch.CARE_CI_CC__r.CC_TYPE_CD__c == 'C AE CARE' && ccBatch.CCB_Contact_Type_No__c == CARE_Constants.CARE_CC_ESA)){
+                                        system.debug('inside 1st else if block--->');
+                                        personIdSet.add(perIdKey);
+                                        //mapOfErrorRecordReason.put(perIdKey, 'PEV Customer Filter Reason - In LiHeap, EPO, REACH');
+                                        break;  
+                                    }
+                        
                         }
                     }
-                if(!String.isBlank(sysAdminError)) {
-                    EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_AutoUtilityController', new EI_BatchException(sysAdminError)));
+             
+                //personIdSet.addAll(perIdFinalSetFromSite);
+                system.debug('personIdSet----->'+ personIdSet);
+                
+                if(personIdSet.size() > 0){    
+                    for(CARE_Batch_Staging__c cb : listOfVCodeRecords){
+                        
+                        if(!personIdSet.contains(cb.PER_ID__c)){
+                            finalListPerId.add(cb.PER_ID__c);
+                            finalList.add(cb);
+                        }else {
+                            cb.Processing_Message__c = CARE_Constants.CARE_VCODE_VALIDATIONFAIL;
+                            cb.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                            dropListCBS.add(cb);
+                        }
+                    }
+                }else{
+                    finalListPerId = setPerId;
+                }
+                system.debug('finalListPerId----->'+finalListPerId);
+                    
+                if(finalListPerId.size() > 0){
+                List<EI_Site__c> perIdListSite = [select Person_ID_EI__c from EI_Site__c where Care_Stop_Date_EI__c >: dDateAfterSixMonths AND Person_ID_EI__c IN: finalListPerId];
+                            
+                    for(EI_Site__c objSite : perIdListSite){
+                        perIdSet.add(objSite.Person_ID_EI__c); 
+                    }
                 }
                 
-                if(dropListCBS.size() > 0){
-                   update dropListCBS;
+                if(finalList.size() > 0){    
+                    for(CARE_Batch_Staging__c cbRec : finalList){
+                        
+                        if(!perIdSet.contains(cbRec.PER_ID__c)){
+                            VCodeFinalList.add(cbRec); 
+                        }
+                        else{
+                            cbRec.Processing_Message__c = CARE_Constants.CARE_VCODE_VALIDATIONFAIL;
+                            cbRec.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                            dropListCBS.add(cbRec);
+                        }
+                    }
+                }else{
+                    VCodeFinalList = finalList;
                 }
-                if(listOfSuccessCBS.size() > 0){
-                   update listOfSuccessCBS;
-                }
-                
+                 system.debug('VCodeFinalList---->'+VCodeFinalList); 
+                    
+                 if(VCodeFinalList.size() > 0){
+                     for(CARE_Batch_Staging__c objSite : VCodeFinalList){
+                         CARE_Application__c careApp = new CARE_Application__c();
+                         careApp.RecordTypeId = careAppRecTypeId;
+                         careApp.APPLICANT_NAME__c = objSite.APPLICANT_NAME__c;
+                         careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
+                         careApp.ENROLLMENT_TYPE__c = CARE_Constants.CARE_ENROLLMENT_OTHER;
+                         careApp.RECEIVED_DATE__c = dTodaysDate; 
+                         careApp.PROCESSED_DATE__c = dTodaysDate;
+                         careApp.PER_ID__c = objSite.PER_ID__c;
+                         careApp.CARE_Account_ID__c = objSite.EI_ACCOUNT__c;
+                         careApp.ACCT_ID__c = objSite.CARE_BILLING_ACCT_ID__c;
+                         careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
+                         careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
+                         careApp.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
+                         careApp.CCB_CONTACT_COMMENT__c = listCareTypeDesc[0].TYPE_DESC_LONG__c;
+                         careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_BATCH;
+                         careAppList.add(careApp);
+                         
+                         //updating processing status and processing message for success records
+                         objSite.Processing_Status__c = CARE_Constants.CARE_PROCESSING_SUCCESS;
+                         objSite.Processing_Message__c = CARE_Constants.CARE_VCODE_SUCCESSMSG;
+                         listOfSuccessCBS.add(objSite);
+                         
+                         system.debug('careAppList--->'+careAppList); 
+                     }
+                     
+                     Database.SaveResult[] srList = Database.insert(careAppList, false);
+                     
+                     for(Integer i =0; i < srList.size(); i++) {
+                         if(srList.get(i).isSuccess()){
+                             setId.add(srList.get(i).Id);
+                         }
+                         else if(!srList.get(i).isSuccess()){
+                             Database.Error errors =  srList.get(i).getErrors().get(0);
+                             errorIdSet.add(srList.get(i).Id);
+                             errorPerIdSet.add(careAppList[i].PER_ID__c); 
+                             sysAdminError += srList.get(i).Id+'-'+errors.getMessage()+'\n';
+                             
+                         }
+                     }
+                     if(!String.isBlank(sysAdminError)) {
+                         EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_AutoUtilityController', new EI_BatchException(sysAdminError)));
+                     }
+                     
+                     }   
+                    
+                }else{
+                      for(CARE_Batch_Staging__c cb : listOfVCodeRecords){
+                            cb.Processing_Message__c = CARE_Constants.CARE_VCODE_VALIDATIONFAIL;
+                            cb.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                            dropListCBS.add(cb);
+                       }
+                }     
+                    
+                    if(dropListCBS.size() > 0){
+                       update dropListCBS;
+                    }
+                    if(listOfSuccessCBS.size() > 0){
+                       update listOfSuccessCBS;
+                    }
+                    
             }
             //system.debug('VCodeFinalList----->'+VCodeFinalList);
             wrappers.careAppSet = setId;
@@ -512,16 +525,19 @@ public with sharing class CARE_AutoUtilityController {
         List<CARE_Type__c> listCareTypeDesc = new List<CARE_Type__c>();
         List<CARE_Batch_Staging__c> listUpdateCBS = new List<CARE_Batch_Staging__c>();
         List<CARE_Batch_Staging__c> listOfSuccessCBS = new List<CARE_Batch_Staging__c>();
-        Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
+        
         
         
         try{
+            listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_VH_HU,null,null);
+            Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
+            
             if(listOfVHCodeRecords.size() > 0){
                 for(CARE_Batch_Staging__c careUploadRecord : listOfVHCodeRecords){
-                if(careUploadRecord.PER_ID__c != null){
-                    setPerIdCBS.add(careUploadRecord.PER_ID__c); 
-                } 
-            }
+                    if(careUploadRecord.PER_ID__c != null){
+                        setPerIdCBS.add(careUploadRecord.PER_ID__c); 
+                    } 
+                }
                 
                 List<CARE_CC_Batch_Detail__c> CheckListForVHCode = [select Id, PER_ID__c, CCB_Contact_Type_No__c, CARE_CI_CC__r.CC_TYPE_CD__c, CARE_CI_CC__r.CC_DTTM__c
                                                                    //CARE_APP_ENROLLED_SA__r.Service_Agreement__r.Care_Stop_Date_EI__c
@@ -531,13 +547,13 @@ public with sharing class CARE_AutoUtilityController {
                 
                 if(CheckListForVHCode.size() > 0){
                     for(CARE_CC_Batch_Detail__c batchCheck : CheckListForVHCode){
-                       setPerId.add(batchCheck.PER_ID__c); 
-                    if(mapOfVHCodeRecord.get(batchCheck.PER_ID__c) == null){
-                        mapOfVHCodeRecord.put(batchCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{batchCheck});
-                    }else{
-                        mapOfVHCodeRecord.get(batchCheck.PER_ID__c).add(batchCheck);                       
-                    }                
-                }
+                        setPerId.add(batchCheck.PER_ID__c); 
+                        if(mapOfVHCodeRecord.get(batchCheck.PER_ID__c) == null){
+                            mapOfVHCodeRecord.put(batchCheck.PER_ID__c ,new List<CARE_CC_Batch_Detail__c>{batchCheck});
+                        }else{
+                            mapOfVHCodeRecord.get(batchCheck.PER_ID__c).add(batchCheck);                       
+                        }                
+                    }
                     
                     system.debug('mapOfVHCodeRecord value for criteria check--->'+mapOfVHCodeRecord);
                     
@@ -557,7 +573,7 @@ public with sharing class CARE_AutoUtilityController {
                             }
                         }
                     }
-                }
+                
                     system.debug('notDropPerIdSet----->'+ notDropPerIdSet);
                     if(notDropPerIdSet.size() > 0){
                         for(CARE_Batch_Staging__c cbRec : listOfVHCodeRecords){
@@ -566,83 +582,94 @@ public with sharing class CARE_AutoUtilityController {
                                 finalListPerId.add(cbRec.PER_ID__c);
                             }else {
                                 cbRec.Processing_Message__c = CARE_Constants.CARE_VHCODE_VALIDATIONFAIL;
-                        		cbRec.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                                cbRec.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
                                 dropVHListCBS.add(cbRec); 
                             }
                         }
                     }else{
                         finalListPerId = setPerId;
                     }
-                  system.debug('finalListPerId---->'+finalListPerId);
-                  system.debug('finalList---->'+finalList);
-                  system.debug('dropVHListCBS---->'+dropVHListCBS);
-                if(finalListPerId.size() > 0){
-                    perIdListSite = [select Person_ID_EI__c from EI_Site__c where Care_Stop_Date_EI__c >: dDateAfterSixMonths AND Person_ID_EI__c IN: finalListPerId];
-                    for(EI_Site__c objSite : perIdListSite){
-                       setPerIdSite.add(objSite.Person_ID_EI__c); 
-                    }
-                }
-                if(finalList.size() > 0){
-                    for(CARE_Batch_Staging__c cBRecord : finalList){
-                        if(!setPerIdSite.contains(cBRecord.PER_ID__c)){
-                           listOfVHRecFinal.add(cBRecord); 
-                        }
-                        else {
-                            cBRecord.Processing_Message__c = CARE_Constants.CARE_VHCODE_VALIDATIONFAIL;
-                        	cBRecord.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
-                        	dropVHListCBS.add(cBRecord); 
+                    system.debug('finalListPerId---->'+finalListPerId);
+                    system.debug('finalList---->'+finalList);
+                    system.debug('dropVHListCBS---->'+dropVHListCBS);
+                    if(finalListPerId.size() > 0){
+                        perIdListSite = [select Person_ID_EI__c from EI_Site__c where Care_Stop_Date_EI__c >: dDateAfterSixMonths AND Person_ID_EI__c IN: finalListPerId];
+                        for(EI_Site__c objSite : perIdListSite){
+                            setPerIdSite.add(objSite.Person_ID_EI__c); 
                         }
                     }
-                }else{
-                    listOfVHRecFinal = finalList;
-                }
-                system.debug('listOfVHRecFinal----->'+listOfVHRecFinal);
-                listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_VH_HU,null,null);
+                    if(finalList.size() > 0){
+                        for(CARE_Batch_Staging__c cBRecord : finalList){
+                            if(!setPerIdSite.contains(cBRecord.PER_ID__c)){
+                                listOfVHRecFinal.add(cBRecord); 
+                            }
+                            else {
+                                cBRecord.Processing_Message__c = CARE_Constants.CARE_VHCODE_VALIDATIONFAIL;
+                                cBRecord.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                                dropVHListCBS.add(cBRecord); 
+                            }
+                        }
+                    }else{
+                        listOfVHRecFinal = finalList;
+                    }
+                    system.debug('listOfVHRecFinal----->'+listOfVHRecFinal);
                     
-                if(listOfVHRecFinal.size() > 0){                    
-                    for(CARE_Batch_Staging__c objSite : listOfVHRecFinal){
-                       CARE_Application__c careApp = new CARE_Application__c();
-                        careApp.RecordTypeId = careAppRecTypeId;
-                        careApp.APPLICANT_NAME__c = objSite.APPLICANT_NAME__c;
-                        careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
-                        careApp.ENROLLMENT_TYPE__c = CARE_Constants.CARE_ENROLLMENT_OTHER;
-                        careApp.PER_ID__c = objSite.PER_ID__c;
-                        careApp.RECEIVED_DATE__c = dTodaysDate; 
-                        careApp.PROCESSED_DATE__c = dTodaysDate;
-                        careApp.CARE_Account_ID__c = objSite.EI_ACCOUNT__c;
-                        careApp.ACCT_ID__c = objSite.CARE_BILLING_ACCT_ID__c;
-                        careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
-                        careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
-                        careApp.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
-                        careApp.CCB_CONTACT_COMMENT__c = listCareTypeDesc[0].TYPE_DESC_LONG__c;
-                        careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_BATCH;
-                        careAppList.add(careApp);
-                        
-                        objSite.Processing_Status__c = CARE_Constants.CARE_PROCESSING_SUCCESS;
-                        listOfSuccessCBS.add(objSite);
-                    }
-                }
-                system.debug('careAppList--->'+careAppList); 
-                Database.SaveResult[] srList = Database.insert(careAppList, false);
-                    
-                    for(Integer i =0; i < srList.size(); i++) {
-                        if(srList.get(i).isSuccess()){
-                            setId.add(srList.get(i).Id);
-                        }
-                        else if(!srList.get(i).isSuccess()){
-                            Database.Error errors =  srList.get(i).getErrors().get(0);
-                            errorIdSet.add(srList.get(i).Id);
-                            errorPerIdSet.add(careAppList[i].PER_ID__c); 
-                            sysAdminError += srList.get(i).Id+'-'+errors.getMessage()+'\n';
+                    if(listOfVHRecFinal.size() > 0){                    
+                        for(CARE_Batch_Staging__c objSite : listOfVHRecFinal){
+                            CARE_Application__c careApp = new CARE_Application__c();
+                            careApp.RecordTypeId = careAppRecTypeId;
+                            careApp.APPLICANT_NAME__c = objSite.APPLICANT_NAME__c;
+                            careApp.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;
+                            careApp.ENROLLMENT_TYPE__c = CARE_Constants.CARE_ENROLLMENT_OTHER;
+                            careApp.PER_ID__c = objSite.PER_ID__c;
+                            careApp.RECEIVED_DATE__c = dTodaysDate; 
+                            careApp.PROCESSED_DATE__c = dTodaysDate;
+                            careApp.CARE_Account_ID__c = objSite.EI_ACCOUNT__c;
+                            careApp.ACCT_ID__c = objSite.CARE_BILLING_ACCT_ID__c;
+                            careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
+                            careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
+                            careApp.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
+                            careApp.CCB_CONTACT_COMMENT__c = listCareTypeDesc[0].TYPE_DESC_LONG__c;
+                            careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_BATCH;
+                            careAppList.add(careApp);
                             
+                            objSite.Processing_Status__c = CARE_Constants.CARE_PROCESSING_SUCCESS;
+                            objSite.Processing_Message__c = CARE_Constants.CARE_VHCODE_SUCCESSMSG;
+                            listOfSuccessCBS.add(objSite);
                         }
+                        system.debug('careAppList--->'+careAppList); 
+                        Database.SaveResult[] srList = Database.insert(careAppList, false);
+                        
+                        for(Integer i =0; i < srList.size(); i++) {
+                            if(srList.get(i).isSuccess()){
+                                setId.add(srList.get(i).Id);
+                            }
+                            else if(!srList.get(i).isSuccess()){
+                                Database.Error errors =  srList.get(i).getErrors().get(0);
+                                errorIdSet.add(srList.get(i).Id);
+                                errorPerIdSet.add(careAppList[i].PER_ID__c); 
+                                sysAdminError += srList.get(i).Id+'-'+errors.getMessage()+'\n';
+                                
+                            }
+                        }
+                        system.debug('setId--->'+setId); 
+                        system.debug('errorIdSet--->'+errorIdSet); 
+                        system.debug('errorPerIdSet--->'+errorPerIdSet); 
+                        if(!String.isBlank(sysAdminError)) {
+                            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_AutoUtilityController', new EI_BatchException(sysAdminError)));
+                        }
+
                     }
-                system.debug('setId--->'+setId); 
-                system.debug('errorIdSet--->'+errorIdSet); 
-                system.debug('errorPerIdSet--->'+errorPerIdSet); 
-                if(!String.isBlank(sysAdminError)) {
-                    EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_AutoUtilityController', new EI_BatchException(sysAdminError)));
+                                  
+                }else{
+                    for(CARE_Batch_Staging__c cBRecord : listOfVHCodeRecords){
+                                cBRecord.Processing_Message__c = CARE_Constants.CARE_VHCODE_VALIDATIONFAIL;
+                                cBRecord.Processing_Status__c = CARE_Constants.CARE_PROCESSING_ERROR;
+                                dropVHListCBS.add(cBRecord); 
+                        }
                 }
+                
+                    
                 if(dropVHListCBS.size() > 0){
                     update dropVHListCBS;
                 }
@@ -767,6 +794,7 @@ public with sharing class CARE_AutoUtilityController {
                         careApp.SOURCE_CHANNEL_TYPE__c = CARE_Constants.CARE_CHANNEL_TYPE_BATCH;
                         careApp.PROCESSED_DATE__c = dTodaysDate;
                         careApp.RECEIVED_DATE__c = dTodaysDate;
+                        careApp.CC_CL_CD__c = objSite.Account_EI__r.CARE_DISCOUNT_TYPE__c;
                         careAppList.add(careApp);
                         system.debug('careAppList--->'+careAppList);
                     }
@@ -919,6 +947,7 @@ public with sharing class CARE_AutoUtilityController {
                         careApp.PER_ID__c = sa.Person_ID_EI__c;
                         careApp.CARE_Account_ID__c = sa.Account_EI__c;
                         careApp.ACCT_ID__c = sa.Billing_Account_ID_EI__c;
+                        careApp.CC_CL_CD__c = sa.Account_EI__r.CARE_DISCOUNT_TYPE__c;
                         careApp.CCB_CONTACT_CODE__c = CARE_Constants.CARE_CC_HU_NORESPONSE;
                         careApp.CCB_CONTACT_DESC__c = CARE_Constants.CARE_PEV_DROP_HU;
                         careApp.CCB_Contact_Type_No__c = CARE_Constants.CARE_CC_HU_NORESPONSE_NO;
@@ -1088,11 +1117,13 @@ When it is called: To find duplicate CARE_App_Staging records based on ACCT_ID__
         saActiveStatusSet.addAll(CARE_Constants.CARE_SA_ACTIVE_STATUSES);
         System.Debug('saActiveStatusSet = ' + saActiveStatusSet);
         
-        // Fetch all Billing ACC IDs for the PER_ID that has at-least one SA which is active and has valid Rate Schedule
+        // Fetch all Billing ACC IDs for the PER_ID that has at-least one SA which is active
         String query = 'SELECT Person_ID_EI__c, Billing_Account_ID_EI__c FROM EI_Site__c WHERE Person_ID_EI__c IN :perIdSet '
-            + ' AND Account_EI__c != NULL AND Svc_Status_Code_EI__c IN :saActiveStatusSet '
-            + ' AND Rate_Schedule_EI__c IN :validRSList '
-            + ' ORDER BY CreatedDate DESC';
+            + ' AND Account_EI__c != NULL AND Svc_Status_Code_EI__c IN :saActiveStatusSet ';
+        if (validRSList != null && !validRSList.isEmpty()) {
+            query += ' AND Rate_Schedule_EI__c IN :validRSList ';
+        }
+        query += ' ORDER BY CreatedDate DESC';
         if (Test.isRunningTest()) {
             query += ' LIMIT 10';
         }
@@ -1336,6 +1367,7 @@ When it is called: To identify the correct Premise to be used for Full Qualifica
         // Get Premises with valid SA having earliest CARE/FERA discount
         Map<String, EI_Site__c> premIdWithSAHavingEarliestDiscountMap = new Map<String, EI_Site__c> ();
         premIdWithSAHavingEarliestDiscountMap = getPremsWithSAHavingEarliestDiscount(premIdWithValidSAsMap);
+        System.Debug('premIdWithSAHavingEarliestDiscountMap = ' + premIdWithSAHavingEarliestDiscountMap);
         
         // Iterate through all remaining Staging records and find if any of the Billing ACC IDs have single Premise with SAs (that are Active and have Valid Rate Schedule)
         for (String billAccId :billAccIdSet) {
@@ -1435,8 +1467,12 @@ When it is called: To retrieve SAs based on ACC IDs
             Set<String> saActiveStatusSet = new Set<String> ();
             saActiveStatusSet.addAll(CARE_Constants.CARE_SA_ACTIVE_STATUSES);
             query += ' FROM EI_Site__c WHERE Billing_Account_ID_EI__c IN :billAccIdSet AND Account_EI__c != NULL '
-                + ' AND Svc_Status_Code_EI__c IN :saActiveStatusSet AND Rate_Schedule_EI__c IN :validRSList '
-                + ' ORDER BY CreatedDate DESC';
+                // + ' AND Svc_Status_Code_EI__c IN :saActiveStatusSet AND Rate_Schedule_EI__c IN :validRSList '
+                + ' AND Svc_Status_Code_EI__c IN :saActiveStatusSet ';
+            if (validRSList != null && !validRSList.isEmpty()) {
+                query += ' AND Rate_Schedule_EI__c IN :validRSList ';
+            }
+            query += ' ORDER BY CreatedDate DESC';
             if (Test.isRunningTest()) {
                 query += ' LIMIT 10';
             }
@@ -1462,6 +1498,41 @@ When it is called: To retrieve SAs based on ACC IDs
     }
     
     /**
+* @Description: Static method for identifying BAD ACC IDs that are not 10 digits
+* @Parameter: Map<String, List<EI_Site__c>>, List<String>
+* @Return: Map<String, List<EI_Site__c>>
+* @Usage:
+Where it is called: Invoked in CARE_BatchEnrollmentDataXport
+When it is called: To filter out SAs that do not have valid CARE Rate Scheudle
+**/
+    public static Map<String, List<EI_Site__c>> removeInvalidSAs(Map<String, List<EI_Site__c>> billAccIdSAsMap, List<String> validRSList) {
+        Set<String> validRSSet = new Set<String> ();
+        validRSSet.addAll(validRSList);
+        System.Debug('validRSSet = ' + validRSSet);
+        
+        // Remove SAs that are having invalid CARE Rate Schedule
+        for (String billAccId :billAccIdSAsMap.KeySet()) {
+            List<EI_Site__c> SAsList = billAccIdSAsMap.get(billAccId);
+            if (SAsList != null && !SAsList.isEmpty()) {
+                for (Integer i = 0; i<SAsList.size(); i++) {
+                    if (!validRSSet.contains(SAsList[i].Rate_Schedule_EI__c)) {
+                        // Since this SA's Rate Schedule is not related to CARE Rate Schedules, remove this SA from list
+                        SAsList.remove(i);
+                        i--;
+                    }
+                }
+                
+                // Update the Map with latest SAsList
+                billAccIdSAsMap.put(billAccId, SAsList);
+            }
+        }
+        
+        System.Debug('billAccIdSAsMap = ' + billAccIdSAsMap);
+        
+        return billAccIdSAsMap;
+    }
+    
+/**
 * @Description: Static method for identifying BAD ACC IDs that are not 10 digits
 * @Parameter: Map<Id, CARE_APP_Staging__c>
 * @Return: Map<Id, CARE_APP_Staging__c>
@@ -1911,6 +1982,7 @@ When it is called: To  generate a Map with PREM ID as KEY and SAs as VALUE if at
                 }
             }
         }
+        System.Debug('premsWithSAHavingEarliestDiscountMap = ' + premsWithSAHavingEarliestDiscountMap);
         
         return premsWithSAHavingEarliestDiscountMap;
     }
@@ -1949,8 +2021,10 @@ When it is called: To send an email with details like Batch Job statistics
         System.Debug('query = ' + query);
         for (CARE_System_Value__c sysValRec : Database.Query(query)) 
         {
-            for (String emailAddr :sysValRec.SYSTEM_VALUE__c.split(';')) {
-                emailAddrList.add(emailAddr);
+            if (String.isNotBlank(sysValRec.SYSTEM_VALUE__c)) {
+                for (String emailAddr :sysValRec.SYSTEM_VALUE__c.split(';')) {
+                    emailAddrList.add(emailAddr);
+                }
             }
         }
         System.Debug('emailAddrList = ' + emailAddrList);
@@ -1982,6 +2056,28 @@ When it is called: To send an email with details like Batch Job statistics
     }
     
     /**
+* @Description: Static method to get Record Types with Id as a Map
+* @Parameter: String
+* @Return: Map<String, Id>
+* @Usage:
+Where it is called: Invoked in CARE_BatchEnrollmentDataXport
+When it is called: To get Record Type Name with Id as a Map
+**/
+    public static Map<String, Id> getRecordTypeNameWithId (String objectAPIName) {
+        Map<String,Schema.RecordTypeInfo> recordTypeInfoMap = Schema.getGlobalDescribe().get(objectAPIName).getDescribe().getRecordTypeInfosByName();
+        Map<String, Id> recTypeNameIdMap = new Map<String, Id> ();
+        
+        for (String recordTypeName :recordTypeInfoMap.KeySet()) {
+            // System.Debug('Record Type Name = ' + recordTypeName);
+            // System.Debug('Record Type Id = ' + recordTypeInfoMap.get(recordTypeName).getRecordTypeId());
+            recTypeNameIdMap.put(recordTypeName, recordTypeInfoMap.get(recordTypeName).getRecordTypeId());
+        }
+        System.Debug('recTypeNameIdMap = ' + recTypeNameIdMap);
+        
+        return recTypeNameIdMap;
+    }
+
+/**
 * @Description: Static method for creating CARE_Application records for Staging records where single Premise with SAs are identified for Full Qualification Logic
 * @Parameter: Map<Id, CARE_APP_Staging__c>, Map<String, List<EI_Site__c>>
 * @Return: Map<Id, CARE_Application__c>
@@ -1994,6 +2090,11 @@ When it is called: To create CARE_Application records for Staging records where 
         System.Debug('stgRecsMap = ' + stgRecsMap);
         System.Debug('premIdWithValidSAsMap = ' + premIdWithValidSAsMap);
         
+        // Get Record Types of CARE_APPLICATION__c object
+        Map<String, Id> careAppRecTypeNameIdMap = new Map<String, Id> ();
+        careAppRecTypeNameIdMap = getRecordTypeNameWithId('CARE_Application__c');
+        System.Debug('careAppRecTypeNameIdMap = ' + careAppRecTypeNameIdMap);
+        
         List<Id> stgIdList = new List<Id> ();
         Map<Id, CARE_Application__c> stgIdCareAppRecMap = new Map<Id, CARE_Application__c> ();
         Map<Integer, String> langNumMap = new Map<Integer, String> ();
@@ -2005,15 +2106,18 @@ When it is called: To create CARE_Application records for Staging records where 
             String premId = stgRecsMap.get(stgRecId).PREM_ID__c;
             
             // Get EI_Account Id from latest created SA for that Premise
-            Id eiAccId = premIdWithValidSAsMap.get(premId)[0].Account_EI__c;
+            Id eiAccId;
+            if (premIdWithValidSAsMap.containsKey(premId) != null && premIdWithValidSAsMap.get(premId) != null) {
+                eiAccId = premIdWithValidSAsMap.get(premId)[0].Account_EI__c;
+            }
             
             // Create CARE_Application record
-            CARE_Application__c careAppRec = createCareAppRec(stgRecsMap.get(stgRecId), eiAccId, langNumMap);
+            CARE_Application__c careAppRec = createCareAppRec(stgRecsMap.get(stgRecId), eiAccId, langNumMap, careAppRecTypeNameIdMap);
             
             stgIdCareAppRecMap.put(stgRecId, careAppRec);
             stgIdList.add(stgRecId);
         }
-        System.Debug('stgIdCareAppRecMap= ' + stgIdCareAppRecMap);
+        System.Debug('stgIdCareAppRecMap = ' + stgIdCareAppRecMap);
         System.Debug('stgIdList = ' + stgIdList);
         
         if (stgIdCareAppRecMap != null && !stgIdCareAppRecMap.isEmpty()) {
@@ -2038,12 +2142,15 @@ When it is called: To create CARE_Application records for Staging records where 
                 }
             }
         }
+        System.Debug('stgIdCareAppRecMap = ' + stgIdCareAppRecMap);
+        System.Debug('stgIdList = ' + stgIdList);
         
         // Create CARE_APP_Image_List__c records
         List<CARE_APP_Image_List__c> careAppImgList = new List<CARE_APP_Image_List__c> ();
+        Id careAppImgResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_RES_DEVELOPER_NAME);
         stgIdList.clear();
         for (Id stgRecId :stgIdCareAppRecMap.KeySet()) {
-            if (!String.isBlank(stgRecsMap.get(stgRecId).IMAGE_ID__c)) {
+            if (String.isNotBlank(stgRecsMap.get(stgRecId).IMAGE_ID__c) && stgRecsMap.get(stgRecId).SOURCE_CHANNEL_TYPE__c == 'DataXport Enrollment') {
                 CARE_APP_Image_List__c careAppImgRec = new CARE_APP_Image_List__c ();
                 // Associate CARE_APP_Image_List record with CARE_Application record
                 careAppImgRec.Application__c = stgIdCareAppRecMap.get(stgRecId).Id;
@@ -2052,6 +2159,7 @@ When it is called: To create CARE_Application records for Staging records where 
                     careAppImgRec.IMAGE_TYPE__c = 'DATAXPORT';
                     careAppImgRec.SOURCE_SYSTEM__c = 'DATAXPORT';
                 }
+                careAppImgRec.RecordTypeId = careAppImgResRecTypeId;
                 careAppImgList.add(careAppImgRec);
                 stgIdList.add(stgRecId);
             }
@@ -2079,6 +2187,7 @@ When it is called: To create CARE_Application records for Staging records where 
             }
         }
         
+        System.Debug('stgIdCareAppRecMap = ' + stgIdCareAppRecMap);
         return stgIdCareAppRecMap;
     }
     
@@ -2090,29 +2199,49 @@ When it is called: To create CARE_Application records for Staging records where 
 Where it is called: Invoked in CARE_BatchEnrollmentDataXport
 When it is called: To create CARE_Application record for a Staging record
 **/
-    public static CARE_Application__c createCareAppRec(CARE_APP_Staging__c stgRec, Id eiAccId, Map<Integer, String> langNumMap)
+    public static CARE_Application__c createCareAppRec(CARE_APP_Staging__c stgRec, Id eiAccId, Map<Integer, String> langNumMap, Map<String, Id> careAppRecTypeNameIdMap)
     {
         System.Debug('stgRec = ' + stgRec);
         System.Debug('eiAccId = ' + eiAccId);
         System.Debug('langNumMap = ' + langNumMap);
         
         CARE_Application__c careAppRec = new CARE_Application__c ();
+        
+        Id userId = UserInfo.getUserId();            
+        List<User> userDetails = new List<User>();
+        userDetails = CARE_UtilityController.getUserDetails(userId);
+        System.Debug('userDetails = ' + userDetails);
+        
+        if (String.isNotBlank(stgRec.APPLICATION_TYPE__c) && stgRec.APPLICATION_TYPE__c.toUpperCase() == 'RESIDENTIAL' && careAppRecTypeNameIdMap.containsKey('Residential Customer')) {
+            careAppRec.RecordTypeId = careAppRecTypeNameIdMap.get('Residential Customer');
+        }
+        
+        careAppRec.ACCT_ID__c = stgRec.ACCT_ID__c;
+        careAppRec.PER_ID__c = stgRec.PER_ID__c;
+        careAppRec.PREM_ID__c = stgRec.PREM_ID__c;
+        careAppRec.APPLICANT_NAME__c = stgRec.APPLICANT_NAME__c;
+        careAppRec.DOC_RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
+        careAppRec.ENROLLMENT_TYPE__c = stgRec.ENROLLMENT_TYPE__c;
+        careAppRec.RECEIVED_DATE__c = ( (stgRec.DOC_RECEIVED_DATE__c != null) ? stgRec.DOC_RECEIVED_DATE__c : 
+                                        ( (stgRec.SCANDATE__c != null) ? stgRec.SCANDATE__c : DATE.ValueOf(stgRec.CreatedDate) )
+                                        );
+        careAppRec.SOURCE_CHANNEL_TYPE__c = stgRec.SOURCE_CHANNEL_TYPE__c;
+        
         if (stgRec.Source_Channel_Type__c == 'DataXport Enrollment') {
-            careAppRec.ACCT_ID__c = stgRec.ACCT_ID__c;
-            careAppRec.PREM_ID__c = stgRec.PREM_ID__c;
             careAppRec.APPLICATION_STATUS__c = 'Pending';
-            System.Debug('stgRec.APPLICANT_NAME__c = ' + stgRec.APPLICANT_NAME__c);
-            careAppRec.APPLICANT_NAME__c = stgRec.APPLICANT_NAME__c;
+            
             careAppRec.REQUEST_DROP__c = ( (String.isNotBlank(stgRec.REQUEST_DROP__c) && stgRec.REQUEST_DROP__c.toUpperCase() == 'Y') ? true : false);
             if (String.isNotBlank(stgRec.EMAIL_ADDRESS__c)) {
                 careAppRec.EMAIL_ADDRESS__c = stgRec.EMAIL_ADDRESS__c;
             }
+            /*
             if (String.isNotBlank(stgRec.PHONE__c)) {
                 careAppRec.PHONE_NO__c = stgRec.PHONE__c;
             }
             if (String.isNotBlank(stgRec.PHONE_TYPE__c)) {
                 careAppRec.CARE_Phone_Type__c = stgRec.PHONE_TYPE__c;
             }
+            */
             if (String.isNotBlank(stgRec.ALT_PHONE__c)) {
                 careAppRec.CARE_Alternate_Phone_Number__c = stgRec.ALT_PHONE__c;
             }
@@ -2120,38 +2249,31 @@ When it is called: To create CARE_Application record for a Staging record
                 careAppRec.CARE_Alternate_Phone_Type__c = stgRec.ALT_PHONE_TYPE__c;
             }
             
-            // Phone No
-            careAppRec.PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Mobile' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c : 
-                (
-                    (careAppRec.CARE_Alternate_Phone_Type__c == 'Mobile' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c)) ?
-                    careAppRec.CARE_Alternate_Phone_Number__c : 
-                    ''
-                )
-            );
+            // Mobile Phone No
+            if (stgRec.PHONE_TYPE__c == 'Mobile' && String.isNotBlank(stgRec.PHONE__c))
+            {
+                careAppRec.PHONE_NO__c = stgRec.PHONE__c;
+                careAppRec.CARE_Phone_Type__c = 'Mobile';
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Mobile' && String.isNotBlank(stgRec.ALT_PHONE__c)) {
+                careAppRec.PHONE_NO__c = stgRec.ALT_PHONE__c;
+                careAppRec.CARE_Phone_Type__c = 'Mobile';
+            }
             
             // Home Phone No
-            careAppRec.HOME_PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Home' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c :
-                (
-                    careAppRec.CARE_Alternate_Phone_Type__c == 'Home' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c) ? 
-                    careAppRec.CARE_Alternate_Phone_Number__c :
-                    ''
-                )
-            );
+            if (stgRec.PHONE_TYPE__c == 'Home' && String.isNotBlank(stgRec.PHONE__c))
+            {
+                careAppRec.HOME_PHONE_NO__c = stgRec.PHONE__c;
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Home' && String.isNotBlank(stgRec.ALT_PHONE__c)) {
+                careAppRec.HOME_PHONE_NO__c = stgRec.ALT_PHONE__c;
+            }
             
             // Work Phone No
-            careAppRec.WORK_PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Work' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c : 
-                (
-                    (careAppRec.CARE_Alternate_Phone_Type__c == 'Work' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c)) ?
-                    careAppRec.CARE_Alternate_Phone_Number__c :
-                    ''
-                )
-            );
+            if (stgRec.PHONE_TYPE__c == 'Work' && String.isNotBlank(stgRec.PHONE__c))
+            {
+                careAppRec.WORK_PHONE_NO__c = stgRec.PHONE__c;
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Work' && String.isNotBlank(stgRec.ALT_PHONE__c)) {
+                careAppRec.WORK_PHONE_NO__c = stgRec.ALT_PHONE__c;
+            }
             
             // Preferred Language
             if (String.isNotBlank(stgRec.LANGUAGE_PREFERENCE__c)) {
@@ -2192,95 +2314,34 @@ When it is called: To create CARE_Application record for a Staging record
             careAppRec.FIXED_INCOME__c = ( (String.isNotBlank(stgRec.IS_FIXED_INCOME__c) && stgRec.IS_FIXED_INCOME__c.toUpperCase() == 'Y') ? true : false);
             careAppRec.ANNUAL_HOUSEHOLD_INCOME__c = stgRec.ANNUAL_INCOME__c;
             careAppRec.IS_SIGNED__c = ( (String.isNotBlank(stgRec.IS_SIGNED__c) && stgRec.IS_SIGNED__c == 'Y') ? true : false);
-            careAppRec.RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
+            // careAppRec.RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
             careAppRec.APPCODE__c = stgRec.APPCODE__c;
             // careAppRec.IMAGE_ID__c = stgRec.IMAGE_ID__c;
             // Create CARE_APP_Image_List record with IMAGE_ID__c and IMAGE_TYPE__c = 'DataXport'
-            careAppRec.SOURCE_CHANNEL_TYPE__c = stgRec.SOURCE_CHANNEL_TYPE__c;
             careAppRec.APPLICATION_EXTERNAL_ID__c = stgRec.EXTERNAL_ID__c;
             careAppRec.APPLICATION_TYPE__c = 'Enrollment';
-            careAppRec.ENROLLMENT_TYPE__c = stgRec.ENROLLMENT_TYPE__c;
-            careAppRec.DOC_RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
             careAppRec.NO_PAGE__c = stgRec.NO_PAGE__c;
             careAppRec.CARE_Account_ID__c = eiAccId;
             careAppRec.COC_CODE__c = stgRec.COC_CODE__c;
             careAppRec.IS_RECERT__c = ( (String.isNotBlank(stgRec.IS_RECERT__c) && stgRec.IS_RECERT__c == 'Y') ? true : false);
             // careAppRec.CARE_DISCOUNT_TYPE__c = stgRec.CC_CL_CD__c;
-            careAppRec.Per_ID__c = stgRec.PER_ID__c;
             
         } else if (stgRec.Source_Channel_Type__c == 'DataXport PEV Notice') {
-            
-            careAppRec.ACCT_ID__c = stgRec.ACCT_ID__c;
-            careAppRec.Per_ID__c = stgRec.PER_ID__c;
-            careAppRec.PREM_ID__c = stgRec.PREM_ID__c;
-            careAppRec.SOURCE_CHANNEL_TYPE__c = stgRec.SOURCE_CHANNEL_TYPE__c;
-            System.Debug('stgRec.APPLICANT_NAME__c = ' + stgRec.APPLICANT_NAME__c);
-            careAppRec.APPLICANT_NAME__c = stgRec.APPLICANT_NAME__c;
             careAppRec.APPLICATION_EXTERNAL_ID__c = stgRec.EXTERNAL_ID__c;
             careAppRec.APPLICATION_STATUS__c = 'Completed';
             careAppRec.APPLICATION_TYPE__c = 'Notice';
-            careAppRec.ENROLLMENT_TYPE__c = stgRec.ENROLLMENT_TYPE__c;
             careAppRec.NO_PAGE__c = stgRec.NO_PAGE__c;
             careAppRec.CARE_Account_ID__c = eiAccId;
-            careAppRec.DOC_RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
+            careAppRec.PROCESSED_DATE__c = System.Today();
+            if (userDetails != null && !userDetails.isEmpty()) {
+                careAppRec.USER_NAME_CARE1__c = (String.isNotBlank(userDetails[0].LAN_ID_EI__c) ? userDetails[0].LAN_ID_EI__c : '');
+            }
+            careAppRec.RESULT_DATE__c = System.Today();
+            
             
         } else if (stgRec.Source_Channel_Type__c == 'CARE Force.com') {
-            careAppRec.ACCT_ID__c = stgRec.ACCT_ID__c;
-            careAppRec.PREM_ID__c = stgRec.PREM_ID__c;
             careAppRec.APPLICATION_STATUS__c = 'Pending';
-            System.Debug('stgRec.APPLICANT_NAME__c = ' + stgRec.APPLICANT_NAME__c);
-            careAppRec.APPLICANT_NAME__c = stgRec.APPLICANT_NAME__c;
-            // careAppRec.REQUEST_DROP__c = ( (String.isNotBlank(stgRec.REQUEST_DROP__c) && stgRec.REQUEST_DROP__c.toUpperCase() == 'Y') ? true : false);
-            /*
-            if (String.isNotBlank(stgRec.EMAIL_ADDRESS__c)) {
-                careAppRec.EMAIL_ADDRESS__c = stgRec.EMAIL_ADDRESS__c;
-            }
-            if (String.isNotBlank(stgRec.PHONE__c)) {
-                careAppRec.PHONE_NO__c = stgRec.PHONE__c;
-            }
-            if (String.isNotBlank(stgRec.PHONE_TYPE__c)) {
-                careAppRec.CARE_Phone_Type__c = stgRec.PHONE_TYPE__c;
-            }
-            if (String.isNotBlank(stgRec.ALT_PHONE__c)) {
-                careAppRec.CARE_Alternate_Phone_Number__c = stgRec.ALT_PHONE__c;
-            }
-            if (String.isNotBlank(stgRec.ALT_PHONE_TYPE__c)) {
-                careAppRec.CARE_Alternate_Phone_Type__c = stgRec.ALT_PHONE_TYPE__c;
-            }
             
-            // Phone No
-            careAppRec.PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Mobile' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c : 
-                (
-                    (careAppRec.CARE_Alternate_Phone_Type__c == 'Mobile' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c)) ?
-                    careAppRec.CARE_Alternate_Phone_Number__c : 
-                    ''
-                )
-            );
-            
-            // Home Phone No
-            careAppRec.HOME_PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Home' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c :
-                (
-                    careAppRec.CARE_Alternate_Phone_Type__c == 'Home' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c) ? 
-                    careAppRec.CARE_Alternate_Phone_Number__c :
-                    ''
-                )
-            );
-            
-            // Work Phone No
-            careAppRec.WORK_PHONE_NO__c = (
-                (careAppRec.CARE_Phone_Type__c == 'Work' && String.isNotBlank(careAppRec.PHONE_NO__c)) ?
-                careAppRec.PHONE_NO__c : 
-                (
-                    (careAppRec.CARE_Alternate_Phone_Type__c == 'Work' && String.isNotBlank(careAppRec.CARE_Alternate_Phone_Number__c)) ?
-                    careAppRec.CARE_Alternate_Phone_Number__c :
-                    ''
-                )
-            );
-            */
             // Preferred Language
             if (String.isNotBlank(stgRec.LANGUAGE_PREFERENCE__c)) {
                 careAppRec.Language_Preference__c = langNumMap.get(Integer.ValueOf(stgRec.LANGUAGE_PREFERENCE__c));
@@ -2320,25 +2381,243 @@ When it is called: To create CARE_Application record for a Staging record
             careAppRec.FIXED_INCOME__c = ( (String.isNotBlank(stgRec.IS_FIXED_INCOME__c) && stgRec.IS_FIXED_INCOME__c.toUpperCase() == 'Y') ? true : false);
             careAppRec.ANNUAL_HOUSEHOLD_INCOME__c = stgRec.ANNUAL_INCOME__c;
             careAppRec.IS_SIGNED__c = ( (String.isNotBlank(stgRec.IS_SIGNED__c) && stgRec.IS_SIGNED__c == 'Y') ? true : false);
-            careAppRec.RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
-            // careAppRec.APPCODE__c = stgRec.APPCODE__c;
-            // careAppRec.IMAGE_ID__c = stgRec.IMAGE_ID__c;
-            // Create CARE_APP_Image_List record with IMAGE_ID__c and IMAGE_TYPE__c = 'DataXport'
-            careAppRec.SOURCE_CHANNEL_TYPE__c = stgRec.SOURCE_CHANNEL_TYPE__c;
             careAppRec.APPLICATION_EXTERNAL_ID__c = stgRec.EXTERNAL_ID__c;
             careAppRec.APPLICATION_TYPE__c = 'Enrollment';
-            careAppRec.ENROLLMENT_TYPE__c = stgRec.ENROLLMENT_TYPE__c;
-            careAppRec.DOC_RECEIVED_DATE__c = stgRec.DOC_RECEIVED_DATE__c;
-            // careAppRec.NO_PAGE__c = stgRec.NO_PAGE__c;
             careAppRec.CARE_Account_ID__c = eiAccId;
             careAppRec.COC_CODE__c = stgRec.COC_CODE__c;
-            // careAppRec.IS_RECERT__c = ( (String.isNotBlank(stgRec.IS_RECERT__c) && stgRec.IS_RECERT__c == 'Y') ? true : false);
-            // careAppRec.CARE_DISCOUNT_TYPE__c = stgRec.CC_CL_CD__c;
-            careAppRec.Per_ID__c = stgRec.PER_ID__c;
             
+        } else if (stgRec.Source_Channel_Type__c == 'CARE SMS') {
+            careAppRec.APPLICATION_STATUS__c = 'Pending';
+            careAppRec.NO_ADULT__c = stgRec.NO_ADULT__c;
+            careAppRec.NO_CHILD__c = stgRec.NO_CHILD__c;
+            careAppRec.ANNUAL_HOUSEHOLD_INCOME__c = stgRec.ANNUAL_INCOME__c;
+            careAppRec.IS_SIGNED__c = true;
+            careAppRec.APPLICATION_EXTERNAL_ID__c = stgRec.EXTERNAL_ID__c;
+            careAppRec.APPLICATION_TYPE__c = 'Enrollment';
+            careAppRec.CARE_Account_ID__c = eiAccId;
+            
+        } else if (stgRec.Source_Channel_Type__c == 'Phone Enrollment') {
+            careAppRec.APPLICATION_STATUS__c = 'Pending';
+            careAppRec.CARE_ALTERNATE_PHONE_NUMBER__c = stgRec.ALT_PHONE__c;
+            careAppRec.CARE_ALTERNATE_PHONE_TYPE__c = stgRec.ALT_PHONE_TYPE__c;
+            if (stgRec.PHONE_TYPE__c == 'Mobile') {
+                careAppRec.PHONE_NO__c = stgRec.PHONE__c;
+                careAppRec.CARE_PHONE_TYPE__c = 'Mobile';
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Mobile' && careAppRec.PHONE_NO__c == null) {
+                careAppRec.PHONE_NO__c = stgRec.ALT_PHONE__c;
+                careAppRec.CARE_PHONE_TYPE__c = 'Mobile';
+            }
+            
+            // Mobile Phone
+            if (stgRec.MOBILE_PHONE__c != null && careAppRec.PHONE_NO__c == null) {
+                careAppRec.PHONE_NO__c = stgRec.MOBILE_PHONE__c;
+                careAppRec.CARE_PHONE_TYPE__c = 'Mobile';
+            } else if (stgRec.MOBILE_ALT_PHONE__c != null && careAppRec.PHONE_NO__c == null) {
+                careAppRec.PHONE_NO__c = stgRec.MOBILE_ALT_PHONE__c;
+                careAppRec.CARE_PHONE_TYPE__c = 'Mobile';
+            }
+            
+            // Home Phone
+            if (stgRec.PHONE_TYPE__c == 'Home') {
+                careAppRec.HOME_PHONE_NO__c = stgRec.PHONE__c;
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Home' && careAppRec.HOME_PHONE_NO__c == null) {
+                careAppRec.HOME_PHONE_NO__c = stgRec.ALT_PHONE__c;
+            }
+            
+            // Work Phone
+            if (stgRec.PHONE_TYPE__c == 'Work') {
+                careAppRec.WORK_PHONE_NO__c = stgRec.PHONE__c;
+            } else if (stgRec.ALT_PHONE_TYPE__c == 'Work' && careAppRec.WORK_PHONE_NO__c == null) {
+                careAppRec.WORK_PHONE_NO__c = stgRec.ALT_PHONE__c;
+            }
+            
+            careAppRec.COC_CODE__c = stgRec.COC_CODE__c;
+            careAppRec.COC_Status__c = stgRec.COC_Status__c;
+            
+            // Preferred Language
+            if (String.isNotBlank(stgRec.LANGUAGE_PREFERENCE__c)) {
+                careAppRec.Language_Preference__c = langNumMap.get(Integer.ValueOf(stgRec.LANGUAGE_PREFERENCE__c));
+            }
+            
+            // Preferred Contact Method
+            careAppRec.CARE_Preferred_Method_of_Communication__c = (
+                (String.isNotBlank(stgRec.EMAIL_PREFERRED__c) && stgRec.EMAIL_PREFERRED__c.toUpperCase() == 'Y') ?
+                'Email' : 
+                (
+                    (String.isNotBlank(stgRec.MAIL_PREFERRED__c) && stgRec.MAIL_PREFERRED__c.toUpperCase() == 'Y') ?
+                    'Mail' : 
+                    (
+                        (String.isNotBlank(stgRec.PHONE_PREFERRED__c) && stgRec.PHONE_PREFERRED__c.toUpperCase() == 'Y') ?
+                        'Phone' : 
+                        (
+                            (String.isNotBlank(stgRec.TEXT_PREFERRED__c) && stgRec.TEXT_PREFERRED__c.toUpperCase() == 'Y') ?
+                            'Text' :
+                            ''
+                        )
+                    )
+                )
+            );
+            careAppRec.REQUEST_DROP__c = ( (String.isNotBlank(stgRec.REQUEST_DROP__c) && stgRec.REQUEST_DROP__c.toUpperCase() == 'Y') ? true : false);
+            if (String.isNotBlank(stgRec.EMAIL_ADDRESS__c)) {
+                careAppRec.EMAIL_ADDRESS__c = stgRec.EMAIL_ADDRESS__c;
+            }
+            
+            careAppRec.CCB_CONTACT_COMMENT__c = stgRec.CCB_CONTACT_COMMENT__c;
+            careAppRec.NO_ADULT__c = stgRec.NO_ADULT__c;
+            careAppRec.NO_CHILD__c = stgRec.NO_CHILD__c;
+            careAppRec.LIHEAP__c = ( (String.isNotBlank(stgRec.LIHEAP__c) && stgRec.LIHEAP__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.WIC__c = ( (String.isNotBlank(stgRec.WIC__c) && stgRec.WIC__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.CALFRESH_SNAP__c = ( (String.isNotBlank(stgRec.CALFRESH_SNAP__c) && stgRec.CALFRESH_SNAP__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.CALWORKS_TANF__c = ( (String.isNotBlank(stgRec.CALWORKS_TANF__c) && stgRec.CALWORKS_TANF__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.HEAD_START_INCOME__c = ( (String.isNotBlank(stgRec.HEAD_START_INCOME__c) && stgRec.HEAD_START_INCOME__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.SSI__c = ( (String.isNotBlank(stgRec.SSI__c) && stgRec.SSI__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.HEALTHY_FAMILIES__c = ( (String.isNotBlank(stgRec.HEALTHY_FAMILIES__c) && stgRec.HEALTHY_FAMILIES__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.NSLP__c = ( (String.isNotBlank(stgRec.NSLP__c) && stgRec.NSLP__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.BUREAU_INDIAN_AFFAIRS__c = ( (String.isNotBlank(stgRec.BUREAU_INDIAN_AFFAIRS__c) && stgRec.BUREAU_INDIAN_AFFAIRS__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.MEDICAID_UNDER65__c = ( (String.isNotBlank(stgRec.MEDICAID_UNDER65__c) && stgRec.MEDICAID_UNDER65__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.MEDICAID_OVER65__c = ( (String.isNotBlank(stgRec.MEDICAID_OVER65__c) && stgRec.MEDICAID_OVER65__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.FIXED_INCOME__c = ( (String.isNotBlank(stgRec.IS_FIXED_INCOME__c) && stgRec.IS_FIXED_INCOME__c.toUpperCase() == 'Y') ? true : false);
+            careAppRec.ANNUAL_HOUSEHOLD_INCOME__c = stgRec.ANNUAL_INCOME__c;
+            careAppRec.IS_SIGNED__c = ( (String.isNotBlank(stgRec.IS_SIGNED__c) && stgRec.IS_SIGNED__c == 'Y') ? true : false);
+            careAppRec.APPLICATION_EXTERNAL_ID__c = stgRec.EXTERNAL_ID__c;
+            careAppRec.APPLICATION_TYPE__c = 'Enrollment';
+            careAppRec.CARE_Account_ID__c = eiAccId;
+            careAppRec.COC_CODE__c = stgRec.COC_CODE__c;
+            careAppRec.ENTRY_DATE_CARE1__c = stgRec.ENTRY_DATE_CARE1__c;
+            careAppRec.USER_NAME_CARE1__c = stgRec.USER_NAME_CARE1__c;
         }
         
         return careAppRec;
+    }
+    
+    /**
+    * @Description: Static method to get the Email Subject for the batch job based on Source Channel
+    * @Parameter: String
+    * @Return: String
+    * @Usage:
+            Where it is called: Invoked in CARE_BatchEnrollmentDataXport
+            When it is called: To get the email subject of a batch job based on Source Channel
+    **/
+    public static String getSourceChannelEmailSubject(String sourceChannelType)
+    {
+        String emailSubject = (sourceChannelType == 'DataXport Enrollment' ? '"CARE: Daily enrollment file from DX"' :
+                                (sourceChannelType == 'CARE Force.com' ? '"CARE: Daily enrollments from PGE.com"' :
+                                    (sourceChannelType == 'Phone Enrollment' ? '"CARE: Daily enrollments from IVR"' :
+                                        (sourceChannelType == 'CARE SMS' ? '"CARE: Daily enrollment file from SMS"' :
+                                            (sourceChannelType == 'CARE LIHEAP' ? '"CARE: Monthly enrollment file from LIHEAP"' :
+                                                (sourceChannelType == 'CARE New Mover' ? '"CARE: Daily enrollment file from New Mover"' :
+                                                    (sourceChannelType == 'CARE Auto Recertification' ? '"CARE: Monthly enrollment file from Auto Recertification"' : '')
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            );
+        System.Debug('emailSubject = ' + emailSubject);
+        
+        return emailSubject;
+    }
+    
+    /**
+    * @Description: Static method to get the Email Subject for the batch job based on Source Channel
+    * @Parameter: String
+    * @Return: String
+    * @Usage:
+            Where it is called: Invoked in CARE_BatchEnrollmentDataXport
+            When it is called: To get the email subject of a batch job based on Source Channel
+    **/
+    public static void checkAndRunBatchForSameSourceChannel(String sourceChannelType, Boolean executeOnlyThisBatchJob, Map<String, CARE_Type__c> sourceChannelMap)
+    {
+        if (!sourceChannelMap.containsKey(sourceChannelType)) {
+            return;
+        }
+        
+        // Get the Staging Object based on Source Channel
+        String objAPIName = sourceChannelMap.get(sourceChannelType).TYPE_CODE__c;
+        System.Debug('objAPIName = ' + objAPIName);
+        
+        String countQuery = 'SELECT COUNT() FROM ' + objAPIName;
+        System.Debug('countQuery = ' + countQuery);
+        
+        // Include WHERE CLAUSE based on the object type to find the "Pending" records
+        if (objAPIName.toUpperCase() == 'CARE_APP_STAGING__c') {
+            countQuery += ' WHERE APPLICATION_TYPE__c = \'Residential\' AND ENROLLMENT_TYPE__C = \'ENROLLMENT\' AND '
+                + 'ENROLLMENT_STATUS__C = \'Pending\' '
+                + ' AND SOURCE_CHANNEL_TYPE__C = :sourceChannelType';
+        }
+        if (Test.isRunningTest()) {
+            countQuery += ' LIMIT 10';
+        }
+        System.Debug('countQuery = ' + countQuery);
+        
+        Integer pendingStgRecsCount = Database.CountQuery(countQuery);
+        System.Debug('pendingStgRecsCount = ' + pendingStgRecsCount);
+        
+        if (pendingStgRecsCount > 0) {
+            // Execute the batch class based on the Staging Object
+            if (objAPIName.toUpperCase() == 'CARE_APP_STAGING__c' && !Test.isRunningTest()) {
+                Id batchJobId = Database.executeBatch(new CARE_BatchEnrollmentDataXport(sourceChannelType, executeOnlyThisBatchJob));
+            }
+        }
+    }
+    
+    /**
+    * @Description: Static method to get the Email Subject for the batch job based on Source Channel
+    * @Parameter: String
+    * @Return: String
+    * @Usage:
+            Where it is called: Invoked in CARE_BatchEnrollmentDataXport
+            When it is called: To get the email subject of a batch job based on Source Channel
+    **/
+    public static void runBatchForNextSourceChannel(String sourceChannelType, Boolean executeOnlyThisBatchJob, Map<String, CARE_Type__c> sourceChannelMap)
+    {
+        System.Debug('sourceChannelType = ' + sourceChannelType);
+        System.Debug('executeOnlyThisBatchJob = ' + executeOnlyThisBatchJob);
+        System.Debug('sourceChannelMap = ' + sourceChannelMap);
+        
+        // Check if Batch Job for next Source Channel needs to be executed or not.
+        // Means, whether current Batch Job was executed only for this Source Channel but not required to execute for other Source Channels
+        if (executeOnlyThisBatchJob == false) {
+            // Identify the next Source Channel from CARE_TYPE records, its base object (CARE_APP_Staging or CARE_BATCH_UPLOAD_DETAIL or any other) along with its corresponding Batch Apex Class and run the corresponding batch job.
+            boolean isThisCurrentSourceChannelType = false;
+            String nextSourceChannelType = '';
+            for (String scType :sourceChannelMap.KeySet()) {
+                System.Debug('scType = ' + scType);
+                if (isThisCurrentSourceChannelType == true) {
+                    nextSourceChannelType = scType;
+                    break;
+                }
+                if (sourceChannelType == scType) {
+                    isThisCurrentSourceChannelType = true;
+                }
+            }
+            System.Debug('nextSourceChannelType = ' + nextSourceChannelType);
+            if (String.isNotBlank(nextSourceChannelType) && sourceChannelMap.containsKey(nextSourceChannelType)) {
+                System.Debug('Next Source Channel Object API Name = ' + sourceChannelMap.get(nextSourceChannelType).TYPE_CODE__c);
+                System.Debug('Next Source Channel Batch Apex Class Name = ' + sourceChannelMap.get(nextSourceChannelType).TYPE_DESC_LONG__c);
+            }
+            
+            if (String.isNotBlank(nextSourceChannelType) && sourceChannelMap.containsKey(nextSourceChannelType)) {
+                // Execute the batch class based on the Staging Object
+                if (sourceChannelMap.get(nextSourceChannelType).TYPE_CODE__c.toUpperCase() == 'CARE_APP_STAGING__C' && !Test.isRunningTest()) {
+                    Id batchJobId = Database.executeBatch(new CARE_BatchEnrollmentDataXport(nextSourceChannelType));
+                }
+                /*
+                else if (sourceChannelMap.get(nextSourceChannelType).TYPE_CODE__c.toUpperCase() == 'CARE_BATCH_STAGING__c' && !Test.isRunningTest()) {
+                }
+                */
+            } else {
+                if (!Test.isRunningTest()) {
+                    // Since no other Source Channel is available next, run the 2nd batch job to processes newly created CARE_Application records
+                    Id batchJobId = Database.executeBatch(new Care_VerifyEnrollmentBatch(), 1);
+                }
+            }
+        } else {
+            if (!Test.isRunningTest()) {
+                // Since batch job is executed for this Source Channel alone, run the 2nd batch job to processes newly created CARE_Application records
+                Id batchJobId = Database.executeBatch(new Care_VerifyEnrollmentBatch(), 1);
+            }
+        }
     }
     
     // This method is used to drop customer not enrolled in ESA after 45 days of H RAND CERT code stamping
@@ -2395,12 +2674,12 @@ When it is called: To create CARE_Application record for a Staging record
                 
                 system.debug('perIdSetESA--->'+perIdSetESA);
                 system.debug('eSACompCareAppIdSet--->'+eSACompCareAppIdSet);
-                if(eSACompCareAppIdSet.size() > 0 || perIdSetESA.size() > 0){
+                if(eSACompCareAppIdSet.size() > 0){
                     wrapperESAThreshold = createEsaCompRecord(eSACompCareAppIdSet);
-                    wrapperESAThreshold = thresholdExceedCheckMethod(perIdSetESA, wrapperESAThreshold);
+                    //wrapperESAThreshold = thresholdExceedCheckMethod(perIdSetESA, wrapperESAThreshold);
                 }
                 system.debug('wrapperESAThreshold----create ESA'+wrapperESAThreshold);
-                system.debug('wrapperESAThreshold----create Threshold'+wrapperESAThreshold);
+                //system.debug('wrapperESAThreshold----create Threshold'+wrapperESAThreshold);
                 
             }
         }catch(exception ex){
@@ -2574,7 +2853,8 @@ When it is called: To create CARE_Application record for a Staging record
     }
     
     //this method is used to create ESA COMP transaction for ESA enrolled records.
-    public static ESAThresholdCheckWrapper thresholdExceedCheckMethod(Set<String> perIdSetESA, ESAThresholdCheckWrapper wrapperESAThreshold){
+    //public static ESAThresholdCheckWrapper thresholdExceedCheckMethod(Set<String> perIdSetESA, ESAThresholdCheckWrapper wrapperESAThreshold){
+    public static ESAThresholdCheckWrapper thresholdExceedCheckMethod(List<CARE_CC_Batch_Detail__c> esaThresholdCheckList){
         
         //Boolean bThresholdCheck = false;
         String sysAdminError = '';
@@ -2595,19 +2875,16 @@ When it is called: To create CARE_Application record for a Staging record
         List<CARE_App_Enrolled_SA__c> careAppEnrollSAList = new List<CARE_App_Enrolled_SA__c>();
         List<CARE_CC_Batch_Detail__c> listEsaCompRec = new List<CARE_CC_Batch_Detail__c>();
         List<CARE_Type__c> listCareTypeDesc = new List<CARE_Type__c>();
-        //ESAThresholdCheckWrapper wrapperThreshold = new ESAThresholdCheckWrapper();
+        ESAThresholdCheckWrapper wrapperThreshold = new ESAThresholdCheckWrapper();
         
         try{           
             //get the cc code details for Transfer Drop
             listCareTypeDesc = CARE_UtilityController.getCCCode(CARE_Constants.CARE_CC_HU_DROP,null,null);
             Id careAppRecTypeId = CARE_UtilityController.getObjectRecordTypeId(CARE_Constants.RES_CUST_DEVELOPER_NAME);
             
-            system.debug('perIdSetESA---->'+perIdSetESA);
-            if(perIdSetESA.size() > 0){
-                listEsaCompRec = [select APPLICATION__c, PER_ID__c, CARE_CI_CC__r.CC_DTTM__c from CARE_CC_Batch_Detail__c
-                                  where CARE_CI_CC__r.CC_TYPE_CD__c = 'ESA COMP' AND PER_ID__c IN: perIdSetESA];
-                
-                for(CARE_CC_Batch_Detail__c careCC : listEsaCompRec){
+            system.debug('esaThresholdCheckList---->'+esaThresholdCheckList);
+            if(esaThresholdCheckList.size() > 0){
+                for(CARE_CC_Batch_Detail__c careCC : esaThresholdCheckList){
                     setOfPerId.add(careCC.PER_ID__c);
                 }
                 system.debug('setOfPerId---->'+setOfPerId);
@@ -2617,24 +2894,28 @@ When it is called: To create CARE_Application record for a Staging record
                                        where ((CARE_CI_CC__r.CC_TYPE_CD__c = '7' AND CCB_Contact_Type_No__c = '6036') OR (CARE_CI_CC__r.CC_TYPE_CD__c = '7' AND CCB_Contact_Type_No__c = '6041')) 
                                        AND PER_ID__c IN: setOfPerId ORDER by CARE_CI_CC__r.CC_DTTM__c DESC];
                     
-                }else{
+                }/*else{
                     setPerIdForThreshold = setOfPerId;
-                }
+                }*/
                 system.debug('listCCCodeSeven--->'+listCCCodeSeven);
                 
-                if(listEsaCompRec.size() > 0 && listCCCodeSeven.size() > 0){
-                    for(CARE_CC_Batch_Detail__c eSACompRecord : listEsaCompRec){
+                if(esaThresholdCheckList.size() > 0 && listCCCodeSeven.size() > 0){
+                    for(CARE_CC_Batch_Detail__c eSACompRecord : esaThresholdCheckList){
                         setPerIdForThreshold.add(eSACompRecord.PER_ID__c);
                         for(CARE_CC_Batch_Detail__c careCCB : listCCCodeSeven){
+                            if(eSACompRecord.PER_ID__c == careCCB.PER_ID__c){
                             Date dEsaCompPlusTwoYear = eSACompRecord.CARE_CI_CC__r.CC_DTTM__c.addYears(+2);
                             System.debug('dEsaCompPlusTwoYear---> '+dEsaCompPlusTwoYear);
                             System.debug('careDate---> '+careCCB.CARE_CI_CC__r.CC_DTTM__c);
                             if(dEsaCompPlusTwoYear > careCCB.CARE_CI_CC__r.CC_DTTM__c){ // && eSACompRecord.CARE_CI_CC__r.CC_DTTM__c < careCCB.CARE_CI_CC__r.CC_DTTM__c){
                                 setPerIdForThreshold.remove(eSACompRecord.PER_ID__c); 
                             }
+                          }
                         }
                     }
-                } 
+                } else{
+                    setPerIdForThreshold = setOfPerId;
+                }
                 system.debug('setPerIdForThreshold---->'+setPerIdForThreshold);
                 if(setPerIdForThreshold.size() > 0){
                     listEIChar = [select Id, SA_ID__c, SERVICE_AGREEMENT__r.Person_ID_EI__c from EI_SA_Char__c
@@ -2665,6 +2946,7 @@ When it is called: To create CARE_Application record for a Staging record
                         careApp.PROCESSED_DATE__c = dTodaysDate; //careAppRecord[0].PROCESSED_DATE__c;
                         careApp.PER_ID__c = objSite.Person_ID_EI__c;
                         careApp.CARE_Account_ID__c = objSite.Account_EI__c;
+                        careApp.CC_CL_CD__c = objSite.Account_EI__r.CARE_DISCOUNT_TYPE__c;
                         careApp.ACCT_ID__c = objSite.Billing_Account_ID_EI__c;
                         careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
                         careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
@@ -2742,15 +3024,15 @@ When it is called: To create CARE_Application record for a Staging record
                     }
                 }
             }
-            wrapperESAThreshold.setThresholdAppId = setId;
-            wrapperESAThreshold.setThresholdErrId = setThresholdErrorId;
-            wrapperESAThreshold.setThresholdErrPerId = setThresholdErrorPerId;
+            wrapperThreshold.setThresholdAppId = setId;
+            wrapperThreshold.setThresholdErrId = setThresholdErrorId;
+            wrapperThreshold.setThresholdErrPerId = setThresholdErrorPerId;
             
         }catch(exception ex){
             system.debug(ex.getLineNumber()+ ': >' + ex.getMessage() + ': >' + ex.getStackTraceString());
         }
         
-        return wrapperESAThreshold;
+        return wrapperThreshold;
     }
     
     //this method is used to drop records not enrolled in ESA after 45 days.
@@ -2859,6 +3141,7 @@ When it is called: To create CARE_Application record for a Staging record
                         careApp.PER_ID__c = objSite.Person_ID_EI__c;
                         careApp.CARE_Account_ID__c = objSite.Account_EI__c;
                         careApp.ACCT_ID__c = objSite.Billing_Account_ID_EI__c;
+                        careApp.CC_CL_CD__c = objSite.Account_EI__r.CARE_DISCOUNT_TYPE__c;
                         careApp.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
                         careApp.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
                         careApp.CCB_Contact_Type_No__c = listCareTypeDesc[0].TYPE_NO__c;
@@ -3016,7 +3299,7 @@ When it is called: To create CARE_Application record for a Staging record
                 system.debug('perIdSetESA--->'+perIdSetESA);
                 if(eSACompCareAppIdSet.size() > 0){
                     wrapperESAThreshold = CARE_AutoUtilityController.createEsaCompRecord(eSACompCareAppIdSet);
-                    wrapperESAThreshold = CARE_AutoUtilityController.thresholdExceedCheckMethod(perIdSetESA, wrapperESAThreshold);
+                    //wrapperESAThreshold = CARE_AutoUtilityController.thresholdExceedCheckMethod(perIdSetESA, wrapperESAThreshold);
                 }
             }
             system.debug('wrapperESAThreshold in eSASixEightyFiveDaysCheck--->'+wrapperESAThreshold);

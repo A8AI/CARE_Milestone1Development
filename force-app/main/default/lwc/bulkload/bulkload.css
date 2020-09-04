@@ -1,0 +1,21 @@
+.c-sectionheader {
+    color: rgb(173, 19, 19);
+    font-weight: bold;
+}
+
+.c-instruction {
+    color: rgb(112, 20, 20);
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.tr {
+    vertical-align:   top; 
+    horizontal-align: left; 
+    display:          flex;
+}
+
+td {
+    padding: 3px;
+    border: 1px solid black;
+}

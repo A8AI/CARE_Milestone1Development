@@ -11,6 +11,7 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 05/28/2020            Cognizant Technology Solutions                     Initial Version.
 *                                                                          CARE Application: 
+* 08/28/2020			SKMN				   							   Updated to stamp extra fields for all applications
 ****************************************************************************************************************************************/
 
 public class CARE_OnDemandDropController {
@@ -18,8 +19,8 @@ public class CARE_OnDemandDropController {
     public static date dDateToday = system.today();
     public static date dToday = system.today();
     public static String dTodayDate = dToday.format();
-    public static Id currentLoggedInUser = UserInfo.getUserId();
-    
+    //public static Id currentLoggedInUser = UserInfo.getUserId();
+    private static Id careAppImgResRecTypeId = CARE_UtilityController.getCareAppImgListRecordTypeId(CARE_Constants.CARE_APP_IMG_RES_DEVELOPER_NAME);    
     
     @AuraEnabled
     //public static Map<String, EI_Site__c> getPerIdValue(String perIdValue){
@@ -81,8 +82,8 @@ public class CARE_OnDemandDropController {
                                                            FIXED_INCOME__c, WIC__c, CALFRESH_SNAP__c, CALWORKS_TANF__c, HEAD_START_INCOME__c,
                                                            SSI__c, HEALTHY_FAMILIES__c, PROCESS_NOTES__c, NSLP__c, BUREAU_INDIAN_AFFAIRS__c,CCB_CONTACT_CODE__c,
                                                            CCB_CONTACT_DESC__c, CCB_CONTACT_COMMENT__c, PER_ID__c, ENROLLMENT_TYPE__c,
-                                                           DROP_SOURCE__c, APPLICATION_TYPE__c, CARE_Account_ID__c,  CC_CL_CD__c
-                                                           //REASON_DESC__c,
+                                                           DROP_SOURCE__c, APPLICATION_TYPE__c, CARE_Account_ID__c, ACCT_ID__c, CC_CL_CD__c,
+                                                           HOUSE_QUALIFY__c, QUALIFIED_BY__c
                                                            from CARE_Application__c where Id =: enrollAppIdValue];
                 
                 CARE_Application__c appCare = new CARE_Application__c();
@@ -96,10 +97,11 @@ public class CARE_OnDemandDropController {
                 appCare.APPLICANT_NAME__c = careAppRecord[0].APPLICANT_NAME__c;
                 appCare.RECEIVED_DATE__c = dCurrentDate; //careAppRecord[0].RECEIVED_DATE__c != null ? careAppRecord[0].RECEIVED_DATE__c : careAppRecord[0].PROCESSED_DATE__c;
                 appCare.PROCESSED_DATE__c = dDateToday; //careAppRecord[0].PROCESSED_DATE__c;
+                appCare.RESULT_DATE__c = dDateToday;
                 appCare.SOURCE_CHANNEL_TYPE__c = 'Regular App';
                 appCare.FORM_CODE__c = careAppRecord[0].FORM_CODE__c;
                 appCare.COC_CODE__c = careAppRecord[0].COC_CODE__c;
-                appCare.APPLICATION_STATUS__c = 'Decision Made';        
+                appCare.APPLICATION_STATUS__c = CARE_Constants.CARE_DECISION_MADE;        
                 appCare.LIHEAP__c = careAppRecord[0].LIHEAP__c;
                 appCare.WIC__c = careAppRecord[0].WIC__c;
                 appCare.CALFRESH_SNAP__c = careAppRecord[0].CALFRESH_SNAP__c;
@@ -118,8 +120,7 @@ public class CARE_OnDemandDropController {
                 appCare.APPLICATION_TYPE__c = 'Other';
                 appCare.CARE_Account_ID__c = careAppRecord[0].CARE_Account_ID__c;
                 appCare.PROCESS_NOTES__c = careAppRecord[0].PROCESS_NOTES__c;
-                appCare.ENROLLMENT_TYPE__c = careAppRecord[0].ENROLLMENT_TYPE__c != null ? careAppRecord[0].ENROLLMENT_TYPE__c : 'OTHER';                
-               // appCare.ENROLLMENT_TYPE__c = null;
+                appCare.ENROLLMENT_TYPE__c = careAppRecord[0].ENROLLMENT_TYPE__c != null ? careAppRecord[0].ENROLLMENT_TYPE__c : 'ENROLLMENT';                
                 appCare.CCB_CONTACT_CODE__c = listCareTypeDesc[0].TYPE_CODE__c;
                 appCare.CCB_CONTACT_DESC__c = listCareTypeDesc[0].TYPE_DESC__c;
                 appCare.CCB_CONTACT_COMMENT__c = careAppRecord[0].CCB_CONTACT_COMMENT__c;
@@ -127,44 +128,56 @@ public class CARE_OnDemandDropController {
                 appCare.DROP_SOURCE__c = careAppRecord[0].DROP_SOURCE__c != null ? careAppRecord[0].DROP_SOURCE__c : '';
                 //appCare.REASON_DESC__c = careAppRecord[0].REASON_DESC__c;
                 appCare.CC_CL_CD__c = careAppRecord[0].CC_CL_CD__c;
+                //appCare.HOUSE_QUALIFY__c = false;
+                //appCare.QUALIFIED_BY__c = careAppRecord[0].QUALIFIED_BY__c;
+                appCare.USER_NAME_CARE1__c = (userDetails[0].LAN_ID_EI__c != null) ? userDetails[0].LAN_ID_EI__c : '';
+                appCare.HOUSE_QUALIFY__c = false; //Extra fields
+                appCare.RESULT_DATE__c = dDateToday;//Extra fields
+                appCare.ACCT_ID__c = careAppRecord[0].ACCT_ID__c;//Extra fields
+                
                 system.debug('appCare Value: ' + appCare);
                 careAppNewRecord.add(appCare); 
+                /*}else{
+careRes.oldAppIdForCare='';
+careRes.descLongValue='';
+careRes.NewAppIdForCare='';
+}*/
+                //string descLongVal = sLanID.replace('<Date Received>', String.valueOf(careAppNewRecord[0].RECEIVED_DATE__c));
+                //if(careAppNewRecord.size() > 0){
+                Database.SaveResult[] srList = Database.insert(careAppNewRecord, false);
+                
+                // Iterate through each returned result
+                for (Database.SaveResult sr : srList) {
+                    if (sr.isSuccess()) {
+                        System.debug('Successfully inserted careApp after isAdjust clicked--->: ' + sr.getId());
+                        NewCareId = sr.getId();
+                        System.debug('careNewAppId is--->: ' + NewCareId);
+                    }
+                    else {
+                        // Operation failed, so get all errors               
+                        for(Database.Error err : sr.getErrors()) {
+                            System.debug('The following error has occurred.');                   
+                            System.debug(err.getStatusCode() + ': ' + err.getMessage());
+                            System.debug('care App fields that affected this error: ' + err.getFields());
+                        }
+                    }
+                    
+                }
+                               
+                string dateReceivedForComment = careAppNewRecord[0].RECEIVED_DATE__c.format();
+                descLongVal = sLanID.replace('<Date Received>', dateReceivedForComment);//String.valueOf(dToday));
+                
+                careRes.oldAppIdForCare=enrollAppIdValue;
+                careRes.descLongValue=descLongVal;
+                careRes.dReceiveDate = careAppNewRecord[0].RECEIVED_DATE__c;
+                careRes.dDropDate   = dDateToday;
+                careRes.NewAppIdForCare=NewCareId;
+                careRes.sContactCode = careAppNewRecord[0].CCB_CONTACT_CODE__c;
             }else{
                 careRes.oldAppIdForCare='';
                 careRes.descLongValue='';
-                careRes.NewAppIdForCare='';
+                careRes.NewAppIdForCare=''; 
             }
-            //string descLongVal = sLanID.replace('<Date Received>', String.valueOf(careAppNewRecord[0].RECEIVED_DATE__c));
-            Database.SaveResult[] srList = Database.insert(careAppNewRecord, false);
-            
-            // Iterate through each returned result
-            for (Database.SaveResult sr : srList) {
-                if (sr.isSuccess()) {
-                    System.debug('Successfully inserted careApp after isAdjust clicked--->: ' + sr.getId());
-                    NewCareId = sr.getId();
-                    System.debug('careNewAppId is--->: ' + NewCareId);
-                }
-                else {
-                    // Operation failed, so get all errors               
-                    for(Database.Error err : sr.getErrors()) {
-                        System.debug('The following error has occurred.');                   
-                        System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                        System.debug('care App fields that affected this error: ' + err.getFields());
-                    }
-                }
-                
-            }
-            
-            
-            string dateReceivedForComment = careAppNewRecord[0].RECEIVED_DATE__c.format();
-            descLongVal = sLanID.replace('<Date Received>', dateReceivedForComment);//String.valueOf(dToday));
-            
-            careRes.oldAppIdForCare=enrollAppIdValue;
-            careRes.descLongValue=descLongVal;
-            careRes.dReceiveDate = careAppNewRecord[0].RECEIVED_DATE__c;
-            careRes.dDropDate   = dDateToday;
-            careRes.NewAppIdForCare=NewCareId;
-            careRes.sContactCode = careAppNewRecord[0].CCB_CONTACT_CODE__c;
             
         }catch(Exception ex){
             EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException('CARE_OnDemandDropController', ex));
@@ -226,6 +239,9 @@ public class CARE_OnDemandDropController {
         system.debug('onDemandDropData.dropSourceValue----->' + onDemandDropData.dropSourceValue);
         system.debug('Event Button name----->' + nameOfEvent);
         
+        List<User> userDetails = new List<User>();
+        Id userId = UserInfo.getUserId();            
+        userDetails = CARE_UtilityController.getUserDetails(userId);
         
         caseIdValue = verifyCaseId(onDemandDropData);
         system.debug('caseIdValue in main method---->'+ caseIdValue);
@@ -235,7 +251,7 @@ public class CARE_OnDemandDropController {
             if(String.isNotBlank(caseIdValue) && (onDemandDropData.dropSourceValue == 'CC&B Case' || onDemandDropData.dropSourceValue == 'SF Case')){
                 system.debug('inside if block when dropsource is CC&B Case---->');
                 updateCareAppRecord(onDemandDropData, perID, newAppIdCare);
-                careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare);
+                careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare, userDetails);
                 createCareAppImageRecord(onDemandDropData, newAppIdCare);
                 
                 fr.careAppEnrolledID = careAppEnrollId;
@@ -246,7 +262,7 @@ public class CARE_OnDemandDropController {
                 if(CARE_UtilityController.checkIfImageIDExists(newAppIdCare) || CARE_UtilityController.checkIfUploadedImageExists(newAppIdCare)){
                     system.debug('inside if block when dropsource is Emailed and image ID exists---->');
                     updateCareAppRecord(onDemandDropData, perID, newAppIdCare);
-                    careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare);
+                    careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare, userDetails);
                     //createCareAppImageRecord(onDemandDropData, newAppIdCare);
                     
                     fr.careAppEnrolledID = careAppEnrollId;
@@ -263,7 +279,7 @@ public class CARE_OnDemandDropController {
             }else if((onDemandDropData.dropSourceValue == 'Called - In' || onDemandDropData.dropSourceValue == 'Space Occupied' || onDemandDropData.dropSourceValue == 'Faxed/Letter Mailed - In' || onDemandDropData.dropSourceValue == 'CSR' || onDemandDropData.dropSourceValue == 'Other') && (String.isBlank(caseIdValue) || String.isNotBlank(caseIdValue))){
                 system.debug('inside if block when dropsource is Called - In---->');
                 updateCareAppRecord(onDemandDropData, perID, newAppIdCare);
-                careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare);
+                careAppEnrollId = createcareAppEnrollSARecord(onDemandDropData, oldAppIdCare, newAppIdCare, userDetails);
                 //createCareAppImageRecord(onDemandDropData, newAppIdCare);
                 
                 fr.careAppEnrolledID = careAppEnrollId;
@@ -342,7 +358,7 @@ public class CARE_OnDemandDropController {
     }
     
     @AuraEnabled
-    public static string createcareAppEnrollSARecord(onDemandDropInfoWrapper onDemandDropData, Id oldAppIdCare, String newAppIdCare){
+    public static string createcareAppEnrollSARecord(onDemandDropInfoWrapper onDemandDropData, Id oldAppIdCare, String newAppIdCare, List<User> userDetails){
         string careAppEnrollId = '';
         
         system.debug('inside createcareAppEnrollSARecord');
@@ -351,12 +367,16 @@ public class CARE_OnDemandDropController {
         List<CARE_App_Enrolled_SA__c> careEnrolledSAListToInsert = new List<CARE_App_Enrolled_SA__c>();
         
         try{
+            //get the Last Bill Date
+            Date dLastBillDate = CARE_UtilityController.getLastBillDate();
+            
             List<CARE_Application__c> listReceiveDate = [select Id, PROCESSED_DATE__c from CARE_Application__c
                                                          where Id =: newAppIdCare];
             
             List<CARE_App_Enrolled_SA__c> retroDatesUpdateList = [select Id, ACCT_ID__c, APPLICATION__c,RETRO_START_DATE__c, RETRO_END_DATE__c,
                                                                   CC_CL_CD__c, PER_ID__c, PREM_ID__c, SA_ID__c, START_DATE__c,END_DATE__c,  Service_Agreement__c,
-                                                                  CCB_CONTACT_TYPE__c, RS_CD__c, SA_START_DATE__c, LAST_BILL_DATE__c, CSR_USER__c
+                                                                  CCB_CONTACT_TYPE__c, RS_CD__c, SA_START_DATE__c, LAST_BILL_DATE__c, CSR_USER__c, SA_ENTITY_NAME__c,
+                                                                  Service_Agreement__r.Svc_Full_Adr_EI__c, Service_Agreement__r.Svc_Type_Code_EI__c, Service_Agreement__r.Imported_Site_Name_EI__c
                                                                   from CARE_App_Enrolled_SA__c where APPLICATION__r.Id =: oldAppIdCare];
             
             if(retroDatesUpdateList !=null && !retroDatesUpdateList.isEmpty()){
@@ -378,8 +398,19 @@ public class CARE_OnDemandDropController {
                     careEnrollSa.APPLICATION__c = newAppIdCare;
                     careEnrollSa.SA_START_DATE__c = caEnroll.SA_START_DATE__c;
                     //careEnrollSa.SA_END_DATE__c = caEnroll.SA_END_DATE__c;
-                    careEnrollSa.LAST_BILL_DATE__c = caEnroll.LAST_BILL_DATE__c;
-                    careEnrollSa.CSR_USER__c = currentLoggedInUser;
+                    //careEnrollSa.LAST_BILL_DATE__c = caEnroll.LAST_BILL_DATE__c;
+                    //careEnrollSa.SA_ENTITY_NAME__c = caEnroll.SA_ENTITY_NAME__c;
+                    //careEnrollSa.CSR_USER__c = currentLoggedInUser;
+                    /*careEnrollSa.ADJUSTED__c = false;//Extra fields
+if(userDetails[0].Profile.Name == CARE_Constants.CSR_PROFILE){
+careEnrollSa.CSR_ADJUSTED__c = true;//Extra fields
+careEnrollSa.CSR_USER__c = userDetails[0].Id;//Extra fields
+}*/
+                    careEnrollSa.SERVICE_FULL_ADDRESS__c = caEnroll.Service_Agreement__r.Svc_Full_Adr_EI__c;//Extra fields
+                    careEnrollSa.SERVICE_TYPE_CODE__c = caEnroll.Service_Agreement__r.Svc_Type_Code_EI__c;//Extra fields
+                    careEnrollSa.LAST_BILL_DATE__c = (dLastBillDate != null) ? dLastBillDate : dDateToday;//Extra fields  
+                    careEnrollSa.SA_ENTITY_NAME__c = caEnroll.Service_Agreement__r.Imported_Site_Name_EI__c;//Extra fields 
+                    
                     careEnrolledSAListToInsert.add(careEnrollSa);
                     
                 }
@@ -424,6 +455,7 @@ public class CARE_OnDemandDropController {
                 careAppImage.CASE__c = onDemandDropData.caseIDValue;
                 careAppImage.SOURCE_SYSTEM__c = 'CASE';
                 careAppImage.IMAGE_ID__c = 0000000000;
+                careAppImage.RecordTypeId = careAppImgResRecTypeId;
                 careAppImageList.add(careAppImage);
             }
             Database.SaveResult[] srList = Database.insert(careAppImageList, false);
@@ -454,11 +486,18 @@ public class CARE_OnDemandDropController {
     @AuraEnabled
     public static void deleteCareAppRecord(String newCareIdToDelete){
         
-        List<CARE_Application__c> listToDeleteCareApp = [select Id from CARE_Application__c where Id =: newCareIdToDelete];
+        system.debug('inside deleteCareAppRecord method---->');
         
-        if(listToDeleteCareApp.size() > 0){
-            delete listToDeleteCareApp;
+        Boolean bDeletedSuccess = CARE_UtilityController.deleteUploadedContents(newCareIdToDelete);
+        
+        if(bDeletedSuccess){
+            CARE_APP_Image_List__c[] imageRec = [SELECT Id FROM CARE_APP_Image_List__c where Application__c =: newCareIdToDelete];          
+            delete imageRec;
         }
+        
+        CARE_Application__c[] rec = [select Id from CARE_Application__c where Id =: newCareIdToDelete];
+        delete rec;
+        
     }
     
 }

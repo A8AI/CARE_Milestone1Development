@@ -8,6 +8,8 @@
     <columns>LAST_RPT_DATE__c</columns>
     <columns>ESFT_FILE_LOC_IN__c</columns>
     <columns>ESFT_FILE_LOC_OUT__c</columns>
+    <columns>Share_from_PGE__c</columns>
+    <columns>Share_to_PGE__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

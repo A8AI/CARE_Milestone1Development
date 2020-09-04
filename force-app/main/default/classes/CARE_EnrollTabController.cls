@@ -11,6 +11,8 @@ Modification Log     :
 * ---------------------------------------------------------------------------------------------------------  
 * 05/04/2020     Cognizant Technology Solutions                   Initial Version.
 *                                                                 CARE Application: 
+* 08/28/2020			SKMN				   Updated to stamp extra fields for all applications
+* 09/03/2020			SKMN				   Updated Account.PREFERRED_CONTACT_METHOD__c for existing records
 ****************************************************************************************************************************************/
 
 public class CARE_EnrollTabController {
@@ -239,6 +241,7 @@ public class CARE_EnrollTabController {
         @AuraEnabled public string adjustReasonValue{get;set;}
         @AuraEnabled public string ccbCommentValue{get;set;}
         @AuraEnabled public boolean isDuplicateValue{get;set;}
+        @AuraEnabled public boolean isNewEnrollmentValue{get;set;}
         @AuraEnabled public String sHomePhone{get;set;}
         @AuraEnabled public String sWorkPhone{get;set;}
         @AuraEnabled public String sMobilePhone{get;set;}
@@ -268,7 +271,7 @@ public class CARE_EnrollTabController {
     }
     
     @AuraEnabled
-    public static finalResult handleButtonClickOnUI(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, String eventName, Boolean isAdjustCheckBox, String appIdCareApplication, string eIAcctId){
+    public static finalResult handleButtonClickOnUI(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, String eventName, Boolean isAdjustCheckBox, String appIdCareApplication, string eIAcctId, String billingAccId){
         //Boolean eventType = false;
         String careAppId = '';
         String careAppIdForIsAdjust = '';
@@ -299,7 +302,7 @@ public class CARE_EnrollTabController {
         
         try{
         if(eventName == 'save'){
-            careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID, appIdCareApplication, eIAcctId);
+            careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID, appIdCareApplication, eIAcctId, billingAccId, eventName);
             //sCareAppStatus = [select APPLICATION_STATUS__c from CARE_Application__c where Id =: careAppId].APPLICATION_STATUS__c;
                 
 				careRes.applicationId=careAppId;
@@ -309,7 +312,7 @@ public class CARE_EnrollTabController {
             
         }else if(eventName == 'verify'){
             sIsAccepted = 'No';
-            careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId);          
+            careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId, billingAccId, eventName);          
             vRes = GetCCCode(careAppId, perID,  premID, sIsAccepted); 
             careRes.applicationId=careAppId;
             careRes.ccCodeDescription=vRes.ccCodeDescription;
@@ -329,7 +332,7 @@ public class CARE_EnrollTabController {
                     system.debug('MassRecordData.sWorkPhone--->'+MassRecordData.sWorkPhone);
                     system.debug('MassRecordData.sHomePhone--->'+MassRecordData.sHomePhone);
                     
-                        careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId);          
+                        careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId, billingAccId, eventName);          
             			vRes = GetCCCode(careAppId, perID,  premID, sIsAccepted);
                     	accUpdateEmailList = updateAccountEmail(MassRecordData, perID);
                     
@@ -337,29 +340,7 @@ public class CARE_EnrollTabController {
                         careRes.ccCodeDescription=vRes.ccCodeDescription;
                         careRes.careCCLongDescValue = vRes.ccCodeDescriptionLong;
                         careRes.careApplicationStatus = 'Decision Made';
-                    
-                    /* if(isAdjustCheckBox == true){
-                        
-                        careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId);          
-            			vRes = GetCCCode(careAppId, perID,  premID, sIsAccepted);
-                        //careAppIdForIsAdjust = createCareAppAfterIsAdjust(MassRecordData, appIdCareApplication, perID);
-                        //createEnrolledSAforIsAdjust(MassRecordData, careAppIdForIsAdjust, appIdCareApplication);
-                        //sCareAppStatus = careUpdateAppStatusRevertRetroDates(appIdCareApplication);
-                        careRes.applicationId=careAppIdForIsAdjust;
-                        careRes.ccCodeDescription=vRes.ccCodeDescription;
-                        careRes.careApplicationStatus = 'Decision Made';
-                        careRes.careCCLongDescValue = vRes.ccCodeDescriptionLong;
-                    }else{
-                        careAppId = createUpdateCareAppRecord(MassRecordData, perID, premID,appIdCareApplication, eIAcctId);          
-            			vRes = GetCCCode(careAppId, perID,  premID, sIsAccepted);
-                        //sCareAppStatus = careUpdateAppStatusRevertRetroDates(appIdCareApplication);
-                        
-                        careRes.applicationId=appIdCareApplication;
-                        careRes.ccCodeDescription=vRes.ccCodeDescription;
-                        careRes.careCCLongDescValue = vRes.ccCodeDescriptionLong;
-                        careRes.careApplicationStatus = 'Decision Made';
-                    }
-                   */
+                   
                 }else{
                     careRes.bImageCheck = false; // No any image attached at accept event
                     careRes.applicationId=appIdCareApplication;
@@ -379,7 +360,7 @@ public class CARE_EnrollTabController {
     }
     
     
-    public static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId){
+    public static string createUpdateCareAppRecord(CustomerInfoWrapper MassRecordData, String perID, List<String> premID, string appIdCareApplication, string eIAcctId, String billingAccId, String eventName){
         String careAppId;
         
         system.debug('Inside createUpdateCareAppRecord method---->:');
@@ -387,6 +368,9 @@ public class CARE_EnrollTabController {
         
         CARE_Application__c caObj = new CARE_Application__c();
         List<CARE_Application__c> caRecList = new List<CARE_Application__c>();
+        
+        Id userId = UserInfo.getUserId();           
+        User userDetails = [SELECT Profile.Name, LAN_ID_EI__c FROM User WHERE ID = :userId];
         
         
         //try{ 
@@ -430,6 +414,8 @@ public class CARE_EnrollTabController {
             caObj.IS_ADJUSTMENT__c = MassRecordData.isAdjustValue;
             caObj.REASON_DESC__c = MassRecordData.adjustReasonValue;
             caObj.IS_DUPLICATE__c = MassRecordData.isDuplicateValue;
+            caObj.IS_NEW_ENROLLMENT__c = MassRecordData.isNewEnrollmentValue;
+            caObj.USER_NAME_CARE1__c = (userDetails.LAN_ID_EI__c != null) ? userDetails.LAN_ID_EI__c : '';
             system.debug('ca Value: ' + caObj);
             system.debug('firstSetReceivedSessionTemp==>'+ MassRecordData.receiveDateValue);
       
@@ -439,12 +425,19 @@ public class CARE_EnrollTabController {
                 system.debug('SetReceivedSessionTemp==>'+ MassRecordData.receiveDateValue);
             }
             if(string.isNotBlank(appIdCareApplication)){
-            caObj.Id = appIdCareApplication;
+                caObj.Id = appIdCareApplication;
             }
+            if(String.isBlank(appIdCareApplication)){
+                //caObj.DOC_RECEIVED_DATE__c = today; //Extra fields:Created Date of application that is, stamp with today's date while insert, else don't do anything leave as-is
+            } 
+            if(eventName == 'accept'){
+                caObj.RESULT_DATE__c = today;//Extra fields       
+            }
+            caObj.ACCT_ID__c = billingAccId != '' ? billingAccId : '';//Extra fields
+            
             caRecList.add(caObj);
         }
         if(string.isNotBlank(appIdCareApplication)){
-            //update caRecList;
           Database.SaveResult[] srList = Database.update(caRecList, false);
             careAppId = appIdCareApplication;
         }else{
@@ -463,7 +456,7 @@ public class CARE_EnrollTabController {
                 for(Database.Error err : sr.getErrors()) {
                     System.debug('The following error has occurred.');                   
                     System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                    System.debug('Account fields that affected this error: ' + err.getFields());
+                    System.debug('Care App fields that affected this error: ' + err.getFields());
                 }
             }
             
@@ -527,11 +520,14 @@ public class CARE_EnrollTabController {
         List<Account> listUpdateEmail = new List<Account>();
         
         if(string.isNotBlank(MassRecordData.emailValue)){
-        	listUpdateEmail = [Select Id, Email_adr_EI__c from Account where Billing_Person_ID_EI__c =: perID];
+        	listUpdateEmail = [Select Id, Email_adr_EI__c, PREFERRED_CONTACT_METHOD__c from Account where Billing_Person_ID_EI__c =: perID];
         }
               
             for(Account acc : listUpdateEmail){
                 acc.Email_adr_EI__c = MassRecordData.emailValue;
+                if(string.isBlank(acc.PREFERRED_CONTACT_METHOD__c)){ //This field is a required field, hence update the existing record having blank value
+                    acc.PREFERRED_CONTACT_METHOD__c = CARE_Constants.ACC_PREFERRED_CONTACT_DEFAULT;
+                }
                 emailUpdateList.add(acc);
             }
             
@@ -559,225 +555,5 @@ public class CARE_EnrollTabController {
         return accWrapper;
     }
     
-    /*@AuraEnabled
-    public static String createCareAppAfterIsAdjust(CustomerInfoWrapper MassRecordData, String appIdCareApplication, String perID){
-        
-        system.debug('inside createCareAppAfterIsAdjust------>');
-        system.debug('App ID for Care Application Object------>'+ appIdCareApplication);
-        String careAppIdForIsAdjust = '';
-        List<CARE_Application__c> careAppListOnIsAdjustClick = new List<CARE_Application__c>();
-        List<CARE_Type__c> listCareTypeFrom = new List<CARE_Type__c>();
-        
-        //get the cc code details for Transfer Drop
-         listCareTypeFrom = CARE_UtilityController.getCCCode('6034',null,null);
-        
-        List<CARE_Application__c> careAppList = [select Id, IS_RECERT__c, NO_ADULT__c, APPLICANT_NAME__c, APPLICATION_STATUS__c,
-                                                 NO_CHILD__c, IS_SIGNED__c, REQUEST_DROP__c, NEED_NAME_CHANGE__c, RECEIVED_DATE__c,
-                                                 SOURCE_CHANNEL_TYPE__c, PROCESSED_DATE__c, FORM_CODE__c, COC_CODE__c, LIHEAP__c, 
-                                                 MEDICAID_UNDER65__c, MEDICAID_OVER65__c, EMAIL_ADDRESS__c, ANNUAL_HOUSEHOLD_INCOME__c,
-                                                 FIXED_INCOME__c, WIC__c, CALFRESH_SNAP__c, CALWORKS_TANF__c, HEAD_START_INCOME__c, CARE_Account_ID__c,
-                                                 SSI__c, HEALTHY_FAMILIES__c,PROCESS_NOTES__c,ENROLLMENT_TYPE__c, NSLP__c, BUREAU_INDIAN_AFFAIRS__c,CCB_CONTACT_CODE__c,
-                                                 //REASON_DESC__c,
-                                                 CCB_CONTACT_DESC__c, CCB_CONTACT_COMMENT__c, APPLICATION_TYPE__c from CARE_Application__c where Id =: appIdCareApplication];
-                                                 
-        if(careAppList != null){
-            for(CARE_Application__c caApp : careAppList){
-                CARE_Application__c careApp = new CARE_Application__c();
-                careApp.RecordTypeId = careAppRecTypeId;
-                careApp.IS_RECERT__c = caApp.IS_RECERT__c;
-                careApp.NO_ADULT__c = caApp.NO_ADULT__c;
-                careApp.NO_CHILD__c = caApp.NO_CHILD__c;
-                careApp.IS_SIGNED__c = caApp.IS_SIGNED__c;
-                careApp.REQUEST_DROP__c = caApp.REQUEST_DROP__c;
-                careApp.NEED_NAME_CHANGE__c = caApp.NEED_NAME_CHANGE__c;
-                careApp.APPLICANT_NAME__c = caApp.APPLICANT_NAME__c;
-                careApp.RECEIVED_DATE__c = caApp.RECEIVED_DATE__c != null ? caApp.RECEIVED_DATE__c : caApp.PROCESSED_DATE__c;
-                careApp.PROCESSED_DATE__c = caApp.PROCESSED_DATE__c;
-                careApp.SOURCE_CHANNEL_TYPE__c = 'Enroll/Adjustment';
-                careApp.FORM_CODE__c = caApp.FORM_CODE__c;
-                careApp.COC_CODE__c = caApp.COC_CODE__c;
-                careApp.APPLICATION_STATUS__c = 'Decision Made';        
-                careApp.LIHEAP__c = caApp.LIHEAP__c;
-                careApp.WIC__c = caApp.WIC__c;
-                careApp.CALFRESH_SNAP__c = caApp.CALFRESH_SNAP__c;
-                careApp.CALWORKS_TANF__c = caApp.CALWORKS_TANF__c;
-                careApp.HEAD_START_INCOME__c = caApp.HEAD_START_INCOME__c;
-                careApp.SSI__c = caApp.SSI__c;
-                careApp.HEALTHY_FAMILIES__c = caApp.HEALTHY_FAMILIES__c;
-                careApp.NSLP__c = caApp.NSLP__c;
-                careApp.BUREAU_INDIAN_AFFAIRS__c = caApp.BUREAU_INDIAN_AFFAIRS__c;
-                careApp.MEDICAID_UNDER65__c = caApp.MEDICAID_UNDER65__c;
-                careApp.MEDICAID_OVER65__c = caApp.MEDICAID_OVER65__c;
-                careApp.EMAIL_ADDRESS__c = caApp.EMAIL_ADDRESS__c;
-                careApp.ANNUAL_HOUSEHOLD_INCOME__c = caApp.ANNUAL_HOUSEHOLD_INCOME__c;
-                careApp.FIXED_INCOME__c = caApp.FIXED_INCOME__c;
-                careApp.APPLICATION_TYPE__c = 'Enrollment';
-                careApp.PROCESS_NOTES__c = MassRecordData.processNoteValue != null ? MassRecordData.processNoteValue : MassRecordData.adjustReasonValue;
-                careApp.PER_ID__c = perID != null ? perID : '';
-                careApp.CCB_CONTACT_CODE__c = listCareTypeFrom[0].TYPE_CODE__c;
-                careApp.CCB_CONTACT_DESC__c = listCareTypeFrom[0].TYPE_DESC__c;
-                careApp.CCB_CONTACT_COMMENT__c = MassRecordData.ccbCommentValue != '' ? MassRecordData.ccbCommentValue : listCareTypeFrom[0].TYPE_DESC_LONG__c;
-                careApp.ENROLLMENT_TYPE__c = caApp.ENROLLMENT_TYPE__c != null ? caApp.ENROLLMENT_TYPE__c : 'OTHER';
-                //careApp.CCB_CONTACT_TYPE__c = caApp.CCB_CONTACT_TYPE__c != '' ? caApp.CCB_CONTACT_TYPE__c : '6034';
-                careApp.CARE_Account_ID__c = caApp.CARE_Account_ID__c;
-                //careApp.REASON_DESC__c = MassRecordData.adjustReasonValue;
-                careApp.IS_ADJUSTMENT__c = MassRecordData.isAdjustValue;
-                system.debug('caAPP Value: ' + careApp);
-                careAppListOnIsAdjustClick.add(careApp); 
-            }
-        }
-        
-        Database.SaveResult[] srList = Database.insert(careAppListOnIsAdjustClick, false);
-        
-        // Iterate through each returned result
-        for (Database.SaveResult sr : srList) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted careApp after isAdjust clicked--->: ' + sr.getId());
-                careAppIdForIsAdjust = sr.getId();
-               
-            }
-            else {
-                // Operation failed, so get all errors               
-                for(Database.Error err : sr.getErrors()) {
-                    System.debug('The following error has occurred.');                   
-                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                    System.debug('Account fields that affected this error: ' + err.getFields());
-                }
-            }
-            
-        }
-        
-        
-        List<CARE_Application__c> updateAppStatusList = new List<CARE_Application__c>();
-        
-        if(careAppList !=null && !careAppList.isEmpty()){
-            for(CARE_Application__c updateAppStatus : careAppList){
-              updateAppStatus.APPLICATION_STATUS__c = 'Decision Made';
-               updateAppStatusList.add(updateAppStatus); 
-            }
-        }
-        
-        if(updateAppStatusList.size() > 0){
-            update updateAppStatusList;
-        }
-        
-        return careAppIdForIsAdjust;
-    }*/
-    
-    
-   /* @AuraEnabled
-    public static void createEnrolledSAforIsAdjust(CustomerInfoWrapper MassRecordData, String careAppIdForIsAdjust, String appIdCareApplication){
-        system.debug('inside createEnrolledSAforIsAdjust');
-        system.debug('App Id for Care App New --->'+ careAppIdForIsAdjust);
-        system.debug('App Id for Care App old --->'+ appIdCareApplication);
-        
-        List<CARE_App_Enrolled_SA__c> careSAListToInsert = new List<CARE_App_Enrolled_SA__c>();
-        
-        List<CARE_App_Enrolled_SA__c> retroDateUpdateList = [select Id, ACCT_ID__c, APPLICATION__c,RETRO_START_DATE__c, RETRO_END_DATE__c,
-                                                             CC_CL_CD__c, PER_ID__c, PREM_ID__c, SA_ID__c, START_DATE__c,END_DATE__c,CSR_USER__c,
-                                                             CCB_CONTACT_TYPE__c, RS_CD__c, Service_Agreement__c, SA_START_DATE__c, SA_END_DATE__c, LAST_BILL_DATE__c
-                                                             from CARE_App_Enrolled_SA__c where APPLICATION__r.Id =: appIdCareApplication]; 
-        
-        if(retroDateUpdateList !=null && !retroDateUpdateList.isEmpty()){
-            for(CARE_App_Enrolled_SA__c caEnroll : retroDateUpdateList){
-                CARE_App_Enrolled_SA__c careEnrollSa = new CARE_App_Enrolled_SA__c();
-                careEnrollSa.ACCT_ID__c = caEnroll.ACCT_ID__c;
-                careEnrollSa.ADJUSTED__c = MassRecordData.isAdjustValue;
-                careEnrollSa.CC_CL_CD__c = caEnroll.CC_CL_CD__c;
-                careEnrollSa.RETRO_START_DATE__c = caEnroll.RETRO_START_DATE__c;
-                careEnrollSa.RETRO_END_DATE__c = caEnroll.RETRO_END_DATE__c;
-                careEnrollSa.PER_ID__c = caEnroll.PER_ID__c;
-                careEnrollSa.PREM_ID__c = caEnroll.PREM_ID__c;
-                careEnrollSa.SA_ID__c = caEnroll.SA_ID__c;
-                careEnrollSa.RS_CD__c = caEnroll.RS_CD__c;
-                careEnrollSa.START_DATE__c = caEnroll.START_DATE__c;
-                careEnrollSa.END_DATE__c = today;
-                careEnrollSa.SA_START_DATE__c = caEnroll.SA_START_DATE__c;
-                careEnrollSa.SA_END_DATE__c = caEnroll.SA_END_DATE__c;
-                careEnrollSa.LAST_BILL_DATE__c = caEnroll.LAST_BILL_DATE__c;
-                careEnrollSa.Service_Agreement__c = caEnroll.Service_Agreement__c;
-                careEnrollSa.CCB_CONTACT_TYPE__c = caEnroll.CCB_CONTACT_TYPE__c != null ? caEnroll.CCB_CONTACT_TYPE__c : '6034';
-                careEnrollSa.APPLICATION__c = careAppIdForIsAdjust;
-                careEnrollSa.CSR_USER__c = currentLoggedInUser;
-                careSAListToInsert.add(careEnrollSa);
-                
-            }
-        }
-        
-        Database.SaveResult[] srList = Database.insert(careSAListToInsert, false);
-        
-        // Iterate through each returned result
-        for (Database.SaveResult sr : srList) {
-            if (sr.isSuccess()) {
-                System.debug('Successfully inserted careAppEnrolledSA with retro dates--->: ' + sr.getId());
-                
-            }
-            else {
-                // Operation failed, so get all errors               
-                for(Database.Error err : sr.getErrors()) {
-                    System.debug('The following error has occurred.');                   
-                    System.debug(err.getStatusCode() + ': ' + err.getMessage());
-                    System.debug('Account fields that affected this error: ' + err.getFields());
-                }
-            }
-            
-        }
-        List<CARE_App_Enrolled_SA__c> careSAListToRevertRetroDates = new List<CARE_App_Enrolled_SA__c>();
-        if(retroDateUpdateList !=null && !retroDateUpdateList.isEmpty()){
-            for(CARE_App_Enrolled_SA__c caEnrollRevert : retroDateUpdateList){
-                caEnrollRevert.RETRO_START_DATE__c = null;
-                caEnrollRevert.RETRO_END_DATE__c = null;
-                careSAListToRevertRetroDates.add(caEnrollRevert);
-                system.debug('reverted retro dates---->:'+ careSAListToRevertRetroDates);
-            }
-        }
-        if(careSAListToRevertRetroDates !=null && careSAListToRevertRetroDates.size() > 0){
-            update careSAListToRevertRetroDates;
-        }
-    }*/
-    
-    /*@AuraEnabled
-    public static string careUpdateAppStatusRevertRetroDates(String appIdCareApplication){
-        String appIdForCareEnroll;
-        string sCareAppStatus = '';
-        
-        List<CARE_App_Enrolled_SA__c> listToRevertRetroDates = new List<CARE_App_Enrolled_SA__c>();
-        List<CARE_Application__c> listToUpdateAppStatus = new List<CARE_Application__c>();
-        
-     
-        List<CARE_Application__c> appStatusList = [Select Id, APPLICATION_STATUS__c from CARE_Application__c
-                                                    where Id =: appIdCareApplication];
-        
-        if(appStatusList !=null && !appStatusList.isEmpty()){
-            for(CARE_Application__c appStatus : appStatusList){
-                appStatus.APPLICATION_STATUS__c = 'Decision Made';
-                listToUpdateAppStatus.add(appStatus);
-            }
-        }
-        
-        sCareAppStatus = listToUpdateAppStatus[0].APPLICATION_STATUS__c;
-        
-        if(listToUpdateAppStatus !=null && listToUpdateAppStatus.size() > 0){
-            update listToUpdateAppStatus;
-            
-        }
-        
-        
-        List<CARE_App_Enrolled_SA__c> retroDateRevertList = [select Id, RETRO_START_DATE__c, RETRO_END_DATE__c                                                            
-                                                             from CARE_App_Enrolled_SA__c where APPLICATION__r.Id =: appIdCareApplication]; 
-        
-        if(retroDateRevertList !=null && !retroDateRevertList.isEmpty()){
-            for(CARE_App_Enrolled_SA__c cAppEnroll : retroDateRevertList){
-                cAppEnroll.RETRO_START_DATE__c = null;
-                cAppEnroll.RETRO_END_DATE__c = null;
-                listToRevertRetroDates.add(cAppEnroll);
-            }
-        }
-        if(listToRevertRetroDates !=null && listToRevertRetroDates.size() > 0){
-            update listToRevertRetroDates;
-        }
-        
-        return sCareAppStatus;
-    }*/
     
 }

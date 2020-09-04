@@ -1,10 +1,13 @@
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, track, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getCustomerList from '@salesforce/apex/CARE_SearchController.getCustomerList';
-import { phoneMask } from 'c/care_Utilities';
+import getFacilityHousingOrg from '@salesforce/apex/CARE_SearchController.getFacilityHousingOrg';
+import { phoneMask, isNotBlank } from 'c/care_Utilities';
 
 import SearchFieldMissingMsg from '@salesforce/label/c.CARE_SearchFieldMissingMsg';
 import InvalidPersonIdMsg from '@salesforce/label/c.CARE_InvalidPersonIdMsg';
+import InvalidFacilityIdMsg from '@salesforce/label/c.CARE_InvalidFacilityIdMsg';
+
 import CARE_RecordsCustNotFound from '@salesforce/label/c.CARE_RecordsCustNotFound';
 import CARE_NoCitySearchAllowMsg from '@salesforce/label/c.CARE_NoCitySearchAllowMsg';
 import CARE_ValidValuesMsg from '@salesforce/label/c.CARE_ValidValuesMsg';	
@@ -17,18 +20,19 @@ const columns = [
     { label: 'Acct ID', fieldName: 'sAccId', type: 'text', sortable: true,initialWidth: 100 },
     { label: 'Prem ID', fieldName: 'sPremId', type: 'text', sortable: true,initialWidth: 100 },
     { label: 'SA ID', fieldName: 'sSAId', type: 'text', sortable: true,initialWidth: 100 },
+    { label: 'Acct ID', fieldName: 'sCustomAcctId', type: 'multipleRow', sortable: true,initialWidth: 100 },//DEL
+    { label: 'SA ID', fieldName: 'sCustomSAId', type: 'multipleRow', sortable: true,initialWidth: 100 },//DEL
     { label: 'SA Type', fieldName: 'sSAType', type: 'text', sortable: true, initialWidth: 10 },
     { label: 'SA Status', fieldName: 'sSAStatus', type: 'text', sortable: true, initialWidth: 10 },
     { label: 'Res/Non Res', fieldName: 'sResNonRes', type: 'text', sortable: true, initialWidth: 10 },
-    { label: 'FH Type', fieldName: 'sFHType', type: 'text', sortable: true,initialWidth: 10 },
     { label: 'Discount', fieldName: 'sDiscount', type: 'text', sortable: true, initialWidth: 10 },
     { label: 'Rate', fieldName: 'sRate', type: 'text', sortable: true },
     { label: 'Service Address', fieldName: 'sSvcAddr', type: 'text',initialWidth: 150, wrapText:true, sortable: true,  typeAttributes: { label: {fieldName: 'sSvcAddr'}} },
-    { label: 'Facility/Housing Org', fieldName: 'sFacility', type: 'text', sortable: true },
+    { label: 'Facility/Housing Org', fieldName: 'sFacilityName', type: 'text', sortable: true },
+    { label: 'FH Type', fieldName: 'sFHType', type: 'text', sortable: true,initialWidth: 10 },    
     { label: 'Space Unit', fieldName: 'sSpaceUnit', type: 'text', sortable: true },
     { label: 'Probation', fieldName: 'sProbation', type: 'text', sortable: true }
 ];
-
 
 
 export default class Care_App extends LightningElement {
@@ -52,12 +56,15 @@ export default class Care_App extends LightningElement {
         sCity: '',
         sZip: '',
         sSpace: '',
-        bMFHC: false,
-        sFacilityHousing: '',
+        bNPFacilityType: false,
+        bAGRFacilityType: false,
+        bMFHCFacilityType: false,
+        bSMFacilityType: false,
+        sFacilityHousingOrgVal: '',
         bEnrolledTenant: false,
         bProbation: false
     };
-    @track showLoadingSpinner = false;
+    //@track showLoadingSpinner = false;
     @track personIdList = [];
     @track page = 1; //this is initialize for 1st page
     @track startingRecord = 1; //start record position per page
@@ -79,10 +86,25 @@ export default class Care_App extends LightningElement {
     sortedDirection = 'asc';
     @track maskedPhone;
     @track sPevAppId;  //use this to dynamically set whenever tab is clicked | SKMN
+    @api bResCustomerTab;
+
+    @track showLoadingSpinner = true;
+    initialized = false;
+    facilityHousingValues = [];
+    allFacilityHousingValues = [];
+    npFacilityHousingValues = [];
+    agrFacilityHousingValues = [];
+    mfhcFacilityHousingValues = [];
+    smFacilityHousingValues = [];
+    sSelectedFacilityId = '';
+    searchListCustom = [];
+    
+    _wiredFacHousingOrg;
 
     label = {
         SearchFieldMissingMsg,
         InvalidPersonIdMsg,
+        InvalidFacilityIdMsg,
         CARE_NoCitySearchAllowMsg,
         CARE_ValidValuesMsg,
         CARE_RecordsCustNotFound
@@ -179,9 +201,9 @@ export default class Care_App extends LightningElement {
             case 'zipField':
                 this.searchInput.sZip = value;
                 break;
-            case 'facilityField':
+            /*case 'facilityField':
                 this.searchInput.sFacilityHousing = value;
-                break;
+                break;*/
             case 'inactiveCustField':
                 this.searchInput.bInactiveCustomer = value;
                 break;
@@ -191,9 +213,9 @@ export default class Care_App extends LightningElement {
             case 'enrolledTenField':
                 this.searchInput.bEnrolledTenant = value;
                 break;
-            case 'mfhcField':
+            /*case 'mfhcField':
                 this.searchInput.bMFHC = value;
-                break;
+                break;*/
             default:
         }
     }
@@ -202,14 +224,21 @@ export default class Care_App extends LightningElement {
         return this.searchData.length > 0;
     }
 
-    //This method is called when Search button is clicked
-    handleSearch() {
+    setFreshSearchForm(){
         this.bCustomerDetailFlag = false; //hide customer details section
         this.listActiveSections = ['SearchForm'];
         this.searchData = [];
         this.template.querySelector(".setCustomerListIdClass").style.visibility = "hidden";
-        this.template.querySelector(".setCustomerDetailIdClass").style.visibility = "hidden";
+        if(this.bResCustomerTab){
+            this.template.querySelector(".setCustomerDetailIdClass").style.visibility = "hidden";
+        }
+       
+    }
 
+    //This method is called when Search button is clicked
+    handleSearch() {
+       
+        this.setFreshSearchForm();
         if(this.maskedPhone !== '' && this.maskedPhone !== undefined && this.maskedPhone !== null){
             this.searchInput.sPhone = this.maskedPhone.replace(/\D/g,''); //remove mask
         }
@@ -219,12 +248,12 @@ export default class Care_App extends LightningElement {
 
         //If none of the fields are entered, throw error message
         if (this.searchInput.sAccountID === '' && this.searchInput.sPersonID === '' && this.searchInput.sPremiseID === '' && this.searchInput.sSAID === '' && this.searchInput.sName === ''
-            && this.searchInput.sPhone === '' && this.searchInput.sStreet === '' && this.searchInput.sCity === '' && this.searchInput.sZip === '' && this.searchInput.sFacilityHousing === '') {
+            && this.searchInput.sPhone === '' && this.searchInput.sStreet === '' && this.searchInput.sCity === '' && this.searchInput.sZip === '' && this.searchInput.sFacilityHousingOrgVal === '') {
             //this.showToast("Please enter atleast one field.");
             this.showToast(this.label.SearchFieldMissingMsg);
         }
         else if(this.searchInput.sCity !== '' && (this.searchInput.sAccountID === '' && this.searchInput.sPersonID === '' && this.searchInput.sPremiseID === '' && this.searchInput.sSAID === '' && this.searchInput.sName === ''
-        && this.searchInput.sPhone === '' && this.searchInput.sStreet === '' && this.searchInput.sZip === '' && this.searchInput.sFacilityHousing === '')){
+        && this.searchInput.sPhone === '' && this.searchInput.sStreet === '' && this.searchInput.sZip === '' && this.searchInput.sFacilityHousingOrgVal === '')){
             this.showToast(this.label.CARE_NoCitySearchAllowMsg);
             
         }else {
@@ -252,6 +281,18 @@ export default class Care_App extends LightningElement {
                         console.log('result==>' + JSON.stringify(result));
                         if (result.success) {
                             this.searchData = result.listCustomers;
+/////////////////////////////////
+                            result.listCustomers.forEach(element => {
+                                let searchObj = { ...element };
+                                searchObj.sCustomSAId = { displayText: searchObj.sCustomSAId.split(",") };
+                                searchObj.sCustomAcctId = { displayText: searchObj.sCustomAcctId.split(",") };
+
+                                this.searchListCustom.push(searchObj);
+                            });
+                            this.searchListCustom = [...this.searchListCustom];
+                            this.searchData = this.searchListCustom;
+                            ////////////////////////////////////
+
                             /*this.totalRecountCount = this.searchData.length;
                             this.totalPage = Math.ceil(this.totalRecountCount / this.pageSize);
                             //slice will take 0th element and ends with 5, but it doesn't include 5th element
@@ -296,7 +337,7 @@ export default class Care_App extends LightningElement {
     }
 
     //This method is called when Clear button is clicked
-    handleClear() {
+    @api handleClear() {
         //This is to clear all the input fields (text and checkbox)
         this.template.querySelectorAll('lightning-input').forEach(elem => {
             if (elem.type === 'checkbox') {
@@ -333,12 +374,16 @@ export default class Care_App extends LightningElement {
             sCity: '',
             sZip: '',
             sSpace: '',
-            bMFHC: false,
-            sFacilityHousing: '',
+            bNPFacilityType: false,
+            bAGRFacilityType: false,
+            bMFHCFacilityType: false,
+            bSMFacilityType: false,
+            sFacilityHousingOrgVal: '',
             bEnrolledTenant: false,
             bProbation: false
         };
         this.maskedPhone = '';
+        this.setFreshSearchForm();
     }
 
     //Pagination: Start
@@ -385,21 +430,30 @@ export default class Care_App extends LightningElement {
     //On row selection pass the Id to the child lwc for fetching the history record
     handleRowSelection(event) {
         let stringId = '';
-        let listPersonId = []; 
+        let listPersonId = [];
+        let listFacilityId = [];
+        let listFacilityIdUnique = []; 
         let listPremId = []
         let listPersonIdUnique = [];
         let selectedRows = event.detail.selectedRows;
         for (let cnt = 0; cnt < selectedRows.length; cnt++) {
             listPersonId.push(selectedRows[cnt].sPerId);
             listPremId.push(selectedRows[cnt].sPremId);
+            listFacilityId.push(selectedRows[cnt].sFacilityId);
         } 
         this.bCustomerDetailFlag = selectedRows.length > 0 ?true:false;
         listPersonIdUnique = listPersonId.filter((item, i, ar) => ar.indexOf(item) === i);
-        if(listPersonIdUnique.length > 1){
+        listFacilityIdUnique = listFacilityId.filter((item, i, ar) => ar.indexOf(item) === i);
+        if(listPersonIdUnique.length > 1 && this.bResCustomerTab){
             this.bCustomerDetailFlag = false;
             //this.showToast("You can't select this SAID as it belongs to different Person ID. Please do reselection of all records of same person");
             this.showToast(this.label.InvalidPersonIdMsg);
         }
+        if(!this.bResCustomerTab && listFacilityIdUnique.length > 1){
+            this.bCustomerDetailFlag = false;
+            this.showToast(this.label.InvalidFacilityIdMsg);
+        }
+
         this.sSelectedPersonId = listPersonIdUnique[0];
         if(selectedRows.length > 0){
             this.sSelectedEIAccountId = selectedRows[0].sEIAccountId;
@@ -407,11 +461,15 @@ export default class Care_App extends LightningElement {
             this.sSelectedCustName = selectedRows[0].sCustName;
             this.sSelectedProbStatus = (selectedRows[0].sProbation == "Y")?true:false;
             this.sSelectedEIAccountEmail = selectedRows[0].sEIAccountEmail;
+            this.sSelectedFacilityId = selectedRows[0].sFacilityId;
         }
         
         this.listSelectedPremId = listPremId.filter((item, i, ar) => ar.indexOf(item) === i);
         this.listActiveSections = ["SearchForm","CustomerList","CustomerDetails"];
-        this.template.querySelector(".setCustomerDetailIdClass").style.visibility = (this.bCustomerDetailFlag)? "visible":"hidden";
+        if(this.bResCustomerTab){
+            this.template.querySelector(".setCustomerDetailIdClass").style.visibility = (this.bCustomerDetailFlag)? "visible":"hidden";
+        }
+       
         
     }
 
@@ -476,4 +534,124 @@ export default class Care_App extends LightningElement {
 
     }
 
+    /**** */
+    renderedCallback() {
+        //console.log('this.facilityHousingValues-->' + JSON.stringify(this.facilityHousingValues));
+        console.log('this.initialized' + this.initialized);
+
+        if (this.facilityHousingValues === null || this.facilityHousingValues === undefined
+            || (isNotBlank(this.facilityHousingValues) && this.facilityHousingValues.length > 0)
+            || this.initialized) {
+            return;
+        }
+        this.initialized = true;
+        let listId = this.template.querySelector('datalist').id;
+        this.template.querySelector("input").setAttribute("list", listId);
+        
+    }
+
+    @wire(getFacilityHousingOrg,{ bResCustomerTab: '$bResCustomerTab' })
+    wiredFacHousingOrg(resp) {
+        this.showLoadingSpinner = true;
+        this._wiredFacHousingOrg = resp;
+        const { data, error } = resp;
+
+        if (data) {
+            //Assign in local variable
+            this.allFacilityHousingValues = data.listAllFacility;
+            this.npFacilityHousingValues = data.listNPFacility;
+            this.agrFacilityHousingValues = data.listAGRFacility;
+            this.mfhcFacilityHousingValues = data.listMFHCFacility;
+            this.smFacilityHousingValues = data.listSMFacility;
+
+            //Assign ALL in list options
+            this.facilityHousingValues = this.allFacilityHousingValues;
+
+            this.showLoadingSpinner = false;
+        } else if (error) {
+            //this.error = error;
+            //this.data = undefined;
+            //this.showLoadingSpinner = false;
+            console.log('this.error-->' + error)
+            //this.showToastMessage(this.label.CARE_ErrorHeader, this.label.CARE_TransactionErrorMsg, 'error');
+
+            this.showLoadingSpinner = false;
+        }      
+        
+        //this.template.querySelector(".slds-tabs_default__item").forEach({}).classList.add('setCustomDisablilityClass');//??
+        this.template.querySelectorAll('.slds-tabs_default__item').forEach(elem => {
+            if(elem.title === 'Enroll'){
+                elem.classList.add('setCustomDisablilityClass');
+            }
+        });
+    }
+
+    //Function called from each of lightning input fields of facility checkboxes
+    handleChangeFacility(event) {
+        let value;
+        if (event.target.type === 'checkbox') {
+            value = event.target.checked;
+        } else {
+            value = event.target.value;
+        }
+        if (event.target.dataset.id === 'checkboxNPField') {
+            this.searchInput.bNPFacilityType = value;
+        } else if (event.target.dataset.id === 'checkboxAGRField') {
+            this.searchInput.bAGRFacilityType = value;
+        } else if (event.target.dataset.id === 'checkboxMFHCField') {
+            this.searchInput.bMFHCFacilityType = value;
+        } else if (event.target.dataset.id === 'checkboxSMField') {
+            this.searchInput.bSMFacilityType = value;
+        } 
+
+        //Re-populate Facility Housing Org Dropdown
+        this.populateFacilityHousingOrgDD();
+    }
+
+    //Function called from facility housing org picklist
+    handleSelectFacility(event) {
+        this.searchInput.sFacilityHousingOrgVal = event.target.value;
+    }
+
+    //method to populate Facility Housing Org
+    populateFacilityHousingOrgDD() {
+        //Clear the selected value
+        this.searchInput.sFacilityHousingOrgVal = ''; 
+        this.template.querySelectorAll('.inputFacilityHousingOrg').forEach(elem => {
+            elem.value = '';
+        });
+        this.facilityHousingValues = []; //Clear the existing values
+
+        //If all checkboxes are unchecked, populate with ALL
+        if (!this.searchInput.bNPFacilityType && !this.searchInput.bAGRFacilityType && !this.searchInput.bMFHCFacilityType && !this.searchInput.bSMFacilityType){
+            this.facilityHousingValues = this.allFacilityHousingValues;
+        }
+        //Else Merge with the selected list of values against each checkbox
+        else{
+            if (this.searchInput.bNPFacilityType) {
+                this.facilityHousingValues = this.sortList(this.facilityHousingValues.concat(this.npFacilityHousingValues));
+            }
+            if (this.searchInput.bAGRFacilityType) {
+                this.facilityHousingValues = this.sortList(this.facilityHousingValues.concat(this.agrFacilityHousingValues));
+            }
+            if (this.searchInput.bMFHCFacilityType) {
+                this.facilityHousingValues = this.sortList(this.facilityHousingValues.concat(this.mfhcFacilityHousingValues));
+            }
+            if (this.searchInput.bSMFacilityType) {
+                this.facilityHousingValues = this.sortList(this.facilityHousingValues.concat(this.smFacilityHousingValues));
+            }
+        }
+    }
+
+    //Sort the list in alphabetical order
+    sortList(nonSortedList) {
+        const sortedList = nonSortedList.sort(function (a, b) {
+            if (a.sFacilityName < b.sFacilityName) return -1;
+            else if (a.sFacilityName > b.sFacilityName) return 1;
+            return 0;
+        });
+        console.log(sortedList);
+        return sortedList;
+    }
+    /**** */
 }

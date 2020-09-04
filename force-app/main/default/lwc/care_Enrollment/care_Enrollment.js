@@ -175,6 +175,7 @@ export default class lwcCmpName extends NavigationMixin(LightningElement) {
         noDateValue: false,
         ccbCommentValue: '',
         isDuplicateValue: false,
+        isNewEnrollmentValue: false,
         /** System Information */
         lastModifiedDate: '',
         lastModifiedById: '',
@@ -472,10 +473,11 @@ handleDataTableSave(event){
             console.log('determine is new enrollment this.EnrollObjFields.noDateValue' , this.EnrollObjFields.noDateValue);
 
             if(!this.EnrollObjFields.noDateValue){
-                this.isNewEnrollment = false;
+                this.EnrollObjFields.isNewEnrollmentValue = false;
                 this.bIsDuplicate = true;
-                console.log(` isNewEnrollment: `, this.isNewEnrollment); 
+                console.log(` isNewEnrollment: `, this.EnrollObjFields.isNewEnrollmentValue); 
             }else if(this.EnrollObjFields.noDateValue === true){
+                this.EnrollObjFields.isNewEnrollmentValue = true;
                 this.isNewEnrollment = true;
                 this.bIsDuplicate = false;
             }
@@ -572,6 +574,8 @@ handleChange(event){
         this.EnrollObjFields.ccbCommentValue = value;
     }else if(event.target.dataset.id === 'isDuplicateField'){
         this.EnrollObjFields.isDuplicateValue = value;
+    }else if(event.target.dataset.id === 'isNewEnrollField'){
+        this.EnrollObjFields.isNewEnrollmentValue = value;
     }
 
 
@@ -730,7 +734,7 @@ handleSave(event){
         
         console.log(` isAdjustValue `, this.EnrollObjFields.isAdjustValue);
         console.log(` Customer values inside Verify button click `, this.EnrollObjFields);
-        handleButtonClickOnUI({MassRecordData : this.EnrollObjFields, perID : this.sSelectedPerId, premID : this.listSelectedPremIds, eventName : nameEvent, isAdjustCheckBox : this.EnrollObjFields.isAdjustValue, appIdCareApplication : this.careResAppId, eIAcctId: this.sSelectedAcctId}).then(result => {
+        handleButtonClickOnUI({MassRecordData : this.EnrollObjFields, perID : this.sSelectedPerId, premID : this.listSelectedPremIds, eventName : nameEvent, isAdjustCheckBox : this.EnrollObjFields.isAdjustValue, appIdCareApplication : this.careResAppId, eIAcctId: this.sSelectedAcctId, billingAccId: this.sSelectedBillingAcctId}).then(result => {
             // Clear the user enter values
             //this.EnrollObjFields = {};
             console.log('result ===> '+ JSON.stringify(result));

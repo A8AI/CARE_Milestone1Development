@@ -14,7 +14,7 @@
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
                 <lightning-input type="checkbox" label="Filing Jointly?" name="FillingJointlyChecked"
                     checked={objInputFields.bIsFillingJointly} value={objInputFields.bIsFillingJointly}
-                    onchange={handleChecked} disabled={bViewMode}>
+                    onchange={handleChecked} disabled={bFilingJointlyDisabled}>
                 </lightning-input>
             </div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small slds-text-align_right">Period:</div>
@@ -32,7 +32,9 @@
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 1 (Wages):</div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                 <lightning-input type="number" name="line1AmountTextBox" variant="label-hidden"
-                    value={objInputFields.dLine1} formatter="currency" onchange={handleAmountChange}
+                    value={objInputFields.dLine1} formatter="currency" 
+                    message-when-step-mismatch="Please enter numeric value without decimals"
+                    onchange={handleAmountChange}
                     disabled={bViewMode}>
                 </lightning-input>
             </div>
@@ -45,7 +47,9 @@
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 2b (Interest):</div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                 <lightning-input type="number" name="line2bAmountTextBox" variant="label-hidden"
-                    value={objInputFields.dLine2b} formatter="currency" onchange={handleAmountChange}
+                    value={objInputFields.dLine2b} formatter="currency" 
+                    message-when-step-mismatch="Please enter numeric value without decimals"
+                    onchange={handleAmountChange}
                     disabled={bViewMode}>
                 </lightning-input>
             </div>
@@ -59,7 +63,9 @@
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 3b (Dividends):</div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                 <lightning-input type="number" name="line3bAmountTextBox" variant="label-hidden"
-                    value={objInputFields.dLine3b} formatter="currency" onchange={handleAmountChange}
+                    value={objInputFields.dLine3b} formatter="currency" 
+                    message-when-step-mismatch="Please enter numeric value without decimals"
+                    onchange={handleAmountChange}
                     disabled={bViewMode}>
                 </lightning-input>
             </div>
@@ -74,7 +80,9 @@
             </div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                 <lightning-input type="number" name="line4aAmountTextBox" variant="label-hidden"
-                    value={objInputFields.dLine4a} formatter="currency" onchange={handleAmountChange}
+                    value={objInputFields.dLine4a} formatter="currency" 
+                    message-when-step-mismatch="Please enter numeric value without decimals"
+                    onchange={handleAmountChange}
                     disabled={bViewMode}>
                 </lightning-input>
             </div>
@@ -94,7 +102,9 @@
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 5a (Social Security):</div>
             <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                 <lightning-input type="number" name="line5aAmountTextBox" variant="label-hidden"
-                    value={objInputFields.dLine5a} formatter="currency" onchange={handleAmountChange}
+                    value={objInputFields.dLine5a} formatter="currency" 
+                    message-when-step-mismatch="Please enter numeric value without decimals"
+                    onchange={handleAmountChange}
                     disabled={bViewMode}>
                 </lightning-input>
             </div>
@@ -134,7 +144,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">Line 11 (Alimony):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xx-small">
                     <lightning-input type="number" name="line11AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine11} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine11} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -148,7 +160,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 12 (Business income):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line12AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine12} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine12} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -171,7 +185,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 13 (Capital gains):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line13AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine13} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine13} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -185,7 +201,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 14 (Other gains):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line14AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine14} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine14} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -199,7 +217,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 17 (Rental income):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line17AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine17} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine17} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -213,7 +233,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 18 (Farm income):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line18AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine18} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine18} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -228,7 +250,9 @@
                     compensation):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line19AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine19} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine19} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -242,7 +266,9 @@
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">Line 21 (Other income):</div>
                 <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_xxx-small">
                     <lightning-input type="number" name="line21AmountTextBox" variant="label-hidden"
-                        value={objInputFields.dLine21} formatter="currency" onchange={handleAmountChange}
+                        value={objInputFields.dLine21} formatter="currency" 
+                        message-when-step-mismatch="Please enter numeric value without decimals"
+                        onchange={handleAmountChange}
                         disabled={bViewMode}>
                     </lightning-input>
                 </div>
@@ -274,12 +300,12 @@
             <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_xxx-small"></div>
             <!---->
             <template if:false={bViewMode}>
-                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small"></div>
-                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_x-small">
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small slds-p-bottom_xx-small"></div>
+                <div class="slds-p-left_small slds-size_1-of-5 slds-p-top_x-small slds-p-bottom_xx-small">
                     <lightning-button label="Save" icon-name="utility:save" onclick={handleSave} disabled={bViewMode}>
                     </lightning-button>
                 </div>
-                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small"></div>
+                <div class="slds-p-left_small slds-size_2-of-5 slds-p-top_x-small slds-p-bottom_xx-small"></div>
             </template>
             <!---->
             <!--section for ScheduleC-->

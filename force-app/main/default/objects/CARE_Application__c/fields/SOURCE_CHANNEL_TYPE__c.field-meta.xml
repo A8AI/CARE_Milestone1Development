@@ -146,6 +146,11 @@
                 <default>false</default>
                 <label>CARE New_Mover</label>
             </value>
+            <value>
+                <fullName>CARE IVR</fullName>
+                <default>false</default>
+                <label>CARE IVR</label>
+            </value>
         </valueSetDefinition>
     </valueSet>
 </CustomField>

@@ -40,8 +40,11 @@ public inherited sharing class CARE_SearchController {
         @AuraEnabled public String sCity{get;set;}
         @AuraEnabled public String sZip{get;set;}
         @AuraEnabled public String sSpace{get;set;}
-        @AuraEnabled public boolean bMFHC{get;set;}
-        @AuraEnabled public String sFacilityHousing{get;set;}
+        @AuraEnabled public boolean bNPFacilityType{get;set;}
+        @AuraEnabled public boolean bAGRFacilityType{get;set;}
+        @AuraEnabled public boolean bMFHCFacilityType{get;set;}
+        @AuraEnabled public boolean bSMFacilityType{get;set;}
+        @AuraEnabled public String sFacilityHousingOrgVal{get;set;}
         @AuraEnabled public boolean bEnrolledTenant{get;set;}
         @AuraEnabled public boolean bProbation{get;set;}
     }
@@ -62,8 +65,7 @@ public inherited sharing class CARE_SearchController {
     }
     
     //SearchWrapperResponse
-    public class CustomerWrapper{
-        
+    public class CustomerWrapper{        
         @AuraEnabled public Id idcustId{get;set;}
         @AuraEnabled public String sCustName{get;set;}
         @AuraEnabled public String sResNonRes{get;set;}
@@ -75,15 +77,19 @@ public inherited sharing class CARE_SearchController {
         @AuraEnabled public String sDiscount{get;set;}
         @AuraEnabled public String sRate{get;set;}
         @AuraEnabled public String sSvcAddr{get;set;}
-        @AuraEnabled public String sFacility{get;set;}
+        @AuraEnabled public String sFacilityId{get;set;}
         @AuraEnabled public String sSpaceUnit{get;set;}
         @AuraEnabled public String sPerId{get;set;}
         @AuraEnabled public String sPremId{get;set;}
         @AuraEnabled public String sEIAccountId{get;set;}
         @AuraEnabled public String sProbation{get;set;}
         @AuraEnabled public String sEIAccountEmail{get;set;}
-    }
-    
+        @AuraEnabled public String sFacilityName{get;set;}
+        
+        //DEL
+        @AuraEnabled public String sCustomSAId{get;set;}
+        @AuraEnabled public String sCustomAcctId{get;set;}
+    }    
     
     public class PremiseSiteDetails{
         @AuraEnabled public EI_PREMISE__c premise {get;set;}
@@ -91,22 +97,32 @@ public inherited sharing class CARE_SearchController {
         @AuraEnabled public String SiteContactPhoneNumber{get;set;}
         @AuraEnabled public String SiteSAIds{get;set;}   
     }
+    
+    public class FacilityHousingWrapper{
+        @AuraEnabled public List<GroupFacilityWrapper> listAllFacility {get;set;}
+        @AuraEnabled public List<GroupFacilityWrapper> listNPFacility {get;set;}
+        @AuraEnabled public List<GroupFacilityWrapper> listAGRFacility {get;set;}
+        @AuraEnabled public List<GroupFacilityWrapper> listMFHCFacility {get;set;}
+        @AuraEnabled public List<GroupFacilityWrapper> listSMFacility {get;set;}       
+        
+        public FacilityHousingWrapper(){
+            listAllFacility = new List <GroupFacilityWrapper>();
+            listNPFacility = new List <GroupFacilityWrapper>();
+            listAGRFacility = new List <GroupFacilityWrapper>();
+            listMFHCFacility = new List <GroupFacilityWrapper>();
+            listSMFacility = new List <GroupFacilityWrapper>();            
+        }        
+    }
+    
+    public class GroupFacilityWrapper{
+        @AuraEnabled public String sId {get;set;}
+        @AuraEnabled public Integer sFacilityId {get;set;}
+        @AuraEnabled public String sFacilityType {get;set;}
+        @AuraEnabled public String sFacilityName {get;set;}
+    }
     /*********************************WRAPPER CLASS*********************************************************/
     
     /*********************************PUBLIC METHODS*********************************************************/
-    /*
-@AuraEnabled(Cacheable = true)
-public static list<Account> retriveAccs(String strAccName) {
-system.debug('strAccName is'+strAccName);
-//strAccName = '%' + strAccName + '%';
-list<Account> lstAccs = [SELECT  Id, Name,Premise_ID__c,AccountNumber,SAID__c,F_Person_ID_EI__c,Discount__c,Service_Address__c,SA_Type__c,Encrypted_Account_Name__c,Type,Rate__c,Branch_Code_EI__c From Account WHERE Premise_ID__c = :strAccName];
-system.debug('lstAccs is'+lstAccs);
-if(lstAccs.isEmpty()) {
-throw new AuraHandledException('No Record Found..');
-}
-return lstAccs; 
-}
-*/
     
     //This method is used to do an exact serach from an object based on a single field search. 
     //Object name and field name are dynamically populated from the parameters
@@ -180,7 +196,7 @@ return lstAccs;
             }
             
             //If any field is entered other than Account Id, then set the flag as false, and proceed with step 2
-            if(String.isNotBlank(searchDetails.sPersonID) || String.isNotBlank(searchDetails.sPremiseID) || String.isNotBlank(searchDetails.sSAID) || String.isNotBlank(searchDetails.sName)
+            if(String.isNotBlank(searchDetails.sPersonID) || String.isNotBlank(searchDetails.sFacilityHousingOrgVal)  || String.isNotBlank(searchDetails.sPremiseID) || String.isNotBlank(searchDetails.sSAID) || String.isNotBlank(searchDetails.sName)
                || String.isNotBlank(searchDetails.sPhone) || String.isNotBlank(searchDetails.sStreet) || String.isNotBlank(searchDetails.sCity) || String.isNotBlank(searchDetails.sZip) ){ //TBD:add more conditions for the fields
                    bOnlyAccountID = false;
                }
@@ -198,21 +214,25 @@ return lstAccs;
                     List<String> listStatus = CARE_UtilityController.getCareActiveStatusCode();
                     listSiteServAgreement = [SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,
                                              Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,
-                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.Email_adr_EI__c
+                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, 
+                                             Account_EI__r.Email_adr_EI__c, (SELECT Id, CARE_Facility_Name__c, Facility_Name__c, FACILITY_TYPE__c, TRANS_TYPE__c FROM CARE_Facility_Enrolled_SA__r where TRANS_TYPE__c !='DR')
                                              FROM EI_Site__c
                                              WHERE Person_ID_EI__c =:sPerId 
                                              AND Account_EI__r.Id != NULL
                                              AND Svc_Status_Code_EI__c IN:listStatus
+                                            // AND Id IN (SELECT CARE_Site__c FROM CARE_Facility_Enrolled_SA__c where TRANS_TYPE__c !='DR')
                                              ORDER BY Person_ID_EI__c, Site_Premise_ID_EI__c, Svc_Type_Code_EI__c
                                             ];
                 }
                 else{ //Else select All
                     listSiteServAgreement = [SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,
                                              Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,
-                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.Email_adr_EI__c
-                                             FROM EI_Site__c
+                                             Person_ID_EI__c, Account_EI__r.Id, Account_EI__r.CARE_ON_PROBATION__c, Site_Premise_ID_EI__c, Res_Ind_EI__c,
+                                             Account_EI__r.Email_adr_EI__c , (SELECT Id, CARE_Facility_Name__c, Facility_Name__c, FACILITY_TYPE__c, TRANS_TYPE__c FROM CARE_Facility_Enrolled_SA__r where TRANS_TYPE__c !='DR')
+                                             FROM EI_Site__c 
                                              WHERE Person_ID_EI__c =:sPerId
                                              AND Account_EI__r.Id != NULL
+                                            // AND Id IN (SELECT CARE_Site__c FROM CARE_Facility_Enrolled_SA__c where TRANS_TYPE__c !='DR')
                                              ORDER BY Person_ID_EI__c, Site_Premise_ID_EI__c, Svc_Type_Code_EI__c
                                             ];
                 }
@@ -220,14 +240,19 @@ return lstAccs;
             else{ //Step 2: If any other field is chosen along with Account Id, do a search with all the related fields entered by the user
                 Date todayDate = Date.Today();
                 soqlWhereClause = populateWhereClauseForSearch(searchDetails);
+                string sFacilitySearchWhere = populateWhereClauseForFacilitySearch(searchDetails);
                 System.debug('soqlWhereClause==>' + soqlWhereClause );
-                if (soqlWhereClause != null && soqlWhereClause != ''){
-                    if(soqlWhereClause.startsWithIgnoreCase(' AND')){
+                System.debug('sFacilitySearchWhere==>' + sFacilitySearchWhere );
+                if ((soqlWhereClause != null && soqlWhereClause != '')){
+                    
+                    if(soqlWhereClause.startsWithIgnoreCase(' AND') ){
                        // soqlWhereClause = soqlWhereClause.replaceFirst(' AND', ''); //remove and from beginning commentted due added account id check
                         soqlSearchQuery = 'SELECT Id, Imported_Site_Name_EI__c, Billing_Account_ID_EI__c, SAID_EI__c, Svc_Type_Code_EI__c,'
                             + ' Svc_Status_Code_EI__c, CARE_DISCOUNT_TYPE__c, Rate_Schedule_EI__c, Svc_Full_Adr_EI__c,'
-                            + ' Person_ID_EI__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.CARE_ON_PROBATION__c, Account_EI__r.Id, Account_EI__r.CARE_PROBATION_START_DATE__c, Account_EI__r.CARE_PROBATION_END_DATE__c, Account_EI__r.Email_adr_EI__c'
-                            + ' FROM EI_Site__c WHERE Account_EI__r.Id != NULL ' + soqlWhereClause + ' ORDER BY Person_ID_EI__c, Site_Premise_ID_EI__c, Svc_Type_Code_EI__c LIMIT 10000';
+                            + ' Person_ID_EI__c, Site_Premise_ID_EI__c, Res_Ind_EI__c, Account_EI__r.CARE_ON_PROBATION__c, Account_EI__r.Id, Account_EI__r.CARE_PROBATION_START_DATE__c, Account_EI__r.CARE_PROBATION_END_DATE__c, Account_EI__r.Email_adr_EI__c,'
+                            +' (SELECT Id, CARE_Facility_Name__c, Facility_Name__c, FACILITY_TYPE__c, TRANS_TYPE__c FROM CARE_Facility_Enrolled_SA__r '
+                            + 'where TRANS_TYPE__c !=\'DR\' ' + sFacilitySearchWhere + ')'
+                            + ' FROM EI_Site__c WHERE Account_EI__r.Id != NULL ' + soqlWhereClause  + ' ORDER BY Person_ID_EI__c, Site_Premise_ID_EI__c, Svc_Type_Code_EI__c LIMIT 10000';
                         
                         System.debug('soqlSearchQuery==>' + soqlSearchQuery );
                         listSiteServAgreement = Database.query(soqlSearchQuery);
@@ -287,32 +312,105 @@ return lstAccs;
         }
         return searchResponse;
     }
-    
-    
-    
-    
-    /*
-
-String sSearchedKey = '555';
-String sMapKeyName  = 'AccountId';
-
-
-
-
-
-Map<String,List<String>> mapSearchedSessionFinal  = (Map<String,List<String>>)sessionPart.get('CareSearchedSessionData');
-
-system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
-
-
-
-*/
-    
-    
-    
+ 
+    //This method is used to populate Facility Housing Org picklist
+    @AuraEnabled(Cacheable = true)
+    public static FacilityHousingWrapper getFacilityHousingOrg(Boolean bResCustomerTab){ 
+        FacilityHousingWrapper response = new FacilityHousingWrapper();
+        try{
+            List<CARE_Facility__c> listCareFacility = [select Id, FACILITY_ID__c, FACILITY_TYPE__c, FACILITY_NAME__c
+                                                       from CARE_Facility__c
+                                                       ORDER BY FACILITY_NAME__c ASC];
+            
+            for(CARE_Facility__c careFacility : listCareFacility){
+                GroupFacilityWrapper objAllFacilityWrapper = new GroupFacilityWrapper();
+                objAllFacilityWrapper.sId            = careFacility.Id;
+                objAllFacilityWrapper.sFacilityId  = Integer.valueOf(careFacility.FACILITY_ID__c);     
+                objAllFacilityWrapper.sFacilityType  = careFacility.FACILITY_TYPE__c; 
+                objAllFacilityWrapper.sFacilityName  = careFacility.FACILITY_NAME__c;             
+                
+                response.listAllFacility.add(objAllFacilityWrapper);      
+                
+                if(careFacility.FACILITY_TYPE__c == 'NP'){
+                    GroupFacilityWrapper objNPFacilityWrapper = new GroupFacilityWrapper();
+                    objNPFacilityWrapper.sId            = careFacility.Id;
+                    objNPFacilityWrapper.sFacilityId  = Integer.valueOf(careFacility.FACILITY_ID__c);     
+                    objNPFacilityWrapper.sFacilityType  = careFacility.FACILITY_TYPE__c; 
+                    objNPFacilityWrapper.sFacilityName  = careFacility.FACILITY_NAME__c;             
+                    
+                    response.listNPFacility.add(objNPFacilityWrapper);      
+                }
+                else if(careFacility.FACILITY_TYPE__c == 'AG'){
+                    GroupFacilityWrapper objAGRFacilityWrapper = new GroupFacilityWrapper();
+                    objAGRFacilityWrapper.sId            = careFacility.Id;
+                    objAGRFacilityWrapper.sFacilityId  = Integer.valueOf(careFacility.FACILITY_ID__c);     
+                    objAGRFacilityWrapper.sFacilityType  = careFacility.FACILITY_TYPE__c; 
+                    objAGRFacilityWrapper.sFacilityName  = careFacility.FACILITY_NAME__c;             
+                    
+                    response.listAGRFacility.add(objAGRFacilityWrapper);      
+                }
+                else if(careFacility.FACILITY_TYPE__c == 'MF'){
+                    GroupFacilityWrapper objMFHCFacilityWrapper = new GroupFacilityWrapper();
+                    objMFHCFacilityWrapper.sId            = careFacility.Id;
+                    objMFHCFacilityWrapper.sFacilityId  = Integer.valueOf(careFacility.FACILITY_ID__c);     
+                    objMFHCFacilityWrapper.sFacilityType  = careFacility.FACILITY_TYPE__c; 
+                    objMFHCFacilityWrapper.sFacilityName  = careFacility.FACILITY_NAME__c;             
+                    
+                    response.listMFHCFacility.add(objMFHCFacilityWrapper);      
+                }
+                else if(careFacility.FACILITY_TYPE__c == 'SM'){
+                    GroupFacilityWrapper objSMFacilityWrapper = new GroupFacilityWrapper();
+                    objSMFacilityWrapper.sId            = careFacility.Id;
+                    objSMFacilityWrapper.sFacilityId  = Integer.valueOf(careFacility.FACILITY_ID__c);     
+                    objSMFacilityWrapper.sFacilityType  = careFacility.FACILITY_TYPE__c; 
+                    objSMFacilityWrapper.sFacilityName  = careFacility.FACILITY_NAME__c;             
+                    
+                    response.listSMFacility.add(objSMFacilityWrapper);      
+                }
+            } 
+        }
+        catch(Exception ex){
+            EI_CreateErrorLog.upsertException(EI_CreateErrorLog.logException(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, ex));
+            CARE_UtilityController.sendExceptionEmail(CARE_Constants.CLASS_NAME_CARE_PEVHU_CONTROLLER, '', '', '', ex);
+            
+            //throw new AuraHandledException(ex.getLineNumber()+': >'+ ex.getMessage()+': >'+ex.getStackTraceString());
+        }        
+        return response;        
+    }
+  
     /*********************************PUBLIC METHODS*********************************************************/
     
     /*********************************PRIVATE METHODS*********************************************************/  
+    
+    private Static String populateWhereClauseForFacilitySearch(SearchWrapperRequest searchDetails){        
+        system.debug('searchDetails@@@' + searchDetails);
+        String soqlWhereClause ='';
+        String inQuery = '';
+        List<String> listFacilityType = new List<String>();
+
+        if(searchDetails.sFacilityHousingOrgVal != null && searchDetails.sFacilityHousingOrgVal.trim() != ''){
+            soqlWhereClause += ' AND Facility_Name__c = \''+ searchDetails.sFacilityHousingOrgVal.trim() + '\''; 
+        }
+        if(searchDetails.bNPFacilityType != null && searchDetails.bNPFacilityType){
+            listFacilityType.add('NP'); 
+        }
+        if(searchDetails.bAGRFacilityType != null && searchDetails.bAGRFacilityType){
+            listFacilityType.add('AG'); 
+        }
+        if(searchDetails.bMFHCFacilityType != null && searchDetails.bMFHCFacilityType){
+            listFacilityType.add('MF'); 
+        }
+        if(searchDetails.bSMFacilityType != null && searchDetails.bSMFacilityType){
+            listFacilityType.add('SM'); 
+        }
+        if(listFacilityType.size() > 0){
+             inQuery = string.join(listFacilityType, ',');
+             string finalString = inQuery.replace(',', '\'' + ',' + '\''); 
+             soqlWhereClause += ' AND FACILITY_TYPE__c IN (\'' + finalString + '\')';
+        }
+        return soqlWhereClause;        
+             
+    }
     
     private Static String populateWhereClauseForSearch(SearchWrapperRequest searchDetails){        
         String soqlWhereClause ='';        
@@ -362,6 +460,12 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
         
         //TBD
         //MFHC, Enrolled Tenant, facility/housing, probation
+        string sFacilitySearchWhere = populateWhereClauseForFacilitySearch(searchDetails);
+        if((sFacilitySearchWhere != null && sFacilitySearchWhere != '')){
+            soqlWhereClause += ' AND Id IN (SELECT CARE_Site__c FROM CARE_Facility_Enrolled_SA__c where TRANS_TYPE__c !=\'DR\' ' + sFacilitySearchWhere + ')';
+        }
+                   
+        
         return soqlWhereClause;        
     }
     
@@ -413,10 +517,18 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
     
     private Static CustomerWrapper getDisplaySearchResultRow(EI_Site__c listEISite){
         CustomerWrapper custWrapper = new CustomerWrapper();
+        List<CARE_Facility_Enrolled_SA__c> listFacilityEnrolledSA = listEISite.CARE_Facility_Enrolled_SA__r;
+        system.debug('listFacilityEnrolledSA@@' + listFacilityEnrolledSA);
+        if(listFacilityEnrolledSA.size() > 0){
+           //custWrapper.sFHType = (listFacilityEnrolledSA[0].FACILITY_TYPE__c != null) ? listFacilityEnrolledSA[0].FACILITY_TYPE__c : '';
+           custWrapper.sFHType = (listFacilityEnrolledSA[0].FACILITY_TYPE__c != null) ? listFacilityEnrolledSA[0].FACILITY_TYPE__c : '';
+           custWrapper.sFacilityName = (listFacilityEnrolledSA[0].Facility_Name__c != null) ? listFacilityEnrolledSA[0].Facility_Name__c : '';
+           custWrapper.sFacilityId = (listFacilityEnrolledSA[0].CARE_Facility_Name__c != null) ? listFacilityEnrolledSA[0].CARE_Facility_Name__c : '';
+        }
         custWrapper.idcustId = (listEISite.Id != null) ? listEISite.Id : '';
         custWrapper.sCustName = (listEISite.Imported_Site_Name_EI__c != null) ? listEISite.Imported_Site_Name_EI__c : '';
         custWrapper.sResNonRes = (listEISite.Res_Ind_EI__c == 'Y') ? 'Res' : 'Non Res';
-        //cust.sFHType = (listEISite.Imported_Site_Name_EI__c != null) ? listEISite.Imported_Site_Name_EI__c : ''; //TBD
+        
         custWrapper.sAccId = (listEISite.Billing_Account_ID_EI__c != null) ? listEISite.Billing_Account_ID_EI__c : '';
         custWrapper.sSAId = (listEISite.SAID_EI__c != null) ? listEISite.SAID_EI__c : '';
         custWrapper.sSAType = (listEISite.Svc_Type_Code_EI__c != null) ? listEISite.Svc_Type_Code_EI__c : '';
@@ -424,7 +536,6 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
         custWrapper.sDiscount = (listEISite.CARE_DISCOUNT_TYPE__c != null) ? listEISite.CARE_DISCOUNT_TYPE__c : '';
         custWrapper.sRate = (listEISite.Rate_Schedule_EI__c != null) ? listEISite.Rate_Schedule_EI__c : '';
         custWrapper.sSvcAddr = (listEISite.Svc_Full_Adr_EI__c != null) ? listEISite.Svc_Full_Adr_EI__c : '';
-        //custWrapper.sFacility = (listEISite.Imported_Site_Name_EI__c != null) ? listEISite.Imported_Site_Name_EI__c : ''; //TBD
         //custWrapper.sSpaceUnit = (listEISite.Imported_Site_Name_EI__c != null) ? listEISite.Imported_Site_Name_EI__c : ''; //TBD
         custWrapper.sPerId = (listEISite.Person_ID_EI__c != null) ? listEISite.Person_ID_EI__c : '';
         custWrapper.sPremId = (listEISite.Site_Premise_ID_EI__c != null) ? listEISite.Site_Premise_ID_EI__c : '';
@@ -432,6 +543,9 @@ system.debug('mapSearchedSessionFinal==>'+mapSearchedSessionFinal);
         custWrapper.sProbation = (listEISite.Account_EI__r.CARE_ON_PROBATION__c) ? 'Y' : 'N'; 
         custWrapper.sEIAccountEmail = (listEISite.Account_EI__r.Email_adr_EI__c != null) ? listEISite.Account_EI__r.Email_adr_EI__c : '';
         
+        ///DEL
+        custWrapper.sCustomSAId = (listEISite.SAID_EI__c != null) ? listEISite.SAID_EI__c + ' (' + listEISite.Svc_Type_Code_EI__c + ')' + ','+'6767676787 (G)': '';
+        custWrapper.sCustomAcctId = (listEISite.Billing_Account_ID_EI__c != null) ? listEISite.Billing_Account_ID_EI__c + ','+'8800000000': '';
         
         
         return custWrapper;

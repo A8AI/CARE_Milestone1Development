@@ -162,6 +162,7 @@ public class CARE_OnDemandDropControllerTest {
         Test.startTest(); 
         CARE_OnDemandDropController.getOnDemandDropInfoList(wrap,careApp[0].ID,lstSite[0].Person_Id_EI__C,careApp[0].Id,'confirm');
         //CARE_OnDemandDropController.getOnDemandDropInfoList(wrap,careApp[0].ID,lstSite.Person_Id_EI__C,careApp[0].Id,'confirm');
+        CARE_OnDemandDropController.deleteCareAppRecord(careApp[0].ID);
         Test.stopTest();
     }
    private static List<CARE_Type__c> createCareTypeRecords(){

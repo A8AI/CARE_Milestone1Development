@@ -190,7 +190,7 @@
         <description>Assign SA Details To a Record Variable</description>
         <name>Assign_SA_Details</name>
         <label>Assign SA Details</label>
-        <locationX>1863</locationX>
+        <locationX>1865</locationX>
         <locationY>3418</locationY>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.ACCT_ID__c</assignToReference>
@@ -348,9 +348,6 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Discounted_SA_SelectedPremise.Care_Start_Date_EI__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.END_DATE__c</assignToReference>
@@ -449,9 +446,6 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Discounted_SA.Care_Start_Date_EI__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.END_DATE__c</assignToReference>
@@ -543,9 +537,6 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Discounted_SA_Other_Premise.Care_Start_Date_EI__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.END_DATE__c</assignToReference>
@@ -773,9 +764,6 @@
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.START_DATE__c</assignToReference>
             <operator>Assign</operator>
-            <value>
-                <elementReference>Loop_Discounted_SA_Selected_Premise.Care_Start_Date_EI__c</elementReference>
-            </value>
         </assignmentItems>
         <assignmentItems>
             <assignToReference>recVarCareAppEnrollingSA.END_DATE__c</assignToReference>
@@ -1438,8 +1426,8 @@
         <description>Set Valid RS Flag False</description>
         <name>Set_Valid_RS_Flag_False</name>
         <label>Set Valid RS Flag False</label>
-        <locationX>5778</locationX>
-        <locationY>949</locationY>
+        <locationX>5792</locationX>
+        <locationY>943</locationY>
         <assignmentItems>
             <assignToReference>varIsCurrentSARateScheduleValid</assignToReference>
             <operator>Assign</operator>
@@ -2068,8 +2056,8 @@
         <description>Is RS Valid</description>
         <name>Is_RS_Valid</name>
         <label>Is RS Valid?</label>
-        <locationX>5772</locationX>
-        <locationY>1391</locationY>
+        <locationX>5782</locationX>
+        <locationY>1393</locationY>
         <defaultConnector>
             <targetReference>Loop_Valid_FERA_RateSchedule</targetReference>
         </defaultConnector>
@@ -2681,6 +2669,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>QUALIFIED_BY__c</field>
             <value>
                 <elementReference>varQualifiedBy_Input</elementReference>
@@ -2948,6 +2942,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RECEIVED_DATE__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.RECEIVED_DATE__c</elementReference>
@@ -3179,6 +3179,12 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
             </value>
         </inputAssignments>
         <inputAssignments>
+            <field>Parent_Application__c</field>
+            <value>
+                <elementReference>varCareApplicationId_Input</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
             <field>RECEIVED_DATE__c</field>
             <value>
                 <elementReference>Get_Main_Application_Details.RECEIVED_DATE__c</elementReference>
@@ -3291,8 +3297,8 @@ For Adjustment Scenario, Main application will remain as Adjustment Transaction.
         <description>CC Code Details of Adjustment</description>
         <name>Get_CC_Code_Details_For_Adjustment</name>
         <label>Get CC Code Details For Adjustment</label>
-        <locationX>2735</locationX>
-        <locationY>2178</locationY>
+        <locationX>2761</locationX>
+        <locationY>2194</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
             <targetReference>Assign_LongDescription</targetReference>

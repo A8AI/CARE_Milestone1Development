@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Email_Template</fullName>
+    <active>true</active>
+    <label>Email Template</label>
+    <picklistValues>
+        <picklist>CATEGORY__c</picklist>
+        <values>
+            <fullName>AG Documentation Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Add Electric Gas Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Adjustment Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Automated Staging Enrollments Priority Order</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Automated Staging PEV Arrival Notice Priority Order</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE Enrollment Contact Codes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CARE Non Profit Contact Codes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CCB Person Level Contact Code and Comments</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>CCB Person Level Enrollment Contact Codes</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility Email Template</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Facility Maintenance Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Language Source</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>MFHC Documentation Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>NP Documentation Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>On Demand Status Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Online Submission</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV CARE CC outbound detail status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV CARE CC outbound header batch_type_no</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV CARE CC outbound header status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV COC list</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV ESA export detail status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV ESA export status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV ESA result detail status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV ESA result status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV ESA result type code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV Person income income source status</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch ESA status type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch upload detail program type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch upload status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch upload type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV batch upload-from source code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV customer category type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV detail item filter reason code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV detail status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV income pay period</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV result status code</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>PEV scanned image type</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Reinstatement Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Residential HU Time-of-Use Rate</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Tenant Maintenance Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Transfer Reason</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Valid Rate Schedule</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Valid SA status</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+    <picklistValues>
+        <picklist>MULTIPLE_PLACE_HOLDER__c</picklist>
+        <values>
+            <fullName>Bullet</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Certified Report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Drop Report</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Failure Report</fullName>
+            <default>false</default>
+        </values>
+    </picklistValues>
+</RecordType>

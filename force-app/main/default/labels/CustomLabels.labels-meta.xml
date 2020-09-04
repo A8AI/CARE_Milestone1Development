@@ -36,6 +36,13 @@
         <value>Please enter applicant Name!!</value>
     </labels>
     <labels>
+        <fullName>CARE_ApplicationCancelledMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_ApplicationCancelledMsg</shortDescription>
+        <value>Application Cancelled</value>
+    </labels>
+    <labels>
         <fullName>CARE_BothRetroDateValidationMsg</fullName>
         <language>en_US</language>
         <protected>false</protected>
@@ -253,11 +260,18 @@
         <value>Every person should have atleast one document (except for joint filing)</value>
     </labels>
     <labels>
+        <fullName>CARE_IncomeInfoDeleteMsg</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>CARE_IncomeInfoDeleteMsg</shortDescription>
+        <value>Income Information Record deleted successfully</value>
+    </labels>
+    <labels>
         <fullName>CARE_IncomePeopleMismatch</fullName>
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>CARE_IncomePeopleMismatch</shortDescription>
-        <value># With Income in Household Information should be equal to the number of persons added in Income Information.</value>
+        <value>Number of persons added should be equal to Number of people with income</value>
     </labels>
     <labels>
         <fullName>CARE_InvalidPersonIdMsg</fullName>

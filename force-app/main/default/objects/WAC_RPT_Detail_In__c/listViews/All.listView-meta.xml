@@ -14,8 +14,8 @@
     <columns>DETAIL_NO__c</columns>
     <columns>BILLING_ZIP__c</columns>
     <columns>BILLING_ZIP4__c</columns>
-    <columns>CERTIFIED_DATE__c</columns>
-    <columns>ENROLLTYPE__c</columns>
+    <columns>FIRST_NAME__c</columns>
+    <columns>LAST_NAME__c</columns>
     <filterScope>Everything</filterScope>
     <label>All</label>
 </ListView>

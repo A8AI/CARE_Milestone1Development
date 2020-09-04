@@ -22,10 +22,14 @@ public with sharing class CARE_OnDemandStatusController {
         @AuraEnabled public Id idAccRecID {get; set;}
         @AuraEnabled public String sPerId {get; set;}
         @AuraEnabled public String sPremId {get; set;}
+        @AuraEnabled public String dPremId {get; set;}
         @AuraEnabled public String sSAID {get; set;}
         @AuraEnabled public String dSaName {get; set;}
         @AuraEnabled public String saStatus {get; set;}
         @AuraEnabled public String sRate {get; set;}
+        @AuraEnabled public String dRateName {get; set;}
+        @AuraEnabled public String sSvcType {get; set;}
+        @AuraEnabled public String dSvcTypName {get; set;}
         @AuraEnabled public String sSiteName {get; set;}
         @AuraEnabled public Date dYesDate {get; set;}
         @AuraEnabled public Date dNoDate {get; set;}
@@ -81,7 +85,7 @@ public with sharing class CARE_OnDemandStatusController {
         Boolean bOnProbation = false;
         
         try{
-            list<EI_Site__c> siteSADetailList = [select Id, External_ID_EI__c, Billing_Account_ID_EI__c, Account_EI__c, Person_ID_EI__c, SAID_EI__c, Site_Premise_ID_EI__c,
+            list<EI_Site__c> siteSADetailList = [select Id, External_ID_EI__c, Svc_Type_Code_EI__c, Billing_Account_ID_EI__c, Account_EI__c, Person_ID_EI__c, SAID_EI__c, Site_Premise_ID_EI__c,
                                                  Svc_Status_Code_EI__c, Rate_Schedule_EI__c, Account_EI__r.CARE_ON_PROBATION__c, Imported_Site_Name_EI__c,
                                                  Account_EI__r.CARE_PROBATION_END_DATE__c, Account_EI__r.CARE_PROBATION_START_DATE__c, Account_EI__r.Id
                                                  from EI_Site__c where Billing_Account_ID_EI__c =: sBillingAcctID];
@@ -108,6 +112,7 @@ public with sharing class CARE_OnDemandStatusController {
                 objRec.saStatus = siteRec.Svc_Status_Code_EI__c;
                 objRec.sRate = siteRec.Rate_Schedule_EI__c;
                 objRec.sSiteName = siteRec.Imported_Site_Name_EI__c;
+                objRec.sSvcType = siteRec.Svc_Type_Code_EI__c;
                 objRec.sType = 'SF';
                 onDemandStatusRecords.listOnDemandStatus.add(objRec);                
             }
@@ -143,6 +148,7 @@ onDemandStatusRecords.listOnDemandStatus.add(objRec);
                     objRec.saStatus = '';
                     objRec.sRate = '';
                     objRec.sSiteName = '';
+                    objRec.sSvcType = '';
                     objRec.sType = 'DM';
                     onDemandStatusRecords.listOnDemandStatus.add(objRec); 
                 }  
@@ -295,13 +301,14 @@ onDemandStatusRecords.listOnDemandStatus.add(objRec);
                 careEnrolledSAObj.CC_CL_CD__c = objOnDemandStatusList.sDiscountType; //This will be Account's discount for stamping
                 careEnrolledSAObj.CCB_CONTACT_TYPE__c = CARE_Constants.CARE_CC_OnDemandTRANSFER;
                 careEnrolledSAObj.PER_ID__c = objOnDemandStatusList.sPerId;
-                careEnrolledSAObj.PREM_ID__c = (objWrapperSA.sPremId != '') ? objWrapperSA.sPremId : '0000000000';
-                careEnrolledSAObj.SA_ID__c = (objWrapperSA.sSAID != '') ? objWrapperSA.sSAID : objWrapperSA.dSaName;
+                careEnrolledSAObj.PREM_ID__c = (objWrapperSA.dPremId != null) ? objWrapperSA.dPremId : objWrapperSA.sPremId;
+                careEnrolledSAObj.SA_ID__c = (objWrapperSA.dSaName != null) ? objWrapperSA.dSaName : objWrapperSA.sSAID;
                 careEnrolledSAObj.START_DATE__c = objWrapperSA.dYesDate; 
                 careEnrolledSAObj.END_DATE__c = objWrapperSA.dNoDate;
                 //careEnrolledSAObj.SA_START_DATE__c = objWrapperAdjust.dSAStartDate;
                 careEnrolledSAObj.Service_Agreement__c = objWrapperSA.idSARecID;
-                careEnrolledSAObj.RS_CD__c = (objWrapperSA.sRate != '') ? objWrapperSA.sRate : 'None';
+                careEnrolledSAObj.SERVICE_TYPE_CODE__c = (objWrapperSA.dSvcTypName!= null) ? objWrapperSA.dSvcTypName : objWrapperSA.sSvcType;
+                careEnrolledSAObj.RS_CD__c = (objWrapperSA.dRateName != null) ? objWrapperSA.dRateName : objWrapperSA.sRate;
                 //careEnrolledSAObj.RETRO_START_DATE__c = objWrapperAdjust.dRetroStartDate;
                 //do not update the Retro End Date if, 'checkbox from UI is checked for 'Yes Start Date Only'
                 //careEnrolledSAObj.RETRO_END_DATE__c = (bRetroStartDateOnly) ? null : objWrapperAdjust.dRetroEndDate;
